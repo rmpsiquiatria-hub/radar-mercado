@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Radar do Mercado</title>
+<meta name="description" content="Cotações ao vivo da B3, EUA, moedas e criptomoedas, com carteira, alertas e relatório diário.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230f766e'/><path d='M5 22l7-7 5 5 10-11' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f6f8; --panel: #ffffff; --panel-2: #f8fafb; --line: #e3e8ec;
+  --text: #0f1b24; --muted: #5d6b76; --faint: #8c99a3;
+  --accent: #0f766e; --accent-soft: #e0f2ef;
+  --up: #0a8a4a; --up-soft: #e3f5ea; --down: #c9302c; --down-soft: #fbe7e6;
+  --warn: #b26b00; --warn-soft: #fff3dc;
+  --shadow: 0 1px 2px rgba(15,27,36,.06), 0 4px 16px rgba(15,27,36,.05);
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1116; --panel: #121a21; --panel-2: #172129; --line: #24313b;
+    --text: #e6edf2; --muted: #9aa8b3; --faint: #6c7a85;
+    --accent: #2dd4bf; --accent-soft: #10302d;
+    --up: #34d27b; --up-soft: #0f2c1d; --down: #ff6b63; --down-soft: #351716;
+    --warn: #f5b041; --warn-soft: #33260c;
+    --shadow: 0 1px 2px rgba(0,0,0,.3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1116; --panel: #121a21; --panel-2: #172129; --line: #24313b;
+  --text: #e6edf2; --muted: #9aa8b3; --faint: #6c7a85;
+  --accent: #2dd4bf; --accent-soft: #10302d;
+  --up: #34d27b; --up-soft: #0f2c1d; --down: #ff6b63; --down-soft: #351716;
+  --warn: #f5b041; --warn-soft: #33260c;
+  --shadow: 0 1px 2px rgba(0,0,0,.3);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--text); font: 15px/1.45 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+button, input, select { font: inherit; color: inherit; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px 48px; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.up { color: var(--up); } .down { color: var(--down); } .flat { color: var(--muted); }
+
+header { display: flex; align-items: center; gap: 12px; padding: 18px 0 14px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 19px; letter-spacing: -.01em; }
+.brand svg { flex: none; }
+.status { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); }
+.dot.live { background: var(--up); box-shadow: 0 0 0 3px var(--up-soft); animation: pulse 2s infinite; }
+.dot.err { background: var(--down); }
+@keyframes pulse { 50% { box-shadow: 0 0 0 6px transparent; } }
+.icon-btn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; width: 34px; height: 34px; display: grid; place-items: center; cursor: pointer; }
+
+.strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.idx { padding: 12px 12px 8px; cursor: pointer; text-align: left; border: 1px solid var(--line); min-width: 0; }
+.idx:hover { border-color: var(--accent); }
+.idx .lbl { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; display: flex; justify-content: space-between; gap: 6px; }
+.idx .px { font-size: 18px; font-weight: 600; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.idx .ch { font-size: 13px; }
+.idx svg { display: block; width: 100%; height: 30px; margin-top: 4px; }
+.mk { font-size: 10px; padding: 1px 6px; border-radius: 99px; background: var(--panel-2); color: var(--faint); text-transform: none; letter-spacing: 0; font-weight: 500; }
+.mk.on { background: var(--up-soft); color: var(--up); }
+
+nav.tabs { display: flex; gap: 4px; margin: 22px 0 12px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+nav.tabs button { border: 0; background: none; padding: 10px 14px; cursor: pointer; color: var(--muted); font-weight: 600; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+nav.tabs button[aria-selected="true"] { color: var(--text); border-color: var(--accent); }
+.badge { display: inline-block; min-width: 18px; padding: 0 5px; margin-left: 4px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-size: 12px; text-align: center; }
+
+.toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.search { position: relative; flex: 1 1 320px; }
+.search input, .field input, .field select { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); outline: none; }
+.search input:focus, .field input:focus, .field select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.sugg { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 20; padding: 4px; display: none; max-height: 340px; overflow: auto; }
+.sugg.open { display: block; }
+.sugg button { display: flex; width: 100%; gap: 10px; align-items: baseline; text-align: left; padding: 8px 10px; border: 0; border-radius: 7px; background: none; cursor: pointer; }
+.sugg button:hover, .sugg button.hl { background: var(--panel-2); }
+.sugg .s { font-weight: 600; min-width: 92px; } .sugg .n { color: var(--muted); font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .sugg .e { color: var(--faint); font-size: 12px; }
+.btn { border: 1px solid var(--line); background: var(--panel); padding: 9px 14px; border-radius: 9px; cursor: pointer; font-weight: 600; white-space: nowrap; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+:root[data-theme="dark"] .btn.primary { color: #062421; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #062421; } }
+.btn.small { padding: 5px 10px; font-size: 13px; }
+.btn:hover { filter: brightness(.97); }
+
+.group { margin-bottom: 18px; overflow: hidden; }
+.group h3 { margin: 0; padding: 10px 14px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--panel-2); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+.row { display: grid; grid-template-columns: minmax(0, 1.6fr) 110px minmax(90px, .8fr) 92px 34px; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.row:last-child { border-bottom: 0; }
+.row:hover { background: var(--panel-2); }
+.row .t { font-weight: 600; } .row .nm { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row svg { width: 110px; height: 30px; display: block; }
+.row .px { text-align: right; font-weight: 600; }
+.pill { justify-self: end; padding: 3px 8px; border-radius: 6px; font-size: 13px; font-weight: 600; min-width: 76px; text-align: center; }
+.pill.up { background: var(--up-soft); } .pill.down { background: var(--down-soft); } .pill.flat { background: var(--panel-2); }
+.flash-up { animation: fu 1s; } .flash-down { animation: fd 1s; }
+@keyframes fu { 0% { background: var(--up-soft); } } @keyframes fd { 0% { background: var(--down-soft); } }
+.del { border: 0; background: none; color: var(--faint); cursor: pointer; font-size: 18px; border-radius: 6px; width: 30px; height: 30px; }
+.del:hover { background: var(--down-soft); color: var(--down); }
+
+table.grid { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.grid th { text-align: right; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; padding: 10px 12px; background: var(--panel-2); border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.grid td { text-align: right; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.grid th:first-child, table.grid td:first-child { text-align: left; }
+table.grid tr:last-child td { border-bottom: 0; }
+table.grid tbody tr { cursor: pointer; } table.grid tbody tr:hover { background: var(--panel-2); }
+.scroll { overflow-x: auto; }
+.totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.tot { padding: 14px; } .tot .lbl { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; } .tot .v { font-size: 22px; font-weight: 600; margin-top: 2px; }
+
+.empty { padding: 28px 16px; text-align: center; color: var(--muted); }
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; padding: 14px; align-items: end; margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.alert-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.alert-row:last-child { border-bottom: 0; }
+.alert-row .what { flex: 1; min-width: 200px; }
+.tag { font-size: 12px; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+.tag.on { background: var(--accent-soft); color: var(--accent); } .tag.fired { background: var(--warn-soft); color: var(--warn); }
+.note { font-size: 13px; color: var(--muted); padding: 10px 14px; border-radius: 9px; background: var(--panel-2); border: 1px dashed var(--line); margin-bottom: 12px; }
+
+dialog { border: 0; padding: 0; background: transparent; max-width: min(860px, calc(100vw - 24px)); width: 100%; color: var(--text); }
+dialog::backdrop { background: rgba(5,10,14,.55); }
+.modal { padding: 18px; }
+.modal-h { display: flex; gap: 12px; align-items: flex-start; }
+.modal-h h2 { margin: 0; font-size: 20px; } .modal-h .sub { color: var(--muted); font-size: 13px; }
+.modal-h .close { margin-left: auto; }
+.big { display: flex; align-items: baseline; gap: 12px; margin: 12px 0 6px; flex-wrap: wrap; }
+.big .px { font-size: 30px; font-weight: 600; }
+.ranges { display: flex; gap: 4px; margin: 6px 0 8px; flex-wrap: wrap; }
+.ranges button { border: 1px solid var(--line); background: var(--panel); padding: 4px 10px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); }
+.ranges button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.chart { position: relative; height: 260px; }
+.chart svg { width: 100%; height: 100%; display: block; }
+.tip { position: absolute; top: 0; pointer-events: none; background: var(--text); color: var(--bg); font-size: 12px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; transform: translateX(-50%); display: none; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 12px 0; }
+.stats div { background: var(--panel-2); border-radius: 8px; padding: 8px 10px; } .stats span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+.modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.toasts { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 8px; z-index: 100; max-width: calc(100vw - 32px); }
+.toast { padding: 12px 14px; border-radius: 10px; background: var(--text); color: var(--bg); box-shadow: 0 8px 30px rgba(0,0,0,.25); font-size: 14px; max-width: 360px; }
+.toast.alarm { background: var(--warn); color: #1a1000; font-weight: 600; }
+
+footer { margin-top: 28px; font-size: 12px; color: var(--faint); display: grid; gap: 8px; }
+footer .links { display: flex; gap: 14px; flex-wrap: wrap; }
+footer a, footer button.link { color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; font-size: 12px; }
+
+nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
+@media (max-width: 1000px) { .strip { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .row { grid-template-columns: minmax(0, 1fr) auto 84px 30px; gap: 8px; padding: 10px 12px; }
+  .row .spark { display: none; }
+  .big .px { font-size: 24px; }
+  .chart { height: 200px; }
+  .modal { padding: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="var(--accent)"/><path d="M5 22l7-7 5 5 10-11" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Radar do Mercado
+    </div>
+    <div class="status"><span class="dot" id="dot"></span><span id="stamp">Conectando…</span></div>
+    <button class="icon-btn" id="theme" title="Mudar tema claro/escuro" aria-label="Mudar tema">◐</button>
+  </header>
+
+  <section class="strip" id="strip" aria-label="Principais indicadores"></section>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="favs" aria-selected="true">Favoritos <span class="badge" id="nFavs">0</span></button>
+    <button role="tab" data-tab="cart">Carteira <span class="badge" id="nCart">0</span></button>
+    <button role="tab" data-tab="alerts">Alertas <span class="badge" id="nAlerts">0</span></button>
+    <button role="tab" data-tab="report">Relatório diário</button>
+  </nav>
+
+  <!-- FAVORITOS -->
+  <section data-panel="favs">
+    <div class="toolbar">
+      <div class="search">
+        <input id="q" type="search" placeholder="Adicionar ativo: digite um nome ou código (ex.: Petrobras, WEGE3, Apple, Bitcoin, euro)" autocomplete="off" aria-label="Buscar ativo">
+        <div class="sugg card" id="sugg" role="listbox"></div>
+      </div>
+    </div>
+    <div id="favList"></div>
+  </section>
+
+  <!-- CARTEIRA -->
+  <section data-panel="cart" hidden>
+    <div class="totals" id="cartTotals"></div>
+    <form class="form card" id="cartForm">
+      <div class="field"><label for="cSym">Ativo (código)</label><input id="cSym" list="symList" placeholder="PETR4.SA" required></div>
+      <div class="field"><label for="cQty">Quantidade</label><input id="cQty" type="number" step="any" min="0" placeholder="100" required></div>
+      <div class="field"><label for="cAvg">Preço médio pago</label><input id="cAvg" type="number" step="any" min="0" placeholder="35,20" required></div>
+      <button class="btn primary" type="submit">Salvar na carteira</button>
+    </form>
+    <div class="card scroll" id="cartList"></div>
+    <p class="note" style="margin-top:12px">Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do dólar do momento. Para editar uma posição, salve o mesmo código de novo com os valores novos.</p>
+  </section>
+
+  <!-- ALERTAS -->
+  <section data-panel="alerts" hidden>
+    <div class="note" id="notifNote">Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). <button class="btn small" id="notifBtn" type="button">Ativar avisos no computador/celular</button></div>
+    <form class="form card" id="alertForm">
+      <div class="field"><label for="aSym">Ativo (código)</label><input id="aSym" list="symList" placeholder="VALE3.SA" required></div>
+      <div class="field"><label for="aOp">Avisar quando</label>
+        <select id="aOp"><option value=">">subir acima de</option><option value="<">cair abaixo de</option></select></div>
+      <div class="field"><label for="aVal">Preço</label><input id="aVal" type="number" step="any" min="0" required></div>
+      <button class="btn primary" type="submit">Criar alerta</button>
+    </form>
+    <div class="card" id="alertList"></div>
+  </section>
+
+  <!-- RELATÓRIO -->
+  <section data-panel="report" hidden>
+    <div class="card" id="reportBox"><div class="empty">Carregando relatório…</div></div>
+  </section>
+
+  <datalist id="symList"></datalist>
+
+  <footer>
+    <div>Fontes: Yahoo Finance (ações, índices, moedas) e Binance (criptomoedas, ao vivo). Ações da B3 podem ter até 15 minutos de atraso. Informação para acompanhamento — não é recomendação de investimento.</div>
+    <div class="links">
+      <button class="link" id="exportBtn" type="button">Salvar cópia dos meus dados</button>
+      <button class="link" id="importBtn" type="button">Restaurar cópia</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+  </footer>
+</div>
+
+<dialog id="detail"><div class="card modal" id="detailBody"></div></dialog>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* ---------- configuração ---------- */
+const STRIP = [
+  { s: "^BVSP", label: "Ibovespa" },
+  { s: "USDBRL=X", label: "Dólar" },
+  { s: "EURBRL=X", label: "Euro" },
+  { s: "^GSPC", label: "S&P 500" },
+  { s: "^IXIC", label: "Nasdaq" },
+  { s: "BTC-USD", label: "Bitcoin" },
+];
+const DEFAULT_FAVS = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBAS3.SA", "WEGE3.SA", "AAPL", "NVDA", "MSFT", "USDBRL=X", "EURBRL=X", "BTC-USD", "ETH-USD"];
+const REFRESH_MS = 20000;
+const KEY = "radar.v1";
+
+/* ---------- estado salvo neste navegador ---------- */
+function load() {
+  try { const d = JSON.parse(localStorage.getItem(KEY)); if (d && Array.isArray(d.favs)) return d; } catch {}
+  return { favs: DEFAULT_FAVS.slice(), cart: [], alerts: [] };
+}
+let state = load();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} renderCounts(); }
+
+const quotes = {};  // symbol -> última cotação
+const names = {};   // symbol -> nome (para busca)
+
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const nf = (d) => new Intl.NumberFormat("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
+function decimals(v) { const a = Math.abs(v); return a >= 1000 ? 2 : a >= 1 ? 2 : a >= 0.01 ? 4 : 6; }
+function money(v, cur, type) {
+  if (v == null || !isFinite(v)) return "—";
+  if (type === "INDEX") return nf(0).format(v) + " pts";
+  const n = nf(decimals(v)).format(Math.abs(v));
+  return (v < 0 ? "-" : "") + (cur === "BRL" ? "R$ " : cur === "USD" ? "US$ " : cur === "EUR" ? "€ " : (cur ? cur + " " : "")) + n;
+}
+const brl = v => (v == null || !isFinite(v)) ? "—" : (v < 0 ? "-" : "") + "R$ " + nf(2).format(Math.abs(v));
+const pct = v => (v == null || !isFinite(v)) ? "—" : (v > 0 ? "+" : "") + nf(2).format(v) + "%";
+const cls = v => v > 0.0001 ? "up" : v < -0.0001 ? "down" : "flat";
+const change = q => q && q.prevClose ? (q.price / q.prevClose - 1) * 100 : null;
+function short(sym) { return sym.replace(/\.SA$/, "").replace(/=X$/, "").replace(/^\^/, ""); }
+function group(sym, q) {
+  const t = q?.type;
+  if (t === "CRYPTOCURRENCY" || /-USD$/.test(sym) && !/=X$/.test(sym)) return "Criptomoedas";
+  if (t === "CURRENCY" || /=X$/.test(sym)) return "Moedas";
+  if (/\.SA$/.test(sym) || sym === "^BVSP") return "Brasil (B3)";
+  return "Exterior";
+}
+const GROUPS = ["Brasil (B3)", "Exterior", "Moedas", "Criptomoedas"];
+function toast(msg, alarm) {
+  const el = document.createElement("div");
+  el.className = "toast" + (alarm ? " alarm" : "");
+  el.textContent = msg;
+  $("#toasts").append(el);
+  setTimeout(() => el.remove(), alarm ? 15000 : 4000);
+}
+function normSym(raw) {
+  let s = String(raw || "").trim().toUpperCase();
+  if (/^[A-Z]{4}\d{1,2}$/.test(s)) s += ".SA";   // PETR4 -> PETR4.SA
+  return s;
+}
+
+/* ---------- gráficos ---------- */
+function sparkline(points, prev, w = 110, h = 30) {
+  if (!points || points.length < 2) return `<svg viewBox="0 0 ${w} ${h}"></svg>`;
+  const ys = points.map(p => p[1]).concat(prev ? [prev] : []);
+  const min = Math.min(...ys), max = Math.max(...ys), span = max - min || 1;
+  const x = i => (i / (points.length - 1)) * w, y = v => h - 2 - ((v - min) / span) * (h - 4);
+  const d = points.map((p, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(p[1]).toFixed(1)).join("");
+  const last = points[points.length - 1][1];
+  const color = (prev ? last >= prev : last >= points[0][1]) ? "var(--up)" : "var(--down)";
+  const base = prev ? `<line x1="0" x2="${w}" y1="${y(prev).toFixed(1)}" y2="${y(prev).toFixed(1)}" stroke="var(--line)" stroke-dasharray="2 3"/>` : "";
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${base}<path d="${d}" fill="none" stroke="${color}" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>`;
+}
+
+function bigChart(box, q, range) {
+  const pts = q.points || [];
+  const W = box.clientWidth || 700, H = box.clientHeight || 260, padL = 8, padR = 64, padT = 22, padB = 22;
+  if (pts.length < 2) { box.innerHTML = `<div class="empty">Sem dados de gráfico para este período.</div>`; return; }
+  const prev = range === "1d" ? q.prevClose : null;
+  const ys = pts.map(p => p[1]).concat(prev ? [prev] : []);
+  let min = Math.min(...ys), max = Math.max(...ys); const pad = (max - min) * 0.08 || max * 0.01; min -= pad; max += pad;
+  const x = i => padL + (i / (pts.length - 1)) * (W - padL - padR);
+  const y = v => padT + (1 - (v - min) / (max - min)) * (H - padT - padB);
+  const last = pts[pts.length - 1][1];
+  const up = last >= (prev ?? pts[0][1]);
+  const color = up ? "var(--up)" : "var(--down)";
+  const line = pts.map((p, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(p[1]).toFixed(1)).join("");
+  const area = line + `L${x(pts.length - 1).toFixed(1)} ${H - padB} L${x(0).toFixed(1)} ${H - padB}Z`;
+  const ticks = [0, .25, .5, .75, 1].map(f => min + (max - min) * f);
+  const fmtT = t => { const d = new Date(t * 1000); return range === "1d" ? d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : range === "5d" ? d.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit" }) + " " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: range === "1y" || range === "5y" ? "2-digit" : undefined }); };
+  const xl = [0, Math.floor(pts.length / 2), pts.length - 1];
+  const gid = "g" + Math.random().toString(36).slice(2, 7);
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de preço">
+    <defs><linearGradient id="${gid}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".22"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    ${ticks.map(v => `<line x1="${padL}" x2="${W - padR}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${W - padR + 6}" y="${y(v) + 4}" font-size="11" fill="var(--faint)" font-family="JetBrains Mono, monospace">${nf(decimals(v)).format(v)}</text>`).join("")}
+    ${prev ? `<line x1="${padL}" x2="${W - padR}" y1="${y(prev)}" y2="${y(prev)}" stroke="var(--muted)" stroke-dasharray="4 4"/><text x="${padL + 2}" y="${y(prev) - 5}" font-size="11" fill="var(--muted)">fechamento anterior</text>` : ""}
+    <path d="${area}" fill="url(#${gid})"/>
+    <path d="${line}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>
+    ${xl.map((i, k) => `<text x="${x(i)}" y="${H - 5}" font-size="11" fill="var(--faint)" text-anchor="${k === 0 ? "start" : k === 2 ? "end" : "middle"}">${fmtT(pts[i][0])}</text>`).join("")}
+    <line id="cx" y1="${padT}" y2="${H - padB}" stroke="var(--muted)" visibility="hidden"/>
+    <circle id="cd" r="4" fill="${color}" stroke="var(--panel)" stroke-width="2" visibility="hidden"/>
+    <rect x="${padL}" y="0" width="${W - padL - padR}" height="${H}" fill="transparent" id="hit"/>
+  </svg><div class="tip" id="tip"></div>`;
+  const svg = box.querySelector("svg"), tip = box.querySelector("#tip"), cx = box.querySelector("#cx"), cd = box.querySelector("#cd");
+  const move = e => {
+    const r = svg.getBoundingClientRect();
+    const px = ((e.touches ? e.touches[0].clientX : e.clientX) - r.left) * (W / r.width);
+    const i = Math.max(0, Math.min(pts.length - 1, Math.round((px - padL) / (W - padL - padR) * (pts.length - 1))));
+    const X = x(i), Y = y(pts[i][1]);
+    cx.setAttribute("x1", X); cx.setAttribute("x2", X); cd.setAttribute("cx", X); cd.setAttribute("cy", Y);
+    cx.setAttribute("visibility", "visible"); cd.setAttribute("visibility", "visible");
+    tip.style.display = "block"; tip.style.left = (X * r.width / W) + "px";
+    tip.textContent = fmtT(pts[i][0]) + " · " + money(pts[i][1], q.currency, q.type);
+  };
+  const hide = () => { tip.style.display = "none"; cx.setAttribute("visibility", "hidden"); cd.setAttribute("visibility", "hidden"); };
+  svg.addEventListener("mousemove", move); svg.addEventListener("touchmove", move, { passive: true });
+  svg.addEventListener("mouseleave", hide); svg.addEventListener("touchend", hide);
+}
+
+/* ---------- busca de dados ---------- */
+async function api(path) {
+  const r = await fetch(path);
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.status);
+  return r.json();
+}
+function watched() {
+  return [...new Set([...STRIP.map(x => x.s), "USDBRL=X", ...state.favs, ...state.cart.map(c => c.symbol), ...state.alerts.map(a => a.symbol)])];
+}
+let lastOk = 0, failing = false;
+async function refresh() {
+  const syms = watched();
+  try {
+    const chunks = [];
+    for (let i = 0; i < syms.length; i += 40) chunks.push(syms.slice(i, i + 40));
+    const res = await Promise.all(chunks.map(c => api("/api/cotacoes?range=1d&s=" + c.map(encodeURIComponent).join(","))));
+    for (const r of res) for (const [s, q] of Object.entries(r.quotes)) {
+      if (q.error) { quotes[s] = quotes[s] || { symbol: s, error: q.error }; continue; }
+      const live = liveCrypto[s];
+      if (live && Date.now() - live.at < 30000) q.price = live.price;   // a Binance é mais nova
+      const old = quotes[s];
+      q._flash = old && old.price != null && q.price !== old.price ? (q.price > old.price ? "up" : "down") : "";
+      quotes[s] = q; names[s] = q.name;
+    }
+    lastOk = Date.now(); failing = false;
+  } catch (e) {
+    failing = true; console.warn(e);
+  }
+  renderAll(); checkAlerts(); connectCrypto();
+}
+setInterval(() => { if (!document.hidden) refresh(); }, REFRESH_MS);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastOk > REFRESH_MS) refresh(); });
+setInterval(renderStamp, 1000);
+
+/* ---------- cripto ao vivo (Binance) ---------- */
+const liveCrypto = {};
+let ws, wsKey = "";
+function binancePair(sym) { const m = sym.match(/^([A-Z0-9]+)-USD$/); return m ? m[1] + "USDT" : null; }
+function connectCrypto() {
+  const pairs = watched().filter(s => (quotes[s]?.type === "CRYPTOCURRENCY" || /^[A-Z0-9]+-USD$/.test(s))).map(s => [s, binancePair(s)]).filter(p => p[1]);
+  const key = pairs.map(p => p[1]).sort().join(",");
+  if (key === wsKey && ws && ws.readyState <= 1) return;
+  wsKey = key; try { ws && ws.close(); } catch {}
+  if (!pairs.length) return;
+  const bySym = Object.fromEntries(pairs.map(([s, p]) => [p, s]));
+  ws = new WebSocket("wss://stream.binance.com:9443/stream?streams=" + pairs.map(p => p[1].toLowerCase() + "@miniTicker").join("/"));
+  let pending = false;
+  ws.onmessage = ev => {
+    const d = JSON.parse(ev.data).data; const s = bySym[d.s]; if (!s) return;
+    const price = +d.c; liveCrypto[s] = { price, at: Date.now() };
+    const q = quotes[s]; if (!q) return;
+    if (q.price !== price) { q._flash = price > q.price ? "up" : "down"; q.price = price; }
+    if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; renderAll(); checkAlerts(); }); }
+  };
+  ws.onclose = () => { setTimeout(() => { wsKey = ""; if (!document.hidden) connectCrypto(); }, 5000); };
+}
+
+/* ---------- desenho da tela ---------- */
+function renderStamp() {
+  const dot = $("#dot"), st = $("#stamp");
+  if (!lastOk) { st.textContent = failing ? "Sem conexão com as cotações" : "Conectando…"; dot.className = "dot" + (failing ? " err" : ""); return; }
+  const s = Math.round((Date.now() - lastOk) / 1000);
+  dot.className = "dot " + (failing ? "err" : "live");
+  st.textContent = (failing ? "Falha ao atualizar · última há " : "Ao vivo · atualizado há ") + (s < 60 ? s + "s" : Math.round(s / 60) + " min");
+}
+function renderCounts() {
+  $("#nFavs").textContent = state.favs.length;
+  $("#nCart").textContent = state.cart.length;
+  $("#nAlerts").textContent = state.alerts.filter(a => !a.fired).length;
+  $("#symList").innerHTML = watched().map(s => `<option value="${esc(s)}">${esc(names[s] || "")}</option>`).join("");
+}
+function renderStrip() {
+  $("#strip").innerHTML = STRIP.map(({ s, label }) => {
+    const q = quotes[s]; const c = change(q);
+    return `<button class="card idx" data-open="${esc(s)}">
+      <div class="lbl">${label}${q ? `<span class="mk ${q.open ? "on" : ""}">${q.open ? "aberto" : "fechado"}</span>` : ""}</div>
+      <div class="px num ${q?._flash ? "flash-" + q._flash : ""}">${q ? money(q.price, q.currency, q.type) : "…"}</div>
+      <div class="ch num ${cls(c)}">${q ? pct(c) : "&nbsp;"}</div>
+      ${sparkline(q?.points, q?.prevClose)}
+    </button>`;
+  }).join("");
+}
+function renderFavs() {
+  if (!state.favs.length) { $("#favList").innerHTML = `<div class="card empty">Sua lista está vazia. Use a busca acima para adicionar ativos.</div>`; return; }
+  const by = {};
+  for (const s of state.favs) (by[group(s, quotes[s])] ||= []).push(s);
+  $("#favList").innerHTML = GROUPS.filter(g => by[g]).map(g => `<div class="card group"><h3><span>${g}</span><span>${by[g].length}</span></h3>${by[g].map(s => {
+    const q = quotes[s]; const c = change(q);
+    return `<div class="row" data-open="${esc(s)}">
+      <div style="min-width:0"><div class="t">${esc(short(s))}</div><div class="nm">${q?.error ? "Código não encontrado" : esc(q?.name || "…")}</div></div>
+      <div class="spark">${sparkline(q?.points, q?.prevClose)}</div>
+      <div class="px num ${q?._flash ? "flash-" + q._flash : ""}">${q && !q.error ? money(q.price, q.currency, q.type) : "—"}</div>
+      <div class="pill num ${cls(c)}">${pct(c)}</div>
+      <button class="del" data-unfav="${esc(s)}" title="Tirar da lista" aria-label="Tirar ${esc(short(s))} da lista">×</button>
+    </div>`; }).join("")}</div>`).join("");
+}
+function toBRL(v, cur) {
+  if (cur === "BRL") return v;
+  if (cur === "USD") return quotes["USDBRL=X"]?.price ? v * quotes["USDBRL=X"].price : null;
+  if (cur === "EUR") return quotes["EURBRL=X"]?.price ? v * quotes["EURBRL=X"].price : null;
+  return null;
+}
+function renderCart() {
+  let inv = 0, now = 0, day = 0, missing = 0;
+  const rows = state.cart.map(p => {
+    const q = quotes[p.symbol]; const cur = q?.currency || (p.symbol.endsWith(".SA") ? "BRL" : "USD");
+    const value = q?.price != null ? q.price * p.qty : null, cost = p.avg * p.qty;
+    const res = value != null ? value - cost : null, resPct = value != null && cost ? (value / cost - 1) * 100 : null;
+    const vB = value != null ? toBRL(value, cur) : null, cB = toBRL(cost, cur);
+    const dB = q?.prevClose ? toBRL((q.price - q.prevClose) * p.qty, cur) : null;
+    if (vB != null && cB != null) { inv += cB; now += vB; day += dB || 0; } else missing++;
+    return `<tr data-open="${esc(p.symbol)}">
+      <td><b>${esc(short(p.symbol))}</b><div class="nm" style="color:var(--muted);font-size:12px">${esc(q?.name || "")}</div></td>
+      <td class="num">${nf(p.qty % 1 ? 4 : 0).format(p.qty)}</td>
+      <td class="num">${money(p.avg, cur)}</td>
+      <td class="num">${q ? money(q.price, cur) : "…"}</td>
+      <td class="num ${cls(change(q))}">${pct(change(q))}</td>
+      <td class="num">${money(value, cur)}</td>
+      <td class="num ${cls(res)}">${res == null ? "—" : (res > 0 ? "+" : "") + money(res, cur)}<div style="font-size:12px">${pct(resPct)}</div></td>
+      <td><button class="del" data-uncart="${esc(p.symbol)}" title="Remover da carteira" aria-label="Remover ${esc(short(p.symbol))}">×</button></td>
+    </tr>`;
+  });
+  $("#cartList").innerHTML = state.cart.length
+    ? `<table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Preço médio</th><th>Atual</th><th>Dia</th><th>Valor</th><th>Resultado</th><th></th></tr></thead><tbody>${rows.join("")}</tbody></table>`
+    : `<div class="empty">Nenhuma posição ainda. Preencha o formulário acima com o que você tem.</div>`;
+  const res = now - inv;
+  $("#cartTotals").innerHTML = state.cart.length ? `
+    <div class="card tot"><div class="lbl">Valor hoje</div><div class="v num">${brl(now)}</div></div>
+    <div class="card tot"><div class="lbl">Total investido</div><div class="v num">${brl(inv)}</div></div>
+    <div class="card tot"><div class="lbl">Resultado</div><div class="v num ${cls(res)}">${(res > 0 ? "+" : "") + brl(res)} <span style="font-size:14px">${pct(inv ? res / inv * 100 : null)}</span></div></div>
+    <div class="card tot"><div class="lbl">Variação hoje</div><div class="v num ${cls(day)}">${(day > 0 ? "+" : "") + brl(day)}</div></div>
+    ${missing ? `<div class="note" style="grid-column:1/-1;margin:0">${missing} ativo(s) ainda sem cotação não entraram no total.</div>` : ""}` : "";
+}
+function renderAlerts() {
+  const list = state.alerts.slice().sort((a, b) => a.fired - b.fired || b.created - a.created);
+  $("#alertList").innerHTML = list.length ? list.map(a => {
+    const q = quotes[a.symbol];
+    return `<div class="alert-row">
+      <div class="what"><b>${esc(short(a.symbol))}</b> ${a.op === ">" ? "subir acima de" : "cair abaixo de"} <b class="num">${money(a.value, q?.currency, q?.type)}</b>
+        <div style="font-size:13px;color:var(--muted)">Agora: <span class="num">${q ? money(q.price, q.currency, q.type) : "…"}</span>${a.fired ? " · disparou em " + new Date(a.fired).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : ""}</div></div>
+      <span class="tag ${a.fired ? "fired" : "on"}">${a.fired ? "Disparado" : "Vigiando"}</span>
+      ${a.fired ? `<button class="btn small" data-rearm="${a.id}">Reativar</button>` : ""}
+      <button class="del" data-unalert="${a.id}" title="Apagar alerta" aria-label="Apagar alerta">×</button>
+    </div>`;
+  }).join("") : `<div class="empty">Nenhum alerta. Crie um acima, ou abra um ativo e toque em “Criar alerta”.</div>`;
+}
+let current = null;
+function renderAll() {
+  renderStrip(); renderFavs(); renderCart(); renderAlerts(); renderCounts(); renderStamp();
+  if (current && $("#detail").open) renderDetailHead();
+  for (const q of Object.values(quotes)) q._flash = "";
+}
+
+/* ---------- detalhe do ativo ---------- */
+const RANGES = [["1d", "Hoje"], ["5d", "5 dias"], ["1mo", "1 mês"], ["6mo", "6 meses"], ["1y", "1 ano"], ["5y", "5 anos"]];
+async function openDetail(sym) {
+  current = { sym, range: "1d" };
+  const isFav = state.favs.includes(sym);
+  $("#detailBody").innerHTML = `
+    <div class="modal-h"><div><h2 id="dTitle">${esc(short(sym))}</h2><div class="sub" id="dSub"></div></div>
+      <button class="icon-btn close" id="dClose" aria-label="Fechar">✕</button></div>
+    <div class="big" id="dBig"></div>
+    <div class="ranges" id="dRanges">${RANGES.map(([r, l]) => `<button data-range="${r}" aria-pressed="${r === "1d"}">${l}</button>`).join("")}</div>
+    <div class="chart" id="dChart"><div class="empty">Carregando gráfico…</div></div>
+    <div class="stats" id="dStats"></div>
+    <div class="modal-actions">
+      <button class="btn" id="dFav">${isFav ? "★ Nos favoritos" : "☆ Adicionar aos favoritos"}</button>
+      <button class="btn" id="dAlert">🔔 Criar alerta</button>
+      <button class="btn" id="dCart">💼 Adicionar à carteira</button>
+    </div>`;
+  $("#detail").showModal();
+  renderDetailHead();
+  loadRange("1d");
+}
+function renderDetailHead() {
+  const q = quotes[current.sym]; if (!q) return;
+  const c = change(q);
+  $("#dTitle").textContent = short(current.sym);
+  $("#dSub").textContent = [q.name, q.exchange, q.open ? "mercado aberto" : "mercado fechado"].filter(Boolean).join(" · ");
+  $("#dBig").innerHTML = `<span class="px num">${money(q.price, q.currency, q.type)}</span><span class="num ${cls(c)}" style="font-weight:600">${q.prevClose ? (q.price - q.prevClose > 0 ? "+" : "") + nf(decimals(q.price)).format(q.price - q.prevClose) + " (" + pct(c) + ")" : ""}</span><span style="color:var(--faint);font-size:13px">hoje</span>`;
+  $("#dStats").innerHTML = [
+    ["Mínima do dia", money(q.dayLow, q.currency, q.type)], ["Máxima do dia", money(q.dayHigh, q.currency, q.type)],
+    ["Mínima 52 sem.", money(q.low52, q.currency, q.type)], ["Máxima 52 sem.", money(q.high52, q.currency, q.type)],
+    ["Fech. anterior", money(q.prevClose, q.currency, q.type)], ["Volume", q.volume ? nf(0).format(q.volume) : "—"],
+  ].map(([k, v]) => `<div><span>${k}</span><b class="num">${v}</b></div>`).join("");
+}
+async function loadRange(range) {
+  current.range = range;
+  document.querySelectorAll("#dRanges button").forEach(b => b.setAttribute("aria-pressed", b.dataset.range === range));
+  const sym = current.sym, box = $("#dChart");
+  try {
+    let q;
+    if (range === "1d" && quotes[sym]?.points) q = quotes[sym];
+    else {
+      const r = await api(`/api/cotacoes?range=${range}&s=${encodeURIComponent(sym)}`);
+      q = r.quotes[sym]; if (q.error) throw new Error(q.error);
+      if (!quotes[sym]) { quotes[sym] = q; renderDetailHead(); }
+    }
+    if (current.sym === sym && current.range === range) bigChart(box, q, range);
+  } catch (e) { box.innerHTML = `<div class="empty">Não consegui carregar o gráfico (${esc(e.message)}).</div>`; }
+}
+$("#detail").addEventListener("click", e => {
+  if (e.target === $("#detail") || e.target.closest("#dClose")) return $("#detail").close();
+  const r = e.target.closest("[data-range]"); if (r) return loadRange(r.dataset.range);
+  if (e.target.closest("#dFav")) { toggleFav(current.sym); e.target.closest("#dFav").textContent = state.favs.includes(current.sym) ? "★ Nos favoritos" : "☆ Adicionar aos favoritos"; }
+  if (e.target.closest("#dAlert")) { $("#detail").close(); showTab("alerts"); $("#aSym").value = current.sym; $("#aVal").value = quotes[current.sym]?.price ?? ""; $("#aVal").focus(); $("#aVal").select(); }
+  if (e.target.closest("#dCart")) { $("#detail").close(); showTab("cart"); $("#cSym").value = current.sym; $("#cQty").focus(); }
+});
+$("#detail").addEventListener("close", () => { current = null; });
+window.addEventListener("resize", () => { if (current && $("#detail").open) loadRange(current.range); });
+
+/* ---------- ações ---------- */
+function toggleFav(s) {
+  const i = state.favs.indexOf(s);
+  if (i >= 0) state.favs.splice(i, 1); else { state.favs.push(s); toast(short(s) + " adicionado aos favoritos"); }
+  save(); renderFavs(); if (!quotes[s]) refresh();
+}
+document.addEventListener("click", e => {
+  const t = e.target;
+  const un = t.closest("[data-unfav]"); if (un) { e.stopPropagation(); toggleFav(un.dataset.unfav); return; }
+  const uc = t.closest("[data-uncart]"); if (uc) { e.stopPropagation(); if (confirm("Remover " + short(uc.dataset.uncart) + " da carteira?")) { state.cart = state.cart.filter(p => p.symbol !== uc.dataset.uncart); save(); renderCart(); } return; }
+  const ua = t.closest("[data-unalert]"); if (ua) { state.alerts = state.alerts.filter(a => a.id !== ua.dataset.unalert); save(); renderAlerts(); return; }
+  const ra = t.closest("[data-rearm]"); if (ra) { const a = state.alerts.find(a => a.id === ra.dataset.rearm); if (a) a.fired = 0; save(); renderAlerts(); return; }
+  const op = t.closest("[data-open]"); if (op && !t.closest("dialog")) openDetail(op.dataset.open);
+});
+
+function showTab(name) {
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === name));
+  document.querySelectorAll("[data-panel]").forEach(p => p.hidden = p.dataset.panel !== name);
+  try { localStorage.setItem(KEY + ".tab", name); } catch {}
+  if (name === "report") loadReport();
+}
+document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) showTab(b.dataset.tab); });
+
+$("#cartForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const symbol = normSym($("#cSym").value), qty = +$("#cQty").value, avg = +$("#cAvg").value;
+  if (!symbol || !(qty > 0) || !(avg >= 0)) return;
+  const ex = state.cart.find(p => p.symbol === symbol);
+  if (ex) { ex.qty = qty; ex.avg = avg; } else state.cart.push({ symbol, qty, avg });
+  save(); e.target.reset(); toast(short(symbol) + " salvo na carteira"); refresh();
+});
+$("#alertForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const symbol = normSym($("#aSym").value), value = +$("#aVal").value, op = $("#aOp").value;
+  if (!symbol || !(value > 0)) return;
+  state.alerts.push({ id: Math.random().toString(36).slice(2, 10), symbol, op, value, fired: 0, created: Date.now() });
+  save(); e.target.reset(); toast("Alerta criado para " + short(symbol)); refresh();
+});
+
+/* ---------- alertas ---------- */
+let audio;
+function beep() {
+  try {
+    audio ||= new AudioContext();
+    [0, .25].forEach(t => { const o = audio.createOscillator(), g = audio.createGain(); o.frequency.value = 880; g.gain.setValueAtTime(.15, audio.currentTime + t); g.gain.exponentialRampToValueAtTime(.001, audio.currentTime + t + .2); o.connect(g).connect(audio.destination); o.start(audio.currentTime + t); o.stop(audio.currentTime + t + .2); });
+  } catch {}
+}
+function checkAlerts() {
+  let changed = false;
+  for (const a of state.alerts) {
+    if (a.fired) continue;
+    const q = quotes[a.symbol]; if (!q || q.price == null) continue;
+    if (a.op === ">" ? q.price >= a.value : q.price <= a.value) {
+      a.fired = Date.now(); changed = true;
+      const msg = `${short(a.symbol)} ${a.op === ">" ? "subiu acima de" : "caiu abaixo de"} ${money(a.value, q.currency, q.type)} — agora ${money(q.price, q.currency, q.type)}`;
+      toast("🔔 " + msg, true); beep();
+      try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: msg, tag: a.id }); } catch {}
+    }
+  }
+  if (changed) { save(); renderAlerts(); }
+}
+function renderNotif() {
+  const ok = "Notification" in window;
+  const p = ok ? Notification.permission : "denied";
+  $("#notifBtn").hidden = !ok || p !== "default";
+  if (p === "granted") $("#notifNote").firstChild.textContent = "Avisos ativados. Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). ";
+}
+$("#notifBtn").addEventListener("click", async () => { try { await Notification.requestPermission(); } catch {} renderNotif(); beep(); });
+
+/* ---------- busca ---------- */
+let sTimer, sItems = [], sHl = -1;
+$("#q").addEventListener("input", () => {
+  clearTimeout(sTimer);
+  const v = $("#q").value.trim();
+  if (v.length < 2) { $("#sugg").classList.remove("open"); return; }
+  sTimer = setTimeout(async () => {
+    try {
+      const r = await api("/api/busca?q=" + encodeURIComponent(v));
+      if ($("#q").value.trim() !== v) return;
+      sItems = r.items; sHl = sItems.length ? 0 : -1;
+      const TY = { EQUITY: "Ação", ETF: "ETF", INDEX: "Índice", CURRENCY: "Moeda", CRYPTOCURRENCY: "Cripto", MUTUALFUND: "Fundo" };
+      $("#sugg").innerHTML = sItems.length ? sItems.map((it, i) => `<button type="button" data-i="${i}" class="${i === 0 ? "hl" : ""}"><span class="s">${esc(short(it.symbol))}</span><span class="n">${esc(it.name)}</span><span class="e">${TY[it.type] || ""} · ${esc(it.exchange || "")}</span></button>`).join("") : `<div class="empty" style="padding:12px">Nada encontrado.</div>`;
+      $("#sugg").classList.add("open");
+    } catch { }
+  }, 250);
+});
+function pick(i) {
+  const it = sItems[i]; if (!it) return;
+  names[it.symbol] = it.name;
+  if (!state.favs.includes(it.symbol)) toggleFav(it.symbol); else toast(short(it.symbol) + " já está na lista");
+  $("#q").value = ""; $("#sugg").classList.remove("open");
+}
+$("#sugg").addEventListener("click", e => { const b = e.target.closest("[data-i]"); if (b) pick(+b.dataset.i); });
+$("#q").addEventListener("keydown", e => {
+  const bs = [...$("#sugg").querySelectorAll("[data-i]")];
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sHl = Math.max(0, Math.min(bs.length - 1, sHl + (e.key === "ArrowDown" ? 1 : -1))); bs.forEach((b, i) => b.classList.toggle("hl", i === sHl)); }
+  else if (e.key === "Enter") { e.preventDefault(); pick(sHl); }
+  else if (e.key === "Escape") $("#sugg").classList.remove("open");
+});
+document.addEventListener("click", e => { if (!e.target.closest(".search")) $("#sugg").classList.remove("open"); });
+
+/* ---------- relatório diário (fase 2) ---------- */
+let reportLoaded = false;
+async function loadReport() {
+  if (reportLoaded) return;
+  const box = $("#reportBox");
+  try {
+    const r = await fetch("/relatorios/ultimo.json", { cache: "no-store" });
+    if (!r.ok) throw 0;
+    const rep = await r.json(); reportLoaded = true;
+    renderReport(rep);
+  } catch {
+    box.innerHTML = `<div class="empty"><b>Relatório diário — em preparação.</b><br>Em breve, toda manhã, aparece aqui um resumo do que os sites de análise fundamentalista dizem sobre as empresas do Ibovespa e os papéis da sua carteira e lista.</div>`;
+  }
+}
+function renderReport(rep) {
+  $("#reportBox").innerHTML = `<div class="empty">Relatório de ${esc(rep.data || "")} carregado.</div>`;
+}
+
+/* ---------- cópia de segurança ---------- */
+$("#exportBtn").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "radar-mercado-" + new Date().toISOString().slice(0, 10) + ".json"; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+$("#importBtn").addEventListener("click", () => $("#importFile").click());
+$("#importFile").addEventListener("change", async e => {
+  try {
+    const d = JSON.parse(await e.target.files[0].text());
+    if (!Array.isArray(d.favs) || !Array.isArray(d.cart) || !Array.isArray(d.alerts)) throw 0;
+    state = { favs: d.favs.filter(s => typeof s === "string"), cart: d.cart, alerts: d.alerts };
+    save(); toast("Dados restaurados"); refresh();
+  } catch { toast("Arquivo inválido"); }
+  e.target.value = "";
+});
+
+/* ---------- tema ---------- */
+function applyTheme(t) { if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme; }
+try { applyTheme(localStorage.getItem(KEY + ".theme")); } catch {}
+$("#theme").addEventListener("click", () => {
+  const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const t = dark ? "light" : "dark"; applyTheme(t); try { localStorage.setItem(KEY + ".theme", t); } catch {}
+});
+
+/* ---------- início ---------- */
+try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {}
+renderNotif(); renderAll(); refresh();
+</script>
+</body>
+</html>
