@@ -17,6 +17,7 @@
   --warn: #b26b00; --warn-soft: #fff3dc;
   --shadow: 0 1px 2px rgba(15,27,36,.06), 0 4px 16px rgba(15,27,36,.05);
   --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --pos: #2563eb; --neg: #d9480f;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -26,6 +27,7 @@
     --accent: #2dd4bf; --accent-soft: #10302d;
     --up: #34d27b; --up-soft: #0f2c1d; --down: #ff6b63; --down-soft: #351716;
     --warn: #f5b041; --warn-soft: #33260c;
+    --pos: #6ea8ff; --neg: #ff8a50;
     --shadow: 0 1px 2px rgba(0,0,0,.3);
     color-scheme: dark;
   }
@@ -36,6 +38,7 @@
   --accent: #2dd4bf; --accent-soft: #10302d;
   --up: #34d27b; --up-soft: #0f2c1d; --down: #ff6b63; --down-soft: #351716;
   --warn: #f5b041; --warn-soft: #33260c;
+    --pos: #6ea8ff; --neg: #ff8a50;
   --shadow: 0 1px 2px rgba(0,0,0,.3);
   color-scheme: dark;
 }
@@ -57,7 +60,29 @@ header { display: flex; align-items: center; gap: 12px; padding: 18px 0 14px; fl
 @keyframes pulse { 50% { box-shadow: 0 0 0 6px transparent; } }
 .icon-btn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; width: 34px; height: 34px; display: grid; place-items: center; cursor: pointer; }
 
-.strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 10px; }
+.idx.macro .lbl .mk { background: var(--accent-soft); color: var(--accent); }
+.corr { margin-top: 12px; padding: 12px 14px; }
+.corr-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 13px; color: var(--muted); }
+.corr-head b { color: var(--text); font-size: 14px; }
+.corr-head select { padding: 4px 8px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); }
+.corr-head .seg { flex: 0 0 auto; }
+.corr-head .link { margin-left: auto; border: 0; background: none; color: var(--accent); font-weight: 600; cursor: pointer; padding: 4px 0; }
+.corr-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; margin-top: 10px; }
+.cchip { border: 1px solid var(--line); border-radius: 9px; padding: 7px 9px; text-align: left; background: var(--panel); }
+.cchip .n { font-size: 12px; color: var(--muted); font-weight: 600; display: flex; justify-content: space-between; gap: 4px; }
+.cchip .v { font-size: 17px; font-weight: 600; }
+.cchip .w { font-size: 11px; color: var(--muted); }
+.cbar2 { position: relative; height: 5px; background: var(--panel-2); border-radius: 3px; margin-top: 5px; overflow: hidden; }
+.cbar2 i { position: absolute; top: 0; bottom: 0; }
+.cbar2::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--faint); }
+.pos { color: var(--pos); } .neg { color: var(--neg); }
+.corr-matrix { margin-top: 12px; overflow-x: auto; }
+.corr-matrix table { border-collapse: separate; border-spacing: 2px; font-size: 12px; min-width: 100%; }
+.corr-matrix th { font-weight: 600; color: var(--muted); padding: 4px 6px; white-space: nowrap; }
+.corr-matrix td { text-align: center; padding: 7px 4px; border-radius: 5px; font-family: var(--mono); min-width: 52px; }
+.corr-matrix td.diag { color: var(--faint); background: var(--panel-2); }
+.corr .hint { margin: 10px 0 0; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
 .idx { padding: 12px 12px 8px; cursor: pointer; text-align: left; border: 1px solid var(--line); min-width: 0; }
 .idx:hover { border-color: var(--accent); }
@@ -202,7 +227,7 @@ tr.detail-row td { white-space: normal; text-align: left; background: var(--pane
 .edu-t td:first-child { color: var(--muted); padding-right: 12px; width: 45%; }
 .edu-t tr:last-child td { border-bottom: 0; }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
-@media (max-width: 1000px) { .strip { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
 @media (max-width: 560px) {
   .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .row { grid-template-columns: minmax(0, 1fr) auto 84px 30px; gap: 8px; padding: 10px 12px; }
@@ -225,6 +250,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   </header>
 
   <section class="strip" id="strip" aria-label="Principais indicadores"></section>
+  <section class="card corr" id="corr" aria-label="Correlações entre os indicadores"></section>
 
   <nav class="tabs" role="tablist">
     <button role="tab" data-tab="favs" aria-selected="true">Favoritos <span class="badge" id="nFavs">0</span></button>
@@ -278,7 +304,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
 
   <!-- EDUCAÇÃO -->
   <section data-panel="edu" hidden>
-    <p class="note">O que significa cada indicador do topo da tela e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
+    <p class="note">O que significa cada indicador do topo da tela, como ler as correlações e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
     <div class="edu-grid" id="eduList"></div>
   </section>
 
@@ -303,6 +329,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
 /* ---------- configuração ---------- */
 const STRIP = [
   { s: "^BVSP", label: "Ibovespa" },
+  { s: "IFIX.SA", label: "IFIX imob." },
   { s: "USDBRL=X", label: "Dólar" },
   { s: "EURBRL=X", label: "Euro" },
   { s: "^GSPC", label: "S&P 500" },
@@ -490,8 +517,32 @@ function renderCounts() {
   $("#nAlerts").textContent = state.alerts.filter(a => !a.fired).length;
   $("#symList").innerHTML = watched().map(s => `<option value="${esc(s)}">${esc(names[s] || "")}</option>`).join("");
 }
+function macroCards() {
+  if (!macro) return "";
+  const out = [];
+  const sl = macro.selic, ip = macro.ipca;
+  if (sl?.atual) {
+    const m = sl.mensal, ago = m.length > 12 ? m[m.length - 13][1] : null, d = ago == null ? null : sl.atual.valor - ago;
+    out.push(`<button class="card idx macro" data-edu="selic">
+      <div class="lbl">Selic<span class="mk">juros</span></div>
+      <div class="px num">${nf(2).format(sl.atual.valor)}% a.a.</div>
+      <div class="ch num ${d == null ? "flat" : d > 0 ? "down" : d < 0 ? "up" : "flat"}">${d == null ? "&nbsp;" : (d > 0 ? "+" : "") + nf(2).format(d) + " p.p. em 12m"}</div>
+      ${sparkline(m.slice(-24).map(([k, v], i) => [i, v]), null)}
+    </button>`);
+  }
+  if (ip?.doze_meses_atual != null) {
+    const mes = new Date(ip.mes + "-15T12:00").toLocaleDateString("pt-BR", { month: "short" }).replace(".", "");
+    out.push(`<button class="card idx macro" data-edu="ipca">
+      <div class="lbl">IPCA<span class="mk">inflação</span></div>
+      <div class="px num">${nf(2).format(ip.doze_meses_atual)}% <span style="font-size:12px;font-weight:500">12m</span></div>
+      <div class="ch num ${ip.mensal_atual > 0 ? "down" : ip.mensal_atual < 0 ? "up" : "flat"}">${mes}: ${(ip.mensal_atual > 0 ? "+" : "") + nf(2).format(ip.mensal_atual)}%</div>
+      ${sparkline(ip.doze_meses.slice(-24).map(([k, v], i) => [i, v]), null)}
+    </button>`);
+  }
+  return out.join("");
+}
 function renderStrip() {
-  $("#strip").innerHTML = STRIP.map(({ s, label }) => {
+  $("#strip").innerHTML = macroCardsWrap(STRIP.map(({ s, label }) => {
     const q = quotes[s]; const c = change(q);
     return `<button class="card idx" data-open="${esc(s)}">
       <div class="lbl">${label}${q ? `<span class="mk ${q.open ? "on" : ""}">${q.open ? "aberto" : "fechado"}</span>` : ""}</div>
@@ -499,7 +550,122 @@ function renderStrip() {
       <div class="ch num ${cls(c)}">${q ? pct(c) : "&nbsp;"}</div>
       ${sparkline(q?.points, q?.prevClose)}
     </button>`;
+  }).join(""));
+}
+const macroCardsWrap = html => html + macroCards();
+
+/* ---------- correlações (Spearman) ---------- */
+// Monthly changes: market series use the month's % return, Selic the change in p.p.,
+// IPCA its monthly rate. Spearman = Pearson correlation of the ranks (ties get the average rank).
+const CORR = [
+  { k: "^BVSP", label: "Ibovespa" },
+  { k: "XFIX11.SA", label: "IFIX", nota: "histórico via ETF XFIX11, que replica o IFIX" },
+  { k: "USDBRL=X", label: "Dólar" },
+  { k: "EURBRL=X", label: "Euro" },
+  { k: "^GSPC", label: "S&P 500" },
+  { k: "^IXIC", label: "Nasdaq" },
+  { k: "BTC-USD", label: "Bitcoin" },
+  { k: "selic", label: "Selic" },
+  { k: "ipca", label: "IPCA" },
+];
+let macro = null, monthly = null;   // monthly: { key: Map("AAAA-MM" -> variação) }
+const thisMonth = () => new Date().toISOString().slice(0, 7);
+function monthlyChanges(pairs, mode) {   // pairs: [["AAAA-MM", valor]] sorted
+  const out = new Map();
+  for (let i = 1; i < pairs.length; i++) {
+    const [m, v] = pairs[i], [pm, pv] = pairs[i - 1];
+    if (m >= thisMonth()) continue;   // month not finished yet
+    const gap = (+m.slice(0, 4) * 12 + +m.slice(5)) - (+pm.slice(0, 4) * 12 + +pm.slice(5));
+    if (gap !== 1) continue;
+    out.set(m, mode === "diff" ? v - pv : (v / pv - 1) * 100);
+  }
+  return out;
+}
+function buildMonthly(q) {
+  const res = {};
+  for (const { k } of CORR) {
+    if (k === "selic" || k === "ipca") continue;
+    const pts = q?.[k]?.points; if (!pts) continue;
+    const byMonth = new Map();
+    // +12h keeps month-start bars stamped just before midnight UTC in the right month.
+    for (const [t, c] of pts) byMonth.set(new Date((t + 43200) * 1000).toISOString().slice(0, 7), c);
+    res[k] = monthlyChanges([...byMonth.entries()].sort((a, b) => a[0].localeCompare(b[0])), "ret");
+  }
+  if (macro?.selic?.mensal) res.selic = monthlyChanges(macro.selic.mensal, "diff");
+  if (macro?.ipca?.mensal) res.ipca = new Map(macro.ipca.mensal.filter(([m]) => m < thisMonth()));
+  return res;
+}
+function ranks(xs) {
+  const idx = xs.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0]), r = Array(xs.length);
+  for (let i = 0; i < idx.length;) {
+    let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++;
+    for (let k = i; k <= j; k++) r[idx[k][1]] = (i + j) / 2 + 1;
+    i = j + 1;
+  }
+  return r;
+}
+function pearson(a, b) {
+  const n = a.length, ma = a.reduce((x, y) => x + y, 0) / n, mb = b.reduce((x, y) => x + y, 0) / n;
+  let sab = 0, saa = 0, sbb = 0;
+  for (let i = 0; i < n; i++) { const da = a[i] - ma, db = b[i] - mb; sab += da * db; saa += da * da; sbb += db * db; }
+  return saa && sbb ? sab / Math.sqrt(saa * sbb) : null;
+}
+function spearman(ka, kb, months) {
+  const A = monthly?.[ka], B = monthly?.[kb]; if (!A || !B) return null;
+  const last = [...A.keys(), ...B.keys()].sort().at(-1); if (!last) return null;
+  const from = new Date(Date.UTC(+last.slice(0, 4), +last.slice(5) - months, 15)).toISOString().slice(0, 7);
+  const xs = [], ys = [];
+  for (const [m, v] of A) if (m >= from && B.has(m)) { xs.push(v); ys.push(B.get(m)); }
+  const n = xs.length; if (n < 8) return { r: null, n };
+  const r = pearson(ranks(xs), ranks(ys)); if (r == null) return { r: null, n, semVariacao: true };
+  const t = Math.abs(r) < 1 ? Math.abs(r) * Math.sqrt((n - 2) / (1 - r * r)) : Infinity;
+  return { r, n, sig: t > 1.96 + 2.4 / (n - 2) };   // ≈ t crítico bicaudal 5%
+}
+const forca = r => { const a = Math.abs(r); return a < 0.2 ? "muito fraca" : a < 0.4 ? "fraca" : a < 0.6 ? "moderada" : a < 0.8 ? "forte" : "muito forte"; };
+const corrStyle = r => r == null ? "" : `background: color-mix(in srgb, var(${r >= 0 ? "--pos" : "--neg"}) ${Math.round(Math.abs(r) * 55)}%, var(--panel));${Math.abs(r) > 0.6 ? "color:#fff;" : ""}`;
+function corrCfg() { return { base: "^BVSP", janela: 36, matriz: false, ...(state.corr || {}) }; }
+function renderCorr() {
+  const box = $("#corr"); if (!box) return;
+  const c = corrCfg(), lbl = k => CORR.find(x => x.k === k)?.label || k;
+  if (!monthly) { box.innerHTML = `<div class="corr-head"><b>Correlações</b> carregando histórico mensal…</div>`; return; }
+  const others = CORR.filter(x => x.k !== c.base);
+  const chips = others.map(o => {
+    const x = spearman(c.base, o.k, c.janela);
+    const r = x?.r;
+    const bar = r == null ? "" : `<div class="cbar2"><i style="${r >= 0 ? "left:50%" : "right:50%"};width:${Math.abs(r) * 50}%;background:var(${r >= 0 ? "--pos" : "--neg"})"></i></div>`;
+    const tip = r == null ? (x?.semVariacao ? "sem variação no período" : "dados insuficientes") : `ρ = ${nf(2).format(r)} · correlação ${forca(r)} ${r >= 0 ? "positiva" : "negativa"} · ${x.n} meses${x.sig ? " · estatisticamente significativa (p < 0,05)" : " · não significativa"}`;
+    return `<div class="cchip" title="${esc(tip)}"><div class="n"><span>${o.label}</span>${x?.sig ? "<span>*</span>" : ""}</div>
+      <div class="v num ${r == null ? "" : r >= 0 ? "pos" : "neg"}">${r == null ? "—" : (r > 0 ? "+" : "") + nf(2).format(r)}</div>
+      <div class="w">${r == null ? (x?.semVariacao ? "sem variação" : "poucos dados") : forca(r)}</div>${bar}</div>`;
   }).join("");
+  const matrix = !c.matriz ? "" : `<div class="corr-matrix"><table><tr><th></th>${CORR.map(o => `<th>${o.label}</th>`).join("")}</tr>
+    ${CORR.map(a => `<tr><th style="text-align:right">${a.label}</th>${CORR.map(b => {
+      if (a.k === b.k) return `<td class="diag">1</td>`;
+      const x = spearman(a.k, b.k, c.janela), r = x?.r;
+      return `<td style="${corrStyle(r)}" title="${esc(r == null ? "sem dados suficientes" : `${a.label} × ${b.label}: ρ = ${nf(2).format(r)} (${forca(r)}), ${x.n} meses${x.sig ? ", significativa" : ""}`)}">${r == null ? "·" : nf(2).format(r) + (x.sig ? "*" : "")}</td>`;
+    }).join("")}</tr>`).join("")}</table></div>`;
+  box.innerHTML = `<div class="corr-head"><b>Correlações</b>
+      <span>de <select id="corrBase" aria-label="Índice base">${CORR.map(o => `<option value="${esc(o.k)}" ${o.k === c.base ? "selected" : ""}>${o.label}</option>`).join("")}</select> com os demais</span>
+      <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [36, "3 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
+      <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
+    <div class="corr-row">${chips}</div>${matrix}
+    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11. Correlação não é causa e muda com o tempo.</p>`;
+}
+$("#corr").addEventListener("click", e => {
+  const j = e.target.closest("[data-cj]"); if (j) { state.corr = { ...corrCfg(), janela: +j.dataset.cj }; save(); return renderCorr(); }
+  if (e.target.closest("#corrToggle")) { state.corr = { ...corrCfg(), matriz: !corrCfg().matriz }; save(); renderCorr(); }
+});
+$("#corr").addEventListener("change", e => {
+  if (e.target.id === "corrBase") { state.corr = { ...corrCfg(), base: e.target.value }; save(); renderCorr(); }
+});
+async function loadCorrData() {
+  const [m, h] = await Promise.allSettled([
+    api("/api/macro"),
+    api("/api/cotacoes?range=5y&s=" + CORR.filter(x => x.k !== "selic" && x.k !== "ipca").map(x => encodeURIComponent(x.k)).join(",")),
+  ]);
+  if (m.status === "fulfilled") macro = m.value;
+  monthly = buildMonthly(h.status === "fulfilled" ? h.value.quotes : null);
+  renderStrip(); renderCorr(); renderEdu();
 }
 function renderFavs() {
   if (!state.favs.length) { $("#favList").innerHTML = `<div class="card empty">Sua lista está vazia. Use a busca acima para adicionar ativos.</div>`; return; }
@@ -642,6 +808,7 @@ document.addEventListener("click", e => {
   const uc = t.closest("[data-uncart]"); if (uc) { e.stopPropagation(); if (confirm("Remover " + short(uc.dataset.uncart) + " da carteira?")) { state.cart = state.cart.filter(p => p.symbol !== uc.dataset.uncart); save(); renderCart(); } return; }
   const ua = t.closest("[data-unalert]"); if (ua) { state.alerts = state.alerts.filter(a => a.id !== ua.dataset.unalert); save(); renderAlerts(); return; }
   const ra = t.closest("[data-rearm]"); if (ra) { const a = state.alerts.find(a => a.id === ra.dataset.rearm); if (a) a.fired = 0; save(); renderAlerts(); return; }
+  const ed = t.closest("[data-edu]"); if (ed) { showTab("edu"); setTimeout(() => document.getElementById("edu-" + ed.dataset.edu)?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); return; }
   const op = t.closest("[data-open]"); if (op && !t.closest("dialog")) openDetail(op.dataset.open);
 });
 
@@ -748,6 +915,28 @@ function eduItems() {
       porque: "Mostra o humor geral dos investidores com as empresas brasileiras.",
       horario: [["Pregão regular", dst ? "10h às 17h" : "10h às 18h"], ["Leilão de abertura", "a partir das 9h45"], ["Dias", "segunda a sexta, exceto feriados"]],
       nota: "De novembro a março (quando os EUA saem do horário de verão) a B3 costuma fechar às 18h; no resto do ano, às 17h." },
+    { id: "ifix", s: "IFIX.SA", titulo: "IFIX", sub: "Índice de fundos imobiliários (B3)",
+      oque: "Mede o desempenho dos <b>fundos imobiliários</b> (FIIs) mais negociados na B3: fundos donos de shoppings, galpões logísticos, prédios de escritórios, agências e também de títulos ligados a imóveis (CRIs). Quem compra uma cota recebe parte dos aluguéis, normalmente todo mês.",
+      porque: "É o termômetro do mercado imobiliário na bolsa. Costuma sofrer quando os juros (Selic) sobem, porque a renda fixa passa a competir com os aluguéis, e melhorar quando os juros caem.",
+      horario: [["Pregão regular", dst ? "10h às 17h" : "10h às 18h"], ["Dias", "segunda a sexta, exceto feriados (mesmo horário da B3)"]],
+      nota: "Nas correlações, o histórico mensal do IFIX vem do ETF XFIX11, um fundo que replica o índice." },
+    { id: "selic", titulo: "Selic", sub: "A taxa básica de juros do Brasil",
+      valor: () => macro?.selic?.atual ? `<b class="num">${nf(2).format(macro.selic.atual.valor)}% ao ano</b> <span class="hint">em ${new Date(macro.selic.atual.data + "T12:00").toLocaleDateString("pt-BR")}</span>` : "",
+      oque: "É a taxa de juros que serve de referência para toda a economia. Quem decide é o <b>Copom</b>, comitê do Banco Central que se reúne 8 vezes por ano, a cada 45 dias mais ou menos. Ela influencia os juros de empréstimos, financiamentos e o rendimento da renda fixa (Tesouro Selic, CDBs).",
+      porque: "Juros altos seguram a inflação, mas encarecem o crédito e costumam pesar sobre a bolsa e os fundos imobiliários. Juros em queda tendem a favorecer ações e imóveis.",
+      horario: [["Decisão", "nas reuniões do Copom, divulgada por volta das 18h30"], ["Vale", "a partir do dia seguinte à decisão"]],
+      nota: "Fonte: IPEA (série do Banco Central). Valor em % ao ano." },
+    { id: "ipca", titulo: "IPCA (inflação)", sub: "O índice oficial de inflação do Brasil",
+      valor: () => macro?.ipca?.doze_meses_atual != null ? `<b class="num">${nf(2).format(macro.ipca.doze_meses_atual)}% em 12 meses</b> <span class="hint">· ${nf(2).format(macro.ipca.mensal_atual)}% em ${new Date(macro.ipca.mes + "-15T12:00").toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}</span>` : "",
+      oque: "Medido pelo <b>IBGE</b>, mostra quanto subiram, em média, os preços do que as famílias compram: alimentos, aluguel, energia, transporte, saúde etc. É a inflação oficial, usada na meta do governo (3% ao ano, com tolerância até 4,5%).",
+      porque: "Inflação alta corrói o poder de compra e leva o Banco Central a subir a Selic. Por isso, o mercado acompanha cada divulgação de perto.",
+      horario: [["Divulgação", "uma vez por mês, por volta do dia 10, às 9h"], ["Prévia (IPCA-15)", "por volta do dia 25 de cada mês"]],
+      nota: "Fonte: IBGE (SIDRA). Valor negativo no mês = deflação, quando os preços caíram." },
+    { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler a linha de correlações",
+      oque: "Mede se dois indicadores costumam se mover <b>na mesma direção</b>. Vai de <b>−1</b> a <b>+1</b>: +1 significa que, quando um tem um mês melhor, o outro também tem; −1, que um sobe quando o outro cai; 0, que não há relação. Diferente da correlação comum (Pearson), a de Spearman compara a <i>ordem</i> dos meses, do pior ao melhor, e por isso é menos afetada por meses extremos.",
+      porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
+      horario: [["Dados", "variações mensais (meses já fechados)"], ["Janelas", "1, 3 ou 5 anos"], ["Asterisco *", "relação estatisticamente significativa (p < 0,05)"]],
+      nota: "Correlação não é causa, e ela muda com o tempo. Com poucos meses (janela de 1 ano), os números oscilam bastante." },
     { s: "USDBRL=X", titulo: "Dólar", sub: "Quantos reais custa 1 dólar americano",
       oque: "O valor mostrado é o <b>dólar comercial</b>, usado por bancos e empresas em grandes operações. O dólar turismo, de casa de câmbio e cartão, sai mais caro.",
       porque: "Mexe com o preço de combustíveis, importados, viagens e com o lucro de exportadoras (Vale, Suzano, Embraer). Costuma subir quando há medo ou quando estrangeiros tiram dinheiro do Brasil.",
@@ -777,11 +966,12 @@ function eduItems() {
 }
 function renderEdu() {
   const box = $("#eduList"); if (!box || box.closest("[hidden]")) return;
-  box.innerHTML = eduItems().map(it => {
-    const q = quotes[it.s], c = change(q);
-    return `<article class="card edu">
+  box.innerHTML = eduItems().sort((a, b) => (a.id === "spearman") - (b.id === "spearman")).map(it => {
+    const q = it.s ? quotes[it.s] : null, c = change(q);
+    return `<article class="card edu" id="edu-${it.id || it.s.replace(/[^a-z0-9]/gi, "").toLowerCase()}">
       <div class="edu-h"><div><h3>${it.titulo}</h3><div class="hint">${it.sub}</div></div>
         ${q ? `<span class="mk ${q.open ? "on" : ""}">${q.open ? "aberto agora" : "fechado agora"}</span>` : ""}</div>
+      ${it.valor && it.valor() ? `<div class="edu-px" style="cursor:default">${it.valor()}</div>` : ""}
       ${q ? `<button class="edu-px" data-open="${esc(it.s)}"><span class="num">${money(q.price, q.currency, q.type)}</span> <span class="num ${cls(c)}">${pct(c)}</span> <span class="hint">· ver gráfico</span></button>` : ""}
       <h4>O que é</h4><p>${it.oque}</p>
       <h4>Por que importa</h4><p>${it.porque}</p>
@@ -1013,7 +1203,7 @@ $("#theme").addEventListener("click", () => {
 
 /* ---------- início ---------- */
 try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {}
-renderNotif(); renderAll(); refresh();
+renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData();
 </script>
 </body>
 </html>
