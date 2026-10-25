@@ -1,0 +1,69 @@
+# Sends the daily report by e-mail at 07:00 (Brasília) on weekdays.
+# - When the Claude routine pushes the new report (around 06:15), this waits until 07:00 and sends.
+# - At 07:20 a scheduled run sends anyway if nothing went out yet (e.g. the routine failed);
+#   the e-mail then warns that the news research is from an earlier day.
+# - "Run workflow" by hand sends immediately (useful to test).
+# relatorios/email-enviado.txt records the last day an e-mail went out, so each day gets one.
+name: E-mail diário
+
+on:
+  push:
+    branches: [main]
+    paths: [relatorios/ultimo.json]
+  schedule:
+    - cron: "20 10 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: email
+  cancel-in-progress: false
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Decidir se envia
+        id: decide
+        run: |
+          today=$(TZ=America/Sao_Paulo date +%F)
+          dow=$(TZ=America/Sao_Paulo date +%u)
+          sent=$(cat relatorios/email-enviado.txt 2>/dev/null || true)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "send=yes" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "$dow" -gt 5 ]; then echo "Fim de semana: não envia."; echo "send=no" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "$sent" = "$today" ]; then echo "Já enviado hoje."; echo "send=no" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "${{ github.event_name }}" = "push" ]; then
+            research=$(node -e "const r=require('./relatorios/ultimo.json');console.log(r.pesquisa_data||'')")
+            if [ "$research" != "$today" ]; then echo "Push sem a pesquisa de hoje: espera a rotina."; echo "send=no" >> "$GITHUB_OUTPUT"; exit 0; fi
+          fi
+          echo "send=yes" >> "$GITHUB_OUTPUT"
+      - name: Esperar até 07:00 (Brasília)
+        if: steps.decide.outputs.send == 'yes' && github.event_name == 'push'
+        run: |
+          target=$(TZ=America/Sao_Paulo date -d "today 07:00" +%s)
+          wait=$(( target - $(date +%s) ))
+          if [ "$wait" -gt 0 ] && [ "$wait" -lt 10800 ]; then echo "Esperando ${wait}s"; sleep "$wait"; fi
+          git pull --rebase
+      - name: Enviar
+        if: steps.decide.outputs.send == 'yes'
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          # A concurrent run may have sent while this one waited.
+          [ "$(cat relatorios/email-enviado.txt 2>/dev/null)" = "$(TZ=America/Sao_Paulo date +%F)" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ] && { echo "Já enviado."; exit 0; }
+          node scripts/email.mjs
+          TZ=America/Sao_Paulo date +%F > relatorios/email-enviado.txt
+          git config user.name "radar-mercado-bot"
+          git config user.email "radar-mercado-bot@users.noreply.github.com"
+          git add relatorios/email-enviado.txt
+          git commit -m "E-mail enviado $(TZ=America/Sao_Paulo date +%F)" || exit 0
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done

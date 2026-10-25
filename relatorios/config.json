@@ -1,0 +1,7 @@
+{
+  "comentario": "Configuração do e-mail diário. tempos_graficos: quais gráficos entram na análise técnica do e-mail (diario, semanal, mensal). criterios: os mesmos da aba Relatório do site (padrão) — usados para os sinais de compra do e-mail.",
+  "site": "https://radar-mercado-xi.vercel.app",
+  "tempos_graficos": ["diario", "semanal", "mensal"],
+  "criterios": { "pl_max": 15, "dy_min": 4, "roe_min": 12, "div_max": 2, "min_casas": 3 },
+  "maiores_do_ibovespa_na_tabela": 15
+}

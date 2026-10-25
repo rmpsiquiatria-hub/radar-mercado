@@ -50,6 +50,8 @@ const now = new Date();
 const out = {
   data: ind.data,
   gerado_em: now.toISOString(),
+  // Day the news research last ran (differs from `data` when only prices/technicals were refreshed).
+  pesquisa_data: dir ? ind.data : (prev.pesquisa_data || prev.data || ind.data),
   resumo_mercado: mercado.resumo_mercado || prev.resumo_mercado || "",
   fontes_mercado: mercado.fontes || prev.fontes_mercado || [],
   tecnica_data: tec?.data || null,

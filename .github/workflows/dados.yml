@@ -1,0 +1,41 @@
+# Weekdays 05:30 (Brasília): refresh fundamentals (B3 + Fundamentus) and technical
+# analysis (Yahoo candles), then rebuild relatorios/ultimo.json on top of the latest
+# research. The Claude routine at 06:00 adds the news research.
+name: Dados do dia
+
+on:
+  schedule:
+    - cron: "30 8 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: relatorios
+  cancel-in-progress: false
+
+jobs:
+  dados:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Indicadores e análise técnica
+        run: |
+          node scripts/indicadores.mjs
+          node scripts/tecnica.mjs
+          node scripts/montar-relatorio.mjs -
+          node scripts/validar-relatorio.mjs
+      - name: Publicar
+        run: |
+          git config user.name "radar-mercado-bot"
+          git config user.email "radar-mercado-bot@users.noreply.github.com"
+          git add relatorios/
+          git diff --cached --quiet && exit 0
+          git commit -m "Dados do dia $(TZ=America/Sao_Paulo date +%F)"
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
+          exit 1
