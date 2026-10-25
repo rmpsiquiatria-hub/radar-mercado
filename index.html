@@ -314,6 +314,27 @@ dialog.vdlg::backdrop { background: rgba(5,10,14,.55); }
 .tec-dt { white-space: nowrap; }
 .tec-feed .row2 { padding: 6px 14px; }
 #cfgPA .alert-row { padding: 10px 0; } #cfgPA .pa-add { padding: 0 0 6px; }
+dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
+.sim-modo { margin: 12px 0 4px; }
+.sim-modo button:disabled { opacity: .5; cursor: not-allowed; }
+.simdlg .vgrid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+.simdlg .field input, .simdlg .field select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.sim-quick { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+.sim-quick button { border: 1px solid var(--line); background: var(--panel-2); border-radius: 6px; font-size: 11.5px; padding: 1px 6px; cursor: pointer; color: var(--muted); }
+.sim-res { margin-top: 14px; }
+.sim-big { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 12px 14px; border-radius: 10px; background: var(--panel-2); border-left: 4px solid var(--up); }
+.sim-big.neg { border-left-color: var(--down); }
+.sim-big span { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; width: 100%; }
+.sim-big b { font-size: 26px; } .sim-big.pos b { color: var(--up); } .sim-big.neg b { color: var(--down); }
+.sim-big small { color: var(--muted); }
+.sim-t { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+.sim-t td { padding: 6px 4px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.sim-t td.num { text-align: right; white-space: nowrap; }
+.sim-t tr.g td { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700; padding-top: 12px; border-bottom: 0; }
+.sim-t tr.tot td, .sim-ct tr.tot td { font-weight: 700; border-top: 2px solid var(--line); }
+.sim-note { font-size: 13px; margin: 8px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--panel-2); }
+.sim-ct { margin-top: 10px; }
+.sim-all { text-align: left; cursor: pointer; border: 1px dashed var(--accent); }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 
 @media (max-width: 560px) {
@@ -360,7 +381,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
 
   <!-- CARTEIRA -->
   <section data-panel="cart" hidden>
-    <div class="vhead"><h3>Minha carteira</h3><button class="btn primary" id="vNew" type="button">＋ Criar carteira virtual</button></div>
+    <div class="vhead"><h3>Minha carteira</h3><span class="row2" style="margin:0"><button class="btn" id="simNew" type="button">🧮 Simular compra e venda</button><button class="btn primary" id="vNew" type="button">＋ Criar carteira virtual</button></span></div>
     <div class="totals" id="cartTotals"></div>
     <form class="form card" id="cartForm">
       <div class="field"><label for="cSym">Ativo (código)</label><input id="cSym" list="symList" placeholder="PETR4.SA" required></div>
@@ -420,6 +441,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   </footer>
 </div>
 
+<dialog id="simDlg" class="vdlg simdlg"><div class="card" id="simBody"></div></dialog>
 <dialog id="vDlg" class="vdlg"><div class="card" id="vDlgBody"></div></dialog>
 <div id="wins"></div>
 <div id="winDock" hidden></div>
@@ -767,7 +789,7 @@ function renderCart() {
       <td class="num ${cls(change(q))}">${pct(change(q))}</td>
       <td class="num">${money(value, cur)}</td>
       <td class="num ${cls(res)}">${res == null ? "—" : (res > 0 ? "+" : "") + money(res, cur)}<div style="font-size:12px">${pct(resPct)}</div></td>
-      <td><button class="del" data-uncart="${esc(p.symbol)}" title="Remover da carteira" aria-label="Remover ${esc(short(p.symbol))}">×</button></td>
+      <td style="white-space:nowrap"><button class="btn small" data-sim="${esc(p.symbol)}" title="Simular a venda com impostos e taxas">🧮</button> <button class="del" data-uncart="${esc(p.symbol)}" title="Remover da carteira" aria-label="Remover ${esc(short(p.symbol))}">×</button></td>
     </tr>`;
   });
   $("#cartList").innerHTML = state.cart.length
@@ -779,7 +801,8 @@ function renderCart() {
     <div class="card tot"><div class="lbl">Total investido</div><div class="v num">${brl(inv)}</div></div>
     <div class="card tot"><div class="lbl">Resultado</div><div class="v num ${cls(res)}">${(res > 0 ? "+" : "") + brl(res)} <span style="font-size:14px">${pct(inv ? res / inv * 100 : null)}</span></div></div>
     <div class="card tot"><div class="lbl">Variação hoje</div><div class="v num ${cls(day)}">${(day > 0 ? "+" : "") + brl(day)}</div></div>
-    ${missing ? `<div class="note" style="grid-column:1/-1;margin:0">${missing} ativo(s) ainda sem cotação não entraram no total.</div>` : ""}` : "";
+    ${missing ? `<div class="note" style="grid-column:1/-1;margin:0">${missing} ativo(s) ainda sem cotação não entraram no total.</div>` : ""}
+    <button class="card tot sim-all" data-simall type="button"><div class="lbl">Se vendesse tudo hoje</div><div class="v" style="font-size:15px">🧮 Ver lucro líquido com impostos e taxas</div></button>` : "";
 }
 function renderAlerts() {
   safeHTML($("#alertList"), priceAlertsHTML(false));
@@ -1092,6 +1115,8 @@ document.addEventListener("click", e => {
   const ua = t.closest("[data-unalert]"); if (ua) { state.alerts = state.alerts.filter(a => a.id !== ua.dataset.unalert); save(); renderAlerts(); return; }
   const ra = t.closest("[data-rearm]"); if (ra) { const a = state.alerts.find(a => a.id === ra.dataset.rearm); if (a) a.fired = 0; save(); renderAlerts(); return; }
   const ed = t.closest("[data-edu]"); if (ed) { showTab("edu"); setTimeout(() => document.getElementById("edu-" + ed.dataset.edu)?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); return; }
+  const sm = t.closest("[data-sim]"); if (sm) { simOpen({ sym: sm.dataset.sim }); return; }
+  if (t.closest("[data-simall]")) { simOpen({ modo: "carteira" }); return; }
   const go = t.closest("[data-goto]"); if (go) { showTab(go.dataset.goto); scrollTo({ top: 0, behavior: "smooth" }); return; }
   const op = t.closest("[data-open]"); if (op && !t.closest(".win")) openWin(op.dataset.open);
 });
@@ -1661,6 +1686,13 @@ function renderConfig() {
       <div id="cfgTec" class="tec-cfg">${tecSettingsHTML()}</div>
     </section>
     <section class="card">
+      <h3>Custos e impostos do simulador</h3>
+      <p class="hint">Usados no "Simular compra e venda" da aba Carteira. Os valores padrão seguem as regras de 2026 e as taxas mais comuns; ajuste para as da sua corretora.</p>
+      <div class="form">${Object.entries(CUSTOS_LABEL).map(([k, [l, u]]) => `<div class="field"><label>${l} (${u})</label><input type="number" step="any" min="0" data-custo="${k}" value="${custos()[k]}"></div>`).join("")}
+        <button class="btn" type="button" data-cfg="custosReset">Voltar ao padrão</button></div>
+      <p class="hint" style="margin-top:10px"><b>Impostos (fixos em lei):</b> ações 15% (isentas se as vendas do mês somarem até R$ 20 mil) e 20% no day trade; ETFs 15%; fundos imobiliários 20%; ações no exterior 15% no ajuste anual; cripto 15% acima de R$ 35 mil de vendas no mês; dólar em espécie isento até US$ 5 mil por ano.</p>
+    </section>
+    <section class="card">
       <h3>Relatório diário</h3>
       <p class="hint">Gráfico usado nos sinais técnicos e na coluna "Técnico" da tabela.</p>
       <div class="row2"><span class="seg">${FRAMES.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${frame() === k}">${l}</button>`).join("")}</span></div>
@@ -1682,6 +1714,8 @@ function renderConfig() {
     </section>`);
 }
 $("#cfgBox").addEventListener("change", e => {
+  const cu = e.target.closest("[data-custo]");
+  if (cu) { state.custos = { ...custos(), [cu.dataset.custo]: Math.max(0, +cu.value || 0) }; save(); return; }
   const inp = e.target.closest("[data-crit]");
   if (inp) { state.criterios = { ...crit(), [inp.dataset.crit]: inp.value === "" ? "" : +inp.value }; save(); renderReport(); return; }
   const ci = e.target.closest("[data-cind]");
@@ -1689,6 +1723,7 @@ $("#cfgBox").addEventListener("change", e => {
 });
 $("#cfgBox").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.cfg === "custosReset") { delete state.custos; save(); renderConfig(); return; }
   if (b.dataset.cfg === "critReset") { delete state.criterios; save(); renderConfig(); renderReport(); return; }
   if (b.dataset.cfg === "export") return $("#exportBtn").click();
   if (b.dataset.cfg === "import") return $("#importBtn").click();
@@ -1900,6 +1935,239 @@ $("#vList").addEventListener("click", e => {
   if (v && confirm(`Excluir a carteira virtual "${v.nome}"?`)) { state.virtuais = virtuais().filter(x => x !== v); save(); renderVirt(); }
 });
 
+/* ---------- simulador de compra e venda (impostos e taxas) ---------- */
+// Brazilian rules in force in 2026 (MP 1.303/2025 lapsed): stocks 15% swing with the R$ 20k/month
+// sales exemption, 20% day trade; ETFs 15/20% and FIIs 20% without exemption; US stocks 15% on the
+// gain in reais (Lei 14.754/2023); crypto 15% above R$ 35k sales/month; cash dollars exempt up to
+// US$ 5k/year. Fees and rates are user-editable defaults (Configurações) — brokers differ.
+const CUSTOS_DEFAULT = {
+  corretagem_b3: 0, taxa_b3_swing: 0.030, taxa_b3_day: 0.023,
+  corretagem_eua: 0, spread_cambio: 0.5, iof_ida: 1.1, iof_volta: 0.38,
+  taxa_cripto: 0.3, iof_especie: 3.5, spread_especie: 3,
+};
+const CUSTOS_LABEL = {
+  corretagem_b3: ["Corretagem por ordem na B3", "R$"], taxa_b3_swing: ["Taxas da B3 — swing trade", "%"], taxa_b3_day: ["Taxas da B3 — day trade", "%"],
+  corretagem_eua: ["Corretagem por ordem nos EUA", "US$"], spread_cambio: ["Spread do câmbio (corretora internacional)", "%"], iof_ida: ["IOF na remessa para investir no exterior", "%"], iof_volta: ["IOF no retorno do dinheiro ao Brasil", "%"],
+  taxa_cripto: ["Taxa da corretora de cripto (por operação)", "%"], iof_especie: ["IOF na compra de dólar em espécie", "%"], spread_especie: ["Spread da casa de câmbio", "%"],
+};
+function custos() { return { ...CUSTOS_DEFAULT, ...(state.custos || {}) }; }
+const KINDS = { acao: "Ação (B3)", etf: "ETF (B3)", fii: "Fundo imobiliário (B3)", exterior: "Ação no exterior (EUA)", cripto: "Criptomoeda", dolar: "Dólar em espécie" };
+function assetKind(sym) {
+  const q = quotes[sym];
+  if (sym === "USDBRL=X") return "dolar";
+  if (q?.type === "CRYPTOCURRENCY" || /^[A-Z0-9]+-USD$/.test(sym)) return "cripto";
+  if (sym.endsWith(".SA")) {
+    if (/imobili|FDO INV IMOB|\bFII\b/i.test(q?.name || "")) return "fii";
+    return q?.type === "ETF" ? "etf" : "acao";
+  }
+  return "exterior";
+}
+const isB3 = k => k === "acao" || k === "etf" || k === "fii";
+function darfDue(d = new Date()) {   // last business day of next month
+  const x = new Date(d.getFullYear(), d.getMonth() + 2, 0);
+  while (x.getDay() === 0 || x.getDay() === 6) x.setDate(x.getDate() - 1);
+  return x.toLocaleDateString("pt-BR");
+}
+const irRendaFixa = dias => dias <= 180 ? 0.225 : dias <= 360 ? 0.20 : dias <= 720 ? 0.175 : 0.15;
+
+// One round trip (buy then sell). Money in reais. p: {kind, op, qty, pb, ps, fxb, fxs, outras, prejuizo, dias}
+function simCalc(p, full = true) {
+  const c = custos(), out = { linhas: [], avisos: [] }, L = (grupo, rot, v) => out.linhas.push({ grupo, rot, v });
+  const q = p.qty;
+  let custoTotal, recebido, baseIR, aliq, isento = false, motivo = "", irrf = 0;
+  if (isB3(p.kind)) {
+    const tx = (p.op === "day" ? c.taxa_b3_day : c.taxa_b3_swing) / 100;
+    const bG = q * p.pb, bF = c.corretagem_b3 + bG * tx, sG = q * p.ps, sF = c.corretagem_b3 + sG * tx;
+    custoTotal = bG + bF; recebido = sG - sF;
+    L("Compra", "Valor da compra", bG); L("Compra", "Corretagem e taxas da B3", bF);
+    L("Venda", "Valor da venda", sG); L("Venda", "Corretagem e taxas da B3", -sF);
+    baseIR = recebido - custoTotal;   // fees are part of the cost basis
+    if (p.op === "day") { aliq = 0.20; irrf = Math.max(0, baseIR) * 0.01; motivo = "day trade: 20% sobre o lucro, sem isenção"; }
+    else {
+      aliq = p.kind === "fii" ? 0.20 : 0.15;
+      irrf = sG * 0.00005;   // "dedo-duro" 0,005% on the sale
+      if (irrf <= 1) irrf = 0;   // withholding of R$ 1,00 or less is waived
+      if (p.kind === "acao") {
+        const vendasMes = sG + (p.outras || 0);
+        isento = vendasMes <= 20000;
+        motivo = isento ? `isento: as vendas de ações no mês somam ${brl(vendasMes)} (até R$ 20.000)` : `15%: as vendas de ações no mês somam ${brl(vendasMes)}, acima de R$ 20.000, então todo o lucro é tributado`;
+      } else motivo = p.kind === "fii" ? "fundo imobiliário: 20% sobre o lucro, sem isenção" : "ETF: 15% sobre o lucro, sem a isenção de R$ 20 mil";
+    }
+  } else if (p.kind === "exterior") {
+    const fb = p.fxb, fs = p.fxs, sp = c.spread_cambio / 100;
+    const bUSD = q * p.pb + c.corretagem_eua, sUSD = q * p.ps - c.corretagem_eua;
+    const remessa = bUSD * fb * (1 + sp), iofIda = remessa * c.iof_ida / 100;
+    const volta = sUSD * fs * (1 - sp), iofVolta = volta * c.iof_volta / 100;
+    custoTotal = remessa + iofIda; recebido = volta - iofVolta;
+    L("Compra", `Valor da compra (US$ ${nf(2).format(q * p.pb)} × ${nf(4).format(fb)})`, q * p.pb * fb);
+    L("Compra", "Corretagem, spread do câmbio e IOF na ida", custoTotal - q * p.pb * fb);
+    L("Venda", `Valor da venda (US$ ${nf(2).format(q * p.ps)} × ${nf(4).format(fs)})`, q * p.ps * fs);
+    L("Venda", "Corretagem, spread e IOF na volta", -(q * p.ps * fs - recebido));
+    baseIR = sUSD * fs - bUSD * fb;   // gain in reais at each date's exchange rate
+    aliq = 0.15; motivo = "15% sobre o ganho em reais (inclui a variação do dólar), sem isenção";
+    out.avisos.push("Ações no exterior: o imposto é apurado uma vez por ano, na declaração (Lei 14.754/2023). Não há DARF mensal.");
+  } else if (p.kind === "cripto") {
+    const tx = c.taxa_cripto / 100, bG = q * p.pb, sG = q * p.ps;
+    custoTotal = bG * (1 + tx); recebido = sG * (1 - tx);
+    L("Compra", "Valor da compra", bG); L("Compra", "Taxa da corretora", bG * tx);
+    L("Venda", "Valor da venda", sG); L("Venda", "Taxa da corretora", -sG * tx);
+    baseIR = recebido - custoTotal; aliq = 0.15;
+    const vendasMes = sG + (p.outras || 0);
+    isento = vendasMes <= 35000;
+    motivo = isento ? `isento: as vendas de cripto no mês somam ${brl(vendasMes)} (até R$ 35.000)` : `15%: as vendas de cripto no mês somam ${brl(vendasMes)}, acima de R$ 35.000`;
+    out.avisos.push("Regra para corretoras brasileiras. Em corretoras estrangeiras vale a regra do exterior (15%, sem isenção, apuração anual).");
+  } else {   // dollar bills: qty in US$, prices in R$ per US$
+    const sp = c.spread_especie / 100, bG = q * p.pb * (1 + sp), iof = bG * c.iof_especie / 100, sG = q * p.ps * (1 - sp);
+    custoTotal = bG + iof; recebido = sG;
+    L("Compra", `US$ ${nf(2).format(q)} a R$ ${nf(4).format(p.pb)} + spread`, bG); L("Compra", "IOF na compra de moeda em espécie", iof);
+    L("Venda", `Venda a R$ ${nf(4).format(p.ps)} − spread`, sG);
+    baseIR = recebido - custoTotal; aliq = 0.15;
+    isento = q <= 5000;
+    motivo = isento ? "isento: vendas de moeda em espécie até US$ 5.000 no ano" : "15% sobre o ganho (vendas acima de US$ 5.000 no ano)";
+  }
+  const ir = isento ? 0 : Math.max(0, baseIR - (p.prejuizo || 0)) * aliq;
+  const imposto = Math.max(ir, irrf);   // the withholding is credited against the tax due
+  Object.assign(out, { custoTotal, recebido, baseIR, imposto, irrf, aliq, isento, motivo });
+  out.lucro = recebido - custoTotal - imposto;
+  out.rent = custoTotal ? out.lucro / custoTotal * 100 : null;
+  out.taxas = out.linhas.filter(l => /taxa|corretagem|IOF|spread/i.test(l.rot)).reduce((a, l) => a + Math.abs(l.v), 0);
+  if (!full) return out;
+  out.darf = (isB3(p.kind) || p.kind === "cripto") && imposto - irrf > 0.009
+    ? `DARF de ${brl(imposto - irrf)} (código ${p.kind === "cripto" ? "4600" : "6015"}) até ${darfDue()}${irrf > 0.009 ? `; ${brl(irrf)} já retidos na venda` : ""}` : "";
+  if (baseIR < 0) out.avisos.push(`Prejuízo de ${brl(-baseIR)}: ${isB3(p.kind) ? `pode ser abatido de lucros futuros de ${p.op === "day" ? "day trade" : "swing trade"}, inclusive em meses seguintes` : "não há imposto a pagar"}.`);
+  const selic = macro?.selic?.atual?.valor;
+  if (selic && p.dias > 0) out.cdi = custoTotal * (Math.pow(1 + (selic - 0.1) / 100, p.dias / 365) - 1) * (1 - irRendaFixa(p.dias));
+  let lo = 0, hi = Math.max(p.pb, p.ps) * 3 + 1;   // selling price that covers costs and taxes
+  for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (simCalc({ ...p, ps: mid }, false).lucro >= 0) hi = mid; else lo = mid; }
+  out.empate = hi;
+  return out;
+}
+
+/* dialog */
+let simState = null;
+function simOpen(pre = {}) {
+  const sym = pre.sym || state.cart[0]?.symbol || "PETR4.SA";
+  simState = { modo: pre.modo || "um" };
+  $("#simBody").innerHTML = `
+    <div class="vdlg-h"><h2>🧮 Simular compra e venda</h2><button type="button" class="icon-btn" data-sd="close" aria-label="Fechar">✕</button></div>
+    <div class="seg sim-modo" role="group"><button data-smodo="um" aria-pressed="${simState.modo === "um"}">Uma operação</button><button data-smodo="carteira" aria-pressed="${simState.modo === "carteira"}" ${state.cart.length ? "" : "disabled title='Sua carteira está vazia'"}>Vender toda a carteira hoje</button></div>
+    <div id="simForm"></div>
+    <div id="simRes" class="sim-res"></div>
+    <p class="hint">Estimativa com as regras de 2026 para pessoa física e as taxas de Configurações (cada corretora cobra diferente). Não substitui um contador. Lucro e prejuízo de day trade e de swing trade são apurados separadamente.</p>`;
+  simRenderForm(pre);
+  $("#simDlg").showModal();
+}
+function simRenderForm(pre = {}) {
+  const box = $("#simForm");
+  if (simState.modo === "carteira") {
+    box.innerHTML = `<div class="vgrid">
+      <div class="field"><label>Outras vendas de ações já feitas este mês (R$)</label><input type="number" min="0" step="100" data-s="outras" value="0"></div>
+      <div class="field"><label>Prejuízo de meses anteriores a compensar (R$)</label><input type="number" min="0" step="100" data-s="prejuizo" value="0"></div></div>`;
+    return simRun();
+  }
+  const sym = normSym(pre.sym || $("#sSym")?.value || state.cart[0]?.symbol || "PETR4.SA");
+  const held = state.cart.find(p => p.symbol === sym);
+  const q = quotes[sym], kind = assetKind(sym), usd = quotes["USDBRL=X"]?.price || 5;
+  const px = kind === "dolar" ? usd : q?.price;
+  box.innerHTML = `
+    <div class="vgrid">
+      <div class="field"><label for="sSym">Ativo</label><input id="sSym" list="symList" value="${esc(sym.endsWith(".SA") ? short(sym) : sym)}" data-s="sym"></div>
+      <div class="field"><label>Tipo</label><select data-s="kind">${Object.entries(KINDS).map(([k, l]) => `<option value="${k}" ${k === kind ? "selected" : ""}>${l}</option>`).join("")}</select></div>
+      <div class="field sim-b3"><label>Operação</label><select data-s="op"><option value="swing">Swing trade (dias diferentes)</option><option value="day">Day trade (compra e venda no mesmo dia)</option></select></div>
+      <div class="field"><label>Quantidade${kind === "dolar" ? " (US$)" : ""}</label><input type="number" min="0" step="any" data-s="qty" value="${pre.qty ?? held?.qty ?? 100}"></div>
+      <div class="field"><label>Preço de compra${kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)"}</label><input type="number" min="0" step="any" data-s="pb" value="${pre.pb ?? held?.avg ?? (px ? +px.toFixed(4) : "")}"></div>
+      <div class="field"><label>Preço de venda${kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)"}</label><input type="number" min="0" step="any" data-s="ps" value="${px ? +px.toFixed(4) : ""}">
+        <div class="sim-quick">${[-10, -5, 0, 5, 10, 20].map(v => `<button type="button" data-sq="${v}">${v > 0 ? "+" : ""}${v === 0 ? "atual" : v + "%"}</button>`).join("")}</div></div>
+      <div class="field sim-ext"><label>Dólar na compra (R$)</label><input type="number" min="0" step="any" data-s="fxb" value="${+usd.toFixed(4)}"></div>
+      <div class="field sim-ext"><label>Dólar na venda (R$)</label><input type="number" min="0" step="any" data-s="fxs" value="${+usd.toFixed(4)}"></div>
+      <div class="field"><label>Tempo com o ativo (dias)</label><input type="number" min="0" step="1" data-s="dias" value="${pre.dias ?? 30}"></div>
+      <div class="field sim-mes"><label>Outras vendas no mês (R$)</label><input type="number" min="0" step="100" data-s="outras" value="0"></div>
+      <div class="field sim-b3"><label>Prejuízo a compensar (R$)</label><input type="number" min="0" step="100" data-s="prejuizo" value="0"></div>
+    </div>
+    ${held ? `<p class="hint">Preço de compra preenchido com o seu preço médio da carteira (${money(held.avg, q?.currency || "BRL")}).</p>` : ""}`;
+  // crypto quoted in US$: convert to reais so the R$ 35k rule applies in reais
+  if (kind === "cripto" && q?.currency === "USD") { box.querySelector('[data-s="pb"]').value = +(+box.querySelector('[data-s="pb"]').value * usd).toFixed(2); box.querySelector('[data-s="ps"]').value = +((q.price || 0) * usd).toFixed(2); box.querySelectorAll("label").forEach(l => l.textContent = l.textContent.replace("(US$)", "(R$)")); }
+  simRun();
+}
+function simRead() {
+  const v = k => { const el = $(`#simForm [data-s="${k}"]`); return el ? (el.type === "number" ? +el.value || 0 : el.value) : undefined; };
+  return { kind: v("kind"), op: v("op") || "swing", qty: v("qty"), pb: v("pb"), ps: v("ps"), fxb: v("fxb"), fxs: v("fxs"), dias: v("dias"), outras: v("outras"), prejuizo: v("prejuizo") };
+}
+function simRun() {
+  const res = $("#simRes");
+  if (simState.modo === "carteira") return simRunCarteira();
+  const p = simRead();
+  $("#simForm").querySelectorAll(".sim-b3").forEach(el => el.hidden = !isB3(p.kind));
+  $("#simForm").querySelectorAll(".sim-ext").forEach(el => el.hidden = p.kind !== "exterior");
+  $("#simForm").querySelectorAll(".sim-mes").forEach(el => el.hidden = !(p.kind === "acao" || p.kind === "cripto"));
+  if (!(p.qty > 0 && p.pb > 0 && p.ps > 0) || (p.kind === "exterior" && !(p.fxb > 0 && p.fxs > 0))) { res.innerHTML = `<div class="hint">Preencha quantidade e preços para ver o resultado.</div>`; return; }
+  const r = simCalc(p), sign = v => (v > 0 ? "+" : "") + brl(v);
+  const unit = p.kind === "exterior" ? "US$ " + nf(2).format(r.empate) : brl(r.empate);
+  res.innerHTML = `
+    <div class="sim-big ${r.lucro >= 0 ? "pos" : "neg"}"><span>Lucro líquido estimado</span><b class="num">${sign(r.lucro)}</b><small class="num">${pct(r.rent)} sobre ${brl(r.custoTotal)} investidos</small></div>
+    <table class="sim-t">
+      ${["Compra", "Venda"].map(g => `<tr class="g"><td colspan="2">${g}</td></tr>` + r.linhas.filter(l => l.grupo === g).map(l => `<tr><td>${esc(l.rot)}</td><td class="num">${brl(l.v)}</td></tr>`).join("")).join("")}
+      <tr class="g"><td colspan="2">Resultado</td></tr>
+      <tr><td>Total gasto na compra (com custos)</td><td class="num">${brl(r.custoTotal)}</td></tr>
+      <tr><td>Total recebido na venda (descontados custos)</td><td class="num">${brl(r.recebido)}</td></tr>
+      <tr><td>Ganho antes do imposto</td><td class="num ${cls(r.recebido - r.custoTotal)}">${sign(r.recebido - r.custoTotal)}</td></tr>
+      <tr><td>Imposto de renda <div class="hint">${esc(r.motivo)}</div></td><td class="num">${r.imposto ? "−" + brl(r.imposto) : "R$ 0,00"}</td></tr>
+      <tr class="tot"><td>Lucro líquido</td><td class="num ${cls(r.lucro)}">${sign(r.lucro)}</td></tr>
+      <tr><td>Taxas e custos pagos no total</td><td class="num">${brl(r.taxas)}</td></tr>
+      <tr><td>Preço de venda para empatar (cobrindo custos e imposto)</td><td class="num">${unit}</td></tr>
+      ${r.cdi != null ? `<tr><td>O mesmo valor no CDI por ${p.dias} dias (já com IR)</td><td class="num">${sign(r.cdi)}</td></tr>` : ""}
+    </table>
+    ${r.darf ? `<p class="sim-note">📄 ${esc(r.darf)}</p>` : ""}
+    ${r.avisos.map(a => `<p class="sim-note">ℹ️ ${esc(a)}</p>`).join("")}`;
+}
+function simRunCarteira() {
+  const res = $("#simRes"), outras = +$('#simForm [data-s="outras"]')?.value || 0, prejuizo = +$('#simForm [data-s="prejuizo"]')?.value || 0;
+  const usd = quotes["USDBRL=X"]?.price;
+  const rows = state.cart.map(pz => {
+    const q = quotes[pz.symbol]; if (!q?.price) return { pz, erro: "sem cotação" };
+    const kind = assetKind(pz.symbol), cripUSD = kind === "cripto" && q.currency === "USD";
+    const p = { kind, op: "swing", qty: pz.qty, pb: cripUSD ? pz.avg * usd : pz.avg, ps: cripUSD ? q.price * usd : q.price, fxb: usd, fxs: usd, dias: 0, outras: 0, prejuizo: 0 };
+    if (kind === "dolar") { p.pb = pz.avg; p.ps = q.price; }
+    return { pz, kind, p, r: simCalc(p, false) };
+  });
+  // Monthly exemptions consider all stock sales (and all crypto sales) of the month together.
+  const vendas = k => rows.filter(x => x.kind === k).reduce((a, x) => a + x.p.qty * x.p.ps, 0);
+  const isentoAcoes = vendas("acao") + outras <= 20000, isentoCripto = vendas("cripto") <= 35000;
+  let prej = prejuizo, tot = { custo: 0, recebido: 0, imposto: 0, lucro: 0 };
+  for (const x of rows) {
+    if (x.erro) continue;
+    const r = simCalc({ ...x.p, outras: x.kind === "acao" ? outras + vendas("acao") - x.p.qty * x.p.ps : x.kind === "cripto" ? vendas("cripto") - x.p.qty * x.p.ps : 0, prejuizo: x.kind === "acao" && !isentoAcoes ? prej : 0 }, false);
+    if (x.kind === "acao" && !isentoAcoes && r.baseIR > 0) prej = Math.max(0, prej - r.baseIR);
+    x.r = r;
+    tot.custo += r.custoTotal; tot.recebido += r.recebido; tot.imposto += r.imposto; tot.lucro += r.lucro;
+  }
+  const sign = v => (v > 0 ? "+" : "") + brl(v);
+  res.innerHTML = `
+    <div class="sim-big ${tot.lucro >= 0 ? "pos" : "neg"}"><span>Se vendesse toda a carteira hoje</span><b class="num">${sign(tot.lucro)}</b><small class="num">lucro líquido · imposto estimado ${brl(tot.imposto)}</small></div>
+    <p class="sim-note">${vendas("acao") ? (isentoAcoes ? `✅ Ações: vendas no mês de ${brl(vendas("acao") + outras)}, dentro da isenção de R$ 20 mil.` : `⚠️ Ações: vendas no mês de ${brl(vendas("acao") + outras)} passam de R$ 20 mil, então todo o lucro em ações paga 15%. Vender parte agora e parte no mês seguinte pode manter a isenção.`) : ""}
+      ${vendas("cripto") ? (isentoCripto ? ` ✅ Cripto: dentro da isenção de R$ 35 mil.` : ` ⚠️ Cripto: vendas acima de R$ 35 mil no mês.`) : ""}</p>
+    <div class="scroll"><table class="grid sim-ct"><thead><tr><th>Ativo</th><th>Tipo</th><th>Custo</th><th>Venda líquida</th><th>Imposto</th><th>Lucro líquido</th></tr></thead><tbody>
+      ${rows.map(x => x.erro ? `<tr><td>${esc(short(x.pz.symbol))}</td><td colspan="5" class="hint">${x.erro}</td></tr>` : `<tr><td><b>${esc(short(x.pz.symbol))}</b></td><td class="hint">${KINDS[x.kind]}</td><td class="num">${brl(x.r.custoTotal)}</td><td class="num">${brl(x.r.recebido)}</td><td class="num">${x.r.imposto ? brl(x.r.imposto) : "—"}</td><td class="num ${cls(x.r.lucro)}">${sign(x.r.lucro)}</td></tr>`).join("")}
+      <tr class="tot"><td>Total</td><td></td><td class="num">${brl(tot.custo)}</td><td class="num">${brl(tot.recebido)}</td><td class="num">${brl(tot.imposto)}</td><td class="num ${cls(tot.lucro)}">${sign(tot.lucro)}</td></tr>
+    </tbody></table></div>
+    <p class="sim-note">ℹ️ Usa o preço médio da sua carteira como custo e o preço de agora como venda, em swing trade. Ações no exterior entram no ajuste anual; ETFs e fundos imobiliários não têm isenção.</p>`;
+}
+$("#simDlg").addEventListener("input", e => {
+  if (e.target.matches('[data-s="sym"]')) { clearTimeout(simState.t); simState.t = setTimeout(async () => { const s = normSym(e.target.value); if (!s) return; if (!quotes[s]) { try { const r = await api("/api/cotacoes?range=1d&s=" + encodeURIComponent(s)); const q = r.quotes[s]; if (!q.error) { quotes[s] = q; names[s] = q.name; } } catch {} } simRenderForm({ sym: s }); setTimeout(() => { const i = $("#sSym"); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }, 0); }, 700); return; }
+  simRun();
+});
+$("#simDlg").addEventListener("click", e => {
+  if (e.target === $("#simDlg") || e.target.closest('[data-sd="close"]')) return $("#simDlg").close();
+  const m = e.target.closest("[data-smodo]"); if (m && !m.disabled) { simState.modo = m.dataset.smodo; $("#simDlg").querySelectorAll("[data-smodo]").forEach(b => b.setAttribute("aria-pressed", b === m)); return simRenderForm(); }
+  const qk = e.target.closest("[data-sq]");
+  if (qk) {
+    const sym = normSym($("#sSym").value), q = quotes[sym], kind = simRead().kind, usd = quotes["USDBRL=X"]?.price || 1;
+    let base = kind === "dolar" ? usd : q?.price; if (kind === "cripto" && q?.currency === "USD") base *= usd;
+    if (base) { $('#simForm [data-s="ps"]').value = +(base * (1 + +qk.dataset.sq / 100)).toFixed(4); simRun(); }
+  }
+});
+$("#simNew").addEventListener("click", () => simOpen());
+
 /* ---------- cópia de segurança ---------- */
 $("#exportBtn").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
@@ -1911,7 +2179,7 @@ $("#importFile").addEventListener("change", async e => {
   try {
     const d = JSON.parse(await e.target.files[0].text());
     if (!Array.isArray(d.favs) || !Array.isArray(d.cart) || !Array.isArray(d.alerts)) throw 0;
-    state = { favs: d.favs.filter(s => typeof s === "string"), cart: d.cart, alerts: d.alerts, criterios: d.criterios, chart: d.chart, corr: d.corr, tempoGrafico: d.tempoGrafico, virtuais: Array.isArray(d.virtuais) ? d.virtuais : [] };
+    state = { favs: d.favs.filter(s => typeof s === "string"), cart: d.cart, alerts: d.alerts, criterios: d.criterios, custos: d.custos, alertasTec: d.alertasTec, chart: d.chart, corr: d.corr, tempoGrafico: d.tempoGrafico, virtuais: Array.isArray(d.virtuais) ? d.virtuais : [] };
     save(); toast("Dados restaurados"); refresh();
   } catch { toast("Arquivo inválido"); }
   e.target.value = "";
