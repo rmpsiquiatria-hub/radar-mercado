@@ -290,6 +290,30 @@ dialog.vdlg::backdrop { background: rgba(5,10,14,.55); }
 .vdlg-f { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 @media (max-width: 560px) { .vgrid { grid-template-columns: 1fr; } }
+.sec-t { font-size: 15px; margin: 22px 0 8px; }
+.alert-row select, .alert-row input[type=number] { padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); margin-left: 4px; }
+.alert-row input[type=number] { width: 110px; }
+.pa-add { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 14px; }
+.pa-add input, .pa-add select { padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.pa-add input[data-pa-new="val"] { width: 110px; }
+.tec-cfg { padding: 14px; }
+.tec-cfg h4, .cfg-sub { margin: 16px 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.tec-cfg .pa-add { padding: 0; }
+.tec-auto { display: flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+.tec-assets { display: flex; flex-wrap: wrap; gap: 6px; }
+.tec-a { border: 1px solid var(--accent); background: var(--accent-soft); color: var(--text); border-radius: 99px; padding: 4px 10px; font-size: 13px; cursor: pointer; }
+.tec-a span { color: var(--muted); font-size: 11.5px; }
+.tec-a.off { border-color: var(--line); background: var(--panel); opacity: .6; }
+.linkx { border: 0; background: none; color: var(--down); cursor: pointer; padding: 0 2px; }
+.tec-feed { padding: 4px 0; }
+.tec-ev { display: flex; gap: 10px; align-items: flex-start; padding: 9px 14px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.tec-ev:hover { background: var(--panel-2); }
+.tec-ev.novo { background: var(--accent-soft); }
+.tec-ev > div { flex: 1; min-width: 0; font-size: 14px; }
+.tec-ic { font-size: 14px; line-height: 1.5; }
+.tec-dt { white-space: nowrap; }
+.tec-feed .row2 { padding: 6px 14px; }
+#cfgPA .alert-row { padding: 10px 0; } #cfgPA .pa-add { padding: 0 0 6px; }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 
 @media (max-width: 560px) {
@@ -353,6 +377,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <!-- ALERTAS -->
   <section data-panel="alerts" hidden>
     <div class="note" id="notifNote">Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). <button class="btn small" id="notifBtn" type="button">Ativar avisos no computador/celular</button></div>
+    <h3 class="sec-t">🔔 Alertas de preço</h3>
     <form class="form card" id="alertForm">
       <div class="field"><label for="aSym">Ativo (código)</label><input id="aSym" list="symList" placeholder="VALE3.SA" required></div>
       <div class="field"><label for="aOp">Avisar quando</label>
@@ -361,6 +386,10 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <button class="btn primary" type="submit">Criar alerta</button>
     </form>
     <div class="card" id="alertList"></div>
+    <h3 class="sec-t">📈 Sinais técnicos recentes <span class="hint" style="font-weight:400">· gráfico diário dos ativos vigiados</span></h3>
+    <div class="card tec-feed" id="tecFeed"></div>
+    <h3 class="sec-t">Configurar alertas técnicos</h3>
+    <div class="card tec-cfg" id="tecCfgA"></div>
   </section>
 
   <!-- RELATÓRIO -->
@@ -424,7 +453,7 @@ function load() {
   return { favs: DEFAULT_FAVS.slice(), cart: [], alerts: [] };
 }
 let state = load();
-function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} renderCounts(); }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} renderCounts(); if (typeof tecSoon === "function") tecSoon(); }
 
 const quotes = {};  // symbol -> última cotação
 const names = {};   // symbol -> nome (para busca)
@@ -548,7 +577,7 @@ function renderStamp() {
 function renderCounts() {
   $("#nFavs").textContent = state.favs.length;
   $("#nCart").textContent = state.cart.length;
-  $("#nAlerts").textContent = state.alerts.filter(a => !a.fired).length;
+  $("#nAlerts").textContent = state.alerts.filter(a => !a.fired).length + (state.alertasTec?.feed || []).filter(n => !n.lido).length;
   $("#symList").innerHTML = watched().map(s => `<option value="${esc(s)}">${esc(names[s] || "")}</option>`).join("");
 }
 function macroCards() {
@@ -753,17 +782,12 @@ function renderCart() {
     ${missing ? `<div class="note" style="grid-column:1/-1;margin:0">${missing} ativo(s) ainda sem cotação não entraram no total.</div>` : ""}` : "";
 }
 function renderAlerts() {
-  const list = state.alerts.slice().sort((a, b) => a.fired - b.fired || b.created - a.created);
-  $("#alertList").innerHTML = list.length ? list.map(a => {
-    const q = quotes[a.symbol];
-    return `<div class="alert-row">
-      <div class="what"><b>${esc(short(a.symbol))}</b> ${a.op === ">" ? "subir acima de" : "cair abaixo de"} <b class="num">${money(a.value, q?.currency, q?.type)}</b>
-        <div style="font-size:13px;color:var(--muted)">Agora: <span class="num">${q ? money(q.price, q.currency, q.type) : "…"}</span>${a.fired ? " · disparou em " + new Date(a.fired).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : ""}</div></div>
-      <span class="tag ${a.fired ? "fired" : "on"}">${a.fired ? "Disparado" : "Vigiando"}</span>
-      ${a.fired ? `<button class="btn small" data-rearm="${a.id}">Reativar</button>` : ""}
-      <button class="del" data-unalert="${a.id}" title="Apagar alerta" aria-label="Apagar alerta">×</button>
-    </div>`;
-  }).join("") : `<div class="empty">Nenhum alerta. Crie um acima, ou abra um ativo e toque em “Criar alerta”.</div>`;
+  safeHTML($("#alertList"), priceAlertsHTML(false));
+  safeHTML($("#tecFeed"), tecFeedHTML());
+  safeHTML($("#tecCfgA"), tecSettingsHTML());
+  safeHTML($("#cfgPA"), priceAlertsHTML(true));
+  safeHTML($("#cfgTec"), tecSettingsHTML());
+  renderCounts();
 }
 function renderAll() {
   renderStrip(); renderFavs(); renderCart(); renderAlerts(); renderCounts(); renderStamp(); renderEdu();
@@ -1079,6 +1103,7 @@ function showTab(name) {
   if (name === "report") loadReport();
   if (name === "edu") renderEdu();
   if (name === "config") renderConfig();
+  if (name === "alerts") { renderAlerts(); setTimeout(() => { const f = tecCfg().feed; if (f.some(x => !x.lido)) setTec({ feed: f.map(x => ({ ...x, lido: true })) }); }, 5000); }
 }
 document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) showTab(b.dataset.tab); });
 
@@ -1127,6 +1152,182 @@ function renderNotif() {
   if (p === "granted") $("#notifNote").firstChild.textContent = "Avisos ativados. Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). ";
 }
 $("#notifBtn").addEventListener("click", async () => { try { await Notification.requestPermission(); } catch {} renderNotif(); beep(); });
+
+/* ---------- alertas técnicos ---------- */
+// Signals on the daily chart for every watched asset: favorites and portfolio are watched
+// automatically (each can be switched off), others can be added by hand. Indicators and
+// candlestick patterns come from lib/analise.js, the same code as the charts and the report.
+const TEC_TIPOS = [
+  ["mm_curta", "Médias curtas (MME 9 × MMS 21)"],
+  ["golden", "Golden / death cross (MMS 50 × MMS 200)"],
+  ["mm200", "Preço cruzando a MMS 200"],
+  ["macd", "MACD: histograma muda de sinal"],
+  ["ifr", "IFR: sobrecompra (> 70) e sobrevenda (< 30)"],
+  ["sr", "Rompimento de suporte / resistência (20 pregões)"],
+  ["candles", "Candles de reversão (martelo, engolfo, estrelas…)"],
+];
+function tecCfg() {
+  const d = { auto: true, tipos: Object.fromEntries(TEC_TIPOS.map(t => [t[0], true])), desligados: [], extras: [], feed: [], vistos: {} };
+  const s = state.alertasTec || {};
+  return { ...d, ...s, tipos: { ...d.tipos, ...(s.tipos || {}) } };
+}
+function setTec(patch) { state.alertasTec = { ...tecCfg(), ...patch }; save(); }
+function tecCandidates() { const c = tecCfg(); return [...new Set([...(c.auto ? [...state.favs, ...state.cart.map(p => p.symbol)] : []), ...c.extras])]; }
+function tecMonitored() { const off = tecCfg().desligados; return tecCandidates().filter(s => !off.includes(s)); }
+function tecOrigem(s) {
+  const o = [];
+  if (state.favs.includes(s)) o.push("favorito");
+  if (state.cart.some(p => p.symbol === s)) o.push("carteira");
+  if (tecCfg().extras.includes(s)) o.push("adicionado");
+  return o.join(" + ");
+}
+const tecBars = {};
+let tecBusy = false, tecTimer = 0;
+function tecSoon() { clearTimeout(tecTimer); tecTimer = setTimeout(() => tecLoad(), 1500); }
+async function tecLoad() {
+  if (tecBusy) return;
+  const need = tecMonitored().filter(s => !tecBars[s] || Date.now() - tecBars[s].at > 10 * 60e3);
+  tecBusy = true;
+  try {
+    for (let i = 0; i < need.length; i += 20) {
+      const r = await api(`/api/cotacoes?range=2y&iv=1d&ohlc=1&s=${need.slice(i, i + 20).map(encodeURIComponent).join(",")}`);
+      for (const [s, q] of Object.entries(r.quotes)) if (!q.error && q.bars) tecBars[s] = { at: Date.now(), bars: q.bars.map(([t, o, h, l, c, v]) => ({ t, o, h, l, c, v })) };
+    }
+  } catch {}
+  tecBusy = false;
+  tecEvaluate();
+}
+setInterval(() => { if (!document.hidden) tecLoad(); }, 10 * 60e3);
+
+const dayBR = t => new Date(t * 1000).toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
+function tecEvents(sym, bars) {
+  const A = window.Analise; if (!A || bars.length < 30) return [];
+  const C = bars.map(b => b.c), k = bars.length - 1, ev = [];
+  const live = dayBR(bars[k].t) === dayBR(Date.now() / 1000) && !!quotes[sym]?.open;   // today's candle still forming
+  const px = v => nf(decimals(v)).format(v);
+  const cross = (a, b) => [a[k - 1], b[k - 1], a[k], b[k]].some(v => v == null) ? null : a[k - 1] <= b[k - 1] && a[k] > b[k] ? "alta" : a[k - 1] >= b[k - 1] && a[k] < b[k] ? "baixa" : null;
+  const add = (tipo, sinal, titulo, texto, kk = k) => ev.push({ tipo, sinal, titulo, texto, data: dayBR(bars[kk].t), formando: kk === k && live });
+  const e9 = A.ema(C, 9), s21 = A.sma(C, 21), s50 = A.sma(C, 50), s200 = A.sma(C, 200), m = A.macd(C), r = A.rsi(C);
+  let x;
+  if ((x = cross(e9, s21))) add("mm_curta", x, `Médias curtas: cruzamento de ${x}`, x === "alta" ? "A MME 9 cruzou acima da MMS 21: a tendência de curto prazo virou para cima." : "A MME 9 cruzou abaixo da MMS 21: a tendência de curto prazo virou para baixo.");
+  if ((x = cross(s50, s200))) add("golden", x, x === "alta" ? "Golden cross" : "Death cross", x === "alta" ? "A MMS 50 cruzou acima da MMS 200: sinal clássico de tendência de alta de longo prazo." : "A MMS 50 cruzou abaixo da MMS 200: sinal clássico de tendência de baixa de longo prazo.");
+  if ((x = cross(C, s200))) add("mm200", x, `Preço ${x === "alta" ? "acima" : "abaixo"} da MMS 200`, x === "alta" ? "O preço voltou para cima da média de 200 pregões, referência de tendência de longo prazo." : "O preço caiu abaixo da média de 200 pregões, referência de tendência de longo prazo.");
+  const h = m.hist;
+  if (h[k - 1] != null && h[k] != null && (h[k - 1] > 0) !== (h[k] > 0)) {
+    const d = h[k] > 0 ? "alta" : "baixa";
+    add("macd", d, `MACD: histograma ficou ${d === "alta" ? "positivo" : "negativo"}`, d === "alta" ? "A linha do MACD cruzou acima da linha de sinal: o impulso de alta ganhou força." : "A linha do MACD cruzou abaixo da linha de sinal: o impulso de baixa ganhou força.");
+  }
+  if (r[k - 1] != null && r[k] != null) {
+    if (r[k - 1] < 70 && r[k] >= 70) add("ifr", "baixa", "IFR em sobrecompra", `O IFR(14) subiu para ${nf(0).format(r[k])}, acima de 70: o ativo subiu rápido demais e pode corrigir.`);
+    if (r[k - 1] > 30 && r[k] <= 30) add("ifr", "alta", "IFR em sobrevenda", `O IFR(14) caiu para ${nf(0).format(r[k])}, abaixo de 30: o ativo caiu rápido demais e pode repicar.`);
+  }
+  if (k > 21) {
+    const prev = bars.slice(k - 20, k), hi = Math.max(...prev.map(b => b.h)), lo = Math.min(...prev.map(b => b.l));
+    if (bars[k].c > hi && bars[k - 1].c <= hi) add("sr", "alta", "Rompeu a resistência", `Passou da máxima dos últimos 20 pregões (${px(hi)}): rompimento para cima.`);
+    if (bars[k].c < lo && bars[k - 1].c >= lo) add("sr", "baixa", "Perdeu o suporte", `Caiu abaixo da mínima dos últimos 20 pregões (${px(lo)}): rompimento para baixo.`);
+  }
+  const kc = live ? k - 1 : k;   // patterns only on finished candles
+  for (const p of A.patternsAt(bars, kc, 0.02)) if (p.sinal !== "neutro") add("candles", p.sinal, `Candle: ${p.nome}`, p.descricao, kc);
+  return ev;
+}
+function tecEvaluate() {
+  if (!window.Analise) { window.addEventListener("analise-pronta", tecEvaluate, { once: true }); return; }
+  const c = tecCfg(), vistos = { ...c.vistos }, novos = [];
+  for (const sym of tecMonitored()) {
+    const d = tecBars[sym]; if (!d) continue;
+    for (const ev of tecEvents(sym, d.bars)) {
+      if (!c.tipos[ev.tipo]) continue;
+      const key = `${sym}|${ev.tipo}|${ev.sinal}|${ev.data}`;
+      if (vistos[key]) continue;
+      vistos[key] = Date.now();
+      novos.push({ key, sym, ...ev, ts: Date.now(), lido: false });
+    }
+  }
+  if (!novos.length) return;
+  const limite = Date.now() - 40 * 864e5;
+  for (const [k, t] of Object.entries(vistos)) if (t < limite) delete vistos[k];
+  setTec({ vistos, feed: novos.concat(c.feed).slice(0, 150) });
+  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)}: ${n.titulo}`, true));
+  else toast(`📈 ${novos.length} novos sinais técnicos nos seus ativos — veja em Alertas`, true);
+  beep();
+  try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)}: ${n.titulo}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); } catch {}
+  renderAlerts();
+}
+
+/* shared editors (Alertas tab and Configurações) */
+// Re-render a block only when the user is not typing in it.
+function safeHTML(el, html) {
+  if (!el) return;
+  const a = document.activeElement;
+  if (a && el.contains(a) && a.matches("input, select, textarea")) return;
+  el.innerHTML = html;
+}
+function priceAlertsHTML(withAdd) {
+  const list = state.alerts.slice().sort((a, b) => a.fired - b.fired || b.created - a.created);
+  const add = withAdd ? `<div class="pa-add">
+      <input data-pa-new="sym" list="symList" placeholder="Ativo (ex.: VALE3)" aria-label="Ativo">
+      <select data-pa-new="op" aria-label="Condição"><option value=">">subir acima de</option><option value="<">cair abaixo de</option></select>
+      <input data-pa-new="val" type="number" step="any" min="0" placeholder="Preço" aria-label="Preço">
+      <button class="btn primary small" data-pa-add type="button">Criar alerta</button></div>` : "";
+  return add + (list.length ? list.map(a => {
+    const q = quotes[a.symbol];
+    return `<div class="alert-row">
+      <div class="what"><b>${esc(short(a.symbol))}</b>
+        <select data-pa-op="${a.id}" aria-label="Condição"><option value=">" ${a.op === ">" ? "selected" : ""}>subir acima de</option><option value="<" ${a.op === "<" ? "selected" : ""}>cair abaixo de</option></select>
+        <input data-pa-val="${a.id}" type="number" step="any" min="0" value="${a.value}" aria-label="Preço">
+        <div style="font-size:13px;color:var(--muted)">Agora: <span class="num">${q ? money(q.price, q.currency, q.type) : "…"}</span>${a.fired ? " · disparou em " + new Date(a.fired).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : ""}</div></div>
+      <span class="tag ${a.fired ? "fired" : "on"}">${a.fired ? "Disparado" : "Vigiando"}</span>
+      ${a.fired ? `<button class="btn small" data-rearm="${a.id}">Reativar</button>` : ""}
+      <button class="del" data-unalert="${a.id}" title="Apagar alerta" aria-label="Apagar alerta">×</button>
+    </div>`;
+  }).join("") : `<div class="empty">Nenhum alerta de preço.</div>`);
+}
+function tecSettingsHTML() {
+  const c = tecCfg(), cand = tecCandidates();
+  return `<label class="tec-auto"><input type="checkbox" data-tec-auto ${c.auto ? "checked" : ""}> <b>Vigiar automaticamente</b> todos os favoritos e os ativos da carteira</label>
+    <h4>Quais sinais avisar</h4>
+    <div class="checks">${TEC_TIPOS.map(([k, l]) => `<label><input type="checkbox" data-tec-tipo="${k}" ${c.tipos[k] ? "checked" : ""}> ${l}</label>`).join("")}</div>
+    <h4>Ativos vigiados (${tecMonitored().length} de ${cand.length})</h4>
+    <p class="hint">Toque em um ativo para ligar ou desligar os alertas técnicos dele.</p>
+    <div class="tec-assets">${cand.map(s => { const off = c.desligados.includes(s); return `<button class="tec-a ${off ? "off" : ""}" data-tec-toggle="${esc(s)}" title="${off ? "Desligado — toque para ligar" : "Ligado — toque para desligar"}"><b>${esc(short(s))}</b> <span>${esc(tecOrigem(s))}</span> ${off ? "○" : "●"}</button>`; }).join("") || `<span class="hint">Nenhum ativo. Adicione favoritos ou use o campo abaixo.</span>`}</div>
+    <div class="pa-add" style="margin-top:10px"><input data-tec-new list="symList" placeholder="Vigiar outro ativo (ex.: BBDC4)" aria-label="Ativo para vigiar"><button class="btn small" data-tec-add type="button">Vigiar</button>
+      ${c.extras.length ? `<span class="hint">Adicionados à mão: ${c.extras.map(s => `${esc(short(s))} <button class="linkx" data-tec-rm="${esc(s)}" title="Parar de vigiar">×</button>`).join(" ")}</span>` : ""}</div>`;
+}
+function tecFeedHTML() {
+  const feed = tecCfg().feed;
+  if (!feed.length) return `<div class="empty">Nenhum sinal técnico ainda. Os alertas aparecem aqui quando um dos sinais acontece no gráfico diário dos ativos vigiados.</div>`;
+  return feed.slice(0, 40).map(n => `<div class="tec-ev ${n.lido ? "" : "novo"}" data-open="${esc(n.sym)}">
+      <span class="tec-ic ${n.sinal === "alta" ? "up" : n.sinal === "baixa" ? "down" : "flat"}">${n.sinal === "alta" ? "▲" : n.sinal === "baixa" ? "▼" : "◆"}</span>
+      <div><b>${esc(short(n.sym))}</b> · <b class="${n.sinal === "alta" ? "up" : n.sinal === "baixa" ? "down" : ""}">${esc(n.titulo)}</b>
+        <div class="hint">${esc(n.texto)}${n.formando ? " (no pregão de hoje, candle ainda em formação)" : ""}</div></div>
+      <span class="hint tec-dt">${new Date(n.data + "T12:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}</span>
+    </div>`).join("") + `<div class="row2" style="justify-content:flex-end"><button class="btn small" data-tec-clear type="button">Limpar lista</button></div>`;
+}
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.matches("[data-pa-op]")) { const a = state.alerts.find(x => x.id === t.dataset.paOp); if (a) { a.op = t.value; a.fired = 0; save(); renderAlerts(); } }
+  else if (t.matches("[data-pa-val]")) { const a = state.alerts.find(x => x.id === t.dataset.paVal); if (a && +t.value > 0) { a.value = +t.value; a.fired = 0; save(); renderAlerts(); } }
+  else if (t.matches("[data-tec-auto]")) { setTec({ auto: t.checked }); renderAlerts(); tecSoon(); }
+  else if (t.matches("[data-tec-tipo]")) { setTec({ tipos: { ...tecCfg().tipos, [t.dataset.tecTipo]: t.checked } }); renderAlerts(); }
+});
+document.addEventListener("click", e => {
+  const t = e.target;
+  const tg = t.closest("[data-tec-toggle]");
+  if (tg) { const s = tg.dataset.tecToggle, off = tecCfg().desligados; setTec({ desligados: off.includes(s) ? off.filter(x => x !== s) : off.concat(s) }); renderAlerts(); tecSoon(); return; }
+  if (t.closest("[data-tec-add]")) {
+    const inp = t.closest(".pa-add").querySelector("[data-tec-new]"), s = normSym(inp.value);
+    if (s) { const c = tecCfg(); setTec({ extras: [...new Set(c.extras.concat(s))], desligados: c.desligados.filter(x => x !== s) }); inp.value = ""; toast(`${short(s)} adicionado aos alertas técnicos`); renderAlerts(); tecSoon(); }
+    return;
+  }
+  const rm = t.closest("[data-tec-rm]"); if (rm) { setTec({ extras: tecCfg().extras.filter(x => x !== rm.dataset.tecRm) }); renderAlerts(); return; }
+  if (t.closest("[data-tec-clear]")) { setTec({ feed: [] }); renderAlerts(); return; }
+  if (t.closest("[data-pa-add]")) {
+    const box = t.closest(".pa-add"), s = normSym(box.querySelector('[data-pa-new="sym"]').value), op = box.querySelector('[data-pa-new="op"]').value, v = +box.querySelector('[data-pa-new="val"]').value;
+    if (!s || !(v > 0)) { toast("Preencha o ativo e o preço"); return; }
+    state.alerts.push({ id: Math.random().toString(36).slice(2, 10), symbol: s, op, value: v, fired: 0, created: Date.now() });
+    save(); toast("Alerta criado para " + short(s)); box.querySelectorAll("input").forEach(i => i.value = ""); renderAlerts(); refresh();
+  }
+});
 
 /* ---------- busca ---------- */
 let sTimer, sItems = [], sHl = -1;
@@ -1436,7 +1637,7 @@ function critSummary(c) {
 function renderConfig() {
   const box = $("#cfgBox"); if (!box || box.closest("[hidden]")) return;
   const c = crit(), d = chartDefaults(), th = themeChoice();
-  box.innerHTML = `
+  safeHTML(box, `
     <section class="card">
       <h3>Meus critérios</h3>
       <p class="hint">Usados nos <b>sinais de compra</b> da aba Relatório diário: um papel só vira sinal de compra se a maioria das casas recomenda compra <b>e</b> ele passa nesses critérios. Deixe um campo vazio para ignorar o critério.</p>
@@ -1450,6 +1651,14 @@ function renderConfig() {
       </div>
       <p class="hint" style="margin-top:10px"><b>P/L</b>: quantos anos de lucro o preço representa (menor = mais barato). <b>Dividendos</b>: quanto a empresa pagou nos últimos 12 meses, em % do preço. <b>ROE</b>: lucro sobre o patrimônio (maior = mais rentável). <b>Dívida líquida/patrimônio</b>: endividamento (menor = mais folga).</p>
       <p class="hint">Estes critérios valem para este navegador. O e-mail das 7h usa os critérios padrão (${esc(critSummary(CRIT_DEFAULT))}). Para mudar os do e-mail, peça ao Claude.</p>
+    </section>
+    <section class="card">
+      <h3>Alertas</h3>
+      <p class="hint">Os mesmos alertas da aba Alertas. Funcionam enquanto o site estiver aberto (pode ficar em outra aba do navegador).</p>
+      <h4 class="cfg-sub">🔔 Alertas de preço</h4>
+      <div id="cfgPA">${priceAlertsHTML(true)}</div>
+      <h4 class="cfg-sub">📈 Alertas técnicos (gráfico diário)</h4>
+      <div id="cfgTec" class="tec-cfg">${tecSettingsHTML()}</div>
     </section>
     <section class="card">
       <h3>Relatório diário</h3>
@@ -1470,7 +1679,7 @@ function renderConfig() {
       <h3>Meus dados</h3>
       <p class="hint">Favoritos, carteira, alertas e estas configurações ficam guardados só neste navegador. Para levar para outro aparelho, salve uma cópia aqui e restaure lá.</p>
       <div class="row2"><button class="btn" data-cfg="export">Salvar cópia dos meus dados</button><button class="btn" data-cfg="import">Restaurar cópia</button></div>
-    </section>`;
+    </section>`);
 }
 $("#cfgBox").addEventListener("change", e => {
   const inp = e.target.closest("[data-crit]");
@@ -1718,7 +1927,7 @@ $("#theme").addEventListener("click", () => {
 
 /* ---------- início ---------- */
 try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {}
-renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData();
+renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 2500);
 </script>
 </body>
 </html>
