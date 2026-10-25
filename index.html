@@ -161,6 +161,9 @@ footer a, footer button.link { color: var(--muted); background: none; border: 0;
 .chip { display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 7px 10px; margin-top: 6px; cursor: pointer; font-size: 13px; }
 .chip span { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chip.compra { border-left: 3px solid var(--up); } .chip.atencao { border-left: 3px solid var(--warn); }
+.tech-box { margin-bottom: 12px; } .tech-box .seg { flex: 0 0 auto; flex-wrap: nowrap; } .tech-box h3 { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.chips2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0 8px; }
+table.tech td, table.tech th { padding: 6px 10px; font-size: 13px; } table.tech td:first-child { color: var(--muted); }
 details.crit { border: 1px solid var(--line); border-radius: 10px; margin-bottom: 12px; }
 details.crit summary { padding: 10px 14px; cursor: pointer; font-weight: 600; font-size: 14px; }
 .seg { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
@@ -742,6 +745,17 @@ function signal(e) {
   }
   return null;
 }
+const FRAMES = [["diario", "Diário"], ["semanal", "Semanal"], ["mensal", "Mensal"]];
+function frame() { return state.tempoGrafico || "diario"; }
+const VIES = { alta: ["up", "Alta"], baixa: ["down", "Baixa"], neutro: ["flat", "Neutro"] };
+// Technical events worth a headline: recent crossovers and reversal candles on the chosen timeframe.
+function techEvents(e) {
+  const t = e.tecnica?.[frame()]; if (!t) return [];
+  const rank = n => /Golden|Death/.test(n) ? 3 : /MME 9/.test(n) ? 1 : 0;
+  return [...t.cruzamentos.filter(c => !/MACD/.test(c.nome)).map(c => ({ sinal: c.sinal, texto: c.nome + " para " + c.sinal, peso: rank(c.nome) })),
+          ...t.candles.filter(c => c.sinal !== "neutro").map(c => ({ sinal: c.sinal, texto: "Candle " + c.nome, peso: 2 }))]
+    .sort((a, b) => b.peso - a.peso);
+}
 function myTickers() {
   return new Set([...state.favs, ...state.cart.map(c => c.symbol)].map(s => s.replace(/\.SA$/, "")));
 }
@@ -779,8 +793,10 @@ function renderReport() {
   if (repFilter === "criterios") list = list.filter(e => { const f = criteriaCheck(e); return f && !f.length; });
   if (repFilter === "sinais") list = list.filter(e => signal(e));
   if (repFilter === "mudancas") list = list.filter(e => (e.mudancas || []).length);
+  if (repFilter === "tecnicos") list = list.filter(e => techEvents(e).length);
   if (repQuery) { const q = repQuery.toLowerCase(); list = list.filter(e => e.ticker.toLowerCase().includes(q) || (e.nome || "").toLowerCase().includes(q)); }
 
+  const techList = emps.map(e => [e, techEvents(e)]).filter(([, ev]) => ev.length).sort((a, b) => b[1][0].peso - a[1][0].peso);
   const chip = ([e, s]) => `<button class="chip ${s.kind}" data-rep="${esc(e.ticker)}" title="${esc(s.why.join(" · "))}"><b>${esc(e.ticker)}</b> <span>${esc(s.why[0])}</span></button>`;
   box.innerHTML = `
     <div class="rep-head">
@@ -791,6 +807,11 @@ function renderReport() {
     <div class="rep-cols">
       <div class="rep-box"><h3>🟢 Sinais de compra <small>${buys.length}</small></h3><p class="hint">A maioria das casas consultadas recomenda compra <b>e</b> o papel passa nos seus critérios.</p>${buys.map(chip).join("") || `<p class="hint">Nenhum papel hoje.</p>`}</div>
       <div class="rep-box"><h3>🟠 Pontos de atenção <small>${warns.length}</small></h3><p class="hint">Recomendações de venda, rebaixamentos recentes ou notícias negativas com indicadores fracos.</p>${warns.map(chip).join("") || `<p class="hint">Nenhum papel hoje.</p>`}</div>
+    </div>
+    <div class="rep-box tech-box"><h3>📈 Sinais técnicos <small>${techList.length}</small>
+        <span class="seg" role="group" style="flex:0;display:inline-flex;margin-left:8px">${FRAMES.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${frame() === k}">${l}</button>`).join("")}</span></h3>
+      <p class="hint">Cruzamentos de médias móveis, MACD e candles de reversão no gráfico ${{ diario: "diário (último pregão)", semanal: "semanal (última semana fechada)", mensal: "mensal (último mês fechado)" }[frame()]}. Calculado a partir dos preços, sem IA.</p>
+      <div class="chips2">${techList.map(([e, ev]) => `<button class="chip ${ev[0].sinal === "alta" ? "compra" : "atencao"}" data-rep="${esc(e.ticker)}" title="${esc(ev.map(x => x.texto).join(" · "))}"><b>${esc(e.ticker)}</b> <span>${esc(ev.map(x => x.texto).join(" · "))}</span></button>`).join("") || `<p class="hint">Nenhum cruzamento ou candle de reversão recente.</p>`}</div>
     </div>
     <details class="crit" ${state.criteriosAbertos ? "open" : ""}><summary>Meus critérios (mude e os sinais se recalculam)</summary>
       <div class="form" id="critForm" style="margin:0">
@@ -805,11 +826,11 @@ function renderReport() {
     </details>
     ${notCovered.length ? `<div class="note">Da sua lista, ainda fora do relatório: <b>${notCovered.map(esc).join(", ")}</b>. Peça ao Claude para incluí-los em <code>relatorios/acompanhar.json</code>.</div>` : ""}
     <div class="toolbar" style="margin-top:12px">
-      <div class="seg" role="group">${[["todas", "Todas"], ["minha", "Minha lista"], ["sinais", "Com sinal"], ["criterios", "Passam nos critérios"], ["mudancas", "Mudanças recentes"]].map(([k, l]) => `<button data-rf="${k}" aria-pressed="${repFilter === k}">${l}</button>`).join("")}</div>
+      <div class="seg" role="group">${[["todas", "Todas"], ["minha", "Minha lista"], ["sinais", "Com sinal"], ["criterios", "Passam nos critérios"], ["mudancas", "Mudanças recentes"], ["tecnicos", "Sinais técnicos"]].map(([k, l]) => `<button data-rf="${k}" aria-pressed="${repFilter === k}">${l}</button>`).join("")}</div>
       <input id="repQ" type="search" placeholder="Filtrar empresa" value="${esc(repQuery)}" style="flex:0 1 200px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel)">
     </div>
-    <div class="card scroll"><table class="grid rep"><thead><tr><th>Empresa</th><th>Casas (compra · neutro · venda)</th><th>Alvo médio</th><th>Potencial</th><th>P/L</th><th>Div.</th><th>ROE</th><th>Sinal</th></tr></thead><tbody>
-      ${list.map(e => repRow(e, mine)).join("") || `<tr><td colspan="8" class="empty">Nenhuma empresa neste filtro.</td></tr>`}
+    <div class="card scroll"><table class="grid rep"><thead><tr><th>Empresa</th><th>Casas (compra · neutro · venda)</th><th>Alvo médio</th><th>Potencial</th><th>P/L</th><th>Div.</th><th>ROE</th><th>Técnico (${FRAMES.find(f => f[0] === frame())[1].toLowerCase()})</th><th>Sinal</th></tr></thead><tbody>
+      ${list.map(e => repRow(e, mine)).join("") || `<tr><td colspan="9" class="empty">Nenhuma empresa neste filtro.</td></tr>`}
     </tbody></table></div>
     <p class="hint" style="margin-top:10px">Resumo automático do que as fontes publicaram, feito por IA — pode conter erros; confira os links. Indicadores: Fundamentus. Não é recomendação de investimento.</p>`;
 }
@@ -826,8 +847,9 @@ function repRow(e, mine) {
     <td class="num">${i.pl != null ? nf(1).format(i.pl) : "—"}</td>
     <td class="num">${i.dy != null ? nf(1).format(i.dy) + "%" : "—"}</td>
     <td class="num">${i.roe != null ? nf(1).format(i.roe) + "%" : "—"}</td>
+    <td>${(() => { const t = e.tecnica?.[frame()]; if (!t) return "—"; const [c, l] = VIES[t.vies]; return `<span class="num ${c}" title="tendência: ${t.tendencia} · pontuação ${t.pontuacao}">${c === "up" ? "▲" : c === "down" ? "▼" : "■"} ${l}</span>${techEvents(e).length ? " ✦" : ""}`; })()}</td>
     <td>${s ? `<span class="tag ${s.kind === "compra" ? "buy" : "fired"}">${s.kind === "compra" ? "Compra" : "Atenção"}</span>` : ""}</td>
-  </tr>${open ? `<tr class="detail-row"><td colspan="8">${repDetail(e, s)}</td></tr>` : ""}`;
+  </tr>${open ? `<tr class="detail-row"><td colspan="9">${repDetail(e, s)}</td></tr>` : ""}`;
 }
 function repDetail(e, s) {
   const i = e.indicadores, k = e.consenso || {}, fails = criteriaCheck(e);
@@ -838,12 +860,29 @@ function repDetail(e, s) {
     ${fails && fails.length ? `<p class="hint"><b>Não passa nos seus critérios:</b> ${esc(fails.join(" · "))}</p>` : ""}
     ${(e.mudancas || []).length ? `<h4>Mudanças recentes</h4><ul>${e.mudancas.map(m => `<li>${esc(new Date(m.data + "T12:00").toLocaleDateString("pt-BR"))} — ${esc(m.descricao)} <span class="hint">(${esc(m.fonte)})</span></li>`).join("")}</ul>` : ""}
     ${(k.casas || []).length ? `<h4>Recomendações por casa</h4><div class="casas">${k.casas.map(c => `<span class="casa ${c.recomendacao}"><b>${esc(c.nome)}</b> ${esc(c.recomendacao)}${c.preco_alvo ? " · alvo " + money(c.preco_alvo, k.moeda || "BRL") : ""}${c.data ? ` <small>${esc(new Date(c.data + "T12:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }))}</small>` : ""}</span>`).join("")}</div>` : ""}
+    ${e.tecnica ? techDetail(e) : ""}
     ${IND.length ? `<h4>Indicadores</h4><div class="stats">${IND.map(([a, b]) => `<div><span>${a}</span><b class="num">${b}</b></div>`).join("")}</div>` : ""}
     ${(e.fontes || []).length ? `<h4>Fontes</h4><ul class="fontes">${e.fontes.map(f => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer">${esc(f.titulo || f.nome)}</a> <span class="hint">${esc(f.nome)}${f.data ? " · " + esc(new Date(f.data + "T12:00").toLocaleDateString("pt-BR")) : ""}</span></li>`).join("")}</ul>` : ""}
     <div class="modal-actions"><button class="btn small" data-open="${esc(e.bolsa === "B3" ? e.ticker + ".SA" : e.ticker)}">Ver gráfico e cotação</button><span class="hint">Pesquisa atualizada em ${esc(new Date(e.atualizado_em + "T12:00").toLocaleDateString("pt-BR"))}</span></div>
   </div>`;
 }
+function techDetail(e) {
+  const money2 = v => v == null ? "—" : money(v, e.bolsa === "B3" ? "BRL" : "USD");
+  return `<h4>Análise técnica</h4><div class="scroll"><table class="grid tech"><thead><tr><th></th>${FRAMES.map(([k, l]) => `<th>${l}${k === frame() ? " ●" : ""}</th>`).join("")}</tr></thead><tbody>
+    ${[["Viés", t => { const [c, l] = VIES[t.vies]; return `<b class="${c}">${l}</b>`; }],
+       ["Tendência", t => t.tendencia],
+       ["Último candle fechado", (t, k) => { const d = new Date(t.data_ultimo_candle + "T12:00"); return k === "mensal" ? d.toLocaleDateString("pt-BR", { month: "short", year: "numeric" }) : (k === "semanal" ? "semana de " : "") + d.toLocaleDateString("pt-BR", k === "semanal" ? { day: "2-digit", month: "2-digit" } : undefined); }],
+       ["MME 9 / MMS 21", t => money2(t.medias.mme9) + " / " + money2(t.medias.mms21)],
+       ["MMS 50 / MMS 200", t => money2(t.medias.mms50) + " / " + money2(t.medias.mms200)],
+       ["IFR (14)", t => t.ifr14 == null ? "—" : nf(0).format(t.ifr14)],
+       ["MACD (histograma)", t => t.macd ? `<span class="${cls(t.macd.histograma)}">${nf(2).format(t.macd.histograma)}</span>` : "—"],
+       ["Suporte / resistência (20)", t => money2(t.suporte) + " / " + money2(t.resistencia)],
+      ].map(([lbl, fn]) => `<tr><td>${lbl}</td>${FRAMES.map(([k]) => `<td class="num">${e.tecnica[k] ? fn(e.tecnica[k], k) : "—"}</td>`).join("")}</tr>`).join("")}
+  </tbody></table></div>
+  ${FRAMES.map(([k, l]) => { const t = e.tecnica[k]; return t && t.sinais.length ? `<p class="hint" style="margin:8px 0 2px"><b>${l}:</b></p><ul>${t.sinais.map(x => `<li><span class="${x.sinal === "alta" ? "up" : x.sinal === "baixa" ? "down" : "flat"}">${x.sinal === "alta" ? "▲" : x.sinal === "baixa" ? "▼" : "•"}</span> ${esc(x.texto)}</li>`).join("")}</ul>` : ""; }).join("")}`;
+}
 $("#reportBox").addEventListener("click", e => {
+  const tf = e.target.closest("[data-tf]"); if (tf) { state.tempoGrafico = tf.dataset.tf; save(); return renderReport(); }
   const f = e.target.closest("[data-rf]"); if (f) { repFilter = f.dataset.rf; return renderReport(); }
   if (e.target.closest("#critReset")) { delete state.criterios; save(); return renderReport(); }
   if (e.target.closest("[data-open]")) return;
