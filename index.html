@@ -150,6 +150,41 @@ footer { margin-top: 28px; font-size: 12px; color: var(--faint); display: grid; 
 footer .links { display: flex; gap: 14px; flex-wrap: wrap; }
 footer a, footer button.link { color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; font-size: 12px; }
 
+#reportBox { padding: 18px; }
+.rep-head h2 { margin: 0; font-size: 20px; } .rep-head h2::first-letter { text-transform: uppercase; }
+.rep-head .sub, .hint { color: var(--muted); font-size: 13px; }
+.rep-sum { font-size: 15px; line-height: 1.6; margin: 10px 0 16px; max-width: 75ch; }
+.rep-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.rep-box { border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--panel-2); }
+.rep-box h3 { margin: 0 0 2px; font-size: 15px; } .rep-box h3 small { color: var(--muted); font-weight: 500; }
+.rep-box .hint { margin: 0 0 8px; }
+.chip { display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 7px 10px; margin-top: 6px; cursor: pointer; font-size: 13px; }
+.chip span { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip.compra { border-left: 3px solid var(--up); } .chip.atencao { border-left: 3px solid var(--warn); }
+details.crit { border: 1px solid var(--line); border-radius: 10px; margin-bottom: 12px; }
+details.crit summary { padding: 10px 14px; cursor: pointer; font-weight: 600; font-size: 14px; }
+.seg { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
+.seg button { border: 1px solid var(--line); background: var(--panel); padding: 5px 10px; border-radius: 99px; cursor: pointer; font-size: 13px; color: var(--muted); font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+table.rep td { vertical-align: middle; }
+.cwrap { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.cbar { display: flex; width: 90px; height: 8px; border-radius: 4px; overflow: hidden; background: var(--panel-2); gap: 1px; }
+.cbar i.b { background: var(--up); } .cbar i.n { background: var(--faint); } .cbar i.s { background: var(--down); }
+.cnt { font-size: 12px; color: var(--muted); }
+.sdot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--faint); }
+.sdot.up { background: var(--up); } .sdot.down { background: var(--down); }
+.tag.buy { background: var(--up-soft); color: var(--up); }
+tr.open td { background: var(--panel-2); }
+tr.detail-row td { white-space: normal; text-align: left; background: var(--panel-2); cursor: default; }
+.rep-detail { position: sticky; left: 12px; max-width: min(80ch, calc(100vw - 104px)); padding: 4px 2px 8px; }
+.rep-detail .stats { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.rep-detail h4 { margin: 14px 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.rep-detail ul { margin: 0; padding-left: 18px; } .rep-detail li { margin: 3px 0; }
+.rep-detail a { color: var(--accent); }
+.casas { display: flex; flex-wrap: wrap; gap: 6px; }
+.casa { font-size: 13px; padding: 3px 8px; border-radius: 6px; background: var(--panel); border: 1px solid var(--line); }
+.casa.compra { border-color: var(--up); } .casa.venda { border-color: var(--down); }
+@media (max-width: 700px) { .rep-cols { grid-template-columns: 1fr; } #reportBox { padding: 14px; } }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 @media (max-width: 1000px) { .strip { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 560px) {
@@ -673,23 +708,163 @@ $("#q").addEventListener("keydown", e => {
 });
 document.addEventListener("click", e => { if (!e.target.closest(".search")) $("#sugg").classList.remove("open"); });
 
-/* ---------- relatório diário (fase 2) ---------- */
-let reportLoaded = false;
-async function loadReport() {
-  if (reportLoaded) return;
-  const box = $("#reportBox");
+/* ---------- relatório diário ---------- */
+const CRIT_DEFAULT = { pl_max: 15, dy_min: 4, roe_min: 12, div_max: 2, min_casas: 3 };
+let report = null, repFilter = "todas", repQuery = "", repOpen = null;
+function crit() { return { ...CRIT_DEFAULT, ...(state.criterios || {}) }; }
+const isSet = v => v !== "" && v != null && isFinite(v);
+
+function criteriaCheck(e) {
+  const i = e.indicadores; if (!i) return null;               // sem indicadores (ex.: EUA): não avalia
+  const c = crit(), fails = [];
+  if (isSet(c.pl_max) && !(i.pl > 0 && i.pl <= c.pl_max)) fails.push(i.pl > 0 ? `P/L ${nf(1).format(i.pl)} acima de ${c.pl_max}` : "P/L negativo (prejuízo)");
+  if (isSet(c.dy_min) && !(i.dy >= c.dy_min)) fails.push(`dividendos ${nf(1).format(i.dy ?? 0)}% abaixo de ${c.dy_min}%`);
+  if (isSet(c.roe_min) && !(i.roe >= c.roe_min)) fails.push(`ROE ${nf(1).format(i.roe ?? 0)}% abaixo de ${c.roe_min}%`);
+  if (isSet(c.div_max) && i.div_liq_pl != null && i.div_liq_pl > c.div_max) fails.push(`dívida líq./patrimônio ${nf(2).format(i.div_liq_pl)} acima de ${c.div_max}`);
+  return fails;
+}
+function signal(e) {
+  const k = e.consenso || {}, tot = (k.compra || 0) + (k.neutro || 0) + (k.venda || 0);
+  const fails = criteriaCheck(e);
+  const down = (e.mudancas || []).find(m => m.tipo === "rebaixamento");
+  const up = (e.mudancas || []).find(m => m.tipo === "elevacao");
+  const enough = tot >= (crit().min_casas || 1);
+  const attention = [];
+  if (enough && k.venda / tot >= 0.4) attention.push(`${k.venda} de ${tot} casas recomendam venda`);
+  if (down) attention.push("rebaixamento recente: " + down.descricao);
+  if (e.sentimento === "negativo" && fails && fails.length) attention.push("notícias negativas e não passa nos seus critérios");
+  if (attention.length) return { kind: "atencao", why: attention };
+  if (enough && k.compra / tot >= 0.6 && (!fails || !fails.length)) {
+    const why = [`${k.compra} de ${tot} casas recomendam compra`];
+    if (fails) why.push("passa nos seus critérios"); else why.push("sem indicadores para checar seus critérios");
+    if (up) why.push("elevação recente: " + up.descricao);
+    return { kind: "compra", why };
+  }
+  return null;
+}
+function myTickers() {
+  return new Set([...state.favs, ...state.cart.map(c => c.symbol)].map(s => s.replace(/\.SA$/, "")));
+}
+function quoteFor(e) { return quotes[e.bolsa === "B3" ? e.ticker + ".SA" : e.ticker]; }
+function upside(e) {
+  const alvo = e.consenso?.preco_alvo_medio, px = quoteFor(e)?.price ?? e.indicadores?.cotacao;
+  return alvo && px ? (alvo / px - 1) * 100 : null;
+}
+
+async function loadReport(force) {
+  if (report && !force) return renderReport();
   try {
     const r = await fetch("/relatorios/ultimo.json", { cache: "no-store" });
     if (!r.ok) throw 0;
-    const rep = await r.json(); reportLoaded = true;
-    renderReport(rep);
+    report = await r.json();
+    renderReport();
   } catch {
-    box.innerHTML = `<div class="empty"><b>Relatório diário — em preparação.</b><br>Em breve, toda manhã, aparece aqui um resumo do que os sites de análise fundamentalista dizem sobre as empresas do Ibovespa e os papéis da sua carteira e lista.</div>`;
+    $("#reportBox").innerHTML = `<div class="empty"><b>O primeiro relatório ainda não foi gerado.</b><br>Toda manhã aparece aqui um resumo do que os sites de análise fundamentalista dizem sobre as empresas do Ibovespa e os papéis da sua lista.</div>`;
   }
 }
-function renderReport(rep) {
-  $("#reportBox").innerHTML = `<div class="empty">Relatório de ${esc(rep.data || "")} carregado.</div>`;
+
+function renderReport() {
+  if (!report) return;
+  const box = $("#reportBox"), c = crit(), mine = myTickers();
+  const emps = report.empresas || [];
+  const sigs = emps.map(e => [e, signal(e)]);
+  const buys = sigs.filter(([, s]) => s?.kind === "compra"), warns = sigs.filter(([, s]) => s?.kind === "atencao");
+  const covered = new Set(emps.map(e => e.ticker));
+  const notCovered = [...mine].filter(t => !covered.has(t) && !/=X$|-USD$|^\^/.test(t));
+  const d = new Date(report.data + "T12:00:00");
+  const old = (Date.now() - new Date(report.gerado_em || report.data).getTime()) / 864e5 > 3;
+
+  let list = emps;
+  if (repFilter === "minha") list = list.filter(e => mine.has(e.ticker));
+  if (repFilter === "criterios") list = list.filter(e => { const f = criteriaCheck(e); return f && !f.length; });
+  if (repFilter === "sinais") list = list.filter(e => signal(e));
+  if (repFilter === "mudancas") list = list.filter(e => (e.mudancas || []).length);
+  if (repQuery) { const q = repQuery.toLowerCase(); list = list.filter(e => e.ticker.toLowerCase().includes(q) || (e.nome || "").toLowerCase().includes(q)); }
+
+  const chip = ([e, s]) => `<button class="chip ${s.kind}" data-rep="${esc(e.ticker)}" title="${esc(s.why.join(" · "))}"><b>${esc(e.ticker)}</b> <span>${esc(s.why[0])}</span></button>`;
+  box.innerHTML = `
+    <div class="rep-head">
+      <div><h2>Relatório de ${d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" })}</h2>
+        <div class="sub">${emps.length} empresas · gerado ${report.gerado_em ? new Date(report.gerado_em).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : ""}${old ? ` · <b style="color:var(--warn)">relatório com mais de 3 dias</b>` : ""}</div></div>
+    </div>
+    <p class="rep-sum">${esc(report.resumo_mercado || "")}</p>
+    <div class="rep-cols">
+      <div class="rep-box"><h3>🟢 Sinais de compra <small>${buys.length}</small></h3><p class="hint">A maioria das casas consultadas recomenda compra <b>e</b> o papel passa nos seus critérios.</p>${buys.map(chip).join("") || `<p class="hint">Nenhum papel hoje.</p>`}</div>
+      <div class="rep-box"><h3>🟠 Pontos de atenção <small>${warns.length}</small></h3><p class="hint">Recomendações de venda, rebaixamentos recentes ou notícias negativas com indicadores fracos.</p>${warns.map(chip).join("") || `<p class="hint">Nenhum papel hoje.</p>`}</div>
+    </div>
+    <details class="crit" ${state.criteriosAbertos ? "open" : ""}><summary>Meus critérios (mude e os sinais se recalculam)</summary>
+      <div class="form" id="critForm" style="margin:0">
+        <div class="field"><label>P/L máximo</label><input type="number" step="any" data-crit="pl_max" value="${c.pl_max ?? ""}"></div>
+        <div class="field"><label>Dividendos mínimos (% ao ano)</label><input type="number" step="any" data-crit="dy_min" value="${c.dy_min ?? ""}"></div>
+        <div class="field"><label>ROE mínimo (%)</label><input type="number" step="any" data-crit="roe_min" value="${c.roe_min ?? ""}"></div>
+        <div class="field"><label>Dívida líq./patrimônio máx.</label><input type="number" step="any" data-crit="div_max" value="${c.div_max ?? ""}"></div>
+        <div class="field"><label>Mínimo de casas opinando</label><input type="number" step="1" min="1" data-crit="min_casas" value="${c.min_casas ?? ""}"></div>
+        <button class="btn" type="button" id="critReset">Voltar ao padrão</button>
+      </div>
+      <p class="hint" style="padding:0 14px 12px">Deixe um campo vazio para ignorar esse critério. P/L = quantos anos de lucro o preço representa (menor = mais barato). ROE = lucro sobre o patrimônio (maior = mais rentável).</p>
+    </details>
+    ${notCovered.length ? `<div class="note">Da sua lista, ainda fora do relatório: <b>${notCovered.map(esc).join(", ")}</b>. Peça ao Claude para incluí-los em <code>relatorios/acompanhar.json</code>.</div>` : ""}
+    <div class="toolbar" style="margin-top:12px">
+      <div class="seg" role="group">${[["todas", "Todas"], ["minha", "Minha lista"], ["sinais", "Com sinal"], ["criterios", "Passam nos critérios"], ["mudancas", "Mudanças recentes"]].map(([k, l]) => `<button data-rf="${k}" aria-pressed="${repFilter === k}">${l}</button>`).join("")}</div>
+      <input id="repQ" type="search" placeholder="Filtrar empresa" value="${esc(repQuery)}" style="flex:0 1 200px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel)">
+    </div>
+    <div class="card scroll"><table class="grid rep"><thead><tr><th>Empresa</th><th>Casas (compra · neutro · venda)</th><th>Alvo médio</th><th>Potencial</th><th>P/L</th><th>Div.</th><th>ROE</th><th>Sinal</th></tr></thead><tbody>
+      ${list.map(e => repRow(e, mine)).join("") || `<tr><td colspan="8" class="empty">Nenhuma empresa neste filtro.</td></tr>`}
+    </tbody></table></div>
+    <p class="hint" style="margin-top:10px">Resumo automático do que as fontes publicaram, feito por IA — pode conter erros; confira os links. Indicadores: Fundamentus. Não é recomendação de investimento.</p>`;
 }
+function repRow(e, mine) {
+  const k = e.consenso || {}, tot = (k.compra || 0) + (k.neutro || 0) + (k.venda || 0), i = e.indicadores || {};
+  const s = signal(e), up = upside(e), open = repOpen === e.ticker;
+  const bar = tot ? `<div class="cbar" title="${k.compra} compra · ${k.neutro} neutro · ${k.venda} venda"><i class="b" style="flex:${k.compra}"></i><i class="n" style="flex:${k.neutro}"></i><i class="s" style="flex:${k.venda}"></i></div><span class="num cnt">${k.compra}·${k.neutro}·${k.venda}</span>` : `<span class="hint">sem cobertura encontrada</span>`;
+  const sent = { positivo: "up", negativo: "down" }[e.sentimento] || "flat";
+  return `<tr data-rep="${esc(e.ticker)}" class="${open ? "open" : ""}">
+    <td><span class="sdot ${sent}" title="tom das notícias: ${esc(e.sentimento)}"></span><b>${esc(e.ticker)}</b>${mine.has(e.ticker) ? ` <span class="tag on">sua lista</span>` : ""}<div class="hint">${esc(e.nome)}</div></td>
+    <td><div class="cwrap">${bar}</div></td>
+    <td class="num">${k.preco_alvo_medio ? money(k.preco_alvo_medio, k.moeda || (e.bolsa === "B3" ? "BRL" : "USD")) : "—"}</td>
+    <td class="num ${cls(up)}">${up == null ? "—" : pct(up)}</td>
+    <td class="num">${i.pl != null ? nf(1).format(i.pl) : "—"}</td>
+    <td class="num">${i.dy != null ? nf(1).format(i.dy) + "%" : "—"}</td>
+    <td class="num">${i.roe != null ? nf(1).format(i.roe) + "%" : "—"}</td>
+    <td>${s ? `<span class="tag ${s.kind === "compra" ? "buy" : "fired"}">${s.kind === "compra" ? "Compra" : "Atenção"}</span>` : ""}</td>
+  </tr>${open ? `<tr class="detail-row"><td colspan="8">${repDetail(e, s)}</td></tr>` : ""}`;
+}
+function repDetail(e, s) {
+  const i = e.indicadores, k = e.consenso || {}, fails = criteriaCheck(e);
+  const IND = i ? [["Cotação", money(i.cotacao, "BRL")], ["P/L", nf(2).format(i.pl ?? 0)], ["P/VP", nf(2).format(i.pvp ?? 0)], ["Dividendos (12m)", nf(2).format(i.dy ?? 0) + "%"], ["ROE", nf(1).format(i.roe ?? 0) + "%"], ["ROIC", nf(1).format(i.roic ?? 0) + "%"], ["Margem líquida", nf(1).format(i.margem_liq ?? 0) + "%"], ["EV/EBITDA", nf(2).format(i.ev_ebitda ?? 0)], ["Dív. líq./patrim.", nf(2).format(i.div_liq_pl ?? 0)], ["Cresc. receita 5a", nf(1).format(i.cresc_rec_5a ?? 0) + "%"]] : [];
+  return `<div class="rep-detail">
+    <p>${esc(e.resumo)}</p>
+    ${s ? `<p class="hint"><b>Por que ${s.kind === "compra" ? "sinal de compra" : "ponto de atenção"}:</b> ${esc(s.why.join(" · "))}</p>` : ""}
+    ${fails && fails.length ? `<p class="hint"><b>Não passa nos seus critérios:</b> ${esc(fails.join(" · "))}</p>` : ""}
+    ${(e.mudancas || []).length ? `<h4>Mudanças recentes</h4><ul>${e.mudancas.map(m => `<li>${esc(new Date(m.data + "T12:00").toLocaleDateString("pt-BR"))} — ${esc(m.descricao)} <span class="hint">(${esc(m.fonte)})</span></li>`).join("")}</ul>` : ""}
+    ${(k.casas || []).length ? `<h4>Recomendações por casa</h4><div class="casas">${k.casas.map(c => `<span class="casa ${c.recomendacao}"><b>${esc(c.nome)}</b> ${esc(c.recomendacao)}${c.preco_alvo ? " · alvo " + money(c.preco_alvo, k.moeda || "BRL") : ""}${c.data ? ` <small>${esc(new Date(c.data + "T12:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }))}</small>` : ""}</span>`).join("")}</div>` : ""}
+    ${IND.length ? `<h4>Indicadores</h4><div class="stats">${IND.map(([a, b]) => `<div><span>${a}</span><b class="num">${b}</b></div>`).join("")}</div>` : ""}
+    ${(e.fontes || []).length ? `<h4>Fontes</h4><ul class="fontes">${e.fontes.map(f => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener noreferrer">${esc(f.titulo || f.nome)}</a> <span class="hint">${esc(f.nome)}${f.data ? " · " + esc(new Date(f.data + "T12:00").toLocaleDateString("pt-BR")) : ""}</span></li>`).join("")}</ul>` : ""}
+    <div class="modal-actions"><button class="btn small" data-open="${esc(e.bolsa === "B3" ? e.ticker + ".SA" : e.ticker)}">Ver gráfico e cotação</button><span class="hint">Pesquisa atualizada em ${esc(new Date(e.atualizado_em + "T12:00").toLocaleDateString("pt-BR"))}</span></div>
+  </div>`;
+}
+$("#reportBox").addEventListener("click", e => {
+  const f = e.target.closest("[data-rf]"); if (f) { repFilter = f.dataset.rf; return renderReport(); }
+  if (e.target.closest("#critReset")) { delete state.criterios; save(); return renderReport(); }
+  if (e.target.closest("[data-open]")) return;
+  const r = e.target.closest("[data-rep]");
+  if (r && !e.target.closest("a")) {
+    repOpen = repOpen === r.dataset.rep ? null : r.dataset.rep;
+    if (r.classList.contains("chip")) { repFilter = "todas"; repQuery = ""; repOpen = r.dataset.rep; }
+    renderReport();
+    if (r.classList.contains("chip")) document.querySelector(`tr[data-rep="${CSS.escape(repOpen)}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+});
+$("#reportBox").addEventListener("change", e => {
+  const inp = e.target.closest("[data-crit]"); if (!inp) return;
+  state.criterios = { ...crit(), [inp.dataset.crit]: inp.value === "" ? "" : +inp.value }; save(); renderReport();
+});
+$("#reportBox").addEventListener("toggle", e => { if (e.target.matches("details.crit")) { state.criteriosAbertos = e.target.open; save(); } }, true);
+$("#reportBox").addEventListener("input", e => {
+  if (e.target.id !== "repQ") return;
+  repQuery = e.target.value; const pos = e.target.selectionStart; renderReport();
+  const q = $("#repQ"); q.focus(); q.setSelectionRange(pos, pos);
+});
 
 /* ---------- cópia de segurança ---------- */
 $("#exportBtn").addEventListener("click", () => {
@@ -702,7 +877,7 @@ $("#importFile").addEventListener("change", async e => {
   try {
     const d = JSON.parse(await e.target.files[0].text());
     if (!Array.isArray(d.favs) || !Array.isArray(d.cart) || !Array.isArray(d.alerts)) throw 0;
-    state = { favs: d.favs.filter(s => typeof s === "string"), cart: d.cart, alerts: d.alerts };
+    state = { favs: d.favs.filter(s => typeof s === "string"), cart: d.cart, alerts: d.alerts, criterios: d.criterios };
     save(); toast("Dados restaurados"); refresh();
   } catch { toast("Arquivo inválido"); }
   e.target.value = "";
