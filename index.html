@@ -68,7 +68,7 @@ header { display: flex; align-items: center; gap: 12px; padding: 18px 0 14px; fl
 .mk { font-size: 10px; padding: 1px 6px; border-radius: 99px; background: var(--panel-2); color: var(--faint); text-transform: none; letter-spacing: 0; font-weight: 500; }
 .mk.on { background: var(--up-soft); color: var(--up); }
 
-nav.tabs { display: flex; gap: 4px; margin: 22px 0 12px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+nav.tabs { display: flex; flex-wrap: wrap; gap: 0 4px; margin: 22px 0 12px; border-bottom: 1px solid var(--line); }
 nav.tabs button { border: 0; background: none; padding: 10px 14px; cursor: pointer; color: var(--muted); font-weight: 600; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
 nav.tabs button[aria-selected="true"] { color: var(--text); border-color: var(--accent); }
 .badge { display: inline-block; min-width: 18px; padding: 0 5px; margin-left: 4px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-size: 12px; text-align: center; }
@@ -188,6 +188,19 @@ tr.detail-row td { white-space: normal; text-align: left; background: var(--pane
 .casa { font-size: 13px; padding: 3px 8px; border-radius: 6px; background: var(--panel); border: 1px solid var(--line); }
 .casa.compra { border-color: var(--up); } .casa.venda { border-color: var(--down); }
 @media (max-width: 700px) { .rep-cols { grid-template-columns: 1fr; } #reportBox { padding: 14px; } }
+.edu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 12px; }
+.edu { padding: 16px; }
+.edu-h { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.edu h3 { margin: 0; font-size: 18px; }
+.edu h4 { margin: 14px 0 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.edu p { margin: 0; font-size: 14px; line-height: 1.55; }
+.edu .mk { font-size: 12px; padding: 2px 8px; white-space: nowrap; }
+.edu-px { display: block; margin-top: 10px; border: 1px solid var(--line); background: var(--panel-2); border-radius: 8px; padding: 6px 10px; cursor: pointer; text-align: left; width: 100%; font-weight: 600; }
+.edu-px:hover { border-color: var(--accent); }
+.edu-t { border-collapse: collapse; width: 100%; font-size: 14px; }
+.edu-t td { padding: 5px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.edu-t td:first-child { color: var(--muted); padding-right: 12px; width: 45%; }
+.edu-t tr:last-child td { border-bottom: 0; }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 @media (max-width: 1000px) { .strip { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 560px) {
@@ -218,6 +231,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
     <button role="tab" data-tab="cart">Carteira <span class="badge" id="nCart">0</span></button>
     <button role="tab" data-tab="alerts">Alertas <span class="badge" id="nAlerts">0</span></button>
     <button role="tab" data-tab="report">Relatório diário</button>
+    <button role="tab" data-tab="edu">Educação</button>
   </nav>
 
   <!-- FAVORITOS -->
@@ -260,6 +274,12 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <!-- RELATÓRIO -->
   <section data-panel="report" hidden>
     <div class="card" id="reportBox"><div class="empty">Carregando relatório…</div></div>
+  </section>
+
+  <!-- EDUCAÇÃO -->
+  <section data-panel="edu" hidden>
+    <p class="note">O que significa cada indicador do topo da tela e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
+    <div class="edu-grid" id="eduList"></div>
   </section>
 
   <datalist id="symList"></datalist>
@@ -547,7 +567,7 @@ function renderAlerts() {
 }
 let current = null;
 function renderAll() {
-  renderStrip(); renderFavs(); renderCart(); renderAlerts(); renderCounts(); renderStamp();
+  renderStrip(); renderFavs(); renderCart(); renderAlerts(); renderCounts(); renderStamp(); renderEdu();
   if (current && $("#detail").open) renderDetailHead();
   for (const q of Object.values(quotes)) q._flash = "";
 }
@@ -630,6 +650,7 @@ function showTab(name) {
   document.querySelectorAll("[data-panel]").forEach(p => p.hidden = p.dataset.panel !== name);
   try { localStorage.setItem(KEY + ".tab", name); } catch {}
   if (name === "report") loadReport();
+  if (name === "edu") renderEdu();
 }
 document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) showTab(b.dataset.tab); });
 
@@ -710,6 +731,66 @@ $("#q").addEventListener("keydown", e => {
   else if (e.key === "Escape") $("#sugg").classList.remove("open");
 });
 document.addEventListener("click", e => { if (!e.target.closest(".search")) $("#sugg").classList.remove("open"); });
+
+/* ---------- educação ---------- */
+// Brazil has no daylight saving time; the US does (March to November). Wall Street and,
+// following it, the B3 shift their hours in Brasília time when the US clock changes.
+function usSummerTime() {
+  return /EDT/.test(new Date().toLocaleString("en-US", { timeZone: "America/New_York", timeZoneName: "short" }));
+}
+function eduItems() {
+  const dst = usSummerTime();
+  const usHours = dst ? "10h30 às 17h" : "11h30 às 18h";
+  const usPre = dst ? "a partir das 5h" : "a partir das 6h";
+  return [
+    { s: "^BVSP", titulo: "Ibovespa", sub: "Índice da bolsa brasileira (B3)",
+      oque: "É o principal termômetro da bolsa do Brasil: uma “cesta” com as cerca de 80 ações mais negociadas, como Petrobras, Vale e Itaú. Cada empresa pesa mais ou menos conforme o tamanho e o volume de negócios. É medido em <b>pontos</b>: se o índice sobe, a média dessas ações subiu.",
+      porque: "Mostra o humor geral dos investidores com as empresas brasileiras.",
+      horario: [["Pregão regular", dst ? "10h às 17h" : "10h às 18h"], ["Leilão de abertura", "a partir das 9h45"], ["Dias", "segunda a sexta, exceto feriados"]],
+      nota: "De novembro a março (quando os EUA saem do horário de verão) a B3 costuma fechar às 18h; no resto do ano, às 17h." },
+    { s: "USDBRL=X", titulo: "Dólar", sub: "Quantos reais custa 1 dólar americano",
+      oque: "O valor mostrado é o <b>dólar comercial</b>, usado por bancos e empresas em grandes operações. O dólar turismo, de casa de câmbio e cartão, sai mais caro.",
+      porque: "Mexe com o preço de combustíveis, importados, viagens e com o lucro de exportadoras (Vale, Suzano, Embraer). Costuma subir quando há medo ou quando estrangeiros tiram dinheiro do Brasil.",
+      horario: [["Mercado mundial", "24h, de domingo à noite até sexta à noite"], ["Mais negócios no Brasil", "aproximadamente 9h às 17h"]],
+      nota: "Moedas são negociadas no mundo todo, sem bolsa única. Por isso o preço se mexe mesmo de madrugada." },
+    { s: "EURBRL=X", titulo: "Euro", sub: "Quantos reais custa 1 euro",
+      oque: "O euro é a moeda de 20 países da União Europeia, como Alemanha, França, Itália e Portugal. Também é mostrada a cotação comercial.",
+      porque: "Costuma andar junto com o dólar em relação ao real, mas também reflete a economia da Europa. Importa para viagens e para empresas que vendem ou compram na Europa.",
+      horario: [["Mercado mundial", "24h, de domingo à noite até sexta à noite"], ["Mais negócios", "manhã no Brasil, quando Europa e Brasil estão abertos juntos"]],
+      nota: "" },
+    { s: "^GSPC", titulo: "S&P 500", sub: "As 500 maiores empresas dos EUA",
+      oque: "Índice com as 500 maiores empresas americanas, como Apple, Microsoft, Nvidia e Amazon, pesadas pelo tamanho. É medido em pontos.",
+      porque: "É o principal termômetro da economia e da bolsa dos EUA, a maior do mundo. Quando cai forte, costuma puxar as bolsas do mundo todo, inclusive o Ibovespa.",
+      horario: [["Pregão regular", usHours], ["Pré-mercado", usPre], ["Dias", "segunda a sexta, exceto feriados americanos"]],
+      nota: "O horário em Brasília muda 1 hora quando os EUA entram ou saem do horário de verão (março e novembro)." },
+    { s: "^IXIC", titulo: "Nasdaq", sub: "Bolsa americana das empresas de tecnologia",
+      oque: "O Nasdaq Composite reúne as cerca de 3 mil empresas listadas na bolsa Nasdaq, com muito peso de tecnologia: Apple, Microsoft, Nvidia, Alphabet (Google), Meta e Amazon.",
+      porque: "É o termômetro do setor de tecnologia. Costuma subir e cair mais que o S&P 500, ou seja, é mais volátil.",
+      horario: [["Pregão regular", usHours], ["Pré-mercado", usPre], ["Dias", "segunda a sexta, exceto feriados americanos"]],
+      nota: "Mesmo horário do S&P 500." },
+    { s: "BTC-USD", titulo: "Bitcoin", sub: "A maior criptomoeda do mundo",
+      oque: "Moeda digital criada em 2009, sem banco central nem governo por trás. É negociada em corretoras do mundo inteiro, e o preço aqui é em <b>dólares (US$)</b>.",
+      porque: "É bem mais volátil que ações: variações de 5% num único dia são comuns. É o termômetro do mercado de criptomoedas.",
+      horario: [["Funcionamento", "24 horas por dia, 7 dias por semana"], ["Fecha?", "nunca, nem em fins de semana ou feriados"]],
+      nota: "Por isso é o único do topo da tela que se mexe no sábado e no domingo." },
+  ];
+}
+function renderEdu() {
+  const box = $("#eduList"); if (!box || box.closest("[hidden]")) return;
+  box.innerHTML = eduItems().map(it => {
+    const q = quotes[it.s], c = change(q);
+    return `<article class="card edu">
+      <div class="edu-h"><div><h3>${it.titulo}</h3><div class="hint">${it.sub}</div></div>
+        ${q ? `<span class="mk ${q.open ? "on" : ""}">${q.open ? "aberto agora" : "fechado agora"}</span>` : ""}</div>
+      ${q ? `<button class="edu-px" data-open="${esc(it.s)}"><span class="num">${money(q.price, q.currency, q.type)}</span> <span class="num ${cls(c)}">${pct(c)}</span> <span class="hint">· ver gráfico</span></button>` : ""}
+      <h4>O que é</h4><p>${it.oque}</p>
+      <h4>Por que importa</h4><p>${it.porque}</p>
+      <h4>Horário (Brasília)</h4>
+      <table class="edu-t">${it.horario.map(([a, b]) => `<tr><td>${a}</td><td><b>${b}</b></td></tr>`).join("")}</table>
+      ${it.nota ? `<p class="hint" style="margin-top:8px">${it.nota}</p>` : ""}
+    </article>`;
+  }).join("");
+}
 
 /* ---------- relatório diário ---------- */
 const CRIT_DEFAULT = { pl_max: 15, dy_min: 4, roe_min: 12, div_max: 2, min_casas: 3 };
