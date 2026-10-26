@@ -419,14 +419,8 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <section data-panel="cart" hidden>
     <div class="vhead"><h3>Minha carteira</h3><span class="row2" style="margin:0"><button class="btn" id="simNew" type="button">🧮 Simular compra e venda</button><button class="btn primary" id="vNew" type="button">＋ Criar carteira virtual</button></span></div>
     <div class="totals" id="cartTotals"></div>
-    <form class="form card" id="cartForm">
-      <div class="field"><label for="cSym">Ativo (código)</label><input id="cSym" list="symList" placeholder="PETR4.SA" required></div>
-      <div class="field"><label for="cQty">Quantidade</label><input id="cQty" type="number" step="any" min="0" placeholder="100"></div>
-      <div class="field"><label for="cAvg">Preço de compra (opcional)</label><input id="cAvg" type="number" step="any" min="0" placeholder="preço de hoje"></div>
-      <button class="btn primary" type="submit">🧮 Simular compra e venda</button>
-    </form>
     <div class="card scroll" id="cartList"></div>
-    <p class="note" style="margin-top:12px">Para incluir ou alterar uma posição, use o simulador: ele mostra custos e impostos e, no final, tem o botão para salvar a compra (ou registrar a venda) na carteira. Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do momento.</p>
+    <p class="note" style="margin-top:12px">Para incluir ou alterar uma posição, use o botão 🧮 Simular compra e venda: ele mostra custos e impostos e, no final, tem o botão para salvar a compra (ou registrar a venda) na carteira. Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do momento.</p>
     <div class="vhead" style="margin-top:26px"><h3>Carteiras virtuais <span class="hint" style="font-weight:400">· simulação com dinheiro fictício</span></h3></div>
     <div id="vList" class="vlist"></div>
   </section>
@@ -830,7 +824,7 @@ function renderCart() {
   });
   $("#cartList").innerHTML = state.cart.length
     ? `<table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Preço médio</th><th>Atual</th><th>Dia</th><th>Valor</th><th>Resultado</th><th></th></tr></thead><tbody>${rows.join("")}</tbody></table>`
-    : `<div class="empty">Nenhuma posição ainda. Preencha o formulário acima com o que você tem.</div>`;
+    : `<div class="empty">Nenhuma posição ainda. Use <b>🧮 Simular compra e venda</b> (acima) e, no final da simulação, salve a compra na carteira.</div>`;
   const res = now - inv;
   $("#cartTotals").innerHTML = state.cart.length ? `
     <div class="card tot"><div class="lbl">Valor hoje</div><div class="v num">${brl(now)}</div></div>
@@ -1119,7 +1113,7 @@ $("#wins").addEventListener("click", e => {
   if (a === "max") return toggleMax(w);
   if (a === "fav") { toggleFav(w.sym); return syncWinControls(w); }
   if (a === "alert") { gotoAlertSettings(w.sym); return; }
-  if (a === "cart") { showTab("cart"); $("#cSym").value = w.sym; $("#cQty").focus(); return; }
+  if (a === "cart") { simOpen({ sym: w.sym }); return; }
   const rg = e.target.closest("[data-wr]"); if (rg) { w.range = rg.dataset.wr; syncWinControls(w); return loadWin(w); }
   const tp = e.target.closest("[data-wt]");
   const ind = e.target.closest("[data-wi]");
@@ -1192,14 +1186,6 @@ $("#favList").addEventListener("click", e => {
   const b = e.target.closest("[data-ftab]"); if (!b) return;
   state.favTab = b.dataset.ftab; save(); renderFavs();
 });
-$("#cartForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const symbol = normSym($("#cSym").value); if (!symbol) return;
-  const qty = +$("#cQty").value, avg = +$("#cAvg").value;
-  simOpen({ sym: symbol, qty: qty > 0 ? qty : undefined, pb: avg > 0 ? avg : undefined });
-  e.target.reset();
-});
-
 /* ---------- alertas ---------- */
 let audio;
 function beep() {
@@ -1881,6 +1867,8 @@ function gotoAlertSettings(sym) {
     setTimeout(() => { const v = box.querySelector('[data-pa-new="val"]'); v.focus(); v.select(); }, 400);
   }
 }
+let emailCfg = null;   // relatorios/config.json: what the 07:00 e-mail uses
+fetch("/relatorios/config.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(c => { emailCfg = c; renderConfig(); }).catch(() => {});
 function renderConfig() {
   const box = $("#cfgBox"); if (!box || box.closest("[hidden]")) return;
   const c = crit(), d = chartDefaults(), th = themeChoice();
@@ -1917,6 +1905,9 @@ function renderConfig() {
     <section class="card">
       <h3>Relatório diário</h3>
       <p class="hint">Gráfico usado nos sinais técnicos e na coluna "Técnico" da tabela.</p>
+      ${emailCfg ? (() => { const tf = emailCfg.tempo_grafico || "diario", lbl = FRAMES.find(f => f[0] === tf)?.[1] || tf; return tf === frame()
+        ? `<p class="hint">📧 O e-mail das 7h também usa o gráfico <b>${lbl.toLowerCase()}</b>. ✔</p>`
+        : `<p class="note" style="margin:10px 0 0">📧 O e-mail das 7h está usando o gráfico <b>${lbl.toLowerCase()}</b>, diferente do escolhido aqui. Esta escolha fica só neste navegador; para o e-mail mudar também, peça ao Claude.</p>`; })() : ""}
       <div class="row2"><span class="seg">${FRAMES.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${frame() === k}">${l}</button>`).join("")}</span></div>
     </section>
     <section class="card">
