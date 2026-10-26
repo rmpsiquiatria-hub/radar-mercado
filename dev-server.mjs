@@ -16,7 +16,10 @@ createServer(async (req, res) => {
     const api = url.pathname.match(/^\/api\/([a-z-]+)$/);
     if (api) {
       const mod = await import(pathToFileURL(join(ROOT, "api", api[1] + ".js")).href + "?t=" + Date.now());
-      const r = await mod.GET(new Request(url));
+      const handler = mod[req.method];
+      if (!handler) { res.writeHead(405); res.end(); return; }
+      const body = ["POST", "PUT"].includes(req.method) ? await new Promise(ok => { const c = []; req.on("data", d => c.push(d)); req.on("end", () => ok(Buffer.concat(c))); }) : undefined;
+      const r = await handler(new Request(url, { method: req.method, headers: req.headers, body }));
       res.writeHead(r.status, Object.fromEntries(r.headers));
       res.end(Buffer.from(await r.arrayBuffer()));
       return;

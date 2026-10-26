@@ -1826,7 +1826,7 @@ function techDetail(e) {
   ${FRAMES.map(([k, l]) => { const t = e.tecnica[k]; return t && t.sinais.length ? `<p class="hint" style="margin:8px 0 2px"><b>${l}:</b></p><ul>${t.sinais.map(x => `<li><span class="${x.sinal === "alta" ? "up" : x.sinal === "baixa" ? "down" : "flat"}">${x.sinal === "alta" ? "▲" : x.sinal === "baixa" ? "▼" : "•"}</span> ${esc(x.texto)}</li>`).join("")}</ul>` : ""; }).join("")}`;
 }
 $("#reportBox").addEventListener("click", e => {
-  const tf = e.target.closest("[data-tf]"); if (tf) { state.tempoGrafico = tf.dataset.tf; save(); return renderReport(); }
+  const tf = e.target.closest("[data-tf]"); if (tf) { state.tempoGrafico = tf.dataset.tf; save(); syncEmailTf(tf.dataset.tf); return renderReport(); }
   const f = e.target.closest("[data-rf]"); if (f) { repFilter = f.dataset.rf; return renderReport(); }
   if (e.target.closest("#critReset")) { delete state.criterios; save(); return renderReport(); }
   if (e.target.closest("[data-open]")) return;
@@ -1867,8 +1867,26 @@ function gotoAlertSettings(sym) {
     setTimeout(() => { const v = box.querySelector('[data-pa-new="val"]'); v.focus(); v.select(); }, 400);
   }
 }
-let emailCfg = null;   // relatorios/config.json: what the 07:00 e-mail uses
-fetch("/relatorios/config.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(c => { emailCfg = c; renderConfig(); }).catch(() => {});
+// What the 07:00 e-mail uses (relatorios/config.json). With GITHUB_TOKEN set in Vercel,
+// /api/preferencias reads it live and saves the timeframe chosen here; otherwise the
+// published copy of the file is read and changes here stay in this browser.
+let emailCfg = null, emailSync = false, emailSyncMsg = "";
+fetch("/api/preferencias", { cache: "no-store" }).then(r => r.json()).then(j => {
+  if (j.configurado && j.tempo_grafico) { emailSync = true; emailCfg = { tempo_grafico: j.tempo_grafico }; renderConfig(); return; }
+  throw 0;
+}).catch(() => fetch("/relatorios/config.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(c => { emailCfg = c; renderConfig(); }).catch(() => {}));
+async function syncEmailTf(tf) {
+  if (!emailSync) return;
+  emailSyncMsg = "⏳ atualizando o e-mail…"; renderConfig();
+  try {
+    const r = await fetch("/api/preferencias", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tempo_grafico: tf }) });
+    const j = await r.json();
+    if (!r.ok || !j.ok) throw new Error(j.erro || r.status);
+    emailCfg = { ...emailCfg, tempo_grafico: j.tempo_grafico }; emailSyncMsg = "";
+    if (j.mudou) toast(`📧 O e-mail das 7h passa a usar o gráfico ${FRAMES.find(f => f[0] === tf)[1].toLowerCase()}`);
+  } catch (e) { emailSyncMsg = `⚠️ Não consegui atualizar o e-mail (${e.message}). Tente de novo.`; }
+  renderConfig();
+}
 function renderConfig() {
   const box = $("#cfgBox"); if (!box || box.closest("[hidden]")) return;
   const c = crit(), d = chartDefaults(), th = themeChoice();
@@ -1906,8 +1924,11 @@ function renderConfig() {
       <h3>Relatório diário</h3>
       <p class="hint">Gráfico usado nos sinais técnicos e na coluna "Técnico" da tabela.</p>
       ${emailCfg ? (() => { const tf = emailCfg.tempo_grafico || "diario", lbl = FRAMES.find(f => f[0] === tf)?.[1] || tf; return tf === frame()
-        ? `<p class="hint">📧 O e-mail das 7h também usa o gráfico <b>${lbl.toLowerCase()}</b>. ✔</p>`
-        : `<p class="note" style="margin:10px 0 0">📧 O e-mail das 7h está usando o gráfico <b>${lbl.toLowerCase()}</b>, diferente do escolhido aqui. Esta escolha fica só neste navegador; para o e-mail mudar também, peça ao Claude.</p>`; })() : ""}
+        ? `<p class="hint">📧 O e-mail das 7h também usa o gráfico <b>${lbl.toLowerCase()}</b>. ✔${emailSync ? " Mudando aqui, o e-mail acompanha." : ""}</p>`
+        : emailSync
+          ? `<p class="note" style="margin:10px 0 0">📧 O e-mail das 7h usa o gráfico <b>${lbl.toLowerCase()}</b>. ${emailSyncMsg || `<button class="linkbtn" type="button" data-email-tf="${frame()}">Usar o ${FRAMES.find(f => f[0] === frame())[1].toLowerCase()} no e-mail também</button>`}</p>`
+          : `<p class="note" style="margin:10px 0 0">📧 O e-mail das 7h está usando o gráfico <b>${lbl.toLowerCase()}</b>, diferente do escolhido aqui. A sincronização automática com o e-mail ainda não foi configurada.</p>`; })() : ""}
+      ${emailSyncMsg && emailCfg?.tempo_grafico === frame() ? `<p class="hint">${emailSyncMsg}</p>` : ""}
       <div class="row2"><span class="seg">${FRAMES.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${frame() === k}">${l}</button>`).join("")}</span></div>
     </section>
     <section class="card">
@@ -1940,7 +1961,8 @@ $("#cfgBox").addEventListener("click", e => {
   if (b.dataset.cfg === "critReset") { delete state.criterios; save(); renderConfig(); renderReport(); return; }
   if (b.dataset.cfg === "export") return $("#exportBtn").click();
   if (b.dataset.cfg === "import") return $("#importBtn").click();
-  if (b.dataset.tf) { state.tempoGrafico = b.dataset.tf; save(); renderConfig(); renderReport(); return; }
+  if (b.dataset.tf) { state.tempoGrafico = b.dataset.tf; save(); renderConfig(); renderReport(); syncEmailTf(b.dataset.tf); return; }
+  if (b.dataset.emailTf) { syncEmailTf(b.dataset.emailTf); return; }
   if (b.dataset.cdef) { state.chart = { ...chartDefaults(), tipo: b.dataset.v }; save(); renderConfig(); return; }
   if (b.dataset.themeSet) {
     const t = b.dataset.themeSet;
