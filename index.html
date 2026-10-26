@@ -357,6 +357,15 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .cgal-i summary { cursor: pointer; list-style: none; display: grid; gap: 6px; }
 .cgal-i summary::-webkit-details-marker { display: none; }
 .cgal-i[open] { grid-column: 1 / -1; }
+.tec-when { font-size: 13px; margin: 2px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.cst { font-size: 11.5px; font-weight: 700; padding: 1px 8px; border-radius: 99px; }
+.cst.forming { background: var(--warn-soft); color: var(--warn); }
+.cst.closed { background: var(--up-soft); color: var(--up); }
+.cst.late { background: var(--panel-2); color: var(--muted); }
+.tec-acts { margin-top: 6px; }
+.tec-dt { text-align: right; font-size: 11.5px; line-height: 1.3; }
+.sim-save { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.sim-save .hint { width: 100%; margin: 0; }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 
 @media (max-width: 560px) {
@@ -407,12 +416,12 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
     <div class="totals" id="cartTotals"></div>
     <form class="form card" id="cartForm">
       <div class="field"><label for="cSym">Ativo (código)</label><input id="cSym" list="symList" placeholder="PETR4.SA" required></div>
-      <div class="field"><label for="cQty">Quantidade</label><input id="cQty" type="number" step="any" min="0" placeholder="100" required></div>
-      <div class="field"><label for="cAvg">Preço médio pago</label><input id="cAvg" type="number" step="any" min="0" placeholder="35,20" required></div>
-      <button class="btn primary" type="submit">Salvar na carteira</button>
+      <div class="field"><label for="cQty">Quantidade</label><input id="cQty" type="number" step="any" min="0" placeholder="100"></div>
+      <div class="field"><label for="cAvg">Preço de compra (opcional)</label><input id="cAvg" type="number" step="any" min="0" placeholder="preço de hoje"></div>
+      <button class="btn primary" type="submit">🧮 Simular compra e venda</button>
     </form>
     <div class="card scroll" id="cartList"></div>
-    <p class="note" style="margin-top:12px">Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do dólar do momento. Para editar uma posição, salve o mesmo código de novo com os valores novos.</p>
+    <p class="note" style="margin-top:12px">Para incluir ou alterar uma posição, use o simulador: ele mostra custos e impostos e, no final, tem o botão para salvar a compra (ou registrar a venda) na carteira. Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do momento.</p>
     <div class="vhead" style="margin-top:26px"><h3>Carteiras virtuais <span class="hint" style="font-weight:400">· simulação com dinheiro fictício</span></h3></div>
     <div id="vList" class="vlist"></div>
   </section>
@@ -1172,12 +1181,12 @@ document.querySelector("header").addEventListener("click", e => { const b = e.ta
 
 $("#cartForm").addEventListener("submit", e => {
   e.preventDefault();
-  const symbol = normSym($("#cSym").value), qty = +$("#cQty").value, avg = +$("#cAvg").value;
-  if (!symbol || !(qty > 0) || !(avg >= 0)) return;
-  const ex = state.cart.find(p => p.symbol === symbol);
-  if (ex) { ex.qty = qty; ex.avg = avg; } else state.cart.push({ symbol, qty, avg });
-  save(); e.target.reset(); toast(short(symbol) + " salvo na carteira"); refresh();
+  const symbol = normSym($("#cSym").value); if (!symbol) return;
+  const qty = +$("#cQty").value, avg = +$("#cAvg").value;
+  simOpen({ sym: symbol, qty: qty > 0 ? qty : undefined, pb: avg > 0 ? avg : undefined });
+  e.target.reset();
 });
+
 /* ---------- alertas ---------- */
 let audio;
 function beep() {
@@ -1389,7 +1398,8 @@ const dayBR = t => new Date(t * 1000).toLocaleDateString("sv-SE", { timeZone: "A
 function tecEvents(sym, bars) {
   const A = window.Analise; if (!A || bars.length < 30) return [];
   const C = bars.map(b => b.c), k = bars.length - 1, ev = [];
-  const live = dayBR(bars[k].t) === dayBR(Date.now() / 1000) && !!quotes[sym]?.open;   // today's candle still forming
+  // Today's candle still forming? If the quote has not arrived yet, assume it is (never call an open candle closed).
+  const live = dayBR(bars[k].t) === dayBR(Date.now() / 1000) && (quotes[sym]?.open ?? true);
   const px = v => nf(decimals(v)).format(v);
   const cross = (a, b) => [a[k - 1], b[k - 1], a[k], b[k]].some(v => v == null) ? null : a[k - 1] <= b[k - 1] && a[k] > b[k] ? "alta" : a[k - 1] >= b[k - 1] && a[k] < b[k] ? "baixa" : null;
   const add = (tipo, sinal, titulo, texto, kk = k) => ev.push({ tipo, sinal, titulo, texto, data: dayBR(bars[kk].t), formando: kk === k && live });
@@ -1490,15 +1500,29 @@ function tecSettingsHTML() {
     <div class="pa-add" style="margin-top:10px"><input data-tec-new list="symList" placeholder="Vigiar outro ativo (ex.: BBDC4)" aria-label="Ativo para vigiar"><button class="btn small" data-tec-add type="button">Vigiar</button>
       ${c.extras.length ? `<span class="hint">Adicionados à mão: ${c.extras.map(s => `${esc(short(s))} <button class="linkx" data-tec-rm="${esc(s)}" title="Parar de vigiar">×</button>`).join(" ")}</span>` : ""}</div>`;
 }
+// Which daily candle the signal refers to, and whether that candle was still forming.
+function candleWhen(n) {
+  const d = new Date(n.data + "T12:00").toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "2-digit", year: "numeric" });
+  const cripto = /-USD$/.test(n.sym) || /=X$/.test(n.sym);
+  const periodo = cripto ? " (dia de 21h a 21h, horário de Brasília)" : "";
+  const hoje = n.data === dayBR(Date.now() / 1000);
+  let selo;
+  if (hoje && (quotes[n.sym]?.open ?? n.formando)) selo = `<span class="cst forming">⏳ em formação — ${cripto ? "dia de hoje" : "pregão de hoje"}, pode mudar até o fechamento</span>`;
+  else if (n.formando) selo = `<span class="cst late">✔ fechou depois do aviso — confira no gráfico se o sinal se manteve</span>`;
+  else selo = `<span class="cst closed">✔ candle fechado</span>`;
+  return `🕯️ Candle diário de <b>${d}</b>${periodo} ${selo}`;
+}
 function tecFeedHTML() {
   const feed = tecCfg().feed;
   if (!feed.length) return `<div class="empty">Nenhum sinal técnico ainda. Os alertas aparecem aqui quando um dos sinais acontece no gráfico diário dos ativos vigiados.</div>`;
   return feed.slice(0, 40).map(n => `<div class="tec-ev ${n.lido ? "" : "novo"}" data-open="${esc(n.sym)}">
       <span class="tec-ic ${n.sinal === "alta" ? "up" : n.sinal === "baixa" ? "down" : "flat"}">${n.sinal === "alta" ? "▲" : n.sinal === "baixa" ? "▼" : "◆"}</span>
       <div><b>${esc(short(n.sym))}</b> · <b class="${n.sinal === "alta" ? "up" : n.sinal === "baixa" ? "down" : ""}">${esc(n.titulo)}</b>
-        <div class="hint">${esc(n.texto)}${n.formando ? " (no pregão de hoje, candle ainda em formação)" : ""}</div>
-        ${n.tipo === "candles" && CANDLE_EDU[n.titulo.replace(/^Candle: /, "")] ? `<details class="cedu" data-ckey="${esc(n.key)}" ${cOpen.has(n.key) ? "open" : ""}><summary>📖 Ver como é este candle</summary>${candleSheet(n.titulo.replace(/^Candle: /, ""))}</details>` : ""}</div>
-      <span class="hint tec-dt">${new Date(n.data + "T12:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}</span>
+        <div class="tec-when">${candleWhen(n)}</div>
+        <div class="hint">${esc(n.texto)}</div>
+        ${n.tipo === "candles" && CANDLE_EDU[n.titulo.replace(/^Candle: /, "")] ? `<details class="cedu" data-ckey="${esc(n.key)}" ${cOpen.has(n.key) ? "open" : ""}><summary>📖 Ver como é este candle</summary>${candleSheet(n.titulo.replace(/^Candle: /, ""))}</details>` : ""}
+        <div class="tec-acts"><button class="btn small" type="button" data-sim="${esc(n.sym)}">🧮 Simular compra ou venda</button></div></div>
+      <span class="hint tec-dt" title="Quando o alerta foi gerado">avisado em<br>${new Date(n.ts).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span>
     </div>`).join("") + `<div class="row2" style="justify-content:flex-end"><button class="btn small" data-tec-clear type="button">Limpar lista</button></div>`;
 }
 document.addEventListener("change", e => {
@@ -2308,7 +2332,44 @@ function simRun() {
       ${r.cdi != null ? `<tr><td>O mesmo valor no CDI por ${p.dias} dias (já com IR)</td><td class="num">${sign(r.cdi)}</td></tr>` : ""}
     </table>
     ${r.darf ? `<p class="sim-note">📄 ${esc(r.darf)}</p>` : ""}
-    ${r.avisos.map(a => `<p class="sim-note">ℹ️ ${esc(a)}</p>`).join("")}`;
+    ${r.avisos.map(a => `<p class="sim-note">ℹ️ ${esc(a)}</p>`).join("")}
+    ${simSaveHTML(p)}`;
+}
+// Average price stored in the portfolio, in the asset's own currency (B3: with fees, as the IR rules do).
+function simAvg(p, sym) {
+  if (isB3(p.kind)) return simCalc(p, false).custoTotal / p.qty;
+  if (p.kind === "cripto" && quotes[sym]?.currency === "USD") return p.pb / (quotes["USDBRL=X"]?.price || 1);
+  return p.pb;
+}
+function simSaveHTML(p) {
+  const sym = normSym($("#sSym")?.value || ""); if (!sym) return "";
+  const held = state.cart.find(x => x.symbol === sym), q = quotes[sym];
+  const cur = p.kind === "cripto" ? (q?.currency || "BRL") : p.kind === "exterior" ? "USD" : "BRL";
+  const avg = simAvg(p, sym);
+  const novoQty = held ? held.qty + p.qty : p.qty, novoAvg = held ? (held.qty * held.avg + p.qty * avg) / novoQty : avg;
+  return `<div class="sim-save">
+    <button class="btn primary" type="button" data-ssave="compra">💾 Salvar a compra na carteira</button>
+    ${held ? `<button class="btn" type="button" data-ssave="venda">📤 Registrar a venda (tira da carteira)</button>` : ""}
+    <p class="hint">${held
+      ? `Você já tem ${nf(held.qty % 1 ? 4 : 0).format(held.qty)} de ${esc(short(sym))} a ${money(held.avg, cur)}. Salvar a compra soma ${nf(p.qty % 1 ? 4 : 0).format(p.qty)} e o preço médio passa a ${money(novoAvg, cur)}. Registrar a venda tira ${nf(p.qty % 1 ? 4 : 0).format(Math.min(p.qty, held.qty))} da carteira.`
+      : `Salva ${nf(p.qty % 1 ? 4 : 0).format(p.qty)} de ${esc(short(sym))} com preço médio de ${money(avg, cur)}${isB3(p.kind) ? " (já com as taxas da compra, como no cálculo do IR)" : ""}.`}</p>
+  </div>`;
+}
+function simSave(tipo) {
+  const p = simRead(), sym = normSym($("#sSym").value);
+  if (!sym || !(p.qty > 0) || !(p.pb > 0)) return;
+  const ex = state.cart.find(x => x.symbol === sym);
+  if (tipo === "compra") {
+    const avg = simAvg(p, sym);
+    if (ex) { ex.avg = (ex.qty * ex.avg + p.qty * avg) / (ex.qty + p.qty); ex.qty += p.qty; }
+    else state.cart.push({ symbol: sym, qty: p.qty, avg });
+    toast(`${short(sym)}: compra salva na carteira`);
+  } else if (ex) {
+    ex.qty -= p.qty;
+    if (ex.qty <= 1e-9) state.cart = state.cart.filter(x => x !== ex);
+    toast(`${short(sym)}: venda registrada`);
+  }
+  save(); $("#simDlg").close(); showTab("cart"); renderCart(); refresh();
 }
 function simRunCarteira() {
   const res = $("#simRes"), outras = +$('#simForm [data-s="outras"]')?.value || 0, prejuizo = +$('#simForm [data-s="prejuizo"]')?.value || 0;
@@ -2348,6 +2409,7 @@ $("#simDlg").addEventListener("input", e => {
 });
 $("#simDlg").addEventListener("click", e => {
   if (e.target === $("#simDlg") || e.target.closest('[data-sd="close"]')) return $("#simDlg").close();
+  const sv = e.target.closest("[data-ssave]"); if (sv) return simSave(sv.dataset.ssave);
   const m = e.target.closest("[data-smodo]"); if (m && !m.disabled) { simState.modo = m.dataset.smodo; $("#simDlg").querySelectorAll("[data-smodo]").forEach(b => b.setAttribute("aria-pressed", b === m)); return simRenderForm(); }
   const qk = e.target.closest("[data-sq]");
   if (qk) {
@@ -2386,7 +2448,7 @@ $("#theme").addEventListener("click", () => {
 /* ---------- início ---------- */
 try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {}
 $("#cgal").innerHTML = Object.entries(CANDLE_EDU).map(([nome, i]) => `<details class="card cgal-i"><summary>${candleFigure(nome, 200, 92, true)}<div><b>${nome}</b><div class="hint ${i.sinal === "alta" ? "up" : i.sinal === "baixa" ? "down" : ""}">${i.sinal === "neutro" ? "indecisão" : "sinal de " + i.sinal}</div></div></summary>${candleSheet(nome)}</details>`).join("");
-renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 2500);
+renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 6000);
 </script>
 </body>
 </html>
