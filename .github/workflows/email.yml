@@ -60,10 +60,17 @@ jobs:
         run: |
           # A concurrent run may have sent while this one waited.
           [ "$(cat relatorios/email-enviado.txt 2>/dev/null)" = "$(TZ=America/Sao_Paulo date +%F)" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ] && { echo "Já enviado."; exit 0; }
+          # GitHub can run the 05:30 data job hours late: refresh prices and technicals
+          # here (keeping the morning research) unless they are already from today.
+          today=$(TZ=America/Sao_Paulo date +%F)
+          if [ "$(node -p "require('./relatorios/tecnica.json').data")" != "$today" ]; then
+            node scripts/indicadores.mjs && node scripts/tecnica.mjs && node scripts/montar-relatorio.mjs - && node scripts/validar-relatorio.mjs \
+              || { echo "Atualização falhou; envia com os dados existentes."; git checkout -- relatorios/; }
+          fi
           node scripts/email.mjs
-          TZ=America/Sao_Paulo date +%F > relatorios/email-enviado.txt
+          echo "$today" > relatorios/email-enviado.txt
           git config user.name "radar-mercado-bot"
           git config user.email "radar-mercado-bot@users.noreply.github.com"
-          git add relatorios/email-enviado.txt
-          git commit -m "E-mail enviado $(TZ=America/Sao_Paulo date +%F)" || exit 0
+          git add relatorios/
+          git commit -m "E-mail enviado $today" || exit 0
           for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
