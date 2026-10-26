@@ -343,6 +343,20 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .win.maxed { resize: none; border-radius: 10px; }
 .win.maxed .win-h { cursor: default; }
 @media (max-width: 699px) { .win-max { display: none; } }
+.cedu { margin-top: 6px; }
+.cedu summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 13px; }
+.csheet { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); cursor: default; }
+.csheet-fig { flex: 0 0 auto; text-align: center; }
+.csheet-fig .hint { margin-top: 4px; }
+.csheet-txt { flex: 1 1 280px; min-width: 0; font-size: 14px; line-height: 1.55; }
+.csheet-txt p { margin: 0 0 8px; } .csheet-txt ul { margin: 0 0 8px; padding-left: 20px; } .csheet-txt li { margin: 2px 0; }
+.cfig { display: block; max-width: 100%; height: auto; background: var(--panel-2); border-radius: 8px; }
+.tt-fig { margin-top: 6px; } .tt-fig .cfig { background: rgba(127,127,127,.18); }
+.cgal { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; align-items: start; }
+.cgal-i { padding: 10px; }
+.cgal-i summary { cursor: pointer; list-style: none; display: grid; gap: 6px; }
+.cgal-i summary::-webkit-details-marker { display: none; }
+.cgal-i[open] { grid-column: 1 / -1; }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 
 @media (max-width: 560px) {
@@ -427,6 +441,9 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <section data-panel="edu" hidden>
     <p class="note">O que significa cada indicador do topo da tela, como ler as correlações e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
     <div class="edu-grid" id="eduList"></div>
+    <h3 class="sec-t" style="margin-top:26px">🕯️ Padrões de candlestick</h3>
+    <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
+    <div class="cgal" id="cgal"></div>
   </section>
 
   <datalist id="symList"></datalist>
@@ -1063,7 +1080,7 @@ function drawWin(w) {
     if (w.ind.ifr && rsiS[from + i] != null) html += `<div class="num">IFR ${nf(0).format(rsiS[from + i])}</div>`;
     if (w.ind.macd && mac.line[from + i] != null) html += `<div class="num">MACD ${nf(3).format(mac.line[from + i])} · sinal ${nf(3).format(mac.signal[from + i] ?? 0)}</div>`;
     const ps = flags[i] || [];
-    if (ps.length) html += ps.map(p => `<div class="tt-pat ${p.sinal}"><b>${p.sinal === "alta" ? "▲" : p.sinal === "baixa" ? "▼" : "◆"} ${esc(p.nome)}</b> <span>(${p.sinal === "neutro" ? "indecisão" : "sinal de " + p.sinal})</span><br>${esc(p.descricao)}</div>`).join("");
+    if (ps.length) html += ps.map(p => `<div class="tt-pat ${p.sinal}"><b>${p.sinal === "alta" ? "▲" : p.sinal === "baixa" ? "▼" : "◆"} ${esc(p.nome)}</b> <span>(${p.sinal === "neutro" ? "indecisão" : "sinal de " + p.sinal})</span><br>${esc(p.descricao)}${CANDLE_EDU[p.nome] ? `<div class="tt-fig">${candleFigure(p.nome, 170, 70, true)}</div>` : ""}</div>`).join("");
     tip.innerHTML = html; tip.hidden = false;
     const br = box.getBoundingClientRect(), wr = w.el.getBoundingClientRect();
     const px = br.left - wr.left + x * (rc.width / W);
@@ -1137,7 +1154,7 @@ document.addEventListener("click", e => {
   if (t.closest("[data-simall]")) { simOpen({ modo: "carteira" }); return; }
   if (t.closest("[data-goto-alertas]")) { gotoAlertSettings(); return; }
   const go = t.closest("[data-goto]"); if (go) { showTab(go.dataset.goto); scrollTo({ top: 0, behavior: "smooth" }); return; }
-  const op = t.closest("[data-open]"); if (op && !t.closest(".win")) openWin(op.dataset.open);
+  const op = t.closest("[data-open]"); if (op && !t.closest(".win") && !t.closest(".cedu")) openWin(op.dataset.open);
 });
 
 function showTab(name) {
@@ -1190,6 +1207,137 @@ function renderNotif() {
   if (p === "granted") $("#notifNote").firstChild.textContent = "Avisos ativados. Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). ";
 }
 $("#notifBtn").addEventListener("click", async () => { try { await Notification.requestPermission(); } catch {} renderNotif(); beep(); });
+
+/* ---------- fichas dos padrões de candlestick ---------- */
+// Didactic sheet per pattern detected by lib/analise.js: a schematic drawing (prior trend in
+// gray, pattern candles numbered) and the textbook description. References: Steve Nison,
+// "Japanese Candlestick Charting Techniques" (1991); Thomas Bulkowski, "Encyclopedia of
+// Candlestick Charts" (2008). Candle coordinates are arbitrary price units.
+const TREND_DOWN = [{ o: 92, h: 95, l: 80, c: 83 }, { o: 84, h: 86, l: 70, c: 72 }, { o: 73, h: 75, l: 58, c: 60 }];
+const TREND_UP = [{ o: 8, h: 20, l: 5, c: 17 }, { o: 16, h: 30, l: 14, c: 28 }, { o: 27, h: 42, l: 25, c: 40 }];
+const CANDLE_EDU = {
+  "Martelo": { sinal: "alta", antes: "baixa", velas: [{ o: 50, h: 55, l: 28, c: 54 }],
+    def: "Candle único, de corpo pequeno situado no topo da amplitude do dia, com sombra inferior longa e sombra superior ausente ou mínima. O nome vem da ideia de que o mercado está \"martelando\" um fundo.",
+    formacao: ["Ocorre depois de uma tendência de baixa.", "Sombra inferior de pelo menos 2 vezes o tamanho do corpo.", "Pouca ou nenhuma sombra superior.", "A cor do corpo pouco importa; corpo de alta (branco/verde) é considerado um pouco mais forte."],
+    leitura: "Durante o pregão os vendedores levaram o preço a uma mínima bem abaixo da abertura, mas os compradores reagiram e o fechamento ficou perto da máxima. A rejeição de preços mais baixos sugere que a pressão vendedora está se esgotando.",
+    confirma: "Nison recomenda esperar o candle seguinte fechar acima do corpo do martelo antes de considerar a reversão." },
+  "Enforcado": { sinal: "baixa", antes: "alta", velas: [{ o: 46, h: 47, l: 25, c: 44 }],
+    def: "Tem exatamente a mesma forma do martelo (corpo pequeno no alto, sombra inferior longa), mas aparece depois de uma alta. O nome lembra a figura de um enforcado pendurado.",
+    formacao: ["Ocorre depois de uma tendência de alta.", "Sombra inferior de pelo menos 2 vezes o corpo.", "Pouca ou nenhuma sombra superior."],
+    leitura: "A sombra longa mostra que, em algum momento do pregão, houve forte venda. Mesmo com o fechamento recuperado, o mercado revelou que há vendedores dispostos a derrubar o preço: um primeiro sinal de cansaço da alta.",
+    confirma: "É um sinal fraco sozinho. A confirmação clássica é o próximo candle abrir e fechar abaixo do corpo do enforcado." },
+  "Estrela cadente": { sinal: "baixa", antes: "alta", velas: [{ o: 46, h: 68, l: 43, c: 44 }],
+    def: "Candle único de corpo pequeno na parte de baixo da amplitude, com sombra superior longa e pouca ou nenhuma sombra inferior. Lembra uma estrela riscando o céu com um rastro para cima.",
+    formacao: ["Ocorre depois de uma tendência de alta.", "Sombra superior de pelo menos 2 vezes o corpo.", "Corpo próximo da mínima do dia."],
+    leitura: "Os compradores levaram o preço bem acima da abertura, mas não conseguiram sustentá-lo, e o fechamento voltou para perto da abertura. É uma rejeição de preços mais altos.",
+    confirma: "Ganha força se o candle seguinte fechar abaixo do corpo da estrela cadente." },
+  "Martelo invertido": { sinal: "alta", antes: "baixa", velas: [{ o: 50, h: 72, l: 49, c: 53 }],
+    def: "Mesma forma da estrela cadente (sombra superior longa, corpo pequeno embaixo), mas surge depois de uma queda.",
+    formacao: ["Ocorre depois de uma tendência de baixa.", "Sombra superior de pelo menos 2 vezes o corpo.", "Pouca ou nenhuma sombra inferior."],
+    leitura: "Os compradores tentaram reagir e chegaram a subir bastante. O fechamento não segurou a alta, mas a tentativa indica que a venda perdeu o domínio do pregão.",
+    confirma: "É considerado um sinal mais fraco que o martelo: precisa de um candle seguinte de alta, abrindo acima do corpo do martelo invertido." },
+  "Engolfo de alta": { sinal: "alta", antes: "baixa", velas: [{ o: 58, h: 59, l: 52, c: 53 }, { o: 51, h: 64, l: 50, c: 63 }],
+    def: "Padrão de dois candles em que um candle de alta tem corpo maior e que \"engole\" totalmente o corpo do candle de baixa anterior.",
+    formacao: ["Ocorre depois de uma tendência de baixa.", "Candle 1: de baixa, normalmente de corpo pequeno.", "Candle 2: de alta, abre abaixo do fechamento do candle 1 e fecha acima da abertura dele.", "Só os corpos contam; as sombras não precisam ser engolidas."],
+    leitura: "O dia começa ainda sob o controle dos vendedores, mas os compradores invertem o movimento e fecham acima de todo o corpo do dia anterior. É uma mudança clara de quem domina o pregão.",
+    confirma: "Quanto maior o candle 2 em relação ao 1 e maior o volume, mais forte o sinal. Fechamento seguinte acima do candle 2 confirma." },
+  "Engolfo de baixa": { sinal: "baixa", antes: "alta", velas: [{ o: 42, h: 48, l: 41, c: 47 }, { o: 49, h: 50, l: 36, c: 37 }],
+    def: "Espelho do engolfo de alta: um candle de baixa de corpo maior engole totalmente o corpo do candle de alta anterior.",
+    formacao: ["Ocorre depois de uma tendência de alta.", "Candle 1: de alta, normalmente pequeno.", "Candle 2: de baixa, abre acima do fechamento do candle 1 e fecha abaixo da abertura dele."],
+    leitura: "Os compradores abrem o dia em vantagem, mas os vendedores assumem e apagam todo o ganho do dia anterior. Sinal de que a alta perdeu sustentação.",
+    confirma: "Fechamento seguinte abaixo do candle 2 confirma; volume alto reforça." },
+  "Harami de alta": { sinal: "alta", antes: "baixa", velas: [{ o: 63, h: 64, l: 40, c: 42 }, { o: 46, h: 53, l: 45, c: 52 }],
+    def: "\"Harami\" significa \"grávida\" em japonês: um candle grande (a mãe) seguido de um pequeno (o bebê) cujo corpo cabe inteiro dentro do corpo do primeiro.",
+    formacao: ["Ocorre depois de uma tendência de baixa.", "Candle 1: de baixa e de corpo longo.", "Candle 2: de alta e pequeno, com o corpo totalmente dentro do corpo do candle 1."],
+    leitura: "Depois de um dia de queda forte, o mercado fica parado dentro da faixa anterior. A força vendedora perdeu ímpeto: é mais um sinal de \"freada\" do que de virada imediata.",
+    confirma: "É mais fraco que o engolfo. Exige confirmação: um candle seguinte de alta, fechando acima da abertura do candle 1, por exemplo." },
+  "Harami de baixa": { sinal: "baixa", antes: "alta", velas: [{ o: 40, h: 63, l: 39, c: 61 }, { o: 56, h: 57, l: 47, c: 48 }],
+    def: "Espelho do harami de alta: um candle de alta longo seguido de um candle de baixa pequeno contido no corpo do primeiro.",
+    formacao: ["Ocorre depois de uma tendência de alta.", "Candle 1: de alta e de corpo longo.", "Candle 2: de baixa e pequeno, com o corpo dentro do corpo do candle 1."],
+    leitura: "Após um dia de alta forte, o mercado não consegue continuar subindo e fica preso dentro da faixa anterior: a compra perdeu força.",
+    confirma: "Precisa de confirmação por um candle seguinte de baixa." },
+  "Piercing line": { sinal: "alta", antes: "baixa", velas: [{ o: 62, h: 63, l: 44, c: 45 }, { o: 41, h: 58, l: 40, c: 57 }],
+    def: "\"Linha de perfuração\": um candle de alta que abre abaixo do anterior e \"perfura\" o corpo do candle de baixa anterior, fechando acima da metade dele.",
+    formacao: ["Ocorre depois de uma tendência de baixa.", "Candle 1: de baixa e longo.", "Candle 2: abre abaixo do fechamento (idealmente da mínima) do candle 1.", "Fecha acima do ponto médio do corpo do candle 1, mas abaixo da abertura dele (se passasse, seria um engolfo)."],
+    leitura: "A abertura mais baixa parece continuar a queda, mas os compradores reagem e recuperam mais da metade da perda do dia anterior.",
+    confirma: "Quanto mais fundo o candle 2 penetra no corpo do candle 1, mais forte o sinal." },
+  "Nuvem negra": { sinal: "baixa", antes: "alta", velas: [{ o: 40, h: 59, l: 39, c: 58 }, { o: 62, h: 63, l: 45, c: 46 }],
+    def: "\"Dark cloud cover\", espelho da piercing line: um candle de baixa que abre acima do anterior e fecha abaixo da metade do corpo do candle de alta anterior, como uma nuvem escura cobrindo a alta.",
+    formacao: ["Ocorre depois de uma tendência de alta.", "Candle 1: de alta e longo.", "Candle 2: abre acima do fechamento (idealmente da máxima) do candle 1.", "Fecha abaixo do ponto médio do corpo do candle 1, mas acima da abertura dele."],
+    leitura: "A abertura em alta parece confirmar a força compradora, mas a venda domina o resto do pregão e devolve mais da metade do ganho anterior.",
+    confirma: "Quanto mais fundo o fechamento do candle 2 dentro do candle 1, mais forte o sinal." },
+  "Estrela da manhã": { sinal: "alta", antes: "baixa", velas: [{ o: 62, h: 63, l: 44, c: 45 }, { o: 41, h: 43, l: 37, c: 40 }, { o: 44, h: 61, l: 43, c: 59 }],
+    def: "Padrão de três candles que anuncia a \"manhã\" depois da noite de queda. O candle do meio é a \"estrela\": pequeno e, idealmente, separado dos outros por gaps (saltos de preço).",
+    formacao: ["Ocorre depois de uma tendência de baixa.", "Candle 1: de baixa e longo.", "Candle 2: de corpo pequeno (de qualquer cor), abaixo do candle 1 — a indecisão.", "Candle 3: de alta, fechando acima do ponto médio do corpo do candle 1."],
+    leitura: "Queda forte, depois um dia de indecisão em que nenhum lado domina, e por fim uma retomada firme dos compradores: é a sequência clássica de esgotamento e virada.",
+    confirma: "É um dos padrões de reversão considerados mais confiáveis por si só; gaps entre os candles e volume alto no candle 3 o reforçam." },
+  "Estrela da noite": { sinal: "baixa", antes: "alta", velas: [{ o: 40, h: 59, l: 39, c: 58 }, { o: 61, h: 65, l: 60, c: 62 }, { o: 58, h: 59, l: 42, c: 44 }],
+    def: "Espelho da estrela da manhã: anuncia a \"noite\" depois de um período de alta.",
+    formacao: ["Ocorre depois de uma tendência de alta.", "Candle 1: de alta e longo.", "Candle 2: de corpo pequeno, acima do candle 1 — a indecisão.", "Candle 3: de baixa, fechando abaixo do ponto médio do corpo do candle 1."],
+    leitura: "Alta forte, um dia de indecisão no topo e uma queda firme em seguida: a compra se esgotou e a venda assumiu.",
+    confirma: "Gaps entre os candles e volume alto no candle 3 tornam o sinal mais forte." },
+  "Três soldados brancos": { sinal: "alta", antes: "baixa", velas: [{ o: 50, h: 58, l: 49, c: 57 }, { o: 55, h: 66, l: 54, c: 65 }, { o: 63, h: 74, l: 62, c: 73 }],
+    def: "Três candles de alta longos e seguidos, avançando como soldados em marcha.",
+    formacao: ["Normalmente aparece depois de uma queda ou de uma lateralização.", "Três candles de alta de corpo longo.", "Cada um abre dentro do corpo do anterior e fecha em uma nova máxima.", "Fechamentos perto da máxima de cada dia (pouca sombra superior)."],
+    leitura: "Três dias seguidos de controle comprador, com fechamentos cada vez mais altos: indica uma mudança consistente de tendência, não uma reação isolada.",
+    confirma: "Se os candles ficarem menores ou com sombras superiores longas, é sinal de que o avanço está perdendo força." },
+  "Três corvos negros": { sinal: "baixa", antes: "alta", velas: [{ o: 52, h: 53, l: 43, c: 44 }, { o: 46, h: 47, l: 36, c: 37 }, { o: 39, h: 40, l: 29, c: 30 }],
+    def: "Três candles de baixa longos e seguidos, como três corvos pousados sobre o topo de uma alta.",
+    formacao: ["Normalmente aparece depois de uma alta.", "Três candles de baixa de corpo longo.", "Cada um abre dentro do corpo do anterior e fecha em uma nova mínima.", "Fechamentos perto da mínima de cada dia."],
+    leitura: "Três dias seguidos de controle vendedor, com fechamentos cada vez mais baixos: sinal de virada consistente para baixo.",
+    confirma: "Quedas muito longas e seguidas podem deixar o ativo sobrevendido; vale olhar o IFR junto." },
+  "Doji": { sinal: "neutro", antes: "alta", velas: [{ o: 45, h: 53, l: 37, c: 45.4 }],
+    def: "Candle em que a abertura e o fechamento são praticamente iguais: o corpo vira quase um traço, formando uma cruz.",
+    formacao: ["Corpo muito pequeno (aqui: até 10% da amplitude do dia).", "Sombras de qualquer tamanho.", "Neste sistema só é sinalizado quando aparece depois de uma tendência (de alta ou de baixa)."],
+    leitura: "Compradores e vendedores terminaram o dia empatados: indecisão. Depois de um movimento forte, essa indecisão pode indicar que a tendência está perdendo fôlego.",
+    confirma: "Sozinho é neutro: a direção depende do candle seguinte. Nison observa que o doji é mais relevante depois de altas do que depois de quedas." },
+};
+// Schematic SVG: gray candles for the prior trend, colored numbered candles for the pattern,
+// and an arrow with the expected direction.
+function candleFigure(nome, W = 260, H = 130, mini = false) {
+  const info = CANDLE_EDU[nome]; if (!info) return "";
+  const antes = (info.antes === "baixa" ? TREND_DOWN : TREND_UP).map(c => ({ ...c, trend: true }));
+  // shift the pattern so it continues from the end of the prior trend
+  const lastC = antes.at(-1).c, firstO = info.velas[0].o, d = info.antes === "baixa" ? lastC - 4 - firstO : lastC + 4 - firstO;
+  const pat = info.velas.map(c => ({ o: c.o + d, h: c.h + d, l: c.l + d, c: c.c + d }));
+  const all = antes.concat(pat), n = all.length;
+  const lo = Math.min(...all.map(c => c.l)), hi = Math.max(...all.map(c => c.h));
+  const top = 8, bot = mini ? 6 : 22, right = 26, step = (W - 10 - right) / n;
+  const Y = v => top + (1 - (v - lo) / (hi - lo)) * (H - top - bot);
+  let svg = `<svg class="cfig" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Desenho do padrão ${esc(nome)}">`;
+  all.forEach((c, i) => {
+    const x = 5 + (i + 0.5) * step, up = c.c >= c.o, cw = Math.min(16, step * 0.55);
+    const col = c.trend ? "var(--faint)" : up ? "var(--up)" : "var(--down)";
+    svg += `<line x1="${x}" x2="${x}" y1="${Y(c.h)}" y2="${Y(c.l)}" stroke="${col}" stroke-width="1.4"/>`;
+    svg += `<rect x="${x - cw / 2}" y="${Math.min(Y(c.o), Y(c.c))}" width="${cw}" height="${Math.max(1.5, Math.abs(Y(c.o) - Y(c.c)))}" fill="${up ? "var(--panel)" : col}" stroke="${col}" stroke-width="1.4"/>`;
+    if (!c.trend && !mini) svg += `<text x="${x}" y="${H - 6}" font-size="11" text-anchor="middle" fill="var(--muted)" font-weight="700">${i - antes.length + 1}</text>`;
+  });
+  if (!mini) svg += `<text x="${5 + step * 1.5}" y="${H - 6}" font-size="10" text-anchor="middle" fill="var(--faint)">tendência de ${info.antes}</text>`;
+  const ax = W - right / 2 - 2, last = pat.at(-1), ay = Y((last.h + last.l) / 2);
+  if (info.sinal !== "neutro") svg += info.sinal === "alta"
+    ? `<path d="M${ax} ${ay - 16} l7 10 h-4.5 v12 h-5 v-12 h-4.5 z" fill="var(--up)" opacity=".85"/>`
+    : `<path d="M${ax} ${ay + 16} l7 -10 h-4.5 v-12 h-5 v12 h-4.5 z" fill="var(--down)" opacity=".85"/>`;
+  else svg += `<text x="${ax}" y="${ay + 5}" font-size="16" text-anchor="middle" fill="var(--muted)">?</text>`;
+  return svg + `</svg>`;
+}
+function candleSheet(nome) {
+  const i = CANDLE_EDU[nome]; if (!i) return "";
+  const s = { alta: "sinal de alta (reversão para cima)", baixa: "sinal de baixa (reversão para baixo)", neutro: "indecisão — direção depende do próximo candle" }[i.sinal];
+  return `<div class="csheet">
+    <div class="csheet-fig">${candleFigure(nome)}<div class="hint">${s}</div></div>
+    <div class="csheet-txt">
+      <p><b>O que é.</b> ${i.def}</p>
+      <p><b>Como se forma:</b></p><ul>${i.formacao.map(f => `<li>${f}</li>`).join("")}</ul>
+      <p><b>Interpretação.</b> ${i.leitura}</p>
+      <p><b>Confirmação.</b> ${i.confirma}</p>
+      <p class="hint">Padrões de candle indicam probabilidades, não certezas; funcionam melhor junto com tendência, suportes/resistências e volume. Referências: Steve Nison, <i>Japanese Candlestick Charting Techniques</i> (1991); Thomas Bulkowski, <i>Encyclopedia of Candlestick Charts</i> (2008).</p>
+    </div></div>`;
+}
+const cOpen = new Set();   // expanded sheets in the alerts feed (survive re-renders)
+document.addEventListener("toggle", e => {
+  const d = e.target; if (!d.matches?.("details[data-ckey]")) return;
+  d.open ? cOpen.add(d.dataset.ckey) : cOpen.delete(d.dataset.ckey);
+}, true);
 
 /* ---------- alertas técnicos ---------- */
 // Signals on the daily chart for every watched asset: favorites and portfolio are watched
@@ -1348,7 +1496,8 @@ function tecFeedHTML() {
   return feed.slice(0, 40).map(n => `<div class="tec-ev ${n.lido ? "" : "novo"}" data-open="${esc(n.sym)}">
       <span class="tec-ic ${n.sinal === "alta" ? "up" : n.sinal === "baixa" ? "down" : "flat"}">${n.sinal === "alta" ? "▲" : n.sinal === "baixa" ? "▼" : "◆"}</span>
       <div><b>${esc(short(n.sym))}</b> · <b class="${n.sinal === "alta" ? "up" : n.sinal === "baixa" ? "down" : ""}">${esc(n.titulo)}</b>
-        <div class="hint">${esc(n.texto)}${n.formando ? " (no pregão de hoje, candle ainda em formação)" : ""}</div></div>
+        <div class="hint">${esc(n.texto)}${n.formando ? " (no pregão de hoje, candle ainda em formação)" : ""}</div>
+        ${n.tipo === "candles" && CANDLE_EDU[n.titulo.replace(/^Candle: /, "")] ? `<details class="cedu" data-ckey="${esc(n.key)}" ${cOpen.has(n.key) ? "open" : ""}><summary>📖 Ver como é este candle</summary>${candleSheet(n.titulo.replace(/^Candle: /, ""))}</details>` : ""}</div>
       <span class="hint tec-dt">${new Date(n.data + "T12:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}</span>
     </div>`).join("") + `<div class="row2" style="justify-content:flex-end"><button class="btn small" data-tec-clear type="button">Limpar lista</button></div>`;
 }
@@ -2236,6 +2385,7 @@ $("#theme").addEventListener("click", () => {
 
 /* ---------- início ---------- */
 try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {}
+$("#cgal").innerHTML = Object.entries(CANDLE_EDU).map(([nome, i]) => `<details class="card cgal-i"><summary>${candleFigure(nome, 200, 92, true)}<div><b>${nome}</b><div class="hint ${i.sinal === "alta" ? "up" : i.sinal === "baixa" ? "down" : ""}">${i.sinal === "neutro" ? "indecisão" : "sinal de " + i.sinal}</div></div></summary>${candleSheet(nome)}</details>`).join("");
 renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 2500);
 </script>
 </body>
