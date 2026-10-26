@@ -366,6 +366,9 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .tec-dt { text-align: right; font-size: 11.5px; line-height: 1.3; }
 .sim-save { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .sim-save .hint { width: 100%; margin: 0; }
+.ftabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.ftabs button { border: 1px solid var(--line); background: var(--panel); border-radius: 10px 10px 0 0; border-bottom-width: 2px; padding: 8px 14px; cursor: pointer; font-weight: 600; color: var(--muted); }
+.ftabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); background: var(--panel-2); }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 
 @media (max-width: 560px) {
@@ -779,11 +782,14 @@ async function loadCorrData() {
   monthly = buildMonthly(h.status === "fulfilled" ? h.value.quotes : null);
   renderStrip(); renderCorr(); renderEdu();
 }
+// Favorites are split into tabs by market (Brasil, Exterior, Moedas, Cripto); the open tab is remembered.
 function renderFavs() {
   if (!state.favs.length) { $("#favList").innerHTML = `<div class="card empty">Sua lista está vazia. Use a busca acima para adicionar ativos.</div>`; return; }
   const by = {};
   for (const s of state.favs) (by[group(s, quotes[s])] ||= []).push(s);
-  $("#favList").innerHTML = GROUPS.filter(g => by[g]).map(g => `<div class="card group"><h3><span>${g}</span><span>${by[g].length}</span></h3>${by[g].map(s => {
+  const tabs = GROUPS.filter(g => by[g]);
+  const cur = tabs.includes(state.favTab) ? state.favTab : tabs[0];
+  $("#favList").innerHTML = `<div class="ftabs" role="tablist">${tabs.map(g => `<button role="tab" data-ftab="${g}" aria-selected="${g === cur}">${g} <span class="badge">${by[g].length}</span></button>`).join("")}</div>` + [cur].map(g => `<div class="card group">${by[g].map(s => {
     const q = quotes[s]; const c = change(q);
     return `<div class="row" data-open="${esc(s)}">
       <div style="min-width:0"><div class="t">${esc(short(s))}</div><div class="nm">${q?.error ? "Código não encontrado" : esc(q?.name || "…")}</div></div>
@@ -1149,7 +1155,7 @@ window.addEventListener("resize", () => { wins.forEach(placeWin); renderDock(); 
 /* ---------- ações ---------- */
 function toggleFav(s) {
   const i = state.favs.indexOf(s);
-  if (i >= 0) state.favs.splice(i, 1); else { state.favs.push(s); toast(short(s) + " adicionado aos favoritos"); }
+  if (i >= 0) state.favs.splice(i, 1); else { state.favs.push(s); state.favTab = group(s, quotes[s]); toast(short(s) + " adicionado aos favoritos"); }
   save(); renderFavs(); if (!quotes[s]) refresh();
 }
 document.addEventListener("click", e => {
@@ -1179,6 +1185,10 @@ function showTab(name) {
 document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) showTab(b.dataset.tab); });
 document.querySelector("header").addEventListener("click", e => { const b = e.target.closest(".hdr-tab"); if (b) { showTab(b.dataset.tab); document.querySelector("nav.tabs").scrollIntoView({ behavior: "smooth", block: "start" }); } });
 
+$("#favList").addEventListener("click", e => {
+  const b = e.target.closest("[data-ftab]"); if (!b) return;
+  state.favTab = b.dataset.ftab; save(); renderFavs();
+});
 $("#cartForm").addEventListener("submit", e => {
   e.preventDefault();
   const symbol = normSym($("#cSym").value); if (!symbol) return;
