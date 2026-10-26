@@ -335,6 +335,7 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .sim-note { font-size: 13px; margin: 8px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--panel-2); }
 .sim-ct { margin-top: 10px; }
 .sim-all { text-align: left; cursor: pointer; border: 1px dashed var(--accent); }
+.linkbtn { border: 0; background: none; color: var(--accent); font-weight: 600; cursor: pointer; padding: 0; font: inherit; text-decoration: underline; }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 
 @media (max-width: 560px) {
@@ -398,19 +399,11 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <!-- ALERTAS -->
   <section data-panel="alerts" hidden>
     <div class="note" id="notifNote">Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). <button class="btn small" id="notifBtn" type="button">Ativar avisos no computador/celular</button></div>
-    <h3 class="sec-t">🔔 Alertas de preço</h3>
-    <form class="form card" id="alertForm">
-      <div class="field"><label for="aSym">Ativo (código)</label><input id="aSym" list="symList" placeholder="VALE3.SA" required></div>
-      <div class="field"><label for="aOp">Avisar quando</label>
-        <select id="aOp"><option value=">">subir acima de</option><option value="<">cair abaixo de</option></select></div>
-      <div class="field"><label for="aVal">Preço</label><input id="aVal" type="number" step="any" min="0" required></div>
-      <button class="btn primary" type="submit">Criar alerta</button>
-    </form>
+    <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">🔔 Alertas de preço</h3><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></div>
     <div class="card" id="alertList"></div>
     <h3 class="sec-t">📈 Sinais técnicos recentes <span class="hint" style="font-weight:400">· gráfico diário dos ativos vigiados</span></h3>
     <div class="card tec-feed" id="tecFeed"></div>
-    <h3 class="sec-t">Configurar alertas técnicos</h3>
-    <div class="card tec-cfg" id="tecCfgA"></div>
+    <p class="hint" id="tecResumo" style="margin-top:10px"></p>
   </section>
 
   <!-- RELATÓRIO -->
@@ -805,9 +798,10 @@ function renderCart() {
     <button class="card tot sim-all" data-simall type="button"><div class="lbl">Se vendesse tudo hoje</div><div class="v" style="font-size:15px">🧮 Ver lucro líquido com impostos e taxas</div></button>` : "";
 }
 function renderAlerts() {
-  safeHTML($("#alertList"), priceAlertsHTML(false));
+  safeHTML($("#alertList"), priceAlertsView());
   safeHTML($("#tecFeed"), tecFeedHTML());
-  safeHTML($("#tecCfgA"), tecSettingsHTML());
+  const tc = tecCfg(), on = TEC_TIPOS.filter(([k]) => tc.tipos[k]).length;
+  safeHTML($("#tecResumo"), `Vigiando <b>${tecMonitored().length}</b> ativo(s)${tc.auto ? " (favoritos e carteira automaticamente)" : ""} em <b>${on} de ${TEC_TIPOS.length}</b> tipos de sinal. <button class="linkbtn" type="button" data-goto-alertas>Mudar em Configurações</button>`);
   safeHTML($("#cfgPA"), priceAlertsHTML(true));
   safeHTML($("#cfgTec"), tecSettingsHTML());
   renderCounts();
@@ -1069,7 +1063,7 @@ $("#wins").addEventListener("click", e => {
   const a = e.target.closest("[data-wa]")?.dataset.wa;
   if (a === "close") return closeWin(w);
   if (a === "fav") { toggleFav(w.sym); return syncWinControls(w); }
-  if (a === "alert") { showTab("alerts"); $("#aSym").value = w.sym; $("#aVal").value = quotes[w.sym]?.price ?? ""; $("#aVal").focus(); $("#aVal").select(); return; }
+  if (a === "alert") { gotoAlertSettings(w.sym); return; }
   if (a === "cart") { showTab("cart"); $("#cSym").value = w.sym; $("#cQty").focus(); return; }
   const rg = e.target.closest("[data-wr]"); if (rg) { w.range = rg.dataset.wr; syncWinControls(w); return loadWin(w); }
   const tp = e.target.closest("[data-wt]");
@@ -1117,6 +1111,7 @@ document.addEventListener("click", e => {
   const ed = t.closest("[data-edu]"); if (ed) { showTab("edu"); setTimeout(() => document.getElementById("edu-" + ed.dataset.edu)?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); return; }
   const sm = t.closest("[data-sim]"); if (sm) { simOpen({ sym: sm.dataset.sim }); return; }
   if (t.closest("[data-simall]")) { simOpen({ modo: "carteira" }); return; }
+  if (t.closest("[data-goto-alertas]")) { gotoAlertSettings(); return; }
   const go = t.closest("[data-goto]"); if (go) { showTab(go.dataset.goto); scrollTo({ top: 0, behavior: "smooth" }); return; }
   const op = t.closest("[data-open]"); if (op && !t.closest(".win")) openWin(op.dataset.open);
 });
@@ -1140,14 +1135,6 @@ $("#cartForm").addEventListener("submit", e => {
   if (ex) { ex.qty = qty; ex.avg = avg; } else state.cart.push({ symbol, qty, avg });
   save(); e.target.reset(); toast(short(symbol) + " salvo na carteira"); refresh();
 });
-$("#alertForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const symbol = normSym($("#aSym").value), value = +$("#aVal").value, op = $("#aOp").value;
-  if (!symbol || !(value > 0)) return;
-  state.alerts.push({ id: Math.random().toString(36).slice(2, 10), symbol, op, value, fired: 0, created: Date.now() });
-  save(); e.target.reset(); toast("Alerta criado para " + short(symbol)); refresh();
-});
-
 /* ---------- alertas ---------- */
 let audio;
 function beep() {
@@ -1306,6 +1293,17 @@ function priceAlertsHTML(withAdd) {
       <button class="del" data-unalert="${a.id}" title="Apagar alerta" aria-label="Apagar alerta">×</button>
     </div>`;
   }).join("") : `<div class="empty">Nenhum alerta de preço.</div>`);
+}
+function priceAlertsView() {
+  const list = state.alerts.slice().sort((a, b) => a.fired - b.fired || b.created - a.created);
+  return list.length ? list.map(a => {
+    const q = quotes[a.symbol];
+    return `<div class="alert-row" data-open="${esc(a.symbol)}" style="cursor:pointer">
+      <div class="what"><b>${esc(short(a.symbol))}</b> ${a.op === ">" ? "subir acima de" : "cair abaixo de"} <b class="num">${money(a.value, q?.currency, q?.type)}</b>
+        <div style="font-size:13px;color:var(--muted)">Agora: <span class="num">${q ? money(q.price, q.currency, q.type) : "…"}</span>${a.fired ? " · disparou em " + new Date(a.fired).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : ""}</div></div>
+      <span class="tag ${a.fired ? "fired" : "on"}">${a.fired ? "Disparado" : "Vigiando"}</span>
+    </div>`;
+  }).join("") : `<div class="empty">Nenhum alerta de preço. Crie em <button class="linkbtn" type="button" data-goto-alertas>Configurações</button>.</div>`;
 }
 function tecSettingsHTML() {
   const c = tecCfg(), cand = tecCandidates();
@@ -1659,6 +1657,18 @@ function critSummary(c) {
   return [isSet(c.pl_max) ? `P/L ≤ ${c.pl_max}` : "", isSet(c.dy_min) ? `dividendos ≥ ${c.dy_min}%` : "", isSet(c.roe_min) ? `ROE ≥ ${c.roe_min}%` : "",
     isSet(c.div_max) ? `dív. líq./patrim. ≤ ${c.div_max}` : "", `mín. ${c.min_casas || 1} casas`].filter(Boolean).join(" · ");
 }
+// Opens Settings at the alerts section; optionally pre-fills a new price alert.
+function gotoAlertSettings(sym) {
+  showTab("config");
+  const sec = document.getElementById("cfgAlertas"); if (!sec) return;
+  sec.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (sym) {
+    const box = sec.querySelector("#cfgPA .pa-add");
+    box.querySelector('[data-pa-new="sym"]').value = sym.endsWith(".SA") ? short(sym) : sym;
+    box.querySelector('[data-pa-new="val"]').value = quotes[sym]?.price ? +quotes[sym].price.toFixed(4) : "";
+    setTimeout(() => { const v = box.querySelector('[data-pa-new="val"]'); v.focus(); v.select(); }, 400);
+  }
+}
 function renderConfig() {
   const box = $("#cfgBox"); if (!box || box.closest("[hidden]")) return;
   const c = crit(), d = chartDefaults(), th = themeChoice();
@@ -1677,7 +1687,7 @@ function renderConfig() {
       <p class="hint" style="margin-top:10px"><b>P/L</b>: quantos anos de lucro o preço representa (menor = mais barato). <b>Dividendos</b>: quanto a empresa pagou nos últimos 12 meses, em % do preço. <b>ROE</b>: lucro sobre o patrimônio (maior = mais rentável). <b>Dívida líquida/patrimônio</b>: endividamento (menor = mais folga).</p>
       <p class="hint">Estes critérios valem para este navegador. O e-mail das 7h usa os critérios padrão (${esc(critSummary(CRIT_DEFAULT))}). Para mudar os do e-mail, peça ao Claude.</p>
     </section>
-    <section class="card">
+    <section class="card" id="cfgAlertas">
       <h3>Alertas</h3>
       <p class="hint">Os mesmos alertas da aba Alertas. Funcionam enquanto o site estiver aberto (pode ficar em outra aba do navegador).</p>
       <h4 class="cfg-sub">🔔 Alertas de preço</h4>
