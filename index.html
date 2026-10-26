@@ -336,6 +336,13 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .sim-ct { margin-top: 10px; }
 .sim-all { text-align: left; cursor: pointer; border: 1px dashed var(--accent); }
 .linkbtn { border: 0; background: none; color: var(--accent); font-weight: 600; cursor: pointer; padding: 0; font: inherit; text-decoration: underline; }
+.hdr-tab { position: relative; font-size: 16px; }
+.hdr-tab[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.hdr-badge { position: absolute; top: -6px; right: -6px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 99px; background: var(--down); color: #fff; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; }
+.hdr-badge[hidden] { display: none; }
+.win.maxed { resize: none; border-radius: 10px; }
+.win.maxed .win-h { cursor: default; }
+@media (max-width: 699px) { .win-max { display: none; } }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 
 @media (max-width: 560px) {
@@ -354,6 +361,8 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       Radar do Mercado
     </div>
     <div class="status"><span class="dot" id="dot"></span><span id="stamp">Conectando…</span></div>
+    <button class="icon-btn hdr-tab" data-tab="alerts" title="Alertas" aria-label="Alertas">🔔<span class="hdr-badge" id="nAlerts" hidden>0</span></button>
+    <button class="icon-btn hdr-tab" data-tab="config" title="Configurações" aria-label="Configurações">⚙</button>
     <button class="icon-btn" id="theme" title="Mudar tema claro/escuro" aria-label="Mudar tema">◐</button>
   </header>
 
@@ -363,10 +372,8 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <nav class="tabs" role="tablist">
     <button role="tab" data-tab="favs" aria-selected="true">Favoritos <span class="badge" id="nFavs">0</span></button>
     <button role="tab" data-tab="cart">Carteira <span class="badge" id="nCart">0</span></button>
-    <button role="tab" data-tab="alerts">Alertas <span class="badge" id="nAlerts">0</span></button>
     <button role="tab" data-tab="report">Relatório diário</button>
     <button role="tab" data-tab="edu">Educação</button>
-    <button role="tab" data-tab="config">⚙ Configurações</button>
   </nav>
 
   <!-- FAVORITOS -->
@@ -592,7 +599,8 @@ function renderStamp() {
 function renderCounts() {
   $("#nFavs").textContent = state.favs.length;
   $("#nCart").textContent = state.cart.length;
-  $("#nAlerts").textContent = state.alerts.filter(a => !a.fired).length + (state.alertasTec?.feed || []).filter(n => !n.lido).length;
+  const nA = state.alerts.filter(a => !a.fired).length + (state.alertasTec?.feed || []).filter(n => !n.lido).length;
+  $("#nAlerts").textContent = nA > 99 ? "99+" : nA; $("#nAlerts").hidden = !nA;
   $("#symList").innerHTML = watched().map(s => `<option value="${esc(s)}">${esc(names[s] || "")}</option>`).join("");
 }
 function macroCards() {
@@ -851,6 +859,7 @@ function openWin(sym) {
         <button data-wa="fav" title="Favoritar"></button>
         <button data-wa="alert" title="Criar alerta de preço">🔔</button>
         <button data-wa="cart" title="Adicionar à carteira">💼</button>
+        <button data-wa="max" class="win-max" title="Maximizar (ou duplo clique no título)" aria-label="Maximizar">⤢</button>
         <button data-wa="close" title="Fechar (Esc)" aria-label="Fechar">✕</button>
       </div>
     </div>
@@ -866,13 +875,22 @@ function openWin(sym) {
   $("#wins").append(el);
   wins.push(w);
   placeWin(w); focusWin(w); syncWinControls(w); renderWinHead(w);
-  new ResizeObserver(() => { if (!w.raf) w.raf = requestAnimationFrame(() => { w.raf = 0; drawWin(w); }); }).observe(el.querySelector(".win-chart"));
+  new ResizeObserver(() => { clearTimeout(w.rt); w.rt = setTimeout(() => drawWin(w), 60); }).observe(el.querySelector(".win-chart"));
   loadWin(w);
   renderDock();
 }
 function placeWin(w) {
   if (isPhone()) { w.el.style.cssText = `z-index:${w.z || topZ}`; return; }
+  if (w.max) { Object.assign(w.el.style, { left: "8px", top: "8px", width: (innerWidth - 16) + "px", height: (innerHeight - 66) + "px", zIndex: w.z || topZ }); return; }
   Object.assign(w.el.style, { left: w.x + "px", top: w.y + "px", width: w.w + "px", height: w.h + "px", zIndex: w.z || topZ });
+}
+function toggleMax(w) {
+  w.max = !w.max;
+  w.el.classList.toggle("maxed", w.max);
+  const b = w.el.querySelector('[data-wa="max"]');
+  b.textContent = w.max ? "⤡" : "⤢"; b.title = w.max ? "Restaurar tamanho" : "Maximizar (ou duplo clique no título)";
+  focusWin(w); placeWin(w);
+  clearTimeout(w.rt); w.rt = setTimeout(() => drawWin(w), 60);
 }
 function focusWin(w) { w.z = ++topZ; w.el.style.zIndex = w.z; wins.forEach(x => x.el.classList.toggle("front", x === w)); }
 function closeWin(w) {
@@ -887,6 +905,7 @@ function tileWins() {
   const rows = Math.ceil(n / cols);
   const W = (innerWidth - gap * (cols + 1)) / cols, H = Math.max(300, (innerHeight - top - bottom - gap * (rows - 1)) / rows);
   wins.forEach((w, i) => {
+    if (w.max) toggleMax(w);
     w.x = gap + (i % cols) * (W + gap); w.y = top + Math.floor(i / cols) * (H + gap); w.w = W; w.h = H;
     placeWin(w);
   });
@@ -1062,6 +1081,7 @@ $("#wins").addEventListener("click", e => {
   const w = wins.find(x => x.id === +el.dataset.win); if (!w) return;
   const a = e.target.closest("[data-wa]")?.dataset.wa;
   if (a === "close") return closeWin(w);
+  if (a === "max") return toggleMax(w);
   if (a === "fav") { toggleFav(w.sym); return syncWinControls(w); }
   if (a === "alert") { gotoAlertSettings(w.sym); return; }
   if (a === "cart") { showTab("cart"); $("#cSym").value = w.sym; $("#cQty").focus(); return; }
@@ -1072,10 +1092,14 @@ $("#wins").addEventListener("click", e => {
   if (ind) w.ind[ind.dataset.wi] = !w.ind[ind.dataset.wi];
   if (tp || ind) { state.chart = { tipo: w.tipo, ...w.ind }; save(); syncWinControls(w); drawWin(w); }
 });
+$("#wins").addEventListener("dblclick", e => {
+  const h = e.target.closest(".win-h"); if (!h || e.target.closest("button") || isPhone()) return;
+  const w = wins.find(x => x.id === +h.closest(".win").dataset.win); if (w) toggleMax(w);
+});
 $("#wins").addEventListener("pointerdown", e => {
   const el = e.target.closest(".win"); if (!el) return;
   const w = wins.find(x => x.id === +el.dataset.win); focusWin(w);
-  if (!e.target.closest(".win-h") || e.target.closest("button") || isPhone()) return;
+  if (!e.target.closest(".win-h") || e.target.closest("button") || isPhone() || w.max) return;
   e.preventDefault();
   const sx = e.clientX - w.x, sy = e.clientY - w.y, h = e.target.closest(".win-h");
   h.setPointerCapture(e.pointerId);
@@ -1084,7 +1108,7 @@ $("#wins").addEventListener("pointerdown", e => {
   h.addEventListener("pointermove", move); h.addEventListener("pointerup", end); h.addEventListener("pointercancel", end);
 });
 // Remember sizes changed with the corner handle (so "lado a lado" and dragging keep them).
-$("#wins").addEventListener("pointerup", e => { const el = e.target.closest(".win"); if (!el || isPhone()) return; const w = wins.find(x => x.id === +el.dataset.win); if (w) { w.w = el.offsetWidth; w.h = el.offsetHeight; } });
+$("#wins").addEventListener("pointerup", e => { const el = e.target.closest(".win"); if (!el || isPhone()) return; const w = wins.find(x => x.id === +el.dataset.win); if (w && !w.max) { w.w = el.offsetWidth; w.h = el.offsetHeight; } });
 $("#winDock").addEventListener("click", e => {
   const a = e.target.closest("[data-dock]")?.dataset.dock;
   if (a === "tile") tileWins();
@@ -1118,6 +1142,7 @@ document.addEventListener("click", e => {
 
 function showTab(name) {
   document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === name));
+  document.querySelectorAll(".hdr-tab").forEach(b => b.setAttribute("aria-pressed", b.dataset.tab === name));
   document.querySelectorAll("[data-panel]").forEach(p => p.hidden = p.dataset.panel !== name);
   try { localStorage.setItem(KEY + ".tab", name); } catch {}
   if (name === "report") loadReport();
@@ -1126,6 +1151,7 @@ function showTab(name) {
   if (name === "alerts") { renderAlerts(); setTimeout(() => { const f = tecCfg().feed; if (f.some(x => !x.lido)) setTec({ feed: f.map(x => ({ ...x, lido: true })) }); }, 5000); }
 }
 document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) showTab(b.dataset.tab); });
+document.querySelector("header").addEventListener("click", e => { const b = e.target.closest(".hdr-tab"); if (b) { showTab(b.dataset.tab); document.querySelector("nav.tabs").scrollIntoView({ behavior: "smooth", block: "start" }); } });
 
 $("#cartForm").addEventListener("submit", e => {
   e.preventDefault();
@@ -1823,6 +1849,7 @@ function vValor(p) {
   const q = quotes[p.symbol]; return q?.price ? toBRL(q.price * p.qty, q.currency) : null;
 }
 function virtuais() { return state.virtuais || []; }
+const vOpen = new Set();   // portfolios whose asset list is expanded
 
 function renderVirt() {
   const box = $("#vList"); if (!box) return;
@@ -1856,7 +1883,7 @@ function renderVirt() {
       <div class="vbar">${bar}</div>
       <div class="vleg">${VMKT.filter(m => byM[m.k]).map(m => `<span><span class="vdot" style="background:${m.cor}"></span>${m.label} ${nf(0).format(byM[m.k] / total * 100)}%</span>`).join("")}${v.caixa > 0.5 ? `<span><span class="vdot" style="background:var(--faint)"></span>Caixa ${brl(v.caixa)}</span>` : ""}</div>
       ${missing ? `<p class="hint">${missing} ativo(s) ainda sem cotação; o total está incompleto.</p>` : ""}
-      <details><summary>Ver os ${v.posicoes.length} ativos</summary><div class="scroll"><table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Investido</th><th>Valor hoje</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></div></details>
+      <details data-vdet="${v.id}" ${vOpen.has(v.id) ? "open" : ""}><summary>Ver os ${v.posicoes.length} ativos</summary><div class="scroll"><table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Investido</th><th>Valor hoje</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></div></details>
     </article>`;
   }).join("");
 }
@@ -1938,6 +1965,10 @@ $("#vDlg").addEventListener("click", e => {
   }
 });
 $("#vNew").addEventListener("click", vOpenDialog);
+$("#vList").addEventListener("toggle", e => {
+  const d = e.target.closest?.("[data-vdet]"); if (!d) return;
+  d.open ? vOpen.add(d.dataset.vdet) : vOpen.delete(d.dataset.vdet);
+}, true);
 $("#vList").addEventListener("click", e => {
   const d = e.target.closest("[data-vdel]"); if (!d) return;
   e.stopPropagation();
