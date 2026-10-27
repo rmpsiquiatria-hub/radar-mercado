@@ -574,12 +574,13 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
 const STRIP = [
   { s: "^BVSP", label: "Ibovespa" },
   { s: "IFIX.SA", label: "IFIX imob." },
+  { s: "INDX.SA", label: "Indústria (INDX)" },
+  { s: "ICON.SA", label: "Consumo (ICON)" },
   { s: "USDBRL=X", label: "Dólar" },
   { s: "EURBRL=X", label: "Euro" },
   { s: "^GSPC", label: "S&P 500" },
   { s: "^IXIC", label: "Nasdaq" },
   { s: "^STOXX50E", label: "Euro Stoxx 50" },
-  { s: "ZS=F", label: "Soja (Chicago)" },
   { s: "BTC-USD", label: "Bitcoin" },
 ];
 const DEFAULT_FAVS = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBAS3.SA", "WEGE3.SA", "AAPL", "NVDA", "MSFT", "USDBRL=X", "EURBRL=X", "BTC-USD", "ETH-USD"];
@@ -731,6 +732,7 @@ function renderCounts() {
   $("#nAlerts").textContent = nA > 99 ? "99+" : nA; $("#nAlerts").hidden = !nA;
   $("#symList").innerHTML = watched().map(s => `<option value="${esc(s)}">${esc(names[s] || "")}</option>`).join("");
 }
+const mesCurto = ym => new Date(ym + "-15T12:00").toLocaleDateString("pt-BR", { month: "short", year: "2-digit" }).replace(".", "").replace(" de ", "/");
 function macroCards() {
   if (!macro) return "";
   const out = [];
@@ -763,6 +765,24 @@ function macroCards() {
       ${sparkline(m.slice(-24).map(([k, v], i) => [i, v]), null)}
     </button>`);
   }
+  if (icbr?.mensal?.length > 1) {
+    const m = icbr.mensal, [mes, v] = m.at(-1), c = (v / m.at(-2)[1] - 1) * 100;
+    out.push(`<button class="card idx macro" data-open="MACRO:icbr" data-max="1" title="Índice de Commodities Brasil (Banco Central) · ver o histórico">
+      <div class="lbl">Commodities BR<span class="mk">BC</span></div>
+      <div class="px num">${nf(1).format(v)} pts</div>
+      <div class="ch num ${cls(c)}">${mesCurto(mes)}: ${pct(c)}</div>
+      ${sparkline(m.slice(-24).map(([k, x], i) => [i, x]), null)}
+    </button>`);
+  }
+  const sm = macro.salmin, usd = quotes["USDBRL=X"]?.price;
+  if (sm?.valor) {
+    out.push(`<button class="card idx macro" data-edu="salmin" title="Salário mínimo nacional · saiba mais">
+      <div class="lbl">Salário mínimo<span class="mk">desde ${mesCurto(sm.desde)}</span></div>
+      <div class="px num">${brl(sm.valor)}</div>
+      <div class="ch num flat">${usd ? `≈ US$ ${nf(2).format(sm.valor / usd)}` : "&nbsp;"}</div>
+      <div class="since">${usd ? "pelo dólar de agora" : ""}</div>
+    </button>`);
+  }
   return out.join("");
 }
 function renderStrip() {
@@ -784,18 +804,43 @@ const macroCardsWrap = html => html + macroCards();
 const CORR = [
   { k: "^BVSP", label: "Ibovespa" },
   { k: "XFIX11.SA", label: "IFIX", nota: "histórico via ETF XFIX11, que replica o IFIX" },
+  { k: "INDX.SA", label: "Indústria (INDX)", nota: "fechamentos diários da B3" },
+  { k: "ICON.SA", label: "Consumo (ICON)", nota: "fechamentos diários da B3" },
   { k: "USDBRL=X", label: "Dólar" },
   { k: "EURBRL=X", label: "Euro" },
   { k: "^GSPC", label: "S&P 500" },
   { k: "^IXIC", label: "Nasdaq" },
   { k: "^STOXX50E", label: "Euro Stoxx 50" },
-  { k: "ZS=F", label: "Soja", nota: "contrato futuro mais próximo da Bolsa de Chicago, em US$" },
   { k: "BTC-USD", label: "Bitcoin" },
+  { k: "icbr", label: "Commodities BR", nota: "IC-Br do Banco Central, em reais" },
   { k: "selic", label: "Selic" },
   { k: "ipca", label: "IPCA" },
   { k: "desemprego", label: "Desemprego", nota: "taxa do trimestre móvel do IBGE, pelo último mês do trimestre" },
 ];
-const MACRO_KEYS = new Set(["selic", "ipca", "desemprego"]);
+// IC-Br: the Central Bank's index of commodity prices in reais (base Dec/2005 = 100), monthly,
+// total (27574) plus its farming (27575), metals (27576) and energy (27577) parts. The BC's API
+// turns away servers outside Brazil but allows browsers (CORS), so the page reads it directly.
+const ICBR_SERIES = { total: 27574, agro: 27575, metal: 27576, energia: 27577 };
+let icbr = null, icbrReq = null;
+// The BC's API drops requests now and then, so each series gets a few tries.
+async function bcbSerie(n) {
+  for (let i = 0; ; i++) {
+    try {
+      const r = await fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${n}/dados?formato=json`, { signal: AbortSignal.timeout(20000) });
+      if (!r.ok) throw new Error("Banco Central " + r.status);
+      return await r.json();
+    } catch (e) { if (i >= 3) throw e; await new Promise(r => setTimeout(r, 1500 * (i + 1))); }
+  }
+}
+function loadIcbr() {
+  return icbrReq ||= Promise.all(Object.entries(ICBR_SERIES).map(async ([k, n]) => {
+    return [k, (await bcbSerie(n)).map(x => [x.data.slice(6) + "-" + x.data.slice(3, 5), Number(x.valor)]).filter(x => Number.isFinite(x[1]))];
+  })).then(parts => {
+    const o = Object.fromEntries(parts);
+    return icbr = { mensal: o.total, partes: { agro: o.agro, metal: o.metal, energia: o.energia } };
+  }).catch(e => { icbrReq = null; throw e; });
+}
+const MACRO_KEYS = new Set(["selic", "ipca", "desemprego", "icbr"]);
 let macro = null, monthly = null;   // monthly: { key: Map("AAAA-MM" -> variação) }
 const thisMonth = () => new Date().toISOString().slice(0, 7);
 function monthlyChanges(pairs, mode) {   // pairs: [["AAAA-MM", valor]] sorted
@@ -822,6 +867,7 @@ function buildMonthly(q) {
   if (macro?.selic?.mensal) res.selic = monthlyChanges(macro.selic.mensal, "diff");
   if (macro?.ipca?.mensal) res.ipca = new Map(macro.ipca.mensal.filter(([m]) => m < thisMonth()));
   if (macro?.desemprego?.mensal) res.desemprego = monthlyChanges(macro.desemprego.mensal, "diff");
+  if (icbr?.mensal) res.icbr = monthlyChanges(icbr.mensal, "ret");
   return res;
 }
 function ranks(xs) {
@@ -880,7 +926,7 @@ function renderCorr() {
       <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [36, "3 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
       <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
     <div class="corr-row">${chips}</div>${matrix}
-    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11. Correlação não é causa e muda com o tempo.</p>`;
+    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Commodities BR pelo IC-Br do Banco Central. Correlação não é causa e muda com o tempo.</p>`;
 }
 $("#corr").addEventListener("click", e => {
   const j = e.target.closest("[data-cj]"); if (j) { state.corr = { ...corrCfg(), janela: +j.dataset.cj }; save(); return renderCorr(); }
@@ -891,12 +937,18 @@ $("#corr").addEventListener("change", e => {
   if (e.target.id === "corrBase") { state.corr = { ...corrCfg(), base: e.target.value }; save(); renderCorr(); }
 });
 async function loadCorrData() {
-  const [m, h] = await Promise.allSettled([
+  const yahoo = CORR.filter(x => !MACRO_KEYS.has(x.k) && !B3_HIST[x.k]), b3 = CORR.filter(x => B3_HIST[x.k]);
+  const [m, h, ic, ...bs] = await Promise.allSettled([
     api("/api/macro"),
-    api("/api/cotacoes?range=5y&s=" + CORR.filter(x => !MACRO_KEYS.has(x.k)).map(x => encodeURIComponent(x.k)).join(",")),
+    api("/api/cotacoes?range=5y&s=" + yahoo.map(x => encodeURIComponent(x.k)).join(",")),
+    loadIcbr(),
+    ...b3.map(x => loadB3Hist(x.k)),
   ]);
   if (m.status === "fulfilled") macro = m.value;
-  monthly = buildMonthly(h.status === "fulfilled" ? h.value.quotes : null);
+  const qs = h.status === "fulfilled" ? { ...h.value.quotes } : {};
+  b3.forEach((x, i) => { if (bs[i].status === "fulfilled") qs[x.k] = { points: bs[i].value.pontos }; });
+  monthly = buildMonthly(qs);
+  if (ic.status === "rejected") console.warn("IC-Br:", ic.reason);
   renderStrip(); renderCorr(); renderEdu();
 }
 // Favorites are split into tabs by market (Brasil, Exterior, Moedas, Cripto); the open tab is remembered.
@@ -1002,6 +1054,8 @@ const MACRO_WIN = {
     serie: m => m.ipca?.doze_meses?.filter(([k]) => k >= "1996-01"), fmt: v => nf(2).format(v) + "%" },
   "MACRO:desemprego": { titulo: "Desemprego", sub: "Taxa de desocupação · trimestre móvel (pelo último mês)", edu: "desemprego", fonte: "IBGE, PNAD Contínua, desde 2012",
     serie: m => m.desemprego?.mensal, fmt: v => nf(1).format(v) + "%" },
+  "MACRO:icbr": { titulo: "Commodities BR", sub: "IC-Br do Banco Central · preços de commodities em reais (dez/2005 = 100)", edu: "icbr", fonte: "Banco Central (IC-Br), desde 1998",
+    carregar: async () => (await loadIcbr()).mensal, variacao: "pct", fmt: v => nf(1).format(v) + " pts" },
 };
 const isMacro = sym => sym in MACRO_WIN;
 const MRANGES = [{ k: "1A", range: "macro", iv: "1mo", show: 12 }, { k: "5A", range: "macro", iv: "1mo", show: 60 }, { k: "10A", range: "macro", iv: "1mo", show: 120 }, { k: "Máx", range: "macro", iv: "1mo", show: 0 }];
@@ -1143,9 +1197,9 @@ function syncWinControls(w) {
 function renderWinHead(w) {
   if (isMacro(w.sym)) {
     const M = MACRO_WIN[w.sym], c = Object.values(w.cache)[0], b = c?.q.bars; if (!b?.length) return;
-    const last = b.at(-1), ago = b.length > 12 ? b.at(-13)[4] : null, d = ago == null ? null : last[4] - ago;
+    const last = b.at(-1), ago = b.length > 12 ? b.at(-13)[4] : null, pc = M.variacao === "pct", d = ago == null ? null : pc ? (last[4] / ago - 1) * 100 : last[4] - ago;
     w.el.querySelector(".win-px").textContent = M.fmt(last[4]);
-    const ch = w.el.querySelector(".win-ch"); ch.textContent = d == null ? "" : (d > 0 ? "+" : "") + nf(2).format(d) + " p.p. em 12 meses"; ch.className = "win-ch num flat";
+    const ch = w.el.querySelector(".win-ch"); ch.textContent = d == null ? "" : pc ? pct(d) + " em 12 meses" : (d > 0 ? "+" : "") + nf(2).format(d) + " p.p. em 12 meses"; ch.className = "win-ch num " + (pc ? cls(d) : "flat");
     w.el.querySelector(".win-sub").textContent = M.sub + " · último dado: " + new Date(last[0] * 1000).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
     w.el.querySelector(".win-stats").innerHTML = `Fonte: ${esc(M.fonte)}. A última linha mostra quem era o presidente. <button class="linkbtn" type="button" data-edu="${M.edu}">O que é?</button>`;
     return;
@@ -1157,20 +1211,22 @@ function renderWinHead(w) {
   w.el.querySelector(".win-sub").textContent = [q.name, q.open ? "aberto" : "fechado"].filter(Boolean).join(" · ");
   w.el.querySelector(".win-stats").textContent = [
     q.dayLow && q.dayHigh ? `Dia: ${money(q.dayLow, q.currency, q.type)} – ${money(q.dayHigh, q.currency, q.type)}` : "",
-    q.low52 && q.high52 ? `52 sem.: ${money(q.low52, q.currency, q.type)} – ${money(q.high52, q.currency, q.type)}` : "",
+    q.low52 && q.high52 && !B3_HIST[w.sym] ? `52 sem.: ${money(q.low52, q.currency, q.type)} – ${money(q.high52, q.currency, q.type)}` : "",
     q.volume ? `Volume: ${nf(0).format(q.volume)}` : "",
-    w.sym === "IFIX.SA" ? "Histórico diário: B3, desde 2011" : "",
+    B3_HIST[w.sym] ? `Histórico diário: B3, desde ${B3_HIST[w.sym].desde}` : "",
   ].filter(Boolean).join("  ·  ");
 }
 function renderWins() { wins.forEach(w => { renderWinHead(w); syncWinControls(w); }); }
-// IFIX: Yahoo has it intraday only, so daily/weekly/monthly charts come from B3's official
-// daily closes (/api/ifix, since 2011), with today's live value as the last point. B3 publishes
+// IFIX, INDX and ICON: Yahoo has them intraday only, so daily/weekly/monthly charts come from B3's
+// official daily closes (/api/ifix?indice=…), with today's live value as the last point. B3 publishes
 // closes only, so a daily candle runs from the previous close to the close.
-let ifixHist = null;
-function loadIfixHist() { return ifixHist ||= api("/api/ifix").catch(e => { ifixHist = null; throw e; }); }
+const B3_HIST = { "IFIX.SA": { indice: "IFIX", desde: 2011 }, "INDX.SA": { indice: "INDX", desde: 2006 }, "ICON.SA": { indice: "ICON", desde: 2006 } };
+const b3Hist = {};
+function loadB3Hist(sym) { return b3Hist[sym] ||= api("/api/ifix?indice=" + B3_HIST[sym].indice).catch(e => { delete b3Hist[sym]; throw e; }); }
+const loadIfixHist = () => loadB3Hist("IFIX.SA");
 const RANGE_YEARS = { "2y": 2, "10y": 10, "20y": 20 };
-async function ifixBars(r) {
-  const pts = (await loadIfixHist()).pontos.slice(), q = quotes["IFIX.SA"];
+async function b3Bars(sym, r) {
+  const pts = (await loadB3Hist(sym)).pontos.slice(), q = quotes[sym];
   if (q?.price && q.time && dayBR(q.time) > dayBR(pts.at(-1)[0])) pts.push([q.time, q.price]);
   const from = RANGE_YEARS[r.range] ? Date.now() / 1000 - RANGE_YEARS[r.range] * 365.25 * 86400 : 0;
   const key = t => { const d = dayBR(t); if (r.iv === "1mo") return d.slice(0, 7); if (r.iv === "1wk") { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() - (x.getUTCDay() + 6) % 7); return x.toISOString().slice(0, 10); } return d; };
@@ -1191,7 +1247,7 @@ async function loadWin(w, force) {
   if (isMacro(w.sym)) {
     if (!w.cache[key]) {
       try {
-        const serie = MACRO_WIN[w.sym].serie(await loadMacroHist()) || [];
+        const M = MACRO_WIN[w.sym], serie = (M.carregar ? await M.carregar() : M.serie(await loadMacroHist())) || [];
         if (!serie.length) throw new Error("fonte indisponível");
         // one bar per month (mid-month timestamp), open = high = low = close = the value
         w.cache[key] = { at: Date.now(), q: { type: "MACRO", fmt: MACRO_WIN[w.sym].fmt, bars: serie.map(([m, v]) => [Date.UTC(+m.slice(0, 4), +m.slice(5) - 1, 15) / 1000, v, v, v, v, 0]) } };
@@ -1203,10 +1259,10 @@ async function loadWin(w, force) {
   if (!w.cache[key] || force) {
     if (!w.cache[key]) box.innerHTML = `<div class="empty">Carregando…</div>`;
     try {
-      if (w.sym === "IFIX.SA" && ["1d", "1wk", "1mo"].includes(r.iv)) {
-        const bars = await ifixBars(r);
-        if (bars.length < 2) throw new Error("sem histórico do IFIX");
-        w.cache[key] = { q: { ...(quotes["IFIX.SA"] || { symbol: "IFIX.SA", name: "IFIX", type: "INDEX" }), bars, fonte: "B3" }, at: Date.now() };
+      if (B3_HIST[w.sym] && ["1d", "1wk", "1mo"].includes(r.iv)) {
+        const bars = await b3Bars(w.sym, r);
+        if (bars.length < 2) throw new Error("sem histórico na B3");
+        w.cache[key] = { q: { ...(quotes[w.sym] || { symbol: w.sym, name: B3_HIST[w.sym].indice, type: "INDEX" }), bars, fonte: "B3" }, at: Date.now() };
         return drawWin(w);
       }
       const res = await api(`/api/cotacoes?range=${r.range}&iv=${r.iv}&ohlc=1&s=${encodeURIComponent(w.sym)}`);
@@ -1927,6 +1983,16 @@ function eduItems() {
       porque: "É o termômetro do mercado imobiliário na bolsa. Costuma sofrer quando os juros (Selic) sobem, porque a renda fixa passa a competir com os aluguéis, e melhorar quando os juros caem.",
       horario: [["Pregão regular", dst ? "10h às 17h" : "10h às 18h"], ["Dias", "segunda a sexta, exceto feriados (mesmo horário da B3)"]],
       nota: "Nas correlações, o histórico mensal do IFIX vem do ETF XFIX11, um fundo que replica o índice." },
+    { id: "indx", s: "INDX.SA", titulo: "Índice Industrial (INDX)", sub: "Ações das indústrias na B3",
+      oque: "Calculado pela B3, reúne as ações mais negociadas de empresas do <b>setor industrial</b>, como fabricantes de máquinas e equipamentos, aviões, papel e celulose, aço e químicos (por exemplo WEG, Embraer, Suzano e Gerdau). É medido em <b>pontos</b>.",
+      porque: "É um termômetro do <b>setor secundário</b> (indústria) na bolsa. Mostra o que os investidores esperam para as indústrias, não a produção em si. Para a produção das fábricas, o dado oficial é a Produção Industrial do IBGE.",
+      horario: [["Pregão regular", dst ? "10h às 17h" : "10h às 18h"], ["Dias", "segunda a sexta, exceto feriados (mesmo horário da B3)"]],
+      nota: "O histórico dos gráficos vem dos fechamentos diários publicados pela B3, desde 2006. Algumas empresas grandes de um setor pesam muito no índice." },
+    { id: "icon", s: "ICON.SA", titulo: "Índice de Consumo (ICON)", sub: "Ações de varejo e consumo na B3",
+      oque: "Calculado pela B3, reúne as ações mais negociadas de empresas ligadas ao <b>consumo</b>: varejo, alimentos, bebidas, farmácias, saúde, educação e viagens. É medido em <b>pontos</b>.",
+      porque: "É um termômetro do <b>setor terciário</b> (comércio e serviços) na bolsa. Costuma sofrer com juros altos e desemprego em alta, que apertam o bolso das famílias e encarecem o crediário, e se beneficiar quando os juros caem e a renda sobe.",
+      horario: [["Pregão regular", dst ? "10h às 17h" : "10h às 18h"], ["Dias", "segunda a sexta, exceto feriados (mesmo horário da B3)"]],
+      nota: "O histórico dos gráficos vem dos fechamentos diários publicados pela B3, desde o fim de 2006. Para a atividade real do setor, os dados oficiais são as pesquisas de Serviços (PMS) e de Comércio (PMC) do IBGE." },
     { id: "selic", titulo: "Selic", sub: "A taxa básica de juros do Brasil",
       valor: () => macro?.selic?.atual ? `<b class="num">${nf(2).format(macro.selic.atual.valor)}% ao ano</b> <span class="hint">em ${new Date(macro.selic.atual.data + "T12:00").toLocaleDateString("pt-BR")}</span>` : "",
       oque: "É a taxa de juros que serve de referência para toda a economia. Quem decide é o <b>Copom</b>, comitê do Banco Central que se reúne 8 vezes por ano, a cada 45 dias mais ou menos. Ela influencia os juros de empréstimos, financiamentos e o rendimento da renda fixa (Tesouro Selic, CDBs).",
@@ -1945,6 +2011,21 @@ function eduItems() {
       porque: "Desemprego baixo indica economia aquecida: mais renda e mais consumo, o que ajuda varejo e bancos, mas pode pressionar a inflação e manter a Selic alta. Desemprego subindo costuma sinalizar desaceleração.",
       horario: [["Divulgação", "uma vez por mês, no fim do mês, às 9h"], ["Defasagem", "cerca de 2 meses: em outubro sai o trimestre jun-jul-ago"]],
       nota: "Fonte: IBGE (SIDRA, tabela 6381). Nas correlações entra a mudança mensal da taxa, em pontos percentuais." },
+    { id: "icbr", titulo: "Commodities BR (IC-Br)", sub: "O preço das commodities que o Brasil produz, em reais",
+      valor: () => { if (!icbr?.mensal?.length) return ""; const [mes, v] = icbr.mensal.at(-1), var12 = icbr.mensal.length > 12 ? (v / icbr.mensal.at(-13)[1] - 1) * 100 : null, parte = k => { const a = icbr.partes[k]; return a?.length > 12 ? pct((a.at(-1)[1] / a.at(-13)[1] - 1) * 100) : "—"; };
+        return `<b class="num">${nf(1).format(v)} pts</b> <span class="hint">em ${new Date(mes + "-15T12:00").toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}${var12 != null ? ` · ${pct(var12)} em 12 meses` : ""}</span><br><span class="hint">Em 12 meses: agropecuária ${parte("agro")} · metais ${parte("metal")} · energia ${parte("energia")}</span>`; },
+      oque: "Índice calculado pelo <b>Banco Central</b> com os preços internacionais das commodities mais importantes para a economia brasileira, <b>convertidos para reais</b>. Tem três partes: <b>agropecuária</b> (soja, milho, carne, café, açúcar, algodão, suco de laranja e outros), <b>metais</b> (minério de ferro, alumínio, cobre etc.) e <b>energia</b> (petróleo, gás e carvão). Base: dezembro de 2005 = 100.",
+      porque: "O Brasil é grande exportador de commodities. Quando o IC-Br sobe, entra mais dinheiro com exportações, o que costuma ajudar empresas como Vale, Petrobras e as do agro. Mas também pode pressionar a inflação, porque comida e combustível ficam mais caros aqui dentro. Como é em reais, sobe tanto quando as commodities sobem lá fora quanto quando o dólar sobe.",
+      horario: [["Divulgação", "mensal, nos primeiros dias do mês seguinte"], ["Atualização aqui", "assim que o Banco Central publica"]],
+      nota: "Fonte: Banco Central (séries 27574 a 27577 do SGS). É um dado mensal, por isso não se mexe ao longo do dia." },
+    { id: "salmin", titulo: "Salário mínimo", sub: "O menor salário que pode ser pago no Brasil",
+      valor: () => { const sm = macro?.salmin, u = quotes["USDBRL=X"]?.price; if (!sm?.valor) return ""; const rj = sm.reajustes.slice(-5).reverse();
+        return `<b class="num">${brl(sm.valor)}</b> <span class="hint">desde ${new Date(sm.desde + "-15T12:00").toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}</span>${u ? `<br><b class="num">≈ US$ ${nf(2).format(sm.valor / u)}</b> <span class="hint">pelo dólar de agora (R$ ${nf(2).format(u)})</span>` : ""}
+          <table class="edu-t" style="margin-top:8px"><tr><td class="hint">Últimos reajustes</td><td></td></tr>${rj.map(([m, v], i) => { const ant = sm.reajustes[sm.reajustes.length - 1 - i - 1]; return `<tr><td>${new Date(m + "-15T12:00").toLocaleDateString("pt-BR", { month: "short", year: "numeric" }).replace(".", "")}</td><td><b class="num">${brl(v)}</b>${ant ? ` <span class="hint">${pct((v / ant[1] - 1) * 100)}</span>` : ""}</td></tr>`; }).join("")}</table>`; },
+      oque: "É o valor mínimo mensal que um trabalhador com carteira assinada pode receber no Brasil. Também serve de piso para aposentadorias e pensões do INSS, e muitos benefícios sociais são calculados a partir dele.",
+      porque: "Mexe com a renda de milhões de pessoas e com as contas do governo (cada real a mais aumenta os gastos da Previdência). A conversão para dólares ajuda a comparar o poder de compra com o de outros países e mostra o efeito do câmbio: com o dólar alto, o salário em dólares encolhe.",
+      horario: [["Reajuste", "uma vez por ano, em 1º de janeiro"], ["Regra atual", "inflação (INPC) do ano anterior + crescimento do PIB de dois anos antes, com ganho real limitado a 2,5% ao ano"]],
+      nota: "Fonte: IPEA (série do Ministério do Trabalho). A conversão para dólares usa a cotação do momento, não a da data do reajuste." },
     { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler a linha de correlações",
       oque: "Mede se dois indicadores costumam se mover <b>na mesma direção</b>. Vai de <b>−1</b> a <b>+1</b>: +1 significa que, quando um tem um mês melhor, o outro também tem; −1, que um sobe quando o outro cai; 0, que não há relação. Diferente da correlação comum (Pearson), a de Spearman compara a <i>ordem</i> dos meses, do pior ao melhor, e por isso é menos afetada por meses extremos.",
       porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
@@ -1975,17 +2056,11 @@ function eduItems() {
       porque: "É o principal termômetro das bolsas da Europa. Como abre de madrugada no horário de Brasília, mostra o humor do mercado internacional antes de a B3 e Nova York abrirem.",
       horario: [["Pregão regular", euDst ? "4h às 12h30" : "5h às 13h30"], ["Na Europa", "9h às 17h30 (horário de Frankfurt e Paris)"], ["Dias", "segunda a sexta, exceto feriados europeus"]],
       nota: "A Europa muda o relógio no último domingo de março e no último domingo de outubro. Por isso, de abril a outubro o pregão vai das 4h às 12h30 de Brasília, e de novembro a março, das 5h às 13h30." },
-    { s: "ZS=F", titulo: "Soja (Chicago)", sub: "O principal produto do agronegócio brasileiro",
-      oque: "Preço do contrato futuro de soja mais próximo do vencimento na Bolsa de Chicago (CBOT), a referência mundial para o grão. É cotado em <b>dólares por bushel</b>, uma medida americana: 1 bushel de soja tem cerca de 27,2 kg, e uma saca de 60 kg tem cerca de 2,2 bushels.",
-      porque: "A soja é o maior produto de exportação do Brasil. Quando o preço em Chicago sobe, a receita dos produtores, das tradings e das empresas do agro tende a subir, e mais dólares entram no país. O que o produtor recebe em reais depende também do dólar: dólar alto compensa soja barata, e vice-versa.",
-      valor: () => { const q = quotes["ZS=F"], u = quotes["USDBRL=X"]?.price; if (!q?.price) return ""; const saca = q.price / 100 * 60 / 27.2155; return `<b class="num">≈ US$ ${nf(2).format(saca)} por saca de 60 kg</b>${u ? ` <span class="hint">· ≈ ${brl(saca * u)} pelo dólar de agora</span>` : ""}`; },
-      horario: [["Sessão principal", dst ? "10h30 às 15h20" : "11h30 às 16h20"], ["Sessão noturna", dst ? "21h às 9h45 do dia seguinte" : "22h às 10h45 do dia seguinte"], ["Dias", "de domingo à noite até sexta, exceto feriados americanos"]],
-      nota: "O valor em reais por saca é só uma conversão do preço de Chicago. O preço pago no Brasil (por exemplo, o indicador CEPEA/ESALQ no porto de Paranaguá) inclui ainda o \"prêmio\" de exportação e pode ser diferente. O contrato futuro vence algumas vezes por ano: na troca de vencimento o preço pode dar um pequeno salto que não é variação real do mercado." },
     { s: "BTC-USD", titulo: "Bitcoin", sub: "A maior criptomoeda do mundo",
       oque: "Moeda digital criada em 2009, sem banco central nem governo por trás. É negociada em corretoras do mundo inteiro, e o preço aqui é em <b>dólares (US$)</b>.",
       porque: "É bem mais volátil que ações: variações de 5% num único dia são comuns. É o termômetro do mercado de criptomoedas.",
       horario: [["Funcionamento", "24 horas por dia, 7 dias por semana"], ["Fecha?", "nunca, nem em fins de semana ou feriados"]],
-      nota: "Por isso é o único do topo da tela que se mexe no sábado e durante o dia de domingo." },
+      nota: "Por isso é o único do topo da tela que se mexe no sábado e no domingo." },
   ];
 }
 function renderEdu() {

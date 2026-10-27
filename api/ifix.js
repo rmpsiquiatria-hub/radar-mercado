@@ -1,14 +1,15 @@
-// GET /api/ifix → the official IFIX daily closing values published by B3, since 2011:
+// GET /api/ifix?indice=IFIX|INDX|ICON → the official daily closing values published by B3
+// (IFIX since 2011; the industrial and consumer indices since 2006):
 // { pontos: [[unix seconds, close], ...] } oldest first.
-// Yahoo only has IFIX intraday (its daily/weekly/monthly series is empty), so the charts use this.
+// Yahoo only has these indices intraday (their daily/weekly/monthly series are empty), so the charts use this.
 // B3 answers one year per request, as a table of day (rows) × month (rateValue1..12).
 
 import { json, bad } from "./_yahoo.js";
 
-const FIRST_YEAR = 2011;
+const FIRST_YEAR = { IFIX: 2011, INDX: 2006, ICON: 2006 };
 
-async function year(y) {
-  const q = Buffer.from(JSON.stringify({ language: "pt-br", index: "IFIX", year: String(y) })).toString("base64");
+async function year(index, y) {
+  const q = Buffer.from(JSON.stringify({ language: "pt-br", index, year: String(y) })).toString("base64");
   const r = await fetch(`https://sistemaswebb3-listados.b3.com.br/indexStatisticsProxy/IndexCall/GetPortfolioDay/${q}`, { signal: AbortSignal.timeout(20000) });
   if (!r.ok) throw new Error(`B3 ${r.status}`);
   const out = [];
@@ -25,21 +26,23 @@ async function year(y) {
 
 // B3 turns away bursts of requests, so years are fetched three at a time, with retries.
 const wait = ms => new Promise(r => setTimeout(r, ms));
-async function yearRetry(y) {
+async function yearRetry(index, y) {
   for (let i = 0; ; i++) {
-    try { const v = await year(y); if (v.length || y === new Date().getUTCFullYear()) return v; throw new Error("vazio"); }
+    try { const v = await year(index, y); if (v.length || y === new Date().getUTCFullYear()) return v; throw new Error("vazio"); }
     catch (e) { if (i >= 3) throw e; await wait(500 * (i + 1)); }
   }
 }
 
-export async function GET() {
+export async function GET(request) {
+  const index = new URL(request.url).searchParams.get("indice") || "IFIX";
+  if (!FIRST_YEAR[index]) return bad("índice desconhecido", 400);
   const now = new Date().getUTCFullYear(), years = [], byYear = {};
-  for (let y = FIRST_YEAR; y <= now; y++) years.push(y);
+  for (let y = FIRST_YEAR[index]; y <= now; y++) years.push(y);
   const queue = years.slice();
-  await Promise.all([0, 1, 2].map(async () => { for (let y; (y = queue.shift()) != null;) { try { byYear[y] = await yearRetry(y); } catch {} } }));
+  await Promise.all([0, 1, 2].map(async () => { for (let y; (y = queue.shift()) != null;) { try { byYear[y] = await yearRetry(index, y); } catch {} } }));
   const faltando = years.filter(y => !byYear[y]);
   const pontos = years.flatMap(y => byYear[y] || []).sort((a, b) => a[0] - b[0]);
   if (!pontos.length) return bad("B3 indisponível", 502);
   // An incomplete answer is cached only briefly, so the next visit tries again.
-  return json({ fonte: "B3", pontos, faltando }, faltando.length ? 120 : 21600);
+  return json({ fonte: "B3", indice: index, pontos, faltando }, faltando.length ? 120 : 21600);
 }

@@ -1,4 +1,4 @@
-// GET /api/macro → Selic, IPCA and unemployment, current value plus monthly history (for cards and correlations).
+// GET /api/macro → Selic, IPCA, unemployment and the minimum wage, current value plus monthly history (for cards and correlations).
 // GET /api/macro?historico=1 → the longest history (Selic since 1996, IPCA since the Real in 1995,
 //        unemployment since 2012), for the charts opened from the top cards.
 // Selic: IPEA series BM366_TJOVER366 (daily, % a.a., mirrors the Central Bank's SGS, which
@@ -6,6 +6,8 @@
 // IPCA:  IBGE SIDRA table 1737 — monthly change (v63) and 12-month change (v2265).
 // Desemprego: IBGE SIDRA table 6381 (PNAD Contínua) — unemployment rate (v4099), rolling
 //        3-month period stamped with its last month.
+// Salário mínimo: IPEA series MTE12_SALMIN12 (monthly, in reais since the Real, July 1994);
+//        the series already carries the months ahead of a value set for the year.
 
 import { json, bad } from "./_yahoo.js";
 
@@ -61,10 +63,26 @@ async function desemprego(longo) {
   return { mes: mensal.at(-1)?.[0] || null, atual: mensal.at(-1)?.[1] ?? null, periodo, mensal };
 }
 
+async function salmin() {
+  const rows = (await getJson("http://www.ipeadata.gov.br/api/odata4/ValoresSerie(SERCODIGO='MTE12_SALMIN12')")).value;
+  const hoje = new Date().toISOString().slice(0, 7), mensal = [];
+  for (const r of rows) {
+    const m = r.VALDATA.slice(0, 7);
+    if (r.VALVALOR != null && m >= "1994-07" && m <= hoje) mensal.push([m, r.VALVALOR]);
+  }
+  mensal.sort((a, b) => a[0].localeCompare(b[0]));
+  if (!mensal.length) throw new Error("sem dados");
+  const valor = mensal.at(-1)[1];
+  let i = mensal.length - 1; while (i > 0 && mensal[i - 1][1] === valor) i--;
+  // Each change of value is a readjustment: [month, new value].
+  const reajustes = mensal.filter(([, v], k) => k === 0 || v !== mensal[k - 1][1]);
+  return { valor, desde: mensal[i][0], reajustes };
+}
+
 export async function GET(request) {
   const longo = new URL(request.url).searchParams.has("historico");
-  const [s, i, d] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo)]);
+  const [s, i, d, sm] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin()]);
   if ([s, i, d].every(x => x.status === "rejected")) return bad("fontes indisponíveis", 502);
   const val = x => x.status === "fulfilled" ? x.value : { erro: String(x.reason?.message || x.reason) };
-  return json({ selic: val(s), ipca: val(i), desemprego: val(d) }, 21600);
+  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm) }, 21600);
 }
