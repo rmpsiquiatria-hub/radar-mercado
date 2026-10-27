@@ -385,6 +385,23 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .gov-txt summary { cursor: pointer; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
 .gov-txt summary span { font-size: 12px; color: var(--muted); }
 .gov-txt ul { margin: 6px 0 0; padding-left: 18px; font-size: 14px; } .gov-txt li { margin: 6px 0; }
+.sim-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.sim-row { display: grid; grid-template-columns: 170px 1fr 150px; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.sim-row:first-of-type { border-top: 0; }
+.sim-row .sim-l b { display: block; font-size: 14px; }
+.sim-row .sim-l span { font-size: 12px; color: var(--muted); }
+.sim-row input[type=range] { width: 100%; accent-color: var(--faint); margin: 0; }
+.sim-bar { position: relative; }
+.sim-bar::after { content: ""; position: absolute; left: 50%; top: 2px; width: 2px; height: 16px; background: var(--muted); transform: translateX(-50%); pointer-events: none; opacity: .6; }
+.sim-bar .sim-z { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); }
+.sim-row.ativo input[type=range] { accent-color: var(--accent); }
+.sim-row.est input[type=range] { accent-color: var(--pos); }
+.sim-row.fraca { opacity: .5; }
+.sim-row .sim-v { text-align: right; font-family: var(--mono); font-size: 14px; }
+.sim-row.ativo .sim-v b { color: var(--accent); }
+.sim-row.est .sim-v b { color: var(--pos); }
+.sim-row .sim-v small { display: block; font-family: inherit; font-size: 11px; color: var(--muted); }
+@media (max-width: 640px) { .sim-row { grid-template-columns: 1fr 110px; } .sim-row .sim-bar { grid-column: 1 / -1; grid-row: 2; } }
 .edu-more { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; }
 .edu-more summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 14px; }
 .fund-intro { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 12px; margin-bottom: 14px; }
@@ -517,6 +534,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <button role="tab" data-esec="mercados">📈 Mercados e horários</button>
       <button role="tab" data-esec="economia">🏦 Juros, inflação e emprego</button>
       <button role="tab" data-esec="governo">🏛️ Governo</button>
+      <button role="tab" data-esec="simulacao">🎚️ Simulação</button>
       <button role="tab" data-esec="fundamentos">📊 Análise fundamentalista</button>
       <button role="tab" data-esec="candles">🕯️ Candlesticks</button>
     </div>
@@ -536,6 +554,11 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <p class="hint">A análise fundamentalista olha para a <b>empresa</b>: quanto ela lucra, quanto deve, quanto paga de dividendos e se o preço da ação está caro ou barato perto disso. (A análise técnica, dos gráficos e candles, olha só para o comportamento do preço.) Estes são os indicadores que aparecem no Relatório e no e-mail. Toque em um para ver a explicação. Os exemplos usam os números da <b>empresa com mais peso no Ibovespa</b> no último relatório.</p>
       <div class="fund-intro" id="fundIntro"></div>
       <div class="fgal" id="fundList"></div>
+    </div>
+    <div data-esec-panel="simulacao" hidden>
+      <p class="note">Mova a barra de <b>um</b> indicador para dizer quanto ele variou no mês. As outras barras mostram, em cor diferente, quanto cada indicador costuma variar <b>junto</b>, pelo histórico dos últimos <b>4 anos</b> (correlação de Spearman entre as variações mensais). Para simular outro indicador, é só mover a barra dele: a simulação anterior é desfeita.</p>
+      <div id="simBox" class="card"></div>
+      <p class="hint" style="margin-top:8px">Como é calculado: para cada par, efeito estimado = ρ × (desvio padrão do outro ÷ desvio padrão do escolhido) × variação escolhida. É uma regressão linear simples sobre as variações mensais, usando a correlação de Spearman (ρ) dos últimos 48 meses no lugar da correlação comum, por ser menos afetada por meses extremos. O efeito é <b>além</b> do que aconteceria num mês normal. Relações sem significância estatística aparecem apagadas: nelas o número é pouco confiável. Correlação não é causa, e o passado não garante o futuro. É um exercício educativo, não uma recomendação de investimento.</p>
     </div>
     <div data-esec-panel="candles" hidden>
       <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
@@ -949,6 +972,7 @@ async function loadCorrData() {
   b3.forEach((x, i) => { if (bs[i].status === "fulfilled") qs[x.k] = { points: bs[i].value.pontos }; });
   monthly = buildMonthly(qs);
   if (ic.status === "rejected") console.warn("IC-Br:", ic.reason);
+  renderSim();
   renderStrip(); renderCorr(); renderEdu();
 }
 // Favorites are split into tabs by market (Brasil, Exterior, Moedas, Cripto); the open tab is remembered.
@@ -2093,7 +2117,68 @@ const eduOpen = new Set();   // "Saiba mais" boxes the user opened (the cards re
 document.addEventListener("toggle", e => { const d = e.target; if (d.matches?.("details[data-emore]")) d.open ? eduOpen.add(d.dataset.emore) : eduOpen.delete(d.dataset.emore); }, true);
 // Education sub-sections: one visible at a time, remembered in this browser.
 function eduSec() { try { return localStorage.getItem(KEY + ".edu") || "mercados"; } catch { return "mercados"; } }
+/* ---------- educação: simulação ---------- */
+// One indicator is moved; every other one shows the change a simple linear regression on the
+// last 48 monthly changes would expect: slope = Spearman ρ × (σ other ÷ σ moved).
+const SIM_MESES = 48;
+let simSel = null, simVal = 0;
+const simUnit = k => k === "selic" || k === "desemprego" ? " p.p." : "%";
+const simFmt = (k, v) => (v > 0.0005 ? "+" : v < -0.0005 ? "−" : "") + nf(2).format(Math.abs(v)) + simUnit(k);
+function simMonths(ka, kb) {   // the same months spearman() uses
+  const A = monthly?.[ka], B = monthly?.[kb]; if (!A || !B) return null;
+  const last = [...A.keys(), ...B.keys()].sort().at(-1); if (!last) return null;
+  const from = new Date(Date.UTC(+last.slice(0, 4), +last.slice(5) - SIM_MESES, 15)).toISOString().slice(0, 7);
+  const xs = [], ys = [];
+  for (const [m, v] of A) if (m >= from && B.has(m)) { xs.push(v); ys.push(B.get(m)); }
+  return { xs, ys };
+}
+const sd = a => { const n = a.length, m = a.reduce((x, y) => x + y, 0) / n; return Math.sqrt(a.reduce((x, y) => x + (y - m) ** 2, 0) / (n - 1)); };
+function simPair(kx, ky) {
+  const c = spearman(kx, ky, SIM_MESES), d = simMonths(kx, ky);
+  if (!c || c.r == null || !d || d.xs.length < 8) return null;
+  const sx = sd(d.xs), sy = sd(d.ys); if (!sx) return null;
+  return { r: c.r, n: c.n, sig: c.sig, beta: c.r * sy / sx };
+}
+function simRange(k) {   // ±3 standard deviations of the indicator's own monthly changes
+  const v = [...(monthly?.[k]?.values() || [])].slice(-SIM_MESES); if (v.length < 8) return null;
+  const s3 = 3 * sd(v), mag = 10 ** Math.floor(Math.log10(s3)), max = Math.ceil(s3 / mag) * mag;
+  return { max, step: max / 100 };
+}
+function simItems() { return CORR.filter(o => simRange(o.k)); }
+function renderSim() {
+  const box = $("#simBox"); if (!box) return;
+  if (!monthly) { box.innerHTML = `<div class="empty">Carregando o histórico mensal…</div>`; return; }
+  const items = simItems();
+  box.innerHTML = `<div class="sim-head"><span class="hint">${simSel ? `Simulando: <b>${esc(CORR.find(o => o.k === simSel).label)}</b>` : "Mova uma barra para começar."}</span><button class="btn" id="simZero" ${simSel ? "" : "disabled"}>↺ Zerar</button></div>` +
+    items.map(o => { const r = simRange(o.k); return `<div class="sim-row" data-row="${esc(o.k)}">
+      <div class="sim-l"><b>${o.label}</b><span>${o.k === "ipca" ? "inflação do mês" : simUnit(o.k) === " p.p." ? "mudança no mês, em p.p." : "variação no mês"}</span></div>
+      <div class="sim-bar"><input type="range" data-sk="${esc(o.k)}" min="${-r.max}" max="${r.max}" step="${r.step}" value="0" aria-label="${esc(o.label)}"><div class="sim-z"><span>−${nf(r.max < 1 ? 2 : 0).format(r.max)}</span><span>0</span><span>+${nf(r.max < 1 ? 2 : 0).format(r.max)}</span></div></div>
+      <div class="sim-v"></div></div>`; }).join("");
+  updateSim();
+}
+function updateSim() {
+  const box = $("#simBox"); if (!box) return;
+  box.querySelectorAll(".sim-row").forEach(row => {
+    const k = row.dataset.row, inp = row.querySelector("input"), out = row.querySelector(".sim-v");
+    row.classList.remove("ativo", "est", "fraca");
+    if (!simSel) { inp.value = 0; out.innerHTML = `<b>${simFmt(k, 0)}</b>`; return; }
+    if (k === simSel) { row.classList.add("ativo"); out.innerHTML = `<b>${simFmt(k, simVal)}</b><small>você escolheu</small>`; return; }
+    const pr = simPair(simSel, k);
+    if (!pr) { inp.value = 0; out.innerHTML = `<b>—</b><small>poucos dados</small>`; return; }
+    const est = pr.beta * simVal;
+    inp.value = est; row.classList.add("est"); if (!pr.sig) row.classList.add("fraca");
+    out.innerHTML = `<b>≈ ${simFmt(k, est)}</b><small>ρ ${nf(2).format(pr.r)} · ${pr.sig ? forca(pr.r) : "não significativa"}</small>`;
+  });
+  const z = $("#simZero"); if (z) z.disabled = !simSel;
+  const h = box.querySelector(".sim-head .hint"); if (h) h.innerHTML = simSel ? `Simulando: <b>${esc(CORR.find(o => o.k === simSel).label)}</b> · ${SIM_MESES} meses de histórico` : "Mova uma barra para começar.";
+}
+$("#simBox").addEventListener("input", e => {
+  const i = e.target.closest("[data-sk]"); if (!i) return;
+  simSel = i.dataset.sk; simVal = +i.value; updateSim();
+});
+$("#simBox").addEventListener("click", e => { if (e.target.closest("#simZero")) { simSel = null; simVal = 0; updateSim(); } });
 function showEduSec(name) {
+  if (name === "simulacao") setTimeout(renderSim);
   document.querySelectorAll("[data-esec]").forEach(b => b.setAttribute("aria-selected", b.dataset.esec === name));
   document.querySelectorAll("[data-esec-panel]").forEach(p => p.hidden = p.dataset.esecPanel !== name);
   try { localStorage.setItem(KEY + ".edu", name); } catch {}
