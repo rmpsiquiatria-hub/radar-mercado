@@ -703,7 +703,7 @@ function macroCards() {
   const sl = macro.selic, ip = macro.ipca, de = macro.desemprego;
   if (sl?.atual) {
     const m = sl.mensal, ago = m.length > 12 ? m[m.length - 13][1] : null, d = ago == null ? null : sl.atual.valor - ago;
-    out.push(`<button class="card idx macro" data-edu="selic">
+    out.push(`<button class="card idx macro" data-open="MACRO:selic" data-max="1" title="Ver o histórico da Selic">
       <div class="lbl">Selic<span class="mk">juros</span></div>
       <div class="px num">${nf(2).format(sl.atual.valor)}% a.a.</div>
       <div class="ch num ${d == null ? "flat" : d > 0 ? "down" : d < 0 ? "up" : "flat"}">${d == null ? "&nbsp;" : (d > 0 ? "+" : "") + nf(2).format(d) + " p.p. em 12m"}</div>
@@ -712,7 +712,7 @@ function macroCards() {
   }
   if (ip?.doze_meses_atual != null) {
     const mes = new Date(ip.mes + "-15T12:00").toLocaleDateString("pt-BR", { month: "short" }).replace(".", "");
-    out.push(`<button class="card idx macro" data-edu="ipca">
+    out.push(`<button class="card idx macro" data-open="MACRO:ipca" data-max="1" title="Ver o histórico do IPCA">
       <div class="lbl">IPCA<span class="mk">inflação</span></div>
       <div class="px num">${nf(2).format(ip.doze_meses_atual)}% <span style="font-size:12px;font-weight:500">12m</span></div>
       <div class="ch num ${ip.mensal_atual > 0 ? "down" : ip.mensal_atual < 0 ? "up" : "flat"}">${mes}: ${(ip.mensal_atual > 0 ? "+" : "") + nf(2).format(ip.mensal_atual)}%</div>
@@ -722,7 +722,7 @@ function macroCards() {
   if (de?.atual != null) {
     // Rising unemployment is bad news, so an increase shows in red.
     const m = de.mensal, ago = m.length > 12 ? m[m.length - 13][1] : null, d = ago == null ? null : de.atual - ago;
-    out.push(`<button class="card idx macro" data-edu="desemprego" title="Trimestre móvel ${esc(de.periodo || "")} (IBGE)">
+    out.push(`<button class="card idx macro" data-open="MACRO:desemprego" data-max="1" title="Trimestre móvel ${esc(de.periodo || "")} (IBGE) · ver o histórico">
       <div class="lbl">Desemprego<span class="mk">emprego</span></div>
       <div class="px num">${nf(1).format(de.atual)}%</div>
       <div class="ch num ${d == null ? "flat" : d > 0 ? "down" : d < 0 ? "up" : "flat"}">${d == null ? "&nbsp;" : (d > 0 ? "+" : "") + nf(1).format(d) + " p.p. em 12m"}</div>
@@ -955,11 +955,28 @@ const wins = [];
 let topZ = 50, winSeq = 0;
 const isPhone = () => innerWidth < 700;
 
+// Selic, IPCA and unemployment open in the same chart window, as monthly lines
+// (symbols "MACRO:selic" etc.). History from /api/macro?historico=1.
+const MACRO_WIN = {
+  "MACRO:selic": { titulo: "Selic", sub: "Taxa básica de juros · % ao ano (valor no fim de cada mês)", edu: "selic", fonte: "IPEA (série do Banco Central), desde 1996",
+    serie: m => m.selic?.mensal, fmt: v => nf(2).format(v) + "% a.a." },
+  "MACRO:ipca": { titulo: "IPCA", sub: "Inflação oficial · acumulada em 12 meses", edu: "ipca", fonte: "IBGE, desde 1996 (antes disso, a inflação do fim dos anos 80 e começo dos 90 achataria o gráfico)",
+    serie: m => m.ipca?.doze_meses?.filter(([k]) => k >= "1996-01"), fmt: v => nf(2).format(v) + "%" },
+  "MACRO:desemprego": { titulo: "Desemprego", sub: "Taxa de desocupação · trimestre móvel (pelo último mês)", edu: "desemprego", fonte: "IBGE, PNAD Contínua, desde 2012",
+    serie: m => m.desemprego?.mensal, fmt: v => nf(1).format(v) + "%" },
+};
+const isMacro = sym => sym in MACRO_WIN;
+const MRANGES = [{ k: "1A", range: "macro", iv: "1mo", show: 12 }, { k: "5A", range: "macro", iv: "1mo", show: 60 }, { k: "10A", range: "macro", iv: "1mo", show: 120 }, { k: "Máx", range: "macro", iv: "1mo", show: 0 }];
+const winRange = w => (isMacro(w.sym) ? MRANGES : WRANGES).find(x => x.k === w.range);
+let macroHist = null;
+function loadMacroHist() { return macroHist ||= api("/api/macro?historico=1").catch(e => { macroHist = null; throw e; }); }
 function openWin(sym) {
   const open = wins.find(w => w.sym === sym);
   if (open) { focusWin(open); return; }
   const d = chartDefaults();
-  const w = { id: ++winSeq, sym, range: "6M", tipo: d.tipo, ind: { mm: d.mm, ifr: d.ifr, macd: d.macd, sr: d.sr, pad: d.pad }, cache: {}, el: null };
+  const mac = isMacro(sym);
+  const w = mac ? { id: ++winSeq, sym, range: "Máx", tipo: "line", ind: {}, cache: {}, el: null }
+    : { id: ++winSeq, sym, range: "6M", tipo: d.tipo, ind: { mm: d.mm, ifr: d.ifr, macd: d.macd, sr: d.sr, pad: d.pad }, cache: {}, el: null };
   const n = wins.length, W = Math.min(680, innerWidth - 24), H = Math.min(540, innerHeight - 90);
   w.x = Math.min(24 + n * 32, Math.max(8, innerWidth - W - 8));
   w.y = Math.min(70 + n * 32, Math.max(8, innerHeight - H - 60));
@@ -968,19 +985,19 @@ function openWin(sym) {
   el.className = "win card"; el.dataset.win = w.id;
   el.innerHTML = `
     <div class="win-h">
-      <div class="win-t"><b>${esc(short(sym))}</b> <span class="win-px num"></span> <span class="win-ch num"></span><div class="win-sub"></div></div>
+      <div class="win-t"><b>${esc(mac ? MACRO_WIN[sym].titulo : short(sym))}</b> <span class="win-px num"></span> <span class="win-ch num"></span><div class="win-sub"></div></div>
       <div class="win-btns">
-        <button data-wa="fav" title="Favoritar"></button>
-        <button data-wa="alert" title="Criar alerta de preço">🔔</button>
-        <button data-wa="cart" title="Adicionar à carteira">💼</button>
+        <button data-wa="fav" title="Favoritar" ${mac ? "hidden" : ""}></button>
+        <button data-wa="alert" title="Criar alerta de preço" ${mac ? "hidden" : ""}>🔔</button>
+        <button data-wa="cart" title="Adicionar à carteira" ${mac ? "hidden" : ""}>💼</button>
         <button data-wa="max" class="win-max" title="Maximizar (ou duplo clique no título)" aria-label="Maximizar">⤢</button>
         <button data-wa="close" title="Fechar (Esc)" aria-label="Fechar">✕</button>
       </div>
     </div>
     <div class="win-tb">
-      <span class="seg">${WRANGES.map(r => `<button data-wr="${r.k}">${r.k}</button>`).join("")}</span>
-      <span class="seg"><button data-wt="line" title="Linha">Linha</button><button data-wt="candle" title="Candlestick">Candles</button></span>
-      <span class="seg">${IND_DEF.map(([k, l]) => `<button data-wi="${k}">${l}</button>`).join("")}</span>
+      <span class="seg">${(mac ? MRANGES : WRANGES).map(r => `<button data-wr="${r.k}">${r.k}</button>`).join("")}</span>
+      ${mac ? "" : `<span class="seg"><button data-wt="line" title="Linha">Linha</button><button data-wt="candle" title="Candlestick">Candles</button></span>
+      <span class="seg">${IND_DEF.map(([k, l]) => `<button data-wi="${k}">${l}</button>`).join("")}</span>`}
       <span class="seg"><button data-wz="out" title="Diminuir zoom (ou role a roda do mouse / afaste dois dedos)" aria-label="Diminuir zoom">−</button><button data-wz="in" title="Aumentar zoom (ou role a roda do mouse / aproxime dois dedos)" aria-label="Aumentar zoom">+</button><button data-wz="reset" title="Voltar ao período inteiro" aria-label="Voltar ao período inteiro">↺</button></span>
     </div>
     <div class="win-stats hint"></div>
@@ -1086,6 +1103,15 @@ function syncWinControls(w) {
   w.el.querySelector('[data-wa="fav"]').textContent = state.favs.includes(w.sym) ? "★" : "☆";
 }
 function renderWinHead(w) {
+  if (isMacro(w.sym)) {
+    const M = MACRO_WIN[w.sym], c = Object.values(w.cache)[0], b = c?.q.bars; if (!b?.length) return;
+    const last = b.at(-1), ago = b.length > 12 ? b.at(-13)[4] : null, d = ago == null ? null : last[4] - ago;
+    w.el.querySelector(".win-px").textContent = M.fmt(last[4]);
+    const ch = w.el.querySelector(".win-ch"); ch.textContent = d == null ? "" : (d > 0 ? "+" : "") + nf(2).format(d) + " p.p. em 12 meses"; ch.className = "win-ch num flat";
+    w.el.querySelector(".win-sub").textContent = M.sub + " · último dado: " + new Date(last[0] * 1000).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    w.el.querySelector(".win-stats").innerHTML = `Fonte: ${esc(M.fonte)}. A última linha mostra quem era o presidente. <button class="linkbtn" type="button" data-edu="${M.edu}">O que é?</button>`;
+    return;
+  }
   const q = quotes[w.sym]; if (!q) return;
   const c = change(q);
   w.el.querySelector(".win-px").textContent = money(q.price, q.currency, q.type);
@@ -1099,8 +1125,20 @@ function renderWinHead(w) {
 }
 function renderWins() { wins.forEach(w => { renderWinHead(w); syncWinControls(w); }); }
 async function loadWin(w, force) {
-  const r = WRANGES.find(x => x.k === w.range), key = r.range + "|" + r.iv;
+  const r = winRange(w), key = r.range + "|" + r.iv;
   const box = w.el.querySelector(".win-chart");
+  if (isMacro(w.sym)) {
+    if (!w.cache[key]) {
+      try {
+        const serie = MACRO_WIN[w.sym].serie(await loadMacroHist()) || [];
+        if (!serie.length) throw new Error("fonte indisponível");
+        // one bar per month (mid-month timestamp), open = high = low = close = the value
+        w.cache[key] = { at: Date.now(), q: { type: "MACRO", fmt: MACRO_WIN[w.sym].fmt, bars: serie.map(([m, v]) => [Date.UTC(+m.slice(0, 4), +m.slice(5) - 1, 15) / 1000, v, v, v, v, 0]) } };
+      } catch (e) { box.innerHTML = `<div class="empty">Não consegui carregar o histórico (${esc(e.message)}).</div>`; return; }
+      renderWinHead(w);
+    }
+    return drawWin(w);
+  }
   if (!w.cache[key] || force) {
     if (!w.cache[key]) box.innerHTML = `<div class="empty">Carregando…</div>`;
     try {
@@ -1115,7 +1153,7 @@ async function loadWin(w, force) {
 // Intraday windows refresh with the quotes (every minute at most).
 function refreshWins() {
   for (const w of wins) {
-    const r = WRANGES.find(x => x.k === w.range), c = w.cache[r.range + "|" + r.iv];
+    const r = winRange(w), c = w.cache[r.range + "|" + r.iv];
     if (r.range.endsWith("d") && c && Date.now() - c.at > 60000) loadWin(w, true);
   }
 }
@@ -1139,7 +1177,7 @@ function presidenteEm(t) {   // t = unix seconds
 }
 function drawWin(w) {
   const A = window.Analise, box = w.el.querySelector(".win-chart");
-  const r = WRANGES.find(x => x.k === w.range), c = w.cache[r.range + "|" + r.iv];
+  const r = winRange(w), c = w.cache[r.range + "|" + r.iv];
   if (!c) return;
   if (!A) { window.addEventListener("analise-pronta", () => drawWin(w), { once: true }); return; }
   const all = (c.q.bars || []).map(([t, o, h, l, cl, v]) => ({ t, o, h, l, c: cl, v }));
@@ -1174,10 +1212,10 @@ function drawWin(w) {
   const fmt = v => nf(decimals(v)).format(v);
   const fmtT = t => { const d = new Date(t * 1000); return intraday ? (r.k === "1D" ? "" : d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) + " ") + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : r.iv === "1mo" ? d.toLocaleDateString("pt-BR", { month: "short", year: "numeric" }) : d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: r.iv === "1wk" || n > 200 ? "2-digit" : undefined }); };
   const path = (arr, yf) => { let d = "", pen = false; arr.forEach((v, i) => { if (v == null) { pen = false; return; } d += (pen ? "L" : "M") + X(i).toFixed(1) + " " + yf(v).toFixed(1); pen = true; }); return d; };
-  const up = bars.at(-1).c >= (prev ?? bars[0].c);
+  const up = bars.at(-1).c >= (prev ?? bars[0].c), lineVar = c.q.type === "MACRO" ? "--accent" : up ? "--up" : "--down";   // rates and inflation: no good/bad colour
   const gid = "wg" + w.id;
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Gráfico de ${esc(short(w.sym))}">`;
-  svg += `<defs><linearGradient id="${gid}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(${up ? "--up" : "--down"})" stop-opacity=".2"/><stop offset="1" stop-color="var(${up ? "--up" : "--down"})" stop-opacity="0"/></linearGradient></defs>`;
+  svg += `<defs><linearGradient id="${gid}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(${lineVar})" stop-opacity=".2"/><stop offset="1" stop-color="var(${lineVar})" stop-opacity="0"/></linearGradient></defs>`;
   for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4, y = Y(v); svg += `<line x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${W - padR + 5}" y="${y + 4}" font-size="10.5" fill="var(--faint)" font-family="JetBrains Mono, monospace">${fmt(v)}</text>`; }
   if (prev) svg += `<line x1="${padL}" x2="${W - padR}" y1="${Y(prev)}" y2="${Y(prev)}" stroke="var(--muted)" stroke-dasharray="4 4"/><text x="${padL + 4}" y="${Y(prev) - 4}" font-size="10.5" fill="var(--muted)">fech. anterior</text>`;
   if (sr) for (const [v, lbl, col] of [[sr.resistencia, "R", "--down"], [sr.suporte, "S", "--up"]]) {
@@ -1192,7 +1230,7 @@ function drawWin(w) {
     });
   } else {
     const line = path(bars.map(b => b.c), Y);
-    svg += `<path d="${line}L${X(n - 1)} ${mainH}L${X(0)} ${mainH}Z" fill="url(#${gid})"/><path d="${line}" fill="none" stroke="var(${up ? "--up" : "--down"})" stroke-width="1.8" stroke-linejoin="round"/>`;
+    svg += `<path d="${line}L${X(n - 1)} ${mainH}L${X(0)} ${mainH}Z" fill="url(#${gid})"/><path d="${line}" fill="none" stroke="var(${lineVar})" stroke-width="1.8" stroke-linejoin="round"/>`;
   }
   if (w.ind.mm) for (const [k, , col] of MA_DEF) svg += `<path d="${path(sl(ma[k]), Y)}" fill="none" stroke="${col}" stroke-width="1.4" opacity=".95"/>`;
   // Candlestick pattern flags: ▲ below the candle for bullish, ▼ above for bearish, ◆ for doji.
@@ -1250,7 +1288,7 @@ function drawWin(w) {
     const i = Math.max(0, Math.min(n - 1, Math.floor(((pt.clientX - rc.left) * (W / rc.width) - padL) / step)));
     const b = bars[i], x = X(i);
     xh.setAttribute("x1", x); xh.setAttribute("x2", x); xh.setAttribute("visibility", "visible");
-    const cur = c.q.currency, ty = c.q.type, mv = v => money(v, cur, ty);
+    const cur = c.q.currency, ty = c.q.type, mv = v => c.q.fmt ? c.q.fmt(v) : money(v, cur, ty);
     let html = `<div class="tt-d">${fmtT(b.t)}</div>`;
     const pr = presidenteEm(b.t); if (pr && r.k !== "1D" && r.k !== "5D") html += `<div class="hint">Presidente: ${esc(pr.nome)} (${esc(pr.partido)})</div>`;
     html += candle ? `<div class="num">A ${mv(b.o)} · M ${mv(b.h)}<br>m ${mv(b.l)} · F <b>${mv(b.c)}</b></div>` : `<div class="num"><b>${mv(b.c)}</b></div>`;

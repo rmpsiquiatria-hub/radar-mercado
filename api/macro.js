@@ -1,4 +1,6 @@
 // GET /api/macro → Selic, IPCA and unemployment, current value plus monthly history (for cards and correlations).
+// GET /api/macro?historico=1 → the longest history (Selic since 1996, IPCA since the Real in 1995,
+//        unemployment since 2012), for the charts opened from the top cards.
 // Selic: IPEA series BM366_TJOVER366 (daily, % a.a., mirrors the Central Bank's SGS, which
 //        does not answer requests from outside Brazil).
 // IPCA:  IBGE SIDRA table 1737 — monthly change (v63) and 12-month change (v2265).
@@ -13,8 +15,8 @@ async function getJson(url) {
   return r.json();
 }
 
-async function selic() {
-  const since = new Date(Date.now() - 7 * 365 * 864e5).toISOString().slice(0, 10);
+async function selic(longo) {
+  const since = longo ? "1990-01-01" : new Date(Date.now() - 7 * 365 * 864e5).toISOString().slice(0, 10);
   const url = "http://www.ipeadata.gov.br/api/odata4/ValoresSerie(SERCODIGO='BM366_TJOVER366')"
     + `?$filter=${encodeURIComponent(`VALDATA ge ${since}T00:00:00-03:00`)}`;
   let rows;
@@ -32,8 +34,8 @@ async function selic() {
   return { atual: last, mensal: [...byMonth.entries()] };
 }
 
-async function ipca() {
-  const rows = await getJson("https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/63,2265/p/last%2084");
+async function ipca(longo) {
+  const rows = await getJson(`https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/63,2265/p/${longo ? "199501-210012" : "last%2084"}`);
   const mensal = [], doze = [];
   for (const r of rows.slice(1)) {
     const mes = `${r.D3C.slice(0, 4)}-${r.D3C.slice(4)}`, v = Number(r.V);
@@ -45,8 +47,8 @@ async function ipca() {
   return { mes: mensal.at(-1)?.[0] || null, mensal_atual: mensal.at(-1)?.[1] ?? null, doze_meses_atual: doze.at(-1)?.[1] ?? null, mensal, doze_meses: doze };
 }
 
-async function desemprego() {
-  const rows = await getJson("https://apisidra.ibge.gov.br/values/t/6381/n1/all/v/4099/p/last%2084");
+async function desemprego(longo) {
+  const rows = await getJson(`https://apisidra.ibge.gov.br/values/t/6381/n1/all/v/4099/p/${longo ? "all" : "last%2084"}`);
   const mensal = [];
   let periodo = null;
   for (const r of rows.slice(1)) {
@@ -59,8 +61,9 @@ async function desemprego() {
   return { mes: mensal.at(-1)?.[0] || null, atual: mensal.at(-1)?.[1] ?? null, periodo, mensal };
 }
 
-export async function GET() {
-  const [s, i, d] = await Promise.allSettled([selic(), ipca(), desemprego()]);
+export async function GET(request) {
+  const longo = new URL(request.url).searchParams.has("historico");
+  const [s, i, d] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo)]);
   if ([s, i, d].every(x => x.status === "rejected")) return bad("fontes indisponíveis", 502);
   const val = x => x.status === "fulfilled" ? x.value : { erro: String(x.reason?.message || x.reason) };
   return json({ selic: val(s), ipca: val(i), desemprego: val(d) }, 21600);
