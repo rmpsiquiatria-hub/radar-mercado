@@ -362,6 +362,19 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .csheet-txt p { margin: 0 0 8px; } .csheet-txt ul { margin: 0 0 8px; padding-left: 20px; } .csheet-txt li { margin: 2px 0; }
 .cfig { display: block; max-width: 100%; height: auto; background: var(--panel-2); border-radius: 8px; }
 .tt-fig { margin-top: 6px; } .tt-fig .cfig { background: rgba(127,127,127,.18); }
+.fund-intro { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 12px; margin-bottom: 14px; }
+.fgrp { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 16px 0 6px; grid-column: 1 / -1; }
+.fgal { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 10px; align-items: start; }
+.fgal details { padding: 10px 12px; }
+.fgal details[open] { grid-column: 1 / -1; }
+.fgal summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.fgal summary::-webkit-details-marker { display: none; }
+.fgal summary b { font-size: 14px; }
+.fgal summary span { font-size: 12px; color: var(--muted); text-align: right; }
+.fx { font-family: "JetBrains Mono", monospace; font-size: 12.5px; background: var(--panel-2); border-radius: 6px; padding: 6px 8px; margin: 8px 0; }
+.fgal p, .fund-intro p { margin: 6px 0; font-size: 14px; }
+.fund-intro ul { margin: 6px 0; padding-left: 20px; font-size: 14px; }
+.fex { font-size: 13px; color: var(--muted); }
 .cgal { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; align-items: start; }
 .cgal-i { padding: 10px; }
 .cgal-i summary { cursor: pointer; list-style: none; display: grid; gap: 6px; }
@@ -457,6 +470,10 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <section data-panel="edu" hidden>
     <p class="note">O que significa cada indicador do topo da tela, como ler as correlações e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
     <div class="edu-grid" id="eduList"></div>
+    <h3 class="sec-t" style="margin-top:26px">📊 Análise fundamentalista: os indicadores</h3>
+    <p class="hint">A análise fundamentalista olha para a <b>empresa</b>: quanto ela lucra, quanto deve, quanto paga de dividendos e se o preço da ação está caro ou barato perto disso. (A análise técnica, dos gráficos e candles, olha só para o comportamento do preço.) Estes são os indicadores que aparecem no Relatório e no e-mail. Toque em um para ver a explicação. Os exemplos usam os números da <b>empresa com mais peso no Ibovespa</b> no último relatório.</p>
+    <div class="fund-intro" id="fundIntro"></div>
+    <div class="fgal" id="fundList"></div>
     <h3 class="sec-t" style="margin-top:26px">🕯️ Padrões de candlestick</h3>
     <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
     <div class="cgal" id="cgal"></div>
@@ -1741,6 +1758,8 @@ function eduItems() {
 }
 function renderEdu() {
   const box = $("#eduList"); if (!box || box.closest("[hidden]")) return;
+  getReport().then(renderFundEdu);
+  renderFundEdu();
   box.innerHTML = eduItems().sort((a, b) => (a.id === "spearman") - (b.id === "spearman")).map(it => {
     const q = it.s ? quotes[it.s] : null, c = change(q);
     return `<article class="card edu" id="edu-${it.id || it.s.replace(/[^a-z0-9]/gi, "").toLowerCase()}">
@@ -1756,6 +1775,117 @@ function renderEdu() {
     </article>`;
   }).join("");
 }
+
+/* ---------- educação: análise fundamentalista ---------- */
+// k = field in relatorios/ultimo.json → indicadores (from Fundamentus); fmt = how to show the example.
+const FUND_INTRO = [
+  { titulo: "EBITDA", sub: "Lucro da operação, antes de juros, impostos, depreciação e amortização",
+    html: `<p>Sigla em inglês de <i>Earnings Before Interest, Taxes, Depreciation and Amortization</i>, em português <b>LAJIDA</b>: lucro antes de juros, impostos, depreciação e amortização.</p>
+      <p>Ele mostra quanto dinheiro a <b>operação</b> da empresa gera (vender, produzir, prestar serviço), deixando de fora três coisas que não têm a ver com o dia a dia do negócio:</p>
+      <ul><li><b>Juros</b>: dependem de quanto a empresa pegou emprestado, não de quão bem ela opera.</li>
+      <li><b>Impostos sobre o lucro</b>: variam com o país, incentivos e regras fiscais.</li>
+      <li><b>Depreciação e amortização</b>: o desgaste contábil de máquinas, prédios, marcas e licenças. Entra como custo no balanço, mas não sai dinheiro do caixa naquele ano.</li></ul>
+      <div class="fx">EBITDA = lucro líquido + impostos + juros (resultado financeiro) + depreciação e amortização</div>
+      <p>Também se calcula de cima para baixo: receita − custos − despesas operacionais, sem descontar depreciação.</p>
+      <p><b>Para que serve:</b> comparar empresas de tamanhos, dívidas e países diferentes pela mesma régua, e medir se a dívida é pesada (dívida líquida ÷ EBITDA; acima de 3 costuma acender alerta).</p>
+      <p><b>Cuidados:</b> EBITDA <b>não é dinheiro no bolso</b>. Ele ignora o investimento necessário para repor máquinas e os juros que de fato serão pagos. Empresas com muita dívida ou que gastam muito com equipamentos podem ter EBITDA bonito e lucro fraco. <b>Bancos e seguradoras não usam EBITDA</b>, porque juros são o próprio negócio deles; por isso esses indicadores aparecem zerados para bancos.</p>` },
+  { titulo: "EBIT", sub: "O EBITDA depois de descontar depreciação e amortização",
+    html: `<p><b>LAJIR</b>: lucro antes de juros e impostos. É o lucro operacional, já contando o desgaste dos equipamentos.</p>
+      <div class="fx">EBIT = EBITDA − depreciação e amortização</div>
+      <p>É mais conservador que o EBITDA, especialmente em empresas com muitos ativos físicos (siderúrgicas, mineradoras, empresas de energia).</p>` },
+  { titulo: "Termos que aparecem nas fórmulas", sub: "Para ler os indicadores abaixo",
+    html: `<ul><li><b>Lucro líquido</b>: o que sobra no fim, depois de todos os custos, juros e impostos.</li>
+      <li><b>Valor de mercado</b>: preço da ação × número de ações. É quanto a bolsa diz que a empresa vale.</li>
+      <li><b>Patrimônio líquido</b>: o que a empresa tem (bens, caixa, direitos) menos o que deve. É o "valor contábil".</li>
+      <li><b>Dívida líquida</b>: dívidas com bancos e títulos menos o dinheiro em caixa. Se for negativa, a empresa tem mais caixa que dívida.</li>
+      <li><b>EV</b> (<i>Enterprise Value</i>, valor da firma): valor de mercado + dívida líquida. É quanto custaria comprar a empresa inteira, assumindo também as dívidas.</li>
+      <li><b>Receita líquida</b>: o total vendido no ano, já sem impostos sobre vendas.</li>
+      <li><b>12 meses</b>: os números de lucro, receita e EBITDA usam a soma dos últimos 4 trimestres.</li></ul>` },
+];
+const FUND_EDU = [
+  { g: "Preço: caro ou barato?" },
+  { k: "pl", nome: "P/L", sub: "Preço sobre lucro", fx: "P/L = preço da ação ÷ lucro por ação (= valor de mercado ÷ lucro líquido)",
+    oque: "Quantos anos de lucro atual seriam necessários para \"pagar\" o preço da ação. P/L 10 = o mercado paga 10 vezes o lucro de um ano.",
+    ler: "Mais baixo pode indicar ação barata; mais alto, que o mercado espera crescimento (ou que está caro). <b>P/L negativo = a empresa teve prejuízo.</b> P/L muito baixo às vezes é sinal de problema: o mercado desconfia que o lucro vai cair. Compare sempre com empresas do mesmo setor.",
+    crit: "pl_max", fmt: v => nf(2).format(v) },
+  { k: "pvp", nome: "P/VP", sub: "Preço sobre valor patrimonial", fx: "P/VP = preço da ação ÷ patrimônio líquido por ação",
+    oque: "Compara o preço na bolsa com o valor contábil da empresa (patrimônio líquido).",
+    ler: "Abaixo de 1: a bolsa paga menos do que a empresa vale no balanço, o que pode ser oportunidade ou sinal de que o mercado vê problemas. Acima de 1 é comum em empresas muito rentáveis (ROE alto). Muito usado para bancos.", fmt: v => nf(2).format(v) },
+  { k: "psr", nome: "PSR", sub: "Preço sobre receita (Price to Sales Ratio)", fx: "PSR = valor de mercado ÷ receita líquida (12 meses)",
+    oque: "Quanto o mercado paga por cada R$ 1 que a empresa vende.",
+    ler: "Útil para empresas que ainda dão prejuízo ou têm lucro instável, quando o P/L não funciona. Varia muito de setor para setor: varejo costuma ter PSR baixo, tecnologia, alto.", fmt: v => nf(2).format(v) },
+  { k: "ev_ebitda", nome: "EV/EBITDA", sub: "Valor da firma sobre EBITDA", fx: "EV/EBITDA = (valor de mercado + dívida líquida) ÷ EBITDA",
+    oque: "Em quantos anos a geração de caixa da operação pagaria a empresa inteira, incluindo as dívidas.",
+    ler: "Parecido com o P/L, mas leva a dívida em conta e não é afetado por juros e impostos. Por isso é bom para comparar empresas com níveis de dívida diferentes. Valores mais baixos sugerem preço mais atrativo. Não se aplica a bancos.", fmt: v => nf(2).format(v) },
+  { k: "ev_ebit", nome: "EV/EBIT", sub: "Valor da firma sobre EBIT", fx: "EV/EBIT = (valor de mercado + dívida líquida) ÷ EBIT",
+    oque: "Igual ao EV/EBITDA, mas usando o EBIT, que já desconta a depreciação.",
+    ler: "Mais rigoroso que o EV/EBITDA em empresas que precisam investir muito em máquinas e equipamentos.", fmt: v => nf(2).format(v) },
+  { k: "p_ebit", nome: "P/EBIT", sub: "Preço sobre EBIT", fx: "P/EBIT = valor de mercado ÷ EBIT",
+    oque: "Quanto o mercado paga pelo lucro operacional, antes de juros e impostos.",
+    ler: "Como o P/L, só que olhando o lucro da operação. Ajuda quando o lucro líquido foi distorcido por juros ou por um evento pontual.", fmt: v => nf(2).format(v) },
+  { k: "p_ativo", nome: "P/Ativo", sub: "Preço sobre ativos", fx: "P/Ativo = valor de mercado ÷ ativo total",
+    oque: "Compara o preço da empresa com tudo o que ela possui (caixa, estoques, máquinas, imóveis, recebíveis).",
+    ler: "Valores baixos indicam que a bolsa paga pouco pelo que a empresa tem. Mais usado em setores com muitos ativos físicos.", fmt: v => nf(2).format(v) },
+  { k: "p_cap_giro", nome: "P/Capital de giro", sub: "Preço sobre capital de giro", fx: "P/Cap. giro = valor de mercado ÷ (ativo circulante − passivo circulante)",
+    oque: "Capital de giro é a folga de curto prazo: o que a empresa tem para receber e em caixa no próximo ano, menos o que precisa pagar no mesmo período.",
+    ler: "Pouco usado sozinho. <b>Negativo</b> quer dizer que as contas de curto prazo superam os recursos de curto prazo, o que é comum em algumas empresas grandes, mas pede atenção.", fmt: v => nf(2).format(v) },
+  { k: "p_ativ_circ_liq", nome: "P/Ativo circulante líquido", sub: "Preço sobre ativo circulante líquido", fx: "P/ACL = valor de mercado ÷ (ativo circulante − passivo total)",
+    oque: "Um teste rigoroso, de Benjamin Graham: se a empresa pagasse todas as dívidas só com o que tem de curto prazo, quanto sobraria?",
+    ler: "Quase sempre negativo em empresas grandes (as dívidas superam o ativo de curto prazo), o que é normal. Positivo e baixo seria uma \"pechincha\" extrema, rara hoje.", fmt: v => nf(2).format(v) },
+  { g: "Rentabilidade: a empresa ganha bem?" },
+  { k: "roe", nome: "ROE", sub: "Retorno sobre o patrimônio (Return on Equity)", fx: "ROE = lucro líquido ÷ patrimônio líquido × 100",
+    oque: "Quanto a empresa lucra, por ano, para cada R$ 100 que os acionistas têm investido nela.",
+    ler: "Quanto mais alto, mais eficiente. Uma referência é comparar com a Selic: um ROE abaixo dos juros da renda fixa é pouco atraente. Cuidado: dívida alta infla o ROE, porque reduz o patrimônio.", crit: "roe_min", fmt: v => nf(1).format(v) + "%" },
+  { k: "roic", nome: "ROIC", sub: "Retorno sobre o capital investido (Return on Invested Capital)", fx: "ROIC = EBIT após impostos ÷ (patrimônio líquido + dívida líquida) × 100",
+    oque: "O retorno sobre <b>todo</b> o dinheiro aplicado no negócio, venha dos sócios ou de empréstimos.",
+    ler: "Mais \"honesto\" que o ROE, porque não é inflado por dívida. ROIC acima do custo do dinheiro (juros) indica que a empresa cria valor. Não se aplica a bancos.", fmt: v => nf(1).format(v) + "%" },
+  { g: "Margens: quanto sobra de cada venda?" },
+  { k: "margem_bruta", nome: "Margem bruta", sub: "Lucro bruto ÷ receita", fx: "Margem bruta = (receita − custo do que foi vendido) ÷ receita × 100",
+    oque: "Quanto sobra de cada R$ 100 vendidos depois de pagar o custo direto do produto ou serviço (matéria-prima, fabricação).",
+    ler: "Margens brutas altas indicam produto com poder de preço ou custo baixo. Compare dentro do setor: supermercados têm margens baixas por natureza, empresas de software, altas.", fmt: v => nf(1).format(v) + "%" },
+  { k: "margem_ebit", nome: "Margem EBIT", sub: "EBIT ÷ receita (margem operacional)", fx: "Margem EBIT = EBIT ÷ receita × 100",
+    oque: "Quanto sobra de cada R$ 100 vendidos depois de todos os custos e despesas da operação (salários, aluguel, marketing, depreciação), antes de juros e impostos.",
+    ler: "Mostra a eficiência da operação. Margem caindo ano após ano pode indicar concorrência maior ou custos fora de controle.", fmt: v => nf(1).format(v) + "%" },
+  { k: "margem_liq", nome: "Margem líquida", sub: "Lucro líquido ÷ receita", fx: "Margem líquida = lucro líquido ÷ receita × 100",
+    oque: "Quanto vira lucro de verdade, no fim, de cada R$ 100 vendidos.",
+    ler: "É o resultado final depois de tudo, inclusive juros e impostos. Negativa = prejuízo. Muito diferente da margem EBIT costuma indicar peso de juros (dívida) ou eventos pontuais.", fmt: v => nf(1).format(v) + "%" },
+  { g: "Dívida e liquidez: a empresa está saudável?" },
+  { k: "div_liq_pl", nome: "Dívida líquida / Patrimônio", sub: "Endividamento", fx: "Dív. líq./PL = (dívidas − caixa) ÷ patrimônio líquido",
+    oque: "Quanto a empresa deve (já descontando o caixa) para cada R$ 1 de patrimônio dos sócios.",
+    ler: "Abaixo de 1 é confortável na maioria dos setores; acima de 2 é endividamento alto. <b>Negativo = a empresa tem mais caixa do que dívida</b>, o que é ótimo. Setores como energia e saneamento convivem bem com dívida maior porque têm receita previsível.", crit: "div_max", fmt: v => nf(2).format(v) },
+  { k: "liq_corrente", nome: "Liquidez corrente", sub: "Capacidade de pagar as contas do próximo ano", fx: "Liquidez corrente = ativo circulante ÷ passivo circulante",
+    oque: "Para cada R$ 1 que a empresa precisa pagar em até 12 meses, quanto ela tem para receber ou em caixa no mesmo prazo.",
+    ler: "Acima de 1: folga para pagar as contas de curto prazo. Abaixo de 1: depende de gerar caixa ou renegociar. Não se aplica a bancos.", fmt: v => nf(2).format(v) },
+  { k: "liq_2meses", nome: "Liquidez média diária", sub: "Volume negociado (média de 2 meses)", fx: "Média do valor negociado por dia na bolsa nos últimos 2 meses",
+    oque: "Não é sobre a saúde da empresa, e sim da <b>ação</b>: quanto dinheiro troca de mãos por dia.",
+    ler: "Ações com pouca liquidez são difíceis de vender rápido sem derrubar o preço, e o preço pode pular muito com poucos negócios.", fmt: v => "R$ " + nf(0).format(v / 1e6) + " milhões/dia" },
+  { k: "patrimonio_liq", nome: "Patrimônio líquido", sub: "O valor contábil da empresa", fx: "Patrimônio líquido = ativos totais − passivos totais",
+    oque: "Tudo o que a empresa tem menos tudo o que deve: o que \"sobraria\" para os acionistas pelo balanço.",
+    ler: "Sozinho diz pouco; serve de base para P/VP, ROE e dívida/patrimônio. Patrimônio negativo (a empresa deve mais do que tem) é um sinal grave.", fmt: v => "R$ " + nf(1).format(v / 1e9) + " bilhões" },
+  { g: "Dividendos e crescimento" },
+  { k: "dy", nome: "Dividend yield (DY)", sub: "Rendimento em dividendos", fx: "DY = dividendos e JCP pagos em 12 meses por ação ÷ preço da ação × 100",
+    oque: "Quanto a ação \"pagou de aluguel\" no último ano, em proporção ao preço de hoje. Inclui dividendos e juros sobre capital próprio (JCP).",
+    ler: "DY alto é atraente, mas olha para trás: um pagamento extraordinário ou uma queda forte no preço podem inflar o número. Vale checar se o lucro sustenta os pagamentos.", crit: "dy_min", fmt: v => nf(2).format(v) + "%" },
+  { k: "cresc_rec_5a", nome: "Crescimento da receita (5 anos)", sub: "Ritmo de crescimento das vendas", fx: "Crescimento médio anual da receita líquida nos últimos 5 anos (composto)",
+    oque: "Quanto as vendas da empresa cresceram, em média, por ano, nos últimos cinco anos.",
+    ler: "Mostra se o negócio está se expandindo. Compare com a inflação do período: crescer abaixo do IPCA é encolher em termos reais. Negativo = vendas caindo.", fmt: v => nf(1).format(v) + "% ao ano" },
+];
+const fundOpen = new Set();
+function renderFundEdu() {
+  const intro = $("#fundIntro"), list = $("#fundList"); if (!intro || !list) return;
+  if (!intro.innerHTML) intro.innerHTML = FUND_INTRO.map(i => `<article class="card edu"><div class="edu-h"><div><h3>${i.titulo}</h3><div class="hint">${i.sub}</div></div></div>${i.html}</article>`).join("");
+  const ex = (report?.empresas || []).slice().sort((a, b) => (b.peso_ibov || 0) - (a.peso_ibov || 0))[0];
+  const c = crit(), critTxt = { pl_max: v => `P/L até ${v}`, roe_min: v => `ROE de pelo menos ${v}%`, div_max: v => `dívida líquida/patrimônio até ${v}`, dy_min: v => `dividend yield de pelo menos ${v}%` };
+  list.innerHTML = FUND_EDU.map(f => {
+    if (f.g) return `<div class="fgrp">${f.g}</div>`;
+    const v = ex?.indicadores?.[f.k];
+    const exTxt = v != null && v !== 0 ? `<p class="fex">Exemplo: <b>${esc(ex.ticker)}</b> no último relatório: <b class="num">${f.fmt(v)}</b>.</p>` : "";
+    const cr = f.crit && isSet(c[f.crit]) ? `<p class="fex">⚙ Seu critério (Configurações): ${critTxt[f.crit](c[f.crit])}.</p>` : "";
+    return `<details class="card" data-fund="${f.k}" ${fundOpen.has(f.k) ? "open" : ""}><summary><b>${f.nome}</b><span>${f.sub}</span></summary>
+      <div class="fx">${f.fx}</div><p><b>O que é:</b> ${f.oque}</p><p><b>Como ler:</b> ${f.ler}</p>${exTxt}${cr}</details>`;
+  }).join("") + `<p class="hint" style="grid-column:1/-1;margin-top:8px">Fonte dos números: Fundamentus (balanços enviados à CVM, últimos 12 meses). As faixas citadas são referências comuns, não regras: cada setor tem seu padrão, e nenhum indicador sozinho diz se uma ação é boa compra. Não é recomendação de investimento.</p>`;
+}
+$("#fundList").addEventListener("toggle", e => { const d = e.target.closest?.("[data-fund]"); if (d) d.open ? fundOpen.add(d.dataset.fund) : fundOpen.delete(d.dataset.fund); }, true);
 
 /* ---------- relatório diário ---------- */
 const CRIT_DEFAULT = { pl_max: 15, dy_min: 4, roe_min: 12, div_max: 2, min_casas: 3 };
