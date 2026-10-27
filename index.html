@@ -556,9 +556,9 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <div class="fgal" id="fundList"></div>
     </div>
     <div data-esec-panel="simulacao" hidden>
-      <p class="note">Mova a barra de <b>um</b> indicador para dizer quanto ele variou no mês. As outras barras mostram, em cor diferente, quanto cada indicador costuma variar <b>junto</b>, pelo histórico dos últimos <b>4 anos</b> (correlação de Spearman entre as variações mensais). Para simular outro indicador, é só mover a barra dele: a simulação anterior é desfeita.</p>
+      <p class="note">Cada barra começa no <b>valor atual</b> do indicador e vai de zero até o dobro dele. Mova a barra de <b>um</b> indicador para o valor que quiser: as outras barras se movem, em azul, para onde cada indicador costuma ir <b>junto</b>, pelo histórico dos últimos <b>4 anos</b> (correlação de Spearman entre as variações mensais). Para simular outro indicador, é só mover a barra dele: a simulação anterior é desfeita.</p>
       <div id="simBox" class="card"></div>
-      <p class="hint" style="margin-top:8px">Como é calculado: para cada par, efeito estimado = ρ × (desvio padrão do outro ÷ desvio padrão do escolhido) × variação escolhida. É uma regressão linear simples sobre as variações mensais, usando a correlação de Spearman (ρ) dos últimos 48 meses no lugar da correlação comum, por ser menos afetada por meses extremos. O efeito é <b>além</b> do que aconteceria num mês normal. Relações sem significância estatística aparecem apagadas: nelas o número é pouco confiável. Correlação não é causa, e o passado não garante o futuro. É um exercício educativo, não uma recomendação de investimento.</p>
+      <p class="hint" style="margin-top:8px">Como é calculado: para cada par, efeito estimado = ρ × (desvio padrão do outro ÷ desvio padrão do escolhido) × variação escolhida, com as variações medidas em % para preços e índices e em pontos percentuais para Selic, IPCA (do mês) e desemprego. É uma regressão linear simples sobre as variações mensais, usando a correlação de Spearman (ρ) dos últimos 48 meses no lugar da correlação comum, por ser menos afetada por meses extremos. Vale melhor para movimentos do tamanho dos que acontecem num mês; movimentos muito grandes (como dobrar o Ibovespa) extrapolam o histórico e dão estimativas pouco realistas. Relações sem significância estatística aparecem apagadas: nelas o número é pouco confiável. Correlação não é causa, e o passado não garante o futuro. É um exercício educativo, não uma recomendação de investimento.</p>
     </div>
     <div data-esec-panel="candles" hidden>
       <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
@@ -2122,7 +2122,7 @@ function eduSec() { try { return localStorage.getItem(KEY + ".edu") || "mercados
 // last 48 monthly changes would expect: slope = Spearman ρ × (σ other ÷ σ moved).
 const SIM_MESES = 48;
 let simSel = null, simVal = 0;
-const simUnit = k => k === "selic" || k === "desemprego" ? " p.p." : "%";
+const simUnit = k => k === "selic" || k === "desemprego" || k === "ipca" ? " p.p." : "%";
 const simFmt = (k, v) => (v > 0.0005 ? "+" : v < -0.0005 ? "−" : "") + nf(2).format(Math.abs(v)) + simUnit(k);
 function simMonths(ka, kb) {   // the same months spearman() uses
   const A = monthly?.[ka], B = monthly?.[kb]; if (!A || !B) return null;
@@ -2139,44 +2139,65 @@ function simPair(kx, ky) {
   const sx = sd(d.xs), sy = sd(d.ys); if (!sx) return null;
   return { r: c.r, n: c.n, sig: c.sig, beta: c.r * sy / sx };
 }
-function simRange(k) {   // ±3 standard deviations of the indicator's own monthly changes
-  const v = [...(monthly?.[k]?.values() || [])].slice(-SIM_MESES); if (v.length < 8) return null;
-  const s3 = 3 * sd(v), mag = 10 ** Math.floor(Math.log10(s3)), max = Math.ceil(s3 / mag) * mag;
-  return { max, step: max / 100 };
+// Sliders work on levels: each starts at the indicator's current value and goes from 0 to twice
+// that. Moving one turns its move into a monthly change (% for prices and indices, p.p. for
+// Selic, IPCA and unemployment), and the others move by the regression estimate.
+const SIM_PP = new Set(["selic", "ipca", "desemprego"]);
+const simQuote = k => quotes[k === "XFIX11.SA" ? "IFIX.SA" : k];
+function simBase(k) {
+  if (k === "selic") return macro?.selic?.atual?.valor;
+  if (k === "desemprego") return macro?.desemprego?.atual;
+  if (k === "ipca") return macro?.ipca?.mensal_atual;
+  if (k === "icbr") return icbr?.mensal?.at(-1)?.[1];
+  return simQuote(k)?.price;
 }
-function simItems() { return CORR.filter(o => simRange(o.k)); }
+function simLevel(k, v) {
+  if (k === "selic") return nf(2).format(v) + "% a.a.";
+  if (k === "ipca") return nf(2).format(v) + "% no mês";
+  if (k === "desemprego") return nf(1).format(v) + "%";
+  if (k === "icbr") return nf(1).format(v) + " pts";
+  const q = simQuote(k); return money(v, q?.currency, q?.type);
+}
+const simDelta = (k, v, base) => SIM_PP.has(k) ? v - base : (v / base - 1) * 100;   // level → monthly change
+const simApply = (k, d, base) => Math.max(0, SIM_PP.has(k) ? base + d : base * (1 + d / 100));   // monthly change → level
+let simBases = {};
+function simItems() { return CORR.filter(o => simBase(o.k) > 0 && monthly?.[o.k]?.size >= 8); }
 function renderSim() {
   const box = $("#simBox"); if (!box) return;
   if (!monthly) { box.innerHTML = `<div class="empty">Carregando o histórico mensal…</div>`; return; }
+  simSel = null; simVal = 0; simBases = {};
   const items = simItems();
-  box.innerHTML = `<div class="sim-head"><span class="hint">${simSel ? `Simulando: <b>${esc(CORR.find(o => o.k === simSel).label)}</b>` : "Mova uma barra para começar."}</span><button class="btn" id="simZero" ${simSel ? "" : "disabled"}>↺ Zerar</button></div>` +
-    items.map(o => { const r = simRange(o.k); return `<div class="sim-row" data-row="${esc(o.k)}">
-      <div class="sim-l"><b>${o.label}</b><span>${o.k === "ipca" ? "inflação do mês" : simUnit(o.k) === " p.p." ? "mudança no mês, em p.p." : "variação no mês"}</span></div>
-      <div class="sim-bar"><input type="range" data-sk="${esc(o.k)}" min="${-r.max}" max="${r.max}" step="${r.step}" value="0" aria-label="${esc(o.label)}"><div class="sim-z"><span>−${nf(r.max < 1 ? 2 : 0).format(r.max)}</span><span>0</span><span>+${nf(r.max < 1 ? 2 : 0).format(r.max)}</span></div></div>
+  box.innerHTML = `<div class="sim-head"><span class="hint"></span><button class="btn" id="simZero" disabled>↺ Voltar aos valores atuais</button></div>` +
+    items.map(o => { const b = simBases[o.k] = simBase(o.k); return `<div class="sim-row" data-row="${esc(o.k)}">
+      <div class="sim-l"><b>${o.label}</b><span>atual: ${simLevel(o.k, b)}</span></div>
+      <div class="sim-bar"><input type="range" data-sk="${esc(o.k)}" min="0" max="${2 * b}" step="${2 * b / 1000}" value="${b}" aria-label="${esc(o.label)}"><div class="sim-z"><span>0</span><span>atual</span><span>${simLevel(o.k, 2 * b)}</span></div></div>
       <div class="sim-v"></div></div>`; }).join("");
   updateSim();
 }
 function updateSim() {
   const box = $("#simBox"); if (!box) return;
+  const dSel = simSel ? simDelta(simSel, simVal, simBases[simSel]) : 0;
+  const chg = (k, d) => SIM_PP.has(k) ? simFmt(k, d) : pct(d);
   box.querySelectorAll(".sim-row").forEach(row => {
-    const k = row.dataset.row, inp = row.querySelector("input"), out = row.querySelector(".sim-v");
+    const k = row.dataset.row, inp = row.querySelector("input"), out = row.querySelector(".sim-v"), base = simBases[k];
     row.classList.remove("ativo", "est", "fraca");
-    if (!simSel) { inp.value = 0; out.innerHTML = `<b>${simFmt(k, 0)}</b>`; return; }
-    if (k === simSel) { row.classList.add("ativo"); out.innerHTML = `<b>${simFmt(k, simVal)}</b><small>você escolheu</small>`; return; }
+    if (!simSel) { inp.value = base; out.innerHTML = `<b>${simLevel(k, base)}</b><small>valor atual</small>`; return; }
+    if (k === simSel) { row.classList.add("ativo"); out.innerHTML = `<b>${simLevel(k, simVal)}</b><small>${chg(k, dSel)} · você escolheu</small>`; return; }
     const pr = simPair(simSel, k);
-    if (!pr) { inp.value = 0; out.innerHTML = `<b>—</b><small>poucos dados</small>`; return; }
-    const est = pr.beta * simVal;
-    inp.value = est; row.classList.add("est"); if (!pr.sig) row.classList.add("fraca");
-    out.innerHTML = `<b>≈ ${simFmt(k, est)}</b><small>ρ ${nf(2).format(pr.r)} · ${pr.sig ? forca(pr.r) : "não significativa"}</small>`;
+    if (!pr) { inp.value = base; out.innerHTML = `<b>${simLevel(k, base)}</b><small>poucos dados</small>`; return; }
+    const v = simApply(k, pr.beta * dSel, base);
+    inp.value = Math.min(v, 2 * base); row.classList.add("est"); if (!pr.sig) row.classList.add("fraca");
+    out.innerHTML = `<b>≈ ${simLevel(k, v)}</b><small>${chg(k, simDelta(k, v, base))} · ρ ${nf(2).format(pr.r)} · ${pr.sig ? forca(pr.r) : "não significativa"}</small>`;
   });
   const z = $("#simZero"); if (z) z.disabled = !simSel;
-  const h = box.querySelector(".sim-head .hint"); if (h) h.innerHTML = simSel ? `Simulando: <b>${esc(CORR.find(o => o.k === simSel).label)}</b> · ${SIM_MESES} meses de histórico` : "Mova uma barra para começar.";
+  const h = box.querySelector(".sim-head .hint");
+  if (h) h.innerHTML = simSel ? `Simulando: <b>${esc(CORR.find(o => o.k === simSel).label)}</b> de ${simLevel(simSel, simBases[simSel])} para ${simLevel(simSel, simVal)} (${chg(simSel, dSel)} no mês) · ${SIM_MESES} meses de histórico` : "Todas as barras começam no valor atual. Mova uma para simular.";
 }
 $("#simBox").addEventListener("input", e => {
   const i = e.target.closest("[data-sk]"); if (!i) return;
   simSel = i.dataset.sk; simVal = +i.value; updateSim();
 });
-$("#simBox").addEventListener("click", e => { if (e.target.closest("#simZero")) { simSel = null; simVal = 0; updateSim(); } });
+$("#simBox").addEventListener("click", e => { if (e.target.closest("#simZero")) renderSim(); });
 function showEduSec(name) {
   if (name === "simulacao") setTimeout(renderSim);
   document.querySelectorAll("[data-esec]").forEach(b => b.setAttribute("aria-selected", b.dataset.esec === name));
