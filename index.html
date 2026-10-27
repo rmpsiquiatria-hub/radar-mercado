@@ -381,6 +381,13 @@ table.grid.gov-t th { white-space: normal; text-transform: none; letter-spacing:
 table.grid.gov-t thead th { text-align: left; white-space: normal; }
 table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index: 1; background: var(--panel); min-width: 96px; max-width: 130px; box-shadow: 1px 0 0 var(--line); }
 .gov-txt { display: grid; gap: 8px; margin-top: 12px; }
+.cg { display: flex; align-items: flex-end; gap: 4px; height: 150px; margin-top: 10px; }
+.cg-col { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-width: 0; }
+.cg-col i { display: block; width: 100%; border-radius: 3px 3px 0 0; }
+.cg-v { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.cg-y { font-size: 10px; color: var(--faint); margin-top: 3px; }
+.cg-g { display: flex; gap: 4px; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 4px; }
+.cg-g span { font-size: 11px; color: var(--muted); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-left: 1px solid var(--line); }
 .gov-txt details { padding: 10px 12px; }
 .gov-txt summary { cursor: pointer; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
 .gov-txt summary span { font-size: 12px; color: var(--muted); }
@@ -761,6 +768,17 @@ function renderCounts() {
   $("#symList").innerHTML = watched().map(s => `<option value="${esc(s)}">${esc(names[s] || "")}</option>`).join("");
 }
 const mesCurto = ym => new Date(ym + "-15T12:00").toLocaleDateString("pt-BR", { month: "short", year: "2-digit" }).replace(".", "").replace(" de ", "/");
+// Tax burden: general government gross tax revenue as % of GDP, by the Treasury's revised series
+// (2010 on), published once a year in April. Typed in from the Treasury's bulletin; update yearly.
+// [year, total, central government, states, municipalities]
+const CARGA = {
+  fonte: "Tesouro Nacional, Boletim de Estimativa da Carga Tributária Bruta do Governo Geral (abril de 2026)",
+  anos: [[2010, 30.3, 20.4, 8.2, 1.7], [2011, 31.0, 21.2, 8.1, 1.7], [2012, 30.6, 20.7, 8.1, 1.8], [2013, 30.3, 20.4, 8.2, 1.8],
+    [2014, 29.5, 19.6, 8.0, 1.8], [2015, 29.7, 19.7, 8.1, 1.9], [2016, 29.8, 19.8, 8.1, 1.9], [2017, 29.9, 19.7, 8.3, 1.9],
+    [2018, 30.4, 20.0, 8.4, 2.0], [2019, 30.4, 19.8, 8.5, 2.2], [2020, 29.2, 18.6, 8.4, 2.1], [2021, 30.9, 19.9, 8.8, 2.2],
+    [2022, 31.2, 20.6, 8.5, 2.2], [2023, 30.3, 19.9, 8.1, 2.3], [2024, 32.22, 21.3, 8.5, 2.4], [2025, 32.40, 21.6, 8.4, 2.4]],
+};
+const cargaAno = y => CARGA.anos.find(a => a[0] === y);
 function macroCards() {
   if (!macro) return "";
   const out = [];
@@ -802,6 +820,13 @@ function macroCards() {
       <div class="since">${usd ? "pelo dólar de agora" : ""}</div>
     </button>`);
   }
+  const ct = CARGA.anos.at(-1), ctp = CARGA.anos.at(-2), dct = ct[1] - ctp[1];
+  out.push(`<button class="card idx macro" data-edu="carga" title="Impostos pagos no país ÷ PIB (Tesouro Nacional) · saiba mais">
+      <div class="lbl">Carga tributária<span class="mk">${ct[0]}</span></div>
+      <div class="px num">${nf(1).format(ct[1])}% <span style="font-size:12px;font-weight:500">do PIB</span></div>
+      <div class="ch num flat">${dct > 0 ? "+" : ""}${nf(2).format(dct)} p.p. em 1 ano</div>
+      <div class="since">dado anual</div>
+    </button>`);
   return out.join("");
 }
 function renderStrip() {
@@ -2012,6 +2037,14 @@ function eduItems() {
       porque: "Mexe com a renda de milhões de pessoas e com as contas do governo (cada real a mais aumenta os gastos da Previdência). A conversão para dólares ajuda a comparar o poder de compra com o de outros países e mostra o efeito do câmbio: com o dólar alto, o salário em dólares encolhe.",
       horario: [["Reajuste", "uma vez por ano, em 1º de janeiro"], ["Regra atual", "inflação (INPC) do ano anterior + crescimento do PIB de dois anos antes, com ganho real limitado a 2,5% ao ano"]],
       nota: "Fonte: IPEA (série do Ministério do Trabalho). A conversão para dólares usa a cotação do momento, não a da data do reajuste." },
+    { id: "carga", titulo: "Carga tributária", sub: "Quanto do que o país produz vai para impostos",
+      valor: () => { const [y, t, c, e, m] = CARGA.anos.at(-1), pv = CARGA.anos.at(-2);
+        return `<b class="num">${nf(2).format(t)}% do PIB em ${y}</b> <span class="hint">· ${pv[0]}: ${nf(2).format(pv[1])}%</span>
+          <table class="edu-t" style="margin-top:8px"><tr><td>Governo federal</td><td><b class="num">${nf(1).format(c)}%</b></td></tr><tr><td>Estados</td><td><b class="num">${nf(1).format(e)}%</b></td></tr><tr><td>Municípios</td><td><b class="num">${nf(1).format(m)}%</b></td></tr></table>`; },
+      oque: "É a soma de <b>todos os tributos</b> pagos no país (federais, estaduais e municipais: Imposto de Renda, INSS, PIS/Cofins, IPI, IOF, ICMS, ISS, IPTU, IPVA e outros) dividida pelo <b>PIB</b>, o total que o país produz no ano. Em 2025, de cada R$ 100 produzidos, cerca de R$ 32 foram para impostos. Os maiores pesos são os impostos sobre bens e serviços (cerca de 14% do PIB), sobre renda e lucros (9%) e as contribuições à Previdência (7%).",
+      porque: "Mostra o peso do Estado na economia. Carga alta financia serviços públicos e reduz o déficit, mas encarece produtos e tira dinheiro de famílias e empresas. O Brasil cobra perto da média dos países ricos da OCDE (cerca de 34% do PIB) e bem acima da média da América Latina (cerca de 22%). A <b>reforma tributária</b>, em fase de teste desde 2026, vai trocar PIS, Cofins, IPI, ICMS e ISS por dois impostos sobre consumo (CBS e IBS) até 2033.",
+      horario: [["Divulgação", "uma vez por ano, por volta de abril (Tesouro Nacional)"], ["Dado oficial", "a Receita Federal publica o seu cálculo mais tarde"]],
+      nota: "Fonte: Tesouro Nacional, série de 2010 a 2025. Em 2026 o Tesouro revisou a metodologia de toda a série (tirou, por exemplo, os recursos do Fundeb e subsídios de energia), por isso alguns números antigos publicados na imprensa são diferentes. Os dados de 2025 ainda são preliminares." },
     { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler a linha de correlações",
       oque: "Mede se dois indicadores costumam se mover <b>na mesma direção</b>. Vai de <b>−1</b> a <b>+1</b>: +1 significa que, quando um tem um mês melhor, o outro também tem; −1, que um sobe quando o outro cai; 0, que não há relação. Diferente da correlação comum (Pearson), a de Spearman compara a <i>ordem</i> dos meses, do pior ao melhor, e por isso é menos afetada por meses extremos.",
       porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
@@ -2289,6 +2322,13 @@ const GOV_TXT = [
     temer: "Subiu só cerca de 6% (2% ao ano), de 91 para 97 pontos, com safras grandes no mundo e preços agrícolas fracos, compensados em parte pelo dólar.",
     bolsonaro: "Mais que dobrou (+113%, 21% ao ano), de 97 para 206 pontos, a maior alta da série: dólar acima de R$ 5, demanda forte depois da pandemia e a guerra na Ucrânia em 2022, que encareceu grãos. O pico foi em junho de 2022, perto de 232 pontos.",
     lula3: "Até outubro de 2026, praticamente estável (+3%), de 206 para cerca de 212 pontos. Caiu a cerca de 184 pontos no início de 2024 e chegou ao recorde, perto de 236 pontos, no fim de 2024, com o café e o dólar em alta." } },
+  { k: "carga", titulo: "Carga tributária", intro: "Total de impostos pagos no país, em % do PIB, pela série revisada do Tesouro Nacional, que começa em 2010. Como o dado é anual, compara o ano anterior à posse com o último ano completo do governo.", t: {
+    fhc: "Sem dados na série atual do Tesouro, que começa em 2010. Pela série antiga da Receita Federal, de metodologia diferente, a carga subiu bastante no período, de cerca de 27% para cerca de 32% do PIB, com a criação e o aumento de contribuições como a CPMF e a Cofins.",
+    lula12: "A série atual só tem o último ano do governo: 30,3% do PIB em 2010. Pela série antiga da Receita, a carga ficou num patamar alto, acima de 30%, ao longo do governo, mesmo com o fim da CPMF em 2007.",
+    dilma: "Caiu de 30,3% (2010) para 29,7% do PIB (2015), depois de chegar a 31% em 2011. A queda veio de desonerações (como a da folha de pagamento, a partir de 2011) e, no fim, da recessão, que reduz a arrecadação.",
+    temer: "Subiu de 29,7% (2015) para 30,4% do PIB (2018), com a saída da recessão e alguns aumentos de tributos, como o dos combustíveis (PIS/Cofins) em 2017.",
+    bolsonaro: "Subiu de 30,4% (2018) para 31,2% do PIB (2022). Caiu para 29,2% em 2020, na pandemia, com a economia parada e impostos adiados, e voltou a subir em 2021–2022 com a retomada, a inflação alta e os preços das commodities. Em 2022 houve cortes de impostos sobre combustíveis e energia.",
+    lula3: "Subiu de 31,2% (2022) para 32,4% do PIB (2025), o maior nível da série. Em 2023 caiu para 30,3%; em 2024–2025 subiu com medidas como a volta de tributos federais sobre combustíveis, a tributação de fundos exclusivos e de apostas, o aumento do IOF e a reoneração da folha." } },
   { k: "salmin", titulo: "Salário mínimo", intro: "Valor do salário mínimo no mês anterior à posse e no fim do governo. O ganho \"real\" desconta a inflação do IPCA no período. O valor em dólares usa a cotação de cada data, o que mostra também o efeito do câmbio.", t: {
     fhc: "Passou de R$ 70 para R$ 200: +186%, cerca de 42% acima da inflação. Em dólares, porém, caiu de cerca de US$ 83 para US$ 57, por causa da desvalorização do real em 1999 e 2002.",
     lula12: "Passou de R$ 200 para R$ 510: +155%, cerca de 63% acima da inflação, o maior ganho real da série, com a política de reajustes pela inflação mais o crescimento do PIB. Em dólares, saltou de US$ 57 para cerca de US$ 307, ajudado também pela valorização do real.",
@@ -2346,6 +2386,17 @@ function govLevel(ser, g) {   // first and last value inside the government (Sel
   if (!dentro.length) return null;
   return { ini: ini ?? dentro[0][1], desde: ini == null ? dentro[0][0] : null, fim: dentro.at(-1)[1], max: Math.max(...dentro.map(x => x[1])), min: Math.min(...dentro.map(x => x[1])) };
 }
+// Bars for each year of the tax burden, shaded by the government that ran most of that year.
+function cargaChart() {
+  const lo = 28, hi = 33, govDe = y => GOVS.slice().reverse().find(g => g.ini <= y + "-07");
+  const bars = CARGA.anos.map(([y, t]) => { const g = govDe(y), i = GOVS.indexOf(g);
+    return `<div class="cg-col" title="${y}: ${nf(2).format(t)}% do PIB · ${esc(g?.nome || "")}"><span class="cg-v num">${nf(1).format(t)}</span><i style="height:${Math.max(4, (t - lo) / (hi - lo) * 100)}%;background:var(${i % 2 ? "--pos" : "--accent"})"></i><span class="cg-y">${String(y).slice(2)}</span></div>`; }).join("");
+  const grupos = []; for (const [y] of CARGA.anos) { const g = govDe(y); if (grupos.at(-1)?.g === g) grupos.at(-1).n++; else grupos.push({ g, n: 1 }); }
+  return `<div class="card" style="margin-top:12px;padding:12px"><b>Carga tributária ano a ano</b> <span class="hint">· % do PIB, todos os impostos do país</span>
+    <div class="cg">${bars}</div>
+    <div class="cg-g">${grupos.map(x => `<span style="flex:${x.n}">${esc(x.g.nome)}</span>`).join("")}</div>
+    <p class="hint" style="margin:6px 0 0">Fonte: ${CARGA.fonte}. Série revisada, que começa em 2010; anos anteriores não são comparáveis. A barra começa em ${lo}% para mostrar melhor as diferenças. Cada ano fica com o governo que comandou a maior parte dele.</p></div>`;
+}
 function renderGov() {
   const box = $("#govBox"); if (!box) return;
   if (!govData) { box.innerHTML = `<div class="empty">Carregando os dados históricos…</div>`; loadGov(); return; }
@@ -2368,6 +2419,17 @@ function renderGov() {
     ["Selic", "início → fim, % ao ano", g => lv(govLevel(govData.mac.selic?.mensal, g))],
     ["IPCA", "inflação acumulada", g => { const i = govIpca(g); return !i ? pc(null) : `<b class="num">${nf(1).format(i.tot)}%</b><div class="hint num">${nf(1).format(i.ano)}% ao ano</div>${g.fim ? "" : `<div class="hint">até ${ymBR(i.ate)}</div>`}`; }],
     ["Desemprego", "início → fim", g => lv(govLevel(govData.mac.desemprego?.mensal, g), 1)],
+    ["Carga tributária", "% do PIB, ano anterior à posse → último ano", g => {
+      // Annual data: from the year before taking office to the last full year in office
+      // (Dilma left in May/2016, so 2016 counts for Temer).
+      const fim = g.fim ? (g.fim.slice(5) === "12" ? +g.fim.slice(0, 4) : +g.fim.slice(0, 4) - 1) : CARGA.anos.at(-1)[0];
+      let ini = +g.ini.slice(0, 4) - 1; const desde = ini < CARGA.anos[0][0];
+      if (desde) ini = CARGA.anos[0][0];
+      const a = cargaAno(ini), b = cargaAno(fim); if (!a || !b || fim < ini) return pc(null);
+      if (a[0] === b[0]) return `<b class="num">${nf(1).format(a[1])}%</b><div class="hint">só ${a[0]} (a série começa em ${CARGA.anos[0][0]})</div>`;
+      const d = b[1] - a[1];
+      return `<b class="num">${nf(1).format(a[1])}% → ${nf(1).format(b[1])}%</b><div class="hint num">${d > 0 ? "+" : ""}${nf(1).format(d)} p.p. · ${a[0] === b[0] ? a[0] : a[0] + "–" + b[0]}</div>${desde ? `<div class="hint">série começa em ${CARGA.anos[0][0]}</div>` : ""}`;
+    }],
     ["Salário mínimo", "início → fim · real = descontado o IPCA", g => {
       const rj = govData.mac.salmin?.reajustes; if (!rj?.length) return pc(null);
       const k0 = ymPrev(g.ini);
@@ -2385,6 +2447,7 @@ function renderGov() {
       ${govData.erro ? `<tr><td colspan="7" class="empty">Não consegui carregar os dados agora. Tente de novo mais tarde.</td></tr>` : ROWS.map(([l, sub, f]) => `<tr><th><b>${l}</b><div class="hint">${sub}</div></th>${GOVS.map(g => `<td>${f(g)}</td>`).join("")}</tr>`).join("")}
     </tbody></table></div>
     <p class="hint" style="margin-top:8px">Variação do fim do mês anterior à posse ao fim do último mês do governo (fechamentos mensais; o governo Dilma vai até abril de 2016 e o de Temer começa em maio de 2016). "Ao ano" = média anual composta, que permite comparar mandatos de durações diferentes. O governo atual usa os dados mais recentes e muda todo mês. Itamar Franco (1992–1994), em cujo governo foi lançado o Plano Real, fica de fora porque quase todas as séries começam depois.</p>
+    ${cargaChart()}
     <div class="gov-txt">${GOV_TXT.map(x => `<details class="card" data-gov="${x.k}" ${govOpen.has(x.k) ? "open" : ""}><summary><b>${x.titulo}</b><span>como se comportou em cada governo</span></summary>
       <p class="hint">${x.intro}</p>
       <ul>${GOVS.map(g => `<li><b>${g.nome} (${g.partido}, ${g.per}):</b> ${x.t[g.id]}</li>`).join("")}</ul></details>`).join("")}</div>`;
