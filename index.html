@@ -1128,6 +1128,28 @@ function renderWinHead(w) {
   ].filter(Boolean).join("  ·  ");
 }
 function renderWins() { wins.forEach(w => { renderWinHead(w); syncWinControls(w); }); }
+// IFIX: Yahoo has it intraday only, so daily/weekly/monthly charts come from B3's official
+// daily closes (/api/ifix, since 2011), with today's live value as the last point. B3 publishes
+// closes only, so a daily candle runs from the previous close to the close.
+let ifixHist = null;
+function loadIfixHist() { return ifixHist ||= api("/api/ifix").catch(e => { ifixHist = null; throw e; }); }
+const RANGE_YEARS = { "2y": 2, "10y": 10, "20y": 20 };
+async function ifixBars(r) {
+  const pts = (await loadIfixHist()).pontos.slice(), q = quotes["IFIX.SA"];
+  if (q?.price && q.time && dayBR(q.time) > dayBR(pts.at(-1)[0])) pts.push([q.time, q.price]);
+  const from = RANGE_YEARS[r.range] ? Date.now() / 1000 - RANGE_YEARS[r.range] * 365.25 * 86400 : 0;
+  const key = t => { const d = dayBR(t); if (r.iv === "1mo") return d.slice(0, 7); if (r.iv === "1wk") { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() - (x.getUTCDay() + 6) % 7); return x.toISOString().slice(0, 10); } return d; };
+  const bars = [];
+  let prev = null, cur = null, k = null;
+  for (const [t, c] of pts) {
+    const kk = key(t);
+    if (kk !== k) { if (cur && cur.t >= from) bars.push(cur); cur = { t, o: prev ?? c, h: Math.max(prev ?? c, c), l: Math.min(prev ?? c, c), c }; k = kk; }
+    else { cur.h = Math.max(cur.h, c); cur.l = Math.min(cur.l, c); cur.c = c; cur.t = t; }
+    prev = c;
+  }
+  if (cur && cur.t >= from) bars.push(cur);
+  return bars.map(b => [b.t, b.o, b.h, b.l, b.c, 0]);
+}
 async function loadWin(w, force) {
   const r = winRange(w), key = r.range + "|" + r.iv;
   const box = w.el.querySelector(".win-chart");
@@ -1146,6 +1168,12 @@ async function loadWin(w, force) {
   if (!w.cache[key] || force) {
     if (!w.cache[key]) box.innerHTML = `<div class="empty">Carregando…</div>`;
     try {
+      if (w.sym === "IFIX.SA" && ["1d", "1wk", "1mo"].includes(r.iv)) {
+        const bars = await ifixBars(r);
+        if (bars.length < 2) throw new Error("sem histórico do IFIX");
+        w.cache[key] = { q: { ...(quotes["IFIX.SA"] || { symbol: "IFIX.SA", name: "IFIX", type: "INDEX" }), bars, fonte: "B3" }, at: Date.now() };
+        return drawWin(w);
+      }
       const res = await api(`/api/cotacoes?range=${r.range}&iv=${r.iv}&ohlc=1&s=${encodeURIComponent(w.sym)}`);
       const q = res.quotes[w.sym]; if (q.error) throw new Error(q.error);
       w.cache[key] = { q, at: Date.now() };
