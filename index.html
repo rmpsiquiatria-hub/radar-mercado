@@ -412,6 +412,13 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .sim-row.ativo .sim-v b { color: var(--accent); }
 .sim-row.est .sim-v b { color: var(--pos); }
 .sim-row .sim-v small { display: block; font-family: inherit; font-size: 11px; color: var(--muted); }
+.sim-row { position: relative; }
+.sim-row .sim-v[data-tip] { cursor: help; outline: none; }
+.sim-row .sim-v[data-tip]:hover::after, .sim-row .sim-v[data-tip]:focus::after, .sim-row .sim-v[data-tip].tip-on::after {
+  content: attr(data-tip); position: absolute; right: 0; top: calc(100% - 6px); z-index: 30; width: min(420px, 92vw);
+  white-space: pre-line; text-align: left; font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--text);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.sim-row.fraca:has(.sim-v:hover), .sim-row.fraca:has(.sim-v:focus), .sim-row.fraca:has(.tip-on) { opacity: 1; }
 @media (max-width: 640px) { .sim-row { grid-template-columns: 1fr 110px; } .sim-row .sim-bar { grid-column: 1 / -1; grid-row: 2; } }
 .edu-more { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; }
 .edu-more summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 14px; }
@@ -567,6 +574,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <div class="fgal" id="fundList"></div>
     </div>
     <div data-esec-panel="simulacao" hidden>
+      <p class="note"><b>ⓘ Passe o mouse (no celular, toque) sobre qualquer resultado</b> para ver, em palavras simples, de onde ele vem, a margem de erro e o quanto dá para confiar nele.</p>
       <p class="note">Salário mínimo e carga tributária mudam uma vez por ano: as relações com eles usam as <b>variações anuais</b> de todo o histórico disponível e aparecem como "relação anual".</p>
       <p class="note">Cada barra começa no <b>valor atual</b> do indicador e vai de zero até o dobro dele (o IPCA do mês pode ir até −1%, porque pode haver deflação). Mova a barra de <b>um</b> indicador para o valor que quiser: as outras barras se movem, em azul, para onde cada indicador costuma ir <b>junto</b>, pelo histórico dos últimos <b>4 anos</b> (correlação de Spearman entre as variações mensais). Para simular outro indicador, é só mover a barra dele: a simulação anterior é desfeita.</p>
       <div id="simBox" class="card"></div>
@@ -2190,12 +2198,39 @@ function simPair(kx, ky) {
   if (ANUAIS.has(kx) || ANUAIS.has(ky)) {
     const c = spearmanAnual(kx, ky); if (!c || c.r == null) return null;
     const sx = sd(c.xs), sy = sd(c.ys); if (!sx) return null;
-    return { r: c.r, n: c.n, sig: c.sig, beta: c.r * sy / sx, anual: true };
+    return { r: c.r, n: c.n, sig: c.sig, beta: c.r * sy / sx, sx, sy, anual: true };
   }
   const c = spearman(kx, ky, SIM_MESES), d = simMonths(kx, ky);
   if (!c || c.r == null || !d || d.xs.length < 8) return null;
   const sx = sd(d.xs), sy = sd(d.ys); if (!sx) return null;
-  return { r: c.r, n: c.n, sig: c.sig, beta: c.r * sy / sx };
+  return { r: c.r, n: c.n, sig: c.sig, beta: c.r * sy / sx, sx, sy };
+}
+// Typical size of one indicator's own move (standard deviation of its monthly, or yearly, changes).
+function simTipico(k) {
+  const v = ANUAIS.has(k) ? [...(anual?.[k]?.values() || [])] : [...(monthly?.[k]?.values() || [])].slice(-SIM_MESES);
+  return v.length > 2 ? sd(v) : null;
+}
+// Plain-language explanations shown when hovering (or tapping) a result.
+const simLbl = k => CORR.find(o => o.k === k)?.label || k;
+const simUn = (k, v) => v === 1 ? (SIM_PP.has(k) ? "1 ponto percentual" : "1%") : SIM_PP.has(k) ? nf(2).format(v) + " pontos percentuais" : nf(2).format(v) + "%";
+function simTipEst(kx, ky, pr, v, base, vx, bx, dx) {
+  const X = simLbl(kx), Y = simLbl(ky), dy = simDelta(ky, v, base), per = pr.anual ? `nos ${pr.n} anos com dados dos dois (comparando um ano com o anterior)` : `nos últimos ${pr.n} meses`;
+  const folga = pr.sy * Math.sqrt(1 - pr.r * pr.r), lo = simApply(ky, pr.beta * dx - folga, base), hi = simApply(ky, pr.beta * dx + folga, base);
+  const chg = (k, d) => SIM_PP.has(k) ? simFmt(k, d) : pct(d);
+  return [
+    `O que diz: se ${X} for de ${simLevel(kx, bx)} para ${simLevel(kx, vx)} (${chg(kx, dx)}), ${Y} tende a ir para cerca de ${simLevel(ky, v)} (${chg(ky, dy)}).`,
+    `De onde vem: ${per}, quando ${X} subia, ${Y} costumava ${pr.r > 0 ? "subir junto" : "cair"}. A força dessa relação é ρ = ${nf(2).format(pr.r)} (${forca(pr.r)}; vai de −1 a +1).`,
+    `Regra usada: para cada ${simUn(kx, 1)} que ${X} sobe, ${Y} ${pr.beta > 0 ? "sobe" : "cai"} em média ${simUn(ky, Math.abs(pr.beta))}.`,
+    `Margem: na maioria das vezes (cerca de 2 em cada 3), o resultado ficaria entre ${simLevel(ky, Math.min(lo, hi))} e ${simLevel(ky, Math.max(lo, hi))}.`,
+    `Peso: essa relação explica só cerca de ${nf(0).format(pr.r * pr.r * 100)}% dos movimentos de ${Y}; o resto vem de outros fatores.`,
+    pr.sig ? "Confiança: estatisticamente significativa (a chance de ser só coincidência é menor que 5%)." : "Atenção: NÃO é estatisticamente significativa. Com esses dados, a relação pode ser só coincidência; trate o número com desconfiança.",
+  ].join("\n\n");
+}
+function simTipSel(k, v, base, d) {
+  const t = simTipico(k), X = simLbl(k), per = ANUAIS.has(k) ? "ano" : "mês", chg = SIM_PP.has(k) ? simFmt(k, d) : pct(d);
+  return [`Você levou ${X} de ${simLevel(k, base)} para ${simLevel(k, v)}: ${chg} ${ANUAIS.has(k) ? "em um ano" : "em um mês"}.`,
+    t ? `Para comparar: ${X} costuma variar cerca de ${simUn(k, t)} por ${per}, para cima ou para baixo (desvio padrão${ANUAIS.has(k) ? " das variações anuais" : ` dos últimos ${SIM_MESES} meses`}). O seu movimento equivale a ${nf(1).format(Math.abs(d) / t)} vez${Math.abs(d) / t >= 2 ? "es" : ""} isso.` : "",
+    t && Math.abs(d) / t > 3 ? "É um movimento muito maior que o normal: as estimativas das outras barras ficam bem menos confiáveis." : "As outras barras mostram para onde cada indicador costuma ir junto. Passe o mouse (ou toque) em cada resultado para entender."].filter(Boolean).join("\n\n");
 }
 // Sliders work on levels: each starts at the indicator's current value and goes from 0 to twice
 // that. Moving one turns its move into a monthly change (% for prices and indices, p.p. for
@@ -2245,12 +2280,15 @@ function updateSim() {
     const k = row.dataset.row, inp = row.querySelector("input"), out = row.querySelector(".sim-v"), base = simBases[k];
     row.classList.remove("ativo", "est", "fraca");
     if (!simSel) { inp.value = base; out.innerHTML = `<b>${simLevel(k, base)}</b><small>valor atual</small>`; return; }
-    if (k === simSel) { row.classList.add("ativo"); out.innerHTML = `<b>${simLevel(k, simVal)}</b><small>${chg(k, dSel)} · você escolheu</small>`; return; }
+    out.removeAttribute("data-tip"); out.removeAttribute("tabindex");
+    const tip = t => { out.dataset.tip = t; out.tabIndex = 0; };
+    if (k === simSel) { row.classList.add("ativo"); out.innerHTML = `<b>${simLevel(k, simVal)}</b><small>${chg(k, dSel)} · você escolheu ⓘ</small>`; tip(simTipSel(k, simVal, base, dSel)); return; }
     const pr = simPair(simSel, k);
     if (!pr) { inp.value = base; out.innerHTML = `<b>${simLevel(k, base)}</b><small>poucos dados</small>`; return; }
     const v = simApply(k, pr.beta * dSel, base);
     inp.value = Math.min(v, simHi(k, base)); row.classList.add("est"); if (!pr.sig) row.classList.add("fraca");
-    out.innerHTML = `<b>≈ ${simLevel(k, v)}</b><small>${chg(k, simDelta(k, v, base))} · ρ ${nf(2).format(pr.r)} · ${pr.sig ? forca(pr.r) : "não significativa"}${pr.anual ? " · relação anual" : ""}</small>`;
+    out.innerHTML = `<b>≈ ${simLevel(k, v)}</b><small>${chg(k, simDelta(k, v, base))} · ρ ${nf(2).format(pr.r)} · ${pr.sig ? forca(pr.r) : "não significativa"}${pr.anual ? " · relação anual" : ""} ⓘ</small>`;
+    tip(simTipEst(simSel, k, pr, v, base, simVal, simBases[simSel], dSel));
   });
   const z = $("#simZero"); if (z) z.disabled = !simSel;
   const h = box.querySelector(".sim-head .hint");
@@ -2260,7 +2298,13 @@ $("#simBox").addEventListener("input", e => {
   const i = e.target.closest("[data-sk]"); if (!i) return;
   simSel = i.dataset.sk; simVal = +i.value; updateSim();
 });
-$("#simBox").addEventListener("click", e => { if (e.target.closest("#simZero")) renderSim(); });
+$("#simBox").addEventListener("click", e => {
+  if (e.target.closest("#simZero")) return renderSim();
+  // a tap opens or closes the explanation (phones have no hover)
+  const v = e.target.closest(".sim-v[data-tip]"), on = v && !v.classList.contains("tip-on");
+  document.querySelectorAll(".sim-v.tip-on").forEach(x => x.classList.remove("tip-on"));
+  if (on) v.classList.add("tip-on");
+});
 function showEduSec(name) {
   if (name === "simulacao") setTimeout(renderSim);
   document.querySelectorAll("[data-esec]").forEach(b => b.setAttribute("aria-selected", b.dataset.esec === name));
