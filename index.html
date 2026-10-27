@@ -567,6 +567,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <div class="fgal" id="fundList"></div>
     </div>
     <div data-esec-panel="simulacao" hidden>
+      <p class="note">Salário mínimo e carga tributária mudam uma vez por ano: as relações com eles usam as <b>variações anuais</b> de todo o histórico disponível e aparecem como "relação anual".</p>
       <p class="note">Cada barra começa no <b>valor atual</b> do indicador e vai de zero até o dobro dele (o IPCA do mês pode ir até −1%, porque pode haver deflação). Mova a barra de <b>um</b> indicador para o valor que quiser: as outras barras se movem, em azul, para onde cada indicador costuma ir <b>junto</b>, pelo histórico dos últimos <b>4 anos</b> (correlação de Spearman entre as variações mensais). Para simular outro indicador, é só mover a barra dele: a simulação anterior é desfeita.</p>
       <div id="simBox" class="card"></div>
       <p class="hint" style="margin-top:8px">Como é calculado: para cada par, efeito estimado = ρ × (desvio padrão do outro ÷ desvio padrão do escolhido) × variação escolhida, com as variações medidas em % para preços e índices e em pontos percentuais para Selic, IPCA (do mês) e desemprego. É uma regressão linear simples sobre as variações mensais, usando a correlação de Spearman (ρ) dos últimos 48 meses no lugar da correlação comum, por ser menos afetada por meses extremos. Vale melhor para movimentos do tamanho dos que acontecem num mês; movimentos muito grandes (como dobrar o Ibovespa) extrapolam o histórico e dão estimativas pouco realistas. Relações sem significância estatística aparecem apagadas: nelas o número é pouco confiável. Correlação não é causa, e o passado não garante o futuro. É um exercício educativo, não uma recomendação de investimento.</p>
@@ -860,8 +861,10 @@ const CORR = [
   { k: "selic", label: "Selic" },
   { k: "ipca", label: "IPCA" },
   { k: "desemprego", label: "Desemprego", nota: "taxa do trimestre móvel do IBGE, pelo último mês do trimestre" },
+  { k: "salmin", label: "Salário mínimo", nota: "reajuste anual, em %" },
+  { k: "carga", label: "Carga tributária", nota: "mudança anual, em p.p. do PIB" },
 ];
-const MACRO_KEYS = new Set(["selic", "ipca", "desemprego"]);
+const MACRO_KEYS = new Set(["selic", "ipca", "desemprego", "salmin", "carga"]);
 let macro = null, monthly = null;   // monthly: { key: Map("AAAA-MM" -> variação) }
 const thisMonth = () => new Date().toISOString().slice(0, 7);
 function monthlyChanges(pairs, mode) {   // pairs: [["AAAA-MM", valor]] sorted
@@ -916,6 +919,53 @@ function spearman(ka, kb, months) {
   const t = Math.abs(r) < 1 ? Math.abs(r) * Math.sqrt((n - 2) / (1 - r * r)) : Infinity;
   return { r, n, sig: t > 1.96 + 2.4 / (n - 2) };   // ≈ t crítico bicaudal 5%
 }
+// The minimum wage and the tax burden change once a year, so any pair with one of them uses yearly
+// changes over all the history available (the window buttons don't apply): price series Dec→Dec in %,
+// Selic and unemployment in p.p., IPCA accumulated in the year, minimum wage in %, tax burden in p.p.
+const ANUAIS = new Set(["salmin", "carga"]);
+let anual = null;   // { key: Map(year -> change) }, finished years only
+function anualDe(ends, mode) {   // ends: Map(year -> value at the end of the year)
+  const out = new Map(), now = new Date().getFullYear();
+  for (const [y, v] of ends) { const pv = ends.get(y - 1); if (y < now && pv != null) out.set(y, mode === "diff" ? v - pv : (v / pv - 1) * 100); }
+  return out;
+}
+const fimDeAno = pairs => { const m = new Map(); for (const [ym, v] of pairs) m.set(+ym.slice(0, 4), v); return m; };   // pairs sorted by "AAAA-MM"
+async function loadAnnual() {
+  const yahoo = CORR.filter(x => !MACRO_KEYS.has(x.k) && !B3_HIST[x.k] && x.k !== "XFIX11.SA");
+  const b3 = [["XFIX11.SA", "IFIX.SA"], ["INDX.SA", "INDX.SA"], ["ICON.SA", "ICON.SA"]];
+  const [q, mh, ...bs] = await Promise.allSettled([
+    api("/api/cotacoes?range=max&iv=1mo&s=" + yahoo.map(x => encodeURIComponent(x.k)).join(",")),
+    loadMacroHist(), ...b3.map(([, sym]) => loadB3Hist(sym)),
+  ]);
+  const a = {};
+  // shift: Yahoo stamps monthly bars just before midnight UTC (+12h keeps them in their month); B3 closes are already in the right day
+  const dePontos = (pts, shift) => pts?.length ? anualDe(fimDeAno(pts.map(([t, c]) => [new Date((t + shift) * 1000).toISOString().slice(0, 7), c])), "ret") : null;
+  if (q.status === "fulfilled") yahoo.forEach(x => { const r = dePontos(q.value.quotes[x.k]?.points, 43200); if (r) a[x.k] = r; });
+  b3.forEach(([k], i) => { if (bs[i].status === "fulfilled") { const r = dePontos(bs[i].value.pontos, 0); if (r) a[k] = r; } });
+  if (mh.status === "fulfilled") {
+    const M = mh.value, now = new Date().getFullYear();
+    if (M.selic?.mensal) a.selic = anualDe(fimDeAno(M.selic.mensal), "diff");
+    if (M.desemprego?.mensal) a.desemprego = anualDe(fimDeAno(M.desemprego.mensal), "diff");
+    if (M.ipca?.mensal) { const acc = new Map(), n = new Map(); for (const [ym, v] of M.ipca.mensal) { const y = +ym.slice(0, 4); acc.set(y, (acc.get(y) ?? 1) * (1 + v / 100)); n.set(y, (n.get(y) || 0) + 1); }
+      a.ipca = new Map([...acc].filter(([y]) => y < now && n.get(y) === 12).map(([y, x]) => [y, (x - 1) * 100])); }
+    const rj = M.salmin?.reajustes;
+    if (rj?.length) { const ends = new Map(); for (let y = +rj[0][0].slice(0, 4); y < now; y++) ends.set(y, valAt(rj, y + "-12")); a.salmin = anualDe(ends, "ret"); }
+  }
+  a.carga = anualDe(new Map(CARGA.anos.map(x => [x[0], x[1]])), "diff");
+  anual = a;
+  renderCorr(); renderSim();
+}
+function spearmanAnual(ka, kb) {
+  const A = anual?.[ka], B = anual?.[kb]; if (!A || !B) return null;
+  const xs = [], ys = [], anos = [];
+  for (const [y, v] of A) if (B.has(y)) { xs.push(v); ys.push(B.get(y)); anos.push(y); }
+  const n = xs.length; if (n < 8) return { r: null, n, anual: true };
+  const r = pearson(ranks(xs), ranks(ys)); if (r == null) return { r: null, n, anual: true, semVariacao: true };
+  const t = Math.abs(r) < 1 ? Math.abs(r) * Math.sqrt((n - 2) / (1 - r * r)) : Infinity;
+  return { r, n, sig: t > 1.96 + 2.4 / (n - 2), anual: true, xs, ys, de: Math.min(...anos), ate: Math.max(...anos) };
+}
+const corrPair = (ka, kb, months) => ANUAIS.has(ka) || ANUAIS.has(kb) ? spearmanAnual(ka, kb) : spearman(ka, kb, months);
+const corrN = x => x.anual ? `${x.n} anos${x.de ? ` (${x.de}–${x.ate})` : ""}, variações anuais` : `${x.n} meses`;
 const forca = r => { const a = Math.abs(r); return a < 0.2 ? "muito fraca" : a < 0.4 ? "fraca" : a < 0.6 ? "moderada" : a < 0.8 ? "forte" : "muito forte"; };
 const corrStyle = r => r == null ? "" : `background: color-mix(in srgb, var(${r >= 0 ? "--pos" : "--neg"}) ${Math.round(Math.abs(r) * 55)}%, var(--panel));${Math.abs(r) > 0.6 ? "color:#fff;" : ""}`;
 function corrCfg() { return { base: "^BVSP", janela: 36, matriz: false, fechado: false, ...(state.corr || {}) }; }
@@ -927,26 +977,26 @@ function renderCorr() {
   if (!monthly) { box.innerHTML = `<div class="corr-head">${corrFold(c)} carregando histórico mensal…</div>`; return; }
   const others = CORR.filter(x => x.k !== c.base);
   const chips = others.map(o => {
-    const x = spearman(c.base, o.k, c.janela);
+    const x = corrPair(c.base, o.k, c.janela);
     const r = x?.r;
     const bar = r == null ? "" : `<div class="cbar2"><i style="${r >= 0 ? "left:50%" : "right:50%"};width:${Math.abs(r) * 50}%;background:var(${r >= 0 ? "--pos" : "--neg"})"></i></div>`;
-    const tip = r == null ? (x?.semVariacao ? "sem variação no período" : "dados insuficientes") : `ρ = ${nf(2).format(r)} · correlação ${forca(r)} ${r >= 0 ? "positiva" : "negativa"} · ${x.n} meses${x.sig ? " · estatisticamente significativa (p < 0,05)" : " · não significativa"}`;
+    const tip = r == null ? (x?.semVariacao ? "sem variação no período" : "dados insuficientes") : `ρ = ${nf(2).format(r)} · correlação ${forca(r)} ${r >= 0 ? "positiva" : "negativa"} · ${corrN(x)}${x.sig ? " · estatisticamente significativa (p < 0,05)" : " · não significativa"}`;
     return `<div class="cchip" title="${esc(tip)}"><div class="n"><span>${o.label}</span>${x?.sig ? "<span>*</span>" : ""}</div>
       <div class="v num ${r == null ? "" : r >= 0 ? "pos" : "neg"}">${r == null ? "—" : (r > 0 ? "+" : "") + nf(2).format(r)}</div>
-      <div class="w">${r == null ? (x?.semVariacao ? "sem variação" : "poucos dados") : forca(r)}</div>${bar}</div>`;
+      <div class="w">${r == null ? (x?.semVariacao ? "sem variação" : "poucos dados") : forca(r)}${x?.anual ? " · anual" : ""}</div>${bar}</div>`;
   }).join("");
   const matrix = !c.matriz ? "" : `<div class="corr-matrix"><table><tr><th></th>${CORR.map(o => `<th>${o.label}</th>`).join("")}</tr>
     ${CORR.map(a => `<tr><th style="text-align:right">${a.label}</th>${CORR.map(b => {
       if (a.k === b.k) return `<td class="diag">1</td>`;
-      const x = spearman(a.k, b.k, c.janela), r = x?.r;
-      return `<td style="${corrStyle(r)}" title="${esc(r == null ? "sem dados suficientes" : `${a.label} × ${b.label}: ρ = ${nf(2).format(r)} (${forca(r)}), ${x.n} meses${x.sig ? ", significativa" : ""}`)}">${r == null ? "·" : nf(2).format(r) + (x.sig ? "*" : "")}</td>`;
+      const x = corrPair(a.k, b.k, c.janela), r = x?.r;
+      return `<td style="${corrStyle(r)}" title="${esc(r == null ? "sem dados suficientes" : `${a.label} × ${b.label}: ρ = ${nf(2).format(r)} (${forca(r)}), ${corrN(x)}${x.sig ? ", significativa" : ""}`)}">${r == null ? "·" : nf(2).format(r) + (x.sig ? "*" : "")}</td>`;
     }).join("")}</tr>`).join("")}</table></div>`;
   box.innerHTML = `<div class="corr-head">${corrFold(c)}
       <span>de <select id="corrBase" aria-label="Índice base">${CORR.map(o => `<option value="${esc(o.k)}" ${o.k === c.base ? "selected" : ""}>${o.label}</option>`).join("")}</select> com os demais</span>
       <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [24, "2 anos"], [36, "3 anos"], [48, "4 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
       <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
     <div class="corr-row">${chips}</div>${matrix}
-    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Agro Brasil é uma cesta de futuros agrícolas montada pelo site. Correlação não é causa e muda com o tempo.</p>`;
+    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Agro Brasil é uma cesta de futuros agrícolas montada pelo site. Salário mínimo e carga tributária mudam uma vez por ano: nas relações com eles entram as <b>variações anuais</b> de todo o histórico disponível (a carga tributária desde 2010), e os botões de janela não se aplicam. Correlação não é causa e muda com o tempo.</p>`;
 }
 $("#corr").addEventListener("click", e => {
   const j = e.target.closest("[data-cj]"); if (j) { state.corr = { ...corrCfg(), janela: +j.dataset.cj }; save(); return renderCorr(); }
@@ -968,6 +1018,7 @@ async function loadCorrData() {
   b3.forEach((x, i) => { if (bs[i].status === "fulfilled") qs[x.k] = { points: bs[i].value.pontos }; });
   monthly = buildMonthly(qs);
   renderSim();
+  loadAnnual();
   renderStrip(); renderCorr(); renderEdu();
 }
 // Favorites are split into tabs by market (Brasil, Exterior, Moedas, Cripto); the open tab is remembered.
@@ -2048,8 +2099,8 @@ function eduItems() {
     { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler a linha de correlações",
       oque: "Mede se dois indicadores costumam se mover <b>na mesma direção</b>. Vai de <b>−1</b> a <b>+1</b>: +1 significa que, quando um tem um mês melhor, o outro também tem; −1, que um sobe quando o outro cai; 0, que não há relação. Diferente da correlação comum (Pearson), a de Spearman compara a <i>ordem</i> dos meses, do pior ao melhor, e por isso é menos afetada por meses extremos.",
       porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
-      horario: [["Dados", "variações mensais (meses já fechados)"], ["Janelas", "1, 3 ou 5 anos"], ["Asterisco *", "relação estatisticamente significativa (p < 0,05)"]],
-      nota: "Correlação não é causa, e ela muda com o tempo. Com poucos meses (janela de 1 ano), os números oscilam bastante." },
+      horario: [["Dados", "variações mensais (meses já fechados)"], ["Janelas", "1 a 5 anos"], ["Salário mínimo e carga tributária", "variações anuais, todo o histórico disponível"], ["Asterisco *", "relação estatisticamente significativa (p < 0,05)"]],
+      nota: "Correlação não é causa, e ela muda com o tempo. Com poucos meses (janela de 1 ano), os números oscilam bastante. Salário mínimo e carga tributária só mudam uma vez por ano, então entram com variações anuais: são poucos pontos (a carga tributária tem só 15 anos de série), e por isso as relações com eles quase nunca chegam a ser significativas." },
     { s: "USDBRL=X", titulo: "Dólar", sub: "Quantos reais custa 1 dólar americano",
       oque: "O valor mostrado é o <b>dólar comercial</b>, usado por bancos e empresas em grandes operações. O dólar turismo, de casa de câmbio e cartão, sai mais caro.",
       porque: "Mexe com o preço de combustíveis, importados, viagens e com o lucro de exportadoras (Vale, Suzano, Embraer). Costuma subir quando há medo ou quando estrangeiros tiram dinheiro do Brasil.",
@@ -2124,7 +2175,7 @@ function eduSec() { try { return localStorage.getItem(KEY + ".edu") || "mercados
 // last 48 monthly changes would expect: slope = Spearman ρ × (σ other ÷ σ moved).
 const SIM_MESES = 48;
 let simSel = null, simVal = 0;
-const simUnit = k => k === "selic" || k === "desemprego" || k === "ipca" ? " p.p." : "%";
+const simUnit = k => k === "selic" || k === "desemprego" || k === "ipca" || k === "carga" ? " p.p." : "%";
 const simFmt = (k, v) => (v > 0.0005 ? "+" : v < -0.0005 ? "−" : "") + nf(2).format(Math.abs(v)) + simUnit(k);
 function simMonths(ka, kb) {   // the same months spearman() uses
   const A = monthly?.[ka], B = monthly?.[kb]; if (!A || !B) return null;
@@ -2136,6 +2187,11 @@ function simMonths(ka, kb) {   // the same months spearman() uses
 }
 const sd = a => { const n = a.length, m = a.reduce((x, y) => x + y, 0) / n; return Math.sqrt(a.reduce((x, y) => x + (y - m) ** 2, 0) / (n - 1)); };
 function simPair(kx, ky) {
+  if (ANUAIS.has(kx) || ANUAIS.has(ky)) {
+    const c = spearmanAnual(kx, ky); if (!c || c.r == null) return null;
+    const sx = sd(c.xs), sy = sd(c.ys); if (!sx) return null;
+    return { r: c.r, n: c.n, sig: c.sig, beta: c.r * sy / sx, anual: true };
+  }
   const c = spearman(kx, ky, SIM_MESES), d = simMonths(kx, ky);
   if (!c || c.r == null || !d || d.xs.length < 8) return null;
   const sx = sd(d.xs), sy = sd(d.ys); if (!sx) return null;
@@ -2144,17 +2200,21 @@ function simPair(kx, ky) {
 // Sliders work on levels: each starts at the indicator's current value and goes from 0 to twice
 // that. Moving one turns its move into a monthly change (% for prices and indices, p.p. for
 // Selic, IPCA and unemployment), and the others move by the regression estimate.
-const SIM_PP = new Set(["selic", "ipca", "desemprego"]);
+const SIM_PP = new Set(["selic", "ipca", "desemprego", "carga"]);
 const simQuote = k => quotes[k === "XFIX11.SA" ? "IFIX.SA" : k];
 function simBase(k) {
   if (k === "selic") return macro?.selic?.atual?.valor;
   if (k === "desemprego") return macro?.desemprego?.atual;
   if (k === "ipca") return macro?.ipca?.mensal_atual;
+  if (k === "salmin") return macro?.salmin?.valor;
+  if (k === "carga") return CARGA.anos.at(-1)[1];
   return simQuote(k)?.price;
 }
 function simLevel(k, v) {
   if (k === "selic") return nf(2).format(v) + "% a.a.";
   if (k === "ipca") return nf(2).format(v) + "% no mês";
+  if (k === "salmin") return brl(v);
+  if (k === "carga") return nf(1).format(v) + "% do PIB";
   if (k === "desemprego") return nf(1).format(v) + "%";
   const q = simQuote(k); return money(v, q?.currency, q?.type);
 }
@@ -2163,7 +2223,7 @@ const simDelta = (k, v, base) => SIM_PP.has(k) ? v - base : (v / base - 1) * 100
 const simMin = k => k === "ipca" ? -1 : 0;
 const simApply = (k, d, base) => Math.max(simMin(k), SIM_PP.has(k) ? base + d : base * (1 + d / 100));   // monthly change → level
 let simBases = {};
-function simItems() { return CORR.filter(o => (o.k === "ipca" ? simBase(o.k) != null : simBase(o.k) > 0) && monthly?.[o.k]?.size >= 8); }
+function simItems() { return CORR.filter(o => (o.k === "ipca" ? simBase(o.k) != null : simBase(o.k) > 0) && (ANUAIS.has(o.k) ? anual?.[o.k]?.size >= 8 : monthly?.[o.k]?.size >= 8)); }
 const simHi = (k, b) => k === "ipca" ? Math.max(2 * b, 1) : 2 * b;   // a month of deflation still leaves room above
 function renderSim() {
   const box = $("#simBox"); if (!box) return;
@@ -2190,11 +2250,11 @@ function updateSim() {
     if (!pr) { inp.value = base; out.innerHTML = `<b>${simLevel(k, base)}</b><small>poucos dados</small>`; return; }
     const v = simApply(k, pr.beta * dSel, base);
     inp.value = Math.min(v, simHi(k, base)); row.classList.add("est"); if (!pr.sig) row.classList.add("fraca");
-    out.innerHTML = `<b>≈ ${simLevel(k, v)}</b><small>${chg(k, simDelta(k, v, base))} · ρ ${nf(2).format(pr.r)} · ${pr.sig ? forca(pr.r) : "não significativa"}</small>`;
+    out.innerHTML = `<b>≈ ${simLevel(k, v)}</b><small>${chg(k, simDelta(k, v, base))} · ρ ${nf(2).format(pr.r)} · ${pr.sig ? forca(pr.r) : "não significativa"}${pr.anual ? " · relação anual" : ""}</small>`;
   });
   const z = $("#simZero"); if (z) z.disabled = !simSel;
   const h = box.querySelector(".sim-head .hint");
-  if (h) h.innerHTML = simSel ? `Simulando: <b>${esc(CORR.find(o => o.k === simSel).label)}</b> de ${simLevel(simSel, simBases[simSel])} para ${simLevel(simSel, simVal)} (${chg(simSel, dSel)} no mês) · ${SIM_MESES} meses de histórico` : "Todas as barras começam no valor atual. Mova uma para simular.";
+  if (h) h.innerHTML = simSel ? `Simulando: <b>${esc(CORR.find(o => o.k === simSel).label)}</b> de ${simLevel(simSel, simBases[simSel])} para ${simLevel(simSel, simVal)} (${chg(simSel, dSel)} ${ANUAIS.has(simSel) ? "no ano" : "no mês"}) · ${ANUAIS.has(simSel) ? "relações por variações anuais" : SIM_MESES + " meses de histórico"}` : "Todas as barras começam no valor atual. Mova uma para simular.";
 }
 $("#simBox").addEventListener("input", e => {
   const i = e.target.closest("[data-sk]"); if (!i) return;
