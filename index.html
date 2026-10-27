@@ -604,6 +604,7 @@ const STRIP = [
   { s: "^GSPC", label: "S&P 500" },
   { s: "^IXIC", label: "Nasdaq" },
   { s: "^STOXX50E", label: "Euro Stoxx 50" },
+  { s: "AGRO-BR", label: "Agro Brasil" },
   { s: "BTC-USD", label: "Bitcoin" },
 ];
 const DEFAULT_FAVS = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBAS3.SA", "WEGE3.SA", "AAPL", "NVDA", "MSFT", "USDBRL=X", "EURBRL=X", "BTC-USD", "ETH-USD"];
@@ -629,7 +630,7 @@ function decimals(v) { const a = Math.abs(v); return a >= 1000 ? 2 : a >= 1 ? 2 
 function money(v, cur, type) {
   if (v == null || !isFinite(v)) return "—";
   if (cur === "USX") { v /= 100; cur = "USD"; }   // grãos de Chicago vêm em centavos de dólar
-  if (type === "INDEX") return nf(0).format(v) + " pts";
+  if (type === "INDEX") return nf(Math.abs(v) < 1000 ? 1 : 0).format(v) + " pts";
   const n = nf(decimals(v)).format(Math.abs(v));
   return (v < 0 ? "-" : "") + (cur === "BRL" ? "R$ " : cur === "USD" ? "US$ " : cur === "EUR" ? "€ " : (cur ? cur + " " : "")) + n;
 }
@@ -788,15 +789,6 @@ function macroCards() {
       ${sparkline(m.slice(-24).map(([k, v], i) => [i, v]), null)}
     </button>`);
   }
-  if (icbr?.mensal?.length > 1) {
-    const m = icbr.mensal, [mes, v] = m.at(-1), c = (v / m.at(-2)[1] - 1) * 100;
-    out.push(`<button class="card idx macro" data-open="MACRO:icbr" data-max="1" title="Índice de Commodities Brasil (Banco Central) · ver o histórico">
-      <div class="lbl">Commodities BR<span class="mk">BC</span></div>
-      <div class="px num">${nf(1).format(v)} pts</div>
-      <div class="ch num ${cls(c)}">${mesCurto(mes)}: ${pct(c)}</div>
-      ${sparkline(m.slice(-24).map(([k, x], i) => [i, x]), null)}
-    </button>`);
-  }
   const sm = macro.salmin, usd = quotes["USDBRL=X"]?.price;
   if (sm?.valor) {
     out.push(`<button class="card idx macro" data-edu="salmin" title="Salário mínimo nacional · saiba mais">
@@ -834,36 +826,13 @@ const CORR = [
   { k: "^GSPC", label: "S&P 500" },
   { k: "^IXIC", label: "Nasdaq" },
   { k: "^STOXX50E", label: "Euro Stoxx 50" },
+  { k: "AGRO-BR", label: "Agro Brasil", nota: "cesta de futuros agrícolas em reais, montada pelo site" },
   { k: "BTC-USD", label: "Bitcoin" },
-  { k: "icbr", label: "Commodities BR", nota: "IC-Br do Banco Central, em reais" },
   { k: "selic", label: "Selic" },
   { k: "ipca", label: "IPCA" },
   { k: "desemprego", label: "Desemprego", nota: "taxa do trimestre móvel do IBGE, pelo último mês do trimestre" },
 ];
-// IC-Br: the Central Bank's index of commodity prices in reais (base Dec/2005 = 100), monthly,
-// total (27574) plus its farming (27575), metals (27576) and energy (27577) parts. The BC's API
-// turns away servers outside Brazil but allows browsers (CORS), so the page reads it directly.
-const ICBR_SERIES = { total: 27574, agro: 27575, metal: 27576, energia: 27577 };
-let icbr = null, icbrReq = null;
-// The BC's API drops requests now and then, so each series gets a few tries.
-async function bcbSerie(n) {
-  for (let i = 0; ; i++) {
-    try {
-      const r = await fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${n}/dados?formato=json`, { signal: AbortSignal.timeout(20000) });
-      if (!r.ok) throw new Error("Banco Central " + r.status);
-      return await r.json();
-    } catch (e) { if (i >= 3) throw e; await new Promise(r => setTimeout(r, 1500 * (i + 1))); }
-  }
-}
-function loadIcbr() {
-  return icbrReq ||= Promise.all(Object.entries(ICBR_SERIES).map(async ([k, n]) => {
-    return [k, (await bcbSerie(n)).map(x => [x.data.slice(6) + "-" + x.data.slice(3, 5), Number(x.valor)]).filter(x => Number.isFinite(x[1]))];
-  })).then(parts => {
-    const o = Object.fromEntries(parts);
-    return icbr = { mensal: o.total, partes: { agro: o.agro, metal: o.metal, energia: o.energia } };
-  }).catch(e => { icbrReq = null; throw e; });
-}
-const MACRO_KEYS = new Set(["selic", "ipca", "desemprego", "icbr"]);
+const MACRO_KEYS = new Set(["selic", "ipca", "desemprego"]);
 let macro = null, monthly = null;   // monthly: { key: Map("AAAA-MM" -> variação) }
 const thisMonth = () => new Date().toISOString().slice(0, 7);
 function monthlyChanges(pairs, mode) {   // pairs: [["AAAA-MM", valor]] sorted
@@ -890,7 +859,6 @@ function buildMonthly(q) {
   if (macro?.selic?.mensal) res.selic = monthlyChanges(macro.selic.mensal, "diff");
   if (macro?.ipca?.mensal) res.ipca = new Map(macro.ipca.mensal.filter(([m]) => m < thisMonth()));
   if (macro?.desemprego?.mensal) res.desemprego = monthlyChanges(macro.desemprego.mensal, "diff");
-  if (icbr?.mensal) res.icbr = monthlyChanges(icbr.mensal, "ret");
   return res;
 }
 function ranks(xs) {
@@ -949,7 +917,7 @@ function renderCorr() {
       <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [24, "2 anos"], [36, "3 anos"], [48, "4 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
       <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
     <div class="corr-row">${chips}</div>${matrix}
-    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Commodities BR pelo IC-Br do Banco Central. Correlação não é causa e muda com o tempo.</p>`;
+    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Agro Brasil é uma cesta de futuros agrícolas montada pelo site. Correlação não é causa e muda com o tempo.</p>`;
 }
 $("#corr").addEventListener("click", e => {
   const j = e.target.closest("[data-cj]"); if (j) { state.corr = { ...corrCfg(), janela: +j.dataset.cj }; save(); return renderCorr(); }
@@ -961,17 +929,15 @@ $("#corr").addEventListener("change", e => {
 });
 async function loadCorrData() {
   const yahoo = CORR.filter(x => !MACRO_KEYS.has(x.k) && !B3_HIST[x.k]), b3 = CORR.filter(x => B3_HIST[x.k]);
-  const [m, h, ic, ...bs] = await Promise.allSettled([
+  const [m, h, ...bs] = await Promise.allSettled([
     api("/api/macro"),
     api("/api/cotacoes?range=5y&s=" + yahoo.map(x => encodeURIComponent(x.k)).join(",")),
-    loadIcbr(),
     ...b3.map(x => loadB3Hist(x.k)),
   ]);
   if (m.status === "fulfilled") macro = m.value;
   const qs = h.status === "fulfilled" ? { ...h.value.quotes } : {};
   b3.forEach((x, i) => { if (bs[i].status === "fulfilled") qs[x.k] = { points: bs[i].value.pontos }; });
   monthly = buildMonthly(qs);
-  if (ic.status === "rejected") console.warn("IC-Br:", ic.reason);
   renderSim();
   renderStrip(); renderCorr(); renderEdu();
 }
@@ -1078,8 +1044,6 @@ const MACRO_WIN = {
     serie: m => m.ipca?.doze_meses?.filter(([k]) => k >= "1996-01"), fmt: v => nf(2).format(v) + "%" },
   "MACRO:desemprego": { titulo: "Desemprego", sub: "Taxa de desocupação · trimestre móvel (pelo último mês)", edu: "desemprego", fonte: "IBGE, PNAD Contínua, desde 2012",
     serie: m => m.desemprego?.mensal, fmt: v => nf(1).format(v) + "%" },
-  "MACRO:icbr": { titulo: "Commodities BR", sub: "IC-Br do Banco Central · preços de commodities em reais (dez/2005 = 100)", edu: "icbr", fonte: "Banco Central (IC-Br), desde 1998",
-    carregar: async () => (await loadIcbr()).mensal, variacao: "pct", fmt: v => nf(1).format(v) + " pts" },
 };
 const isMacro = sym => sym in MACRO_WIN;
 const MRANGES = [{ k: "1A", range: "macro", iv: "1mo", show: 12 }, { k: "5A", range: "macro", iv: "1mo", show: 60 }, { k: "10A", range: "macro", iv: "1mo", show: 120 }, { k: "Máx", range: "macro", iv: "1mo", show: 0 }];
@@ -1992,6 +1956,7 @@ function usSummerTime() {
 function euSummerTime() {
   try { return /GMT\+2/.test(new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Berlin", timeZoneName: "shortOffset" }).format(new Date())); } catch { return false; }
 }
+const AGRO_NOMES = { "ZS=F": "Soja", "SB=F": "Açúcar", "KC=F": "Café", "LE=F": "Boi", "ZC=F": "Milho", "CT=F": "Algodão", "OJ=F": "Suco de laranja" };
 function eduItems() {
   const dst = usSummerTime(), euDst = euSummerTime();
   const usHours = dst ? "10h30 às 17h" : "11h30 às 18h";
@@ -2035,13 +2000,6 @@ function eduItems() {
       porque: "Desemprego baixo indica economia aquecida: mais renda e mais consumo, o que ajuda varejo e bancos, mas pode pressionar a inflação e manter a Selic alta. Desemprego subindo costuma sinalizar desaceleração.",
       horario: [["Divulgação", "uma vez por mês, no fim do mês, às 9h"], ["Defasagem", "cerca de 2 meses: em outubro sai o trimestre jun-jul-ago"]],
       nota: "Fonte: IBGE (SIDRA, tabela 6381). Nas correlações entra a mudança mensal da taxa, em pontos percentuais." },
-    { id: "icbr", titulo: "Commodities BR (IC-Br)", sub: "O preço das commodities que o Brasil produz, em reais",
-      valor: () => { if (!icbr?.mensal?.length) return ""; const [mes, v] = icbr.mensal.at(-1), var12 = icbr.mensal.length > 12 ? (v / icbr.mensal.at(-13)[1] - 1) * 100 : null, parte = k => { const a = icbr.partes[k]; return a?.length > 12 ? pct((a.at(-1)[1] / a.at(-13)[1] - 1) * 100) : "—"; };
-        return `<b class="num">${nf(1).format(v)} pts</b> <span class="hint">em ${new Date(mes + "-15T12:00").toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}${var12 != null ? ` · ${pct(var12)} em 12 meses` : ""}</span><br><span class="hint">Em 12 meses: agropecuária ${parte("agro")} · metais ${parte("metal")} · energia ${parte("energia")}</span>`; },
-      oque: "Índice calculado pelo <b>Banco Central</b> com os preços internacionais das commodities mais importantes para a economia brasileira, <b>convertidos para reais</b>. Tem três partes: <b>agropecuária</b> (soja, milho, carne, café, açúcar, algodão, suco de laranja e outros), <b>metais</b> (minério de ferro, alumínio, cobre etc.) e <b>energia</b> (petróleo, gás e carvão). Base: dezembro de 2005 = 100.",
-      porque: "O Brasil é grande exportador de commodities. Quando o IC-Br sobe, entra mais dinheiro com exportações, o que costuma ajudar empresas como Vale, Petrobras e as do agro. Mas também pode pressionar a inflação, porque comida e combustível ficam mais caros aqui dentro. Como é em reais, sobe tanto quando as commodities sobem lá fora quanto quando o dólar sobe.",
-      horario: [["Divulgação", "mensal, nos primeiros dias do mês seguinte"], ["Atualização aqui", "assim que o Banco Central publica"]],
-      nota: "Fonte: Banco Central (séries 27574 a 27577 do SGS). É um dado mensal, por isso não se mexe ao longo do dia." },
     { id: "salmin", titulo: "Salário mínimo", sub: "O menor salário que pode ser pago no Brasil",
       valor: () => { const sm = macro?.salmin, u = quotes["USDBRL=X"]?.price; if (!sm?.valor) return ""; const rj = sm.reajustes.slice(-5).reverse();
         return `<b class="num">${brl(sm.valor)}</b> <span class="hint">desde ${new Date(sm.desde + "-15T12:00").toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}</span>${u ? `<br><b class="num">≈ US$ ${nf(2).format(sm.valor / u)}</b> <span class="hint">pelo dólar de agora (R$ ${nf(2).format(u)})</span>` : ""}
@@ -2080,6 +2038,13 @@ function eduItems() {
       porque: "É o principal termômetro das bolsas da Europa. Como abre de madrugada no horário de Brasília, mostra o humor do mercado internacional antes de a B3 e Nova York abrirem.",
       horario: [["Pregão regular", euDst ? "4h às 12h30" : "5h às 13h30"], ["Na Europa", "9h às 17h30 (horário de Frankfurt e Paris)"], ["Dias", "segunda a sexta, exceto feriados europeus"]],
       nota: "A Europa muda o relógio no último domingo de março e no último domingo de outubro. Por isso, de abril a outubro o pregão vai das 4h às 12h30 de Brasília, e de novembro a março, das 5h às 13h30." },
+    { id: "agro", s: "AGRO-BR", titulo: "Agro Brasil", sub: "Cesta dos produtos que o Brasil mais exporta, em reais",
+      valor: () => { const c = quotes["AGRO-BR"]?.componentes; if (!c) return "";
+        return `<table class="edu-t"><tr><td class="hint">Produto (peso)</td><td class="hint">hoje</td></tr>${c.map(x => `<tr><td>${AGRO_NOMES[x.symbol] || x.symbol} (${nf(0).format(x.peso * 100)}%)</td><td><b class="num ${cls(change(x))}">${pct(change(x))}</b></td></tr>`).join("")}<tr><td>Dólar</td><td><b class="num ${cls(change(quotes["USDBRL=X"]))}">${pct(change(quotes["USDBRL=X"]))}</b></td></tr></table>`; },
+      oque: "Índice montado pelo Radar com os <b>contratos futuros</b> dos produtos agrícolas que o Brasil mais exporta, negociados nas bolsas americanas que servem de referência mundial de preço: soja (45%), açúcar (15%), café (13%), boi (12%), milho (8%), algodão (5%) e suco de laranja (2%). Os pesos seguem, aproximadamente, a participação de cada produto na exportação do agro brasileiro (2024–2025). O resultado é convertido para <b>reais</b> pelo dólar do momento. Base: dezembro de 2019 = 100 pontos.",
+      porque: "Mostra, ao vivo, quanto vale em reais o que o agro brasileiro vende para fora. Sobe quando as commodities agrícolas sobem lá fora ou quando o dólar sobe. Ajuda a entender a receita dos produtores, das tradings e de empresas como SLC Agrícola, BrasilAgro e 3tentos, e o preço dos alimentos aqui dentro.",
+      horario: [["Todos abertos", dst ? "10h30 às 14h, aproximadamente" : "11h30 às 15h, aproximadamente"], ["Soja e milho", dst ? "também das 21h às 9h45" : "também das 22h às 10h45"], ["Dias", "segunda a sexta (soja e milho abrem domingo à noite)"]],
+      nota: "Cada produto tem um horário diferente; fora do horário de um deles, o índice usa o último preço dele. Fontes: CBOT (soja, milho), ICE (café, açúcar, algodão, suco de laranja) e CME (boi), com cerca de 10 minutos de atraso. Os preços em Chicago e Nova York são a referência, mas o preço pago no Brasil pode ser diferente (inclui frete e prêmio de exportação). Os contratos futuros vencem algumas vezes por ano, e a troca de vencimento pode causar pequenos saltos." },
     { s: "BTC-USD", titulo: "Bitcoin", sub: "A maior criptomoeda do mundo",
       oque: "Moeda digital criada em 2009, sem banco central nem governo por trás. É negociada em corretoras do mundo inteiro, e o preço aqui é em <b>dólares (US$)</b>.",
       porque: "É bem mais volátil que ações: variações de 5% num único dia são comuns. É o termômetro do mercado de criptomoedas.",
@@ -2148,14 +2113,12 @@ function simBase(k) {
   if (k === "selic") return macro?.selic?.atual?.valor;
   if (k === "desemprego") return macro?.desemprego?.atual;
   if (k === "ipca") return macro?.ipca?.mensal_atual;
-  if (k === "icbr") return icbr?.mensal?.at(-1)?.[1];
   return simQuote(k)?.price;
 }
 function simLevel(k, v) {
   if (k === "selic") return nf(2).format(v) + "% a.a.";
   if (k === "ipca") return nf(2).format(v) + "% no mês";
   if (k === "desemprego") return nf(1).format(v) + "%";
-  if (k === "icbr") return nf(1).format(v) + " pts";
   const q = simQuote(k); return money(v, q?.currency, q?.type);
 }
 const simDelta = (k, v, base) => SIM_PP.has(k) ? v - base : (v / base - 1) * 100;   // level → monthly change
@@ -2312,13 +2275,13 @@ const GOV_TXT = [
     temer: "Subiu cerca de 27% (9% ao ano), de 2,69 mil para 3,4 mil pontos, com a queda da inflação e dos juros.",
     bolsonaro: "Caiu cerca de 14% (−3,6% ao ano), de 3,4 mil para 2,9 mil pontos, depois de ter chegado a 5,5 mil. Terminou o governo perto da mínima do período, com a Selic subindo de 2% para 13,75% e a inflação alta apertando o orçamento das famílias.",
     lula3: "Até outubro de 2026, queda de cerca de 10% (−2,7% ao ano), de 2,9 mil para 2,6 mil pontos, com a Selic em dois dígitos durante quase todo o período." } },
-  { k: "icbr", titulo: "Commodities BR (IC-Br)", intro: "Índice do Banco Central com o preço das commodities que o Brasil produz, em reais. Por ser em reais, sobe tanto quando as commodities sobem lá fora quanto quando o dólar sobe. A série começa em 1998.", t: {
-    fhc: "Desde janeiro de 1998, subiu cerca de 167% (22% ao ano), de 39 para 105 pontos, puxado principalmente pela desvalorização do real em 1999 e em 2002.",
-    lula12: "Subiu só cerca de 9% (1% ao ano), de 105 para 114 pontos. Em dólares, as commodities dispararam com o crescimento da China, mas o real se valorizou muito (o dólar caiu de R$ 3,53 para R$ 1,66), o que anulou quase toda a alta em reais. Metais subiram 51%; energia caiu 10%.",
-    dilma: "Subiu cerca de 44% (7% ao ano), de 114 para 165 pontos, principalmente pela alta do dólar (de R$ 1,66 para R$ 3,43). Agropecuária subiu 53%; energia ficou estável, com a queda do petróleo em 2014–2015.",
-    temer: "Subiu cerca de 18% (6% ao ano), de 165 para 194 pontos, com a recuperação do petróleo: energia subiu 81%, metais 30% e agropecuária 7%.",
-    bolsonaro: "Dobrou (+102%, 19% ao ano), de 194 para 391 pontos, a maior alta da série: dólar alto, retomada da economia mundial depois da pandemia e guerra na Ucrânia em 2022. Agropecuária +96%, metais +84%, energia +125%.",
-    lula3: "Até setembro de 2026, alta de cerca de 18% (4,6% ao ano), de 391 para 463 pontos. Metais subiram 74%, agropecuária 15% e energia caiu 13%." } },
+  { k: "agro", titulo: "Agro Brasil (cesta agrícola)", intro: "Cesta montada pelo site com os futuros de soja, açúcar, café, boi, milho, algodão e suco de laranja, convertida para reais (dezembro de 2019 = 100). Como depende do dólar, só é calculada a partir de dezembro de 2003, quando começa a série do dólar usada aqui.", t: {
+    fhc: "Sem dados (o cálculo começa em dezembro de 2003).",
+    lula12: "Desde dezembro de 2003, subiu só cerca de 17% (2% ao ano), de 54 para 63 pontos. Em dólares, os produtos agrícolas subiram bastante com o crescimento da China, mas a forte valorização do real (o dólar caiu de cerca de R$ 2,90 para R$ 1,66) cancelou boa parte da alta em reais. A mínima foi em 2006, perto de 39 pontos.",
+    dilma: "Subiu cerca de 45% (7% ao ano), de 63 para 91 pontos, puxado principalmente pela alta do dólar (de R$ 1,66 para R$ 3,43). Chegou ao pico do período, 106 pontos, no início de 2016.",
+    temer: "Subiu só cerca de 6% (2% ao ano), de 91 para 97 pontos, com safras grandes no mundo e preços agrícolas fracos, compensados em parte pelo dólar.",
+    bolsonaro: "Mais que dobrou (+113%, 21% ao ano), de 97 para 206 pontos, a maior alta da série: dólar acima de R$ 5, demanda forte depois da pandemia e a guerra na Ucrânia em 2022, que encareceu grãos. O pico foi em junho de 2022, perto de 232 pontos.",
+    lula3: "Até outubro de 2026, praticamente estável (+3%), de 206 para cerca de 212 pontos. Caiu a cerca de 184 pontos no início de 2024 e chegou ao recorde, perto de 236 pontos, no fim de 2024, com o café e o dólar em alta." } },
   { k: "salmin", titulo: "Salário mínimo", intro: "Valor do salário mínimo no mês anterior à posse e no fim do governo. O ganho \"real\" desconta a inflação do IPCA no período. O valor em dólares usa a cotação de cada data, o que mostra também o efeito do câmbio.", t: {
     fhc: "Passou de R$ 70 para R$ 200: +186%, cerca de 42% acima da inflação. Em dólares, porém, caiu de cerca de US$ 83 para US$ 57, por causa da desvalorização do real em 1999 e 2002.",
     lula12: "Passou de R$ 200 para R$ 510: +155%, cerca de 63% acima da inflação, o maior ganho real da série, com a política de reajustes pela inflação mais o crescimento do PIB. Em dólares, saltou de US$ 57 para cerca de US$ 307, ajudado também pela valorização do real.",
@@ -2333,17 +2296,16 @@ async function loadGov() {
   if (govData || govLoading) return;
   govLoading = true;
   try {
-    const SY = ["^BVSP", "USDBRL=X", "EURBRL=X", "^GSPC", "^IXIC", "^STOXX50E", "BTC-USD"];
+    const SY = ["^BVSP", "USDBRL=X", "EURBRL=X", "^GSPC", "^IXIC", "^STOXX50E", "BTC-USD", "AGRO-BR"];
     const [q, ifx, mac] = await Promise.all([api("/api/cotacoes?range=max&iv=1mo&s=" + SY.map(encodeURIComponent).join(",")), loadIfixHist(), loadMacroHist()]);
     // Optional series: if one fails, its row shows "—" instead of the whole table failing.
-    const [indx, icon, ic] = await Promise.allSettled([loadB3Hist("INDX.SA"), loadB3Hist("ICON.SA"), loadIcbr()]);
+    const [indx, icon] = await Promise.allSettled([loadB3Hist("INDX.SA"), loadB3Hist("ICON.SA")]);
     const byMonth = (pts, shift) => { const m = new Map(); for (const [t, c] of pts) m.set(govMonth(t, shift), c); return [...m].sort((a, b) => a[0].localeCompare(b[0])); };
     const S = {};
     for (const s of SY) S[s] = byMonth(q.quotes[s]?.points || []);
     S.IFIX = byMonth(ifx.pontos, 0);
     if (indx.status === "fulfilled") S.INDX = byMonth(indx.value.pontos, 0);
     if (icon.status === "fulfilled") S.ICON = byMonth(icon.value.pontos, 0);
-    if (ic.status === "fulfilled") S.ICBR = ic.value.mensal;
     govData = { S, mac };
   } catch { govData = { erro: true }; }
   govLoading = false;
@@ -2395,7 +2357,7 @@ function renderGov() {
     ["Bitcoin", "em US$", g => pc(govChange(S["BTC-USD"], g))],
     ["Indústria (INDX)", "ações industriais da B3", g => pc(govChange(S.INDX, g))],
     ["Consumo (ICON)", "ações de varejo e consumo", g => pc(govChange(S.ICON, g))],
-    ["Commodities BR", "IC-Br do Banco Central, em reais", g => pc(govChange(S.ICBR, g), false)],
+    ["Agro Brasil", "cesta de futuros agrícolas, em reais", g => pc(govChange(S["AGRO-BR"], g))],
     ["Selic", "início → fim, % ao ano", g => lv(govLevel(govData.mac.selic?.mensal, g))],
     ["IPCA", "inflação acumulada", g => { const i = govIpca(g); return !i ? pc(null) : `<b class="num">${nf(1).format(i.tot)}%</b><div class="hint num">${nf(1).format(i.ano)}% ao ano</div>${g.fim ? "" : `<div class="hint">até ${ymBR(i.ate)}</div>`}`; }],
     ["Desemprego", "início → fim", g => lv(govLevel(govData.mac.desemprego?.mensal, g), 1)],
