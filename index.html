@@ -3350,8 +3350,8 @@ function simRenderForm(pre = {}) {
   const box = $("#simForm");
   if (simState.modo === "carteira") {
     box.innerHTML = `<div class="vgrid">
-      <div class="field"><label>Outras vendas de ações já feitas este mês (R$)</label><input type="number" min="0" step="100" data-s="outras" value="0"></div>
-      <div class="field"><label>Prejuízo de meses anteriores a compensar (R$)</label><input type="number" min="0" step="100" data-s="prejuizo" value="0"></div></div>`;
+      <div class="field"><label>Outras vendas de ações já feitas este mês (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="outras" value="0"></div>
+      <div class="field"><label>Prejuízo de meses anteriores a compensar (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="prejuizo" value="0"></div></div>`;
     return simRun();
   }
   const sym = normSym(pre.sym || $("#sSym")?.value || state.cart[0]?.symbol || "PETR4.SA");
@@ -3363,23 +3363,35 @@ function simRenderForm(pre = {}) {
       <div class="field"><label for="sSym">Ativo</label><input id="sSym" list="symList" value="${esc(sym.endsWith(".SA") ? short(sym) : sym)}" data-s="sym"></div>
       <div class="field"><label>Tipo</label><select data-s="kind">${Object.entries(KINDS).map(([k, l]) => `<option value="${k}" ${k === kind ? "selected" : ""}>${l}</option>`).join("")}</select></div>
       <div class="field sim-b3"><label>Operação</label><select data-s="op"><option value="swing">Swing trade (dias diferentes)</option><option value="day">Day trade (compra e venda no mesmo dia)</option></select></div>
-      <div class="field"><label>Quantidade${kind === "dolar" ? " (US$)" : ""}</label><input type="number" min="0" step="any" data-s="qty" value="${pre.qty ?? held?.qty ?? 100}"></div>
-      <div class="field"><label>Preço de compra${kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)"}</label><input type="number" min="0" step="any" data-s="pb" value="${pre.pb ?? held?.avg ?? (px ? +px.toFixed(4) : "")}"></div>
-      <div class="field"><label>Preço de venda${kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)"}</label><input type="number" min="0" step="any" data-s="ps" value="${px ? +px.toFixed(4) : ""}">
+      <div class="field"><label>Quantidade${kind === "dolar" ? " (US$)" : ""}</label><input type="text" inputmode="decimal" class="nbr" data-s="qty" value="${nbrFmt(pre.qty ?? held?.qty ?? 100)}"></div>
+      <div class="field"><label>Preço de compra${kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)"}</label><input type="text" inputmode="decimal" class="nbr" data-s="pb" value="${nbrFmt(pre.pb ?? held?.avg ?? (px ? +px.toFixed(4) : ""))}"></div>
+      <div class="field"><label>Preço de venda${kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)"}</label><input type="text" inputmode="decimal" class="nbr" data-s="ps" value="${nbrFmt(px ? +px.toFixed(4) : "")}">
         <div class="sim-quick">${[-10, -5, 0, 5, 10, 20].map(v => `<button type="button" data-sq="${v}">${v > 0 ? "+" : ""}${v === 0 ? "atual" : v + "%"}</button>`).join("")}</div></div>
-      <div class="field sim-ext"><label>Dólar na compra (R$)</label><input type="number" min="0" step="any" data-s="fxb" value="${+usd.toFixed(4)}"></div>
-      <div class="field sim-ext"><label>Dólar na venda (R$)</label><input type="number" min="0" step="any" data-s="fxs" value="${+usd.toFixed(4)}"></div>
+      <div class="field sim-ext"><label>Dólar na compra (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="fxb" value="${nbrFmt(+usd.toFixed(4))}"></div>
+      <div class="field sim-ext"><label>Dólar na venda (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="fxs" value="${nbrFmt(+usd.toFixed(4))}"></div>
       <div class="field"><label>Tempo com o ativo (dias)</label><input type="number" min="0" step="1" data-s="dias" value="${pre.dias ?? 30}"></div>
-      <div class="field sim-mes"><label>Outras vendas no mês (R$)</label><input type="number" min="0" step="100" data-s="outras" value="0"></div>
-      <div class="field sim-b3"><label>Prejuízo a compensar (R$)</label><input type="number" min="0" step="100" data-s="prejuizo" value="0"></div>
+      <div class="field sim-mes"><label>Outras vendas no mês (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="outras" value="0"></div>
+      <div class="field sim-b3"><label>Prejuízo a compensar (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="prejuizo" value="0"></div>
     </div>
     ${held ? `<p class="hint">Preço de compra preenchido com o seu preço médio da carteira (${money(held.avg, q?.currency || "BRL")}).</p>` : ""}`;
   // crypto quoted in US$: convert to reais so the R$ 35k rule applies in reais
-  if (kind === "cripto" && q?.currency === "USD") { box.querySelector('[data-s="pb"]').value = +(+box.querySelector('[data-s="pb"]').value * usd).toFixed(2); box.querySelector('[data-s="ps"]').value = +((q.price || 0) * usd).toFixed(2); box.querySelectorAll("label").forEach(l => l.textContent = l.textContent.replace("(US$)", "(R$)")); }
+  if (kind === "cripto" && q?.currency === "USD") { box.querySelector('[data-s="pb"]').value = nbrFmt(+(nbrParse(box.querySelector('[data-s="pb"]').value) * usd).toFixed(2)); box.querySelector('[data-s="ps"]').value = nbrFmt(+((q.price || 0) * usd).toFixed(2)); box.querySelectorAll("label").forEach(l => l.textContent = l.textContent.replace("(US$)", "(R$)")); }
   simRun();
 }
+// Number fields in the simulator are text fields so they can show "12.588,13".
+const nbrFmt = v => v === "" || v == null || !isFinite(+v) ? "" : (+v).toLocaleString("pt-BR", { maximumFractionDigits: Math.abs(+v) < 1 && +v !== 0 ? 8 : 4 });
+const nbrParse = t => { const x = +String(t ?? "").replace(/\./g, "").replace(",", "."); return isFinite(x) ? x : 0; };
+function nbrLive(el) {   // adds the thousands dots while typing, keeping the cursor in place
+  const raw = el.value, pos = el.selectionStart ?? raw.length, keep = raw.slice(0, pos).replace(/[^\d,]/g, "").length;
+  const [i0, ...ds] = raw.replace(/[^\d,]/g, "").split(","), i = i0.replace(/^0+(?=\d)/, ""), d = ds.length ? ds.join("") : null;
+  const out = (i ? i.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : d != null ? "0" : "") + (d != null ? "," + d : "");
+  if (out === raw) return;
+  el.value = out;
+  let c = 0, q = 0; while (q < out.length && c < keep) { if (/[\d,]/.test(out[q])) c++; q++; }
+  el.setSelectionRange(q, q);
+}
 function simRead() {
-  const v = k => { const el = $(`#simForm [data-s="${k}"]`); return el ? (el.type === "number" ? +el.value || 0 : el.value) : undefined; };
+  const v = k => { const el = $(`#simForm [data-s="${k}"]`); return el ? (el.classList.contains("nbr") ? nbrParse(el.value) : el.type === "number" ? +el.value || 0 : el.value) : undefined; };
   return { kind: v("kind"), op: v("op") || "swing", qty: v("qty"), pb: v("pb"), ps: v("ps"), fxb: v("fxb"), fxs: v("fxs"), dias: v("dias"), outras: v("outras"), prejuizo: v("prejuizo") };
 }
 function simRun() {
@@ -3447,7 +3459,7 @@ function simSave(tipo) {
   save(); $("#simDlg").close(); showTab("cart"); renderCart(); refresh();
 }
 function simRunCarteira() {
-  const res = $("#simRes"), outras = +$('#simForm [data-s="outras"]')?.value || 0, prejuizo = +$('#simForm [data-s="prejuizo"]')?.value || 0;
+  const res = $("#simRes"), outras = nbrParse($('#simForm [data-s="outras"]')?.value), prejuizo = nbrParse($('#simForm [data-s="prejuizo"]')?.value);
   const usd = quotes["USDBRL=X"]?.price;
   const rows = state.cart.map(pz => {
     const q = quotes[pz.symbol]; if (!q?.price) return { pz, erro: "sem cotação" };
@@ -3479,6 +3491,7 @@ function simRunCarteira() {
     <p class="sim-note">ℹ️ Usa o preço médio da sua carteira como custo e o preço de agora como venda, em swing trade. Ações no exterior entram no ajuste anual; ETFs e fundos imobiliários não têm isenção.</p>`;
 }
 $("#simDlg").addEventListener("input", e => {
+  if (e.target.matches("input.nbr")) nbrLive(e.target);
   if (e.target.matches('[data-s="sym"]')) { clearTimeout(simState.t); simState.t = setTimeout(async () => { const s = normSym(e.target.value); if (!s) return; if (!quotes[s]) { try { const r = await api("/api/cotacoes?range=1d&s=" + encodeURIComponent(s)); const q = r.quotes[s]; if (!q.error) { quotes[s] = q; names[s] = q.name; } } catch {} } simRenderForm({ sym: s }); setTimeout(() => { const i = $("#sSym"); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }, 0); }, 700); return; }
   simRun();
 });
@@ -3490,7 +3503,7 @@ $("#simDlg").addEventListener("click", e => {
   if (qk) {
     const sym = normSym($("#sSym").value), q = quotes[sym], kind = simRead().kind, usd = quotes["USDBRL=X"]?.price || 1;
     let base = kind === "dolar" ? usd : q?.price; if (kind === "cripto" && q?.currency === "USD") base *= usd;
-    if (base) { $('#simForm [data-s="ps"]').value = +(base * (1 + +qk.dataset.sq / 100)).toFixed(4); simRun(); }
+    if (base) { $('#simForm [data-s="ps"]').value = nbrFmt(+(base * (1 + +qk.dataset.sq / 100)).toFixed(4)); simRun(); }
   }
 });
 $("#simNew").addEventListener("click", () => simOpen());
