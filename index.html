@@ -375,6 +375,16 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .csheet-txt p { margin: 0 0 8px; } .csheet-txt ul { margin: 0 0 8px; padding-left: 20px; } .csheet-txt li { margin: 2px 0; }
 .cfig { display: block; max-width: 100%; height: auto; background: var(--panel-2); border-radius: 8px; }
 .tt-fig { margin-top: 6px; } .tt-fig .cfig { background: rgba(127,127,127,.18); }
+.gov-t th, .gov-t td { vertical-align: top; min-width: 104px; }
+table.grid.gov-t th { white-space: normal; text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--text); font-weight: 400; }
+.gov-t th .hint { font-size: 11.5px; }
+table.grid.gov-t thead th { text-align: left; white-space: normal; }
+table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index: 1; background: var(--panel); min-width: 96px; max-width: 130px; box-shadow: 1px 0 0 var(--line); }
+.gov-txt { display: grid; gap: 8px; margin-top: 12px; }
+.gov-txt details { padding: 10px 12px; }
+.gov-txt summary { cursor: pointer; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.gov-txt summary span { font-size: 12px; color: var(--muted); }
+.gov-txt ul { margin: 6px 0 0; padding-left: 18px; font-size: 14px; } .gov-txt li { margin: 6px 0; }
 .fund-intro { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 12px; margin-bottom: 14px; }
 .fgrp { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 16px 0 6px; grid-column: 1 / -1; }
 .fgal { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 10px; align-items: start; }
@@ -503,6 +513,9 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <section data-panel="edu" hidden>
     <p class="note">O que significa cada indicador do topo da tela, como ler as correlações e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
     <div class="edu-grid" id="eduList"></div>
+    <h3 class="sec-t" style="margin-top:26px" id="edu-governo">🏛️ Governo: os índices em cada mandato</h3>
+    <p class="hint">Como cada indicador do painel se comportou nos governos desde o Plano Real: presidente, partido e período. Os mercados dependem muito de fatores de fora do país (crises mundiais, juros nos EUA, preço das commodities) e de decisões que não são só do governo, como a Selic, definida pelo Banco Central. Os mandatos têm durações diferentes e começaram em situações diferentes. Os números mostram <b>o que aconteceu</b> em cada período, não provam que o governo foi a causa. Os textos foram escritos por IA (Claude) com base nos dados do painel e em fatos amplamente documentados, e podem conter imprecisões; a tabela é calculada ao vivo.</p>
+    <div id="govBox"></div>
     <h3 class="sec-t" style="margin-top:26px">📊 Análise fundamentalista: os indicadores</h3>
     <p class="hint">A análise fundamentalista olha para a <b>empresa</b>: quanto ela lucra, quanto deve, quanto paga de dividendos e se o preço da ação está caro ou barato perto disso. (A análise técnica, dos gráficos e candles, olha só para o comportamento do preço.) Estes são os indicadores que aparecem no Relatório e no e-mail. Toque em um para ver a explicação. Os exemplos usam os números da <b>empresa com mais peso no Ibovespa</b> no último relatório.</p>
     <div class="fund-intro" id="fundIntro"></div>
@@ -1945,6 +1958,7 @@ function eduItems() {
 }
 function renderEdu() {
   const box = $("#eduList"); if (!box || box.closest("[hidden]")) return;
+  if (!$("#govBox").dataset.feito) renderGov();
   getReport().then(renderFundEdu);
   renderFundEdu();
   box.innerHTML = eduItems().sort((a, b) => (a.id === "spearman") - (b.id === "spearman")).map(it => {
@@ -1962,6 +1976,176 @@ function renderEdu() {
     </article>`;
   }).join("");
 }
+
+
+/* ---------- educação: governos ---------- */
+// How each dashboard indicator behaved under each president since the Real. The table is computed
+// live from the same sources as the charts (monthly closes); the texts were written by Claude in
+// Oct/2026 from those numbers plus widely documented events, and only describe what happened.
+const GOVS = [
+  { id: "fhc", nome: "FHC", full: "Fernando Henrique Cardoso", partido: "PSDB", ini: "1995-01", fim: "2002-12", per: "jan/1995 – dez/2002" },
+  { id: "lula12", nome: "Lula (1º e 2º)", full: "Luiz Inácio Lula da Silva", partido: "PT", ini: "2003-01", fim: "2010-12", per: "jan/2003 – dez/2010" },
+  { id: "dilma", nome: "Dilma", full: "Dilma Rousseff", partido: "PT", ini: "2011-01", fim: "2016-04", per: "jan/2011 – mai/2016" },
+  { id: "temer", nome: "Temer", full: "Michel Temer", partido: "MDB", ini: "2016-05", fim: "2018-12", per: "mai/2016 – dez/2018" },
+  { id: "bolsonaro", nome: "Bolsonaro", full: "Jair Bolsonaro", partido: "PSL, depois PL", ini: "2019-01", fim: "2022-12", per: "jan/2019 – dez/2022" },
+  { id: "lula3", nome: "Lula (3º)", full: "Luiz Inácio Lula da Silva", partido: "PT", ini: "2023-01", fim: null, per: "jan/2023 – hoje" },
+];
+const GOV_TXT = [
+  { k: "ibov", titulo: "Ibovespa", intro: "Pontos do índice do fim do mês anterior à posse até o fim do governo, em valores nominais. A tabela também mostra o ganho descontada a inflação (IPCA).", t: {
+    fhc: "Subiu cerca de 159% (13% ao ano), de 4,4 mil para 11,3 mil pontos, com muita oscilação: crises do México (1995), da Ásia (1997) e da Rússia (1998), a desvalorização do real em janeiro de 1999 e a incerteza da eleição de 2002. Descontada a inflação, o ganho foi de cerca de 29%.",
+    lula12: "Foi o maior avanço da série: cerca de +515% (25% ao ano), de 11,3 mil para 69,3 mil pontos. O período coincidiu com o ciclo de alta das commodities puxado pela China, com a forte entrada de capital estrangeiro e com o grau de investimento, recebido em 2008. Houve uma queda forte na crise financeira mundial de 2008, recuperada em 2009. Descontada a inflação, cerca de +290%.",
+    dilma: "Caiu cerca de 22%, de 69,3 mil para 53,9 mil pontos, num período de fim do ciclo das commodities, piora das contas públicas, perda do grau de investimento (2015), investigações da Lava Jato e recessão em 2015–2016. Descontada a inflação, a perda foi de cerca de 46%.",
+    temer: "Subiu cerca de 63% em dois anos e meio (20% ao ano), de 53,9 mil para 87,9 mil pontos, com a queda dos juros e da inflação e a aprovação do teto de gastos (2016) e da reforma trabalhista (2017). Em maio de 2017 caiu quase 9% em um único dia, após a divulgação de gravações de uma conversa do presidente com um empresário. Descontada a inflação, cerca de +48%.",
+    bolsonaro: "Subiu cerca de 25%, de 87,9 mil para 110 mil pontos. Despencou cerca de 30% em março de 2020, com a pandemia, e chegou perto de 130 mil pontos em 2021, mas recuou com a alta dos juros. Como a inflação do período foi de 27%, descontada a inflação ficou praticamente estável (cerca de −1%).",
+    lula3: "Até outubro de 2026, alta de cerca de 60% (13% ao ano), de 110 mil para cerca de 176 mil pontos, tendo superado 200 mil pontos nos últimos 12 meses. Descontada a inflação, cerca de +35%." } },
+  { k: "ifix", titulo: "IFIX (fundos imobiliários)", intro: "O histórico oficial da B3 começa em 2011. O IFIX já inclui os aluguéis distribuídos (é um índice de retorno total), por isso tende a subir com o tempo. Fundos imobiliários costumam sofrer quando a Selic sobe e melhorar quando ela cai.", t: {
+    fhc: "Sem dados: o índice só passou a ser publicado em 2012, com valores calculados desde 2011.",
+    lula12: "Sem dados (o índice começa em 2011).",
+    dilma: "Subiu cerca de 55% (8,5% ao ano), de mil para 1,55 mil pontos, num período em que os fundos imobiliários se popularizaram entre pessoas físicas. Sofreu em 2015, quando a Selic foi a 14,25%.",
+    temer: "Subiu cerca de 51% (17% ao ano), o melhor ritmo da série, acompanhando a queda da Selic de 14,25% para 6,5%.",
+    bolsonaro: "Subiu cerca de 22% (5% ao ano), o ritmo mais fraco da série. Caiu na pandemia, em 2020, e voltou a sofrer em 2021–2022, quando a Selic subiu de 2% para 13,75%.",
+    lula3: "Até outubro de 2026, alta de cerca de 31% (7,4% ao ano), oscilando com o vaivém dos juros: caiu em 2024, quando a perspectiva era de Selic mais alta, e se recuperou depois." } },
+  { k: "dolar", titulo: "Dólar", intro: "Quantos reais custa 1 dólar. Dólar subindo = real mais fraco. Ele depende muito do cenário mundial (força do dólar, juros nos EUA, preço das commodities), além da confiança nas contas do país.", t: {
+    fhc: "O painel só tem o dólar desde 2003. Pelos dados do Banco Central, passou de cerca de R$ 0,85 para R$ 3,53. O real começou valorizado, com câmbio controlado; em janeiro de 1999 o país adotou o câmbio flutuante e a moeda se desvalorizou, e em 2002 subiu de novo com a incerteza da eleição.",
+    lula12: "Caiu de cerca de R$ 3,53 no fim de 2002 (Banco Central) para R$ 1,66, queda de mais de 50%; no painel, que tem o dólar a partir de dezembro de 2003 (R$ 2,90), a queda foi de 43%. O real foi uma das moedas que mais se valorizaram no mundo, com a entrada de dólares das exportações de commodities e de investidores. Subiu por alguns meses na crise de 2008.",
+    dilma: "Mais que dobrou (cerca de +106%), de R$ 1,66 para R$ 3,43, com o dólar se fortalecendo no mundo, as commodities em queda e a crise fiscal e política no Brasil. Passou de R$ 4 em 2015.",
+    temer: "Subiu cerca de 13%, de R$ 3,43 para R$ 3,87, com alta em 2018 durante a greve dos caminhoneiros e a incerteza da eleição.",
+    bolsonaro: "Subiu cerca de 36%, de R$ 3,87 para R$ 5,28. Chegou perto de R$ 5,90 em 2020, na pandemia, quando a Selic de 2% deixou o real menos atrativo para o investidor estrangeiro.",
+    lula3: "Praticamente estável até outubro de 2026 (de R$ 5,28 para cerca de R$ 5,34), mas com oscilações: passou de R$ 6 no fim de 2024, em meio a dúvidas sobre as contas públicas, e voltou a cair em 2025." } },
+  { k: "euro", titulo: "Euro", intro: "Quantos reais custa 1 euro. Segue em boa parte o dólar, porque o que mais pesa é a força ou a fraqueza do real.", t: {
+    fhc: "O euro foi criado em 1999 (as cédulas, em 2002); o painel tem a cotação em reais a partir de 2003.",
+    lula12: "Do início dos dados do painel, em dezembro de 2003 (R$ 3,52), ao fim de 2010 (R$ 2,20), caiu cerca de 37%, com a valorização do real.",
+    dilma: "Subiu cerca de 78%, de R$ 2,20 para R$ 3,93, mesmo com a crise das dívidas na zona do euro (2010–2012), porque o real se enfraqueceu mais.",
+    temer: "Subiu cerca de 13%, para R$ 4,44.",
+    bolsonaro: "Subiu cerca de 27%, para R$ 5,63.",
+    lula3: "Até outubro de 2026, subiu cerca de 5%, para cerca de R$ 5,94." } },
+  { k: "sp", titulo: "S&P 500 (EUA)", intro: "Em dólares. Não depende do governo brasileiro: aparece aqui para mostrar o cenário mundial em cada período.", t: {
+    fhc: "Subiu cerca de 73% (7% ao ano), com a bolha da internet: forte alta até 2000 e queda em 2001–2002.",
+    lula12: "Subiu cerca de 58%, apesar da crise financeira de 2008, quando caiu mais de 50% do pico de 2007 até março de 2009.",
+    dilma: "Subiu cerca de 58% (9% ao ano), na recuperação pós-crise, com juros perto de zero nos EUA.",
+    temer: "Subiu cerca de 33% (11% ao ano).",
+    bolsonaro: "Subiu cerca de 43%: caiu forte na pandemia (março de 2020), se recuperou rápido e recuou em 2022, quando os EUA subiram os juros.",
+    lula3: "Até outubro de 2026, subiu cerca de 95% (19% ao ano), puxado pelas grandes empresas de tecnologia e pela onda da inteligência artificial." } },
+  { k: "nasdaq", titulo: "Nasdaq (EUA)", intro: "Em dólares, com muito peso de tecnologia. Costuma exagerar os movimentos do S&P 500, para cima e para baixo.", t: {
+    fhc: "Subiu cerca de 75% no período, mas com uma montanha-russa: multiplicou de valor até o pico da bolha da internet, em março de 2000, e perdeu cerca de três quartos até 2002.",
+    lula12: "Subiu cerca de 104%, recuperando-se do estouro da bolha e atravessando a crise de 2008.",
+    dilma: "Subiu cerca de 77% (11% ao ano).",
+    temer: "Subiu cerca de 52% (17% ao ano).",
+    bolsonaro: "Subiu cerca de 59%, com forte alta em 2020–2021 e queda de mais de 30% em 2022.",
+    lula3: "Até outubro de 2026, mais que dobrou (cerca de +129%, 24% ao ano), com a valorização das empresas ligadas à inteligência artificial." } },
+  { k: "stoxx", titulo: "Euro Stoxx 50 (Europa)", intro: "Em pontos (euros). O histórico disponível no painel começa em 2007. Como o S&P 500, mostra o cenário externo.", t: {
+    fhc: "Sem dados no painel.",
+    lula12: "De 2007 ao fim de 2010, caiu cerca de 36%, com a crise financeira de 2008 e o início da crise das dívidas europeias.",
+    dilma: "Subiu cerca de 8%, atravessando a crise das dívidas da zona do euro (2010–2012).",
+    temer: "Praticamente estável (cerca de −1%).",
+    bolsonaro: "Subiu cerca de 26%, com queda forte na pandemia e recuperação.",
+    lula3: "Até outubro de 2026, subiu cerca de 63% (13% ao ano)." } },
+  { k: "btc", titulo: "Bitcoin", intro: "Em dólares, negociado no mundo inteiro; não tem relação com o governo brasileiro. O histórico do painel começa em setembro de 2014.", t: {
+    fhc: "Não existia (foi criado em 2009).",
+    lula12: "Ainda sem cotação relevante no período.",
+    dilma: "De setembro de 2014 a maio de 2016, subiu cerca de 32%, de US$ 340 para US$ 450.",
+    temer: "Subiu cerca de 735%: foi de US$ 450 a quase US$ 20 mil em dezembro de 2017 e caiu para cerca de US$ 3,7 mil no fim de 2018.",
+    bolsonaro: "Subiu cerca de 340%, com recorde perto de US$ 69 mil em novembro de 2021 e forte queda em 2022.",
+    lula3: "Até outubro de 2026, subiu cerca de 386%, com novos recordes depois da aprovação de fundos de bitcoin (ETFs) nas bolsas dos EUA, em 2024." } },
+  { k: "selic", titulo: "Selic", intro: "Valor no início e no fim de cada governo. A Selic é decidida pelo Copom, do Banco Central, que é autônomo desde 2021; o governo influencia sobretudo por meio da inflação e das contas públicas.", t: {
+    fhc: "Juros muito altos para sustentar o real: o painel tem a Selic desde julho de 1996; ela chegou a 45% ao ano em março de 1999, após a desvalorização, e terminou o governo em 25%.",
+    lula12: "Caiu de 25% para 10,75%. Subiu a 26,5% em 2003, para conter a inflação herdada da crise de 2002, e chegou à mínima de 8,75% em 2009.",
+    dilma: "Foi cortada até 7,25% (2012–2013), o menor nível até então, e depois elevada até 14,25% (2015) para combater a inflação, que passou de 10%.",
+    temer: "Caiu de 14,25% para 6,5%, o menor nível da história até então, com a inflação em queda.",
+    bolsonaro: "Caiu a 2% em 2020, a mínima histórica, na pandemia, e subiu a 13,75% em 2021–2022 para combater a inflação.",
+    lula3: "Começou em 13,75%, foi cortada até 10,5% (2024), subiu a 15% (2025) e voltou a 13,75% em outubro de 2026." } },
+  { k: "ipca", titulo: "IPCA (inflação)", intro: "Inflação acumulada em todo o governo e a média por ano. A meta de inflação existe desde 1999.", t: {
+    fhc: "Acumulou cerca de 101% em oito anos (9,1% ao ano), mas caindo muito: de 22% em 1995 para 1,65% em 1998, voltando a 12,5% em 2002 com a alta do dólar.",
+    lula12: "Acumulou cerca de 57% (5,8% ao ano): começou alta, 9,3% em 2003, e ficou perto da meta de 4,5% na maior parte do período.",
+    dilma: "Acumulou cerca de 45% em cinco anos e quatro meses (7,2% ao ano); em 2015 chegou a 10,7%, a maior desde 2002.",
+    temer: "Acumulou cerca de 10% (3,6% ao ano); em 2017 foi de 2,95%, abaixo do piso da meta.",
+    bolsonaro: "Acumulou cerca de 27% (6,1% ao ano); em 2021 chegou a 10,1%, puxada por combustíveis, energia e efeitos da pandemia.",
+    lula3: "Até setembro de 2026, acumulou cerca de 19% (4,7% ao ano)." } },
+  { k: "desemprego", titulo: "Desemprego", intro: "Taxa da PNAD Contínua (IBGE), que começa em 2012. A pesquisa anterior tinha outra metodologia e não é comparável.", t: {
+    fhc: "Sem dados comparáveis na PNAD Contínua.",
+    lula12: "Sem dados comparáveis na PNAD Contínua.",
+    dilma: "Começou a série em 8% (2012), caiu a cerca de 6,2% em 2013–2014 e subiu para 11,3% em 2016, com a recessão.",
+    temer: "Subiu de 11,3% para o pico de 13,9% em 2017 e terminou em 11,7%.",
+    bolsonaro: "Começou em 11,7%, chegou ao pico de 14,9% na pandemia (2020–2021) e caiu para 7,9% no fim de 2022.",
+    lula3: "Começou em 7,9%, subiu a 8,8% no início de 2023 e caiu para 5,3% (agosto de 2026), passando pela mínima da série, 5,1%." } },
+];
+let govData = null, govLoading = false;
+const govMonth = (t, shift = 43200) => new Date((t + shift) * 1000).toISOString().slice(0, 7);
+async function loadGov() {
+  if (govData || govLoading) return;
+  govLoading = true;
+  try {
+    const SY = ["^BVSP", "USDBRL=X", "EURBRL=X", "^GSPC", "^IXIC", "^STOXX50E", "BTC-USD"];
+    const [q, ifx, mac] = await Promise.all([api("/api/cotacoes?range=max&iv=1mo&s=" + SY.map(encodeURIComponent).join(",")), loadIfixHist(), loadMacroHist()]);
+    const byMonth = (pts, shift) => { const m = new Map(); for (const [t, c] of pts) m.set(govMonth(t, shift), c); return [...m].sort((a, b) => a[0].localeCompare(b[0])); };
+    const S = {};
+    for (const s of SY) S[s] = byMonth(q.quotes[s]?.points || []);
+    S.IFIX = byMonth(ifx.pontos, 0);
+    govData = { S, mac };
+  } catch { govData = { erro: true }; }
+  govLoading = false;
+  renderGov();
+}
+const ymPrev = ym => new Date(Date.UTC(+ym.slice(0, 4), +ym.slice(5) - 2, 1)).toISOString().slice(0, 7);
+const ymDiff = (a, b) => (+b.slice(0, 4) - +a.slice(0, 4)) * 12 + (+b.slice(5) - +a.slice(5));
+const ymBR = ym => new Date(ym + "-15T12:00").toLocaleDateString("pt-BR", { month: "short", year: "numeric" }).replace(".", "");
+const valAt = (ser, ym) => { let v = null; for (const [k, x] of ser) { if (k <= ym) v = x; else break; } return v; };
+// Change over a government: from the close of the month before it took office (or the first
+// month with data) to the close of its last month (or the latest month, for the current one).
+function govChange(ser, g) {
+  if (!ser?.length) return null;
+  const fim = g.fim || ser.at(-1)[0];
+  if (ser[0][0] > fim) return null;
+  const desde = ser[0][0] > ymPrev(g.ini) ? ser[0][0] : null, k0 = desde || ymPrev(g.ini);
+  const v0 = valAt(ser, k0), v1 = valAt(ser, fim), n = ymDiff(k0, fim);
+  if (!v0 || !v1 || n < 1) return null;
+  return { v0, v1, tot: (v1 / v0 - 1) * 100, ano: (Math.pow(v1 / v0, 12 / n) - 1) * 100, desde };
+}
+function govIpca(g) {
+  const ip = govData.mac.ipca?.mensal || [], fim = g.fim || ip.at(-1)?.[0];
+  const ms = ip.filter(([k]) => k >= g.ini && k <= fim); if (!ms.length) return null;
+  const acc = ms.reduce((x, [, v]) => x * (1 + v / 100), 1);
+  return { acc, tot: (acc - 1) * 100, ano: (Math.pow(acc, 12 / ms.length) - 1) * 100, ate: ms.at(-1)[0] };
+}
+function govLevel(ser, g) {   // first and last value inside the government (Selic, unemployment)
+  if (!ser?.length) return null;
+  const fim = g.fim || ser.at(-1)[0], k0 = ymPrev(g.ini);
+  const ini = valAt(ser, k0), dentro = ser.filter(([k]) => k >= g.ini && k <= fim);
+  if (!dentro.length) return null;
+  return { ini: ini ?? dentro[0][1], desde: ini == null ? dentro[0][0] : null, fim: dentro.at(-1)[1], max: Math.max(...dentro.map(x => x[1])), min: Math.min(...dentro.map(x => x[1])) };
+}
+function renderGov() {
+  const box = $("#govBox"); if (!box) return;
+  if (!govData) { box.innerHTML = `<div class="empty">Carregando os dados históricos…</div>`; loadGov(); return; }
+  const { S } = govData;
+  const pc = (x, colour = true, dec = 0) => !x ? `<span class="hint">—</span>` : `<b class="num ${colour ? cls(x.tot) : ""}">${x.tot > 0 ? "+" : ""}${nf(dec).format(x.tot)}%</b><div class="hint num">${x.ano > 0 ? "+" : ""}${nf(1).format(x.ano)}% ao ano</div>${x.desde ? `<div class="hint">desde ${ymBR(x.desde)}</div>` : ""}`;
+  const lv = (x, d = 2) => !x ? `<span class="hint">—</span>` : `<b class="num">${nf(d).format(x.ini)}% → ${nf(d).format(x.fim)}%</b><div class="hint num">mín. ${nf(d).format(x.min)}% · máx. ${nf(d).format(x.max)}%</div>${x.desde ? `<div class="hint">desde ${ymBR(x.desde)}</div>` : ""}`;
+  const ROWS = govData.erro ? [] : [
+    ["Ibovespa", "pontos, nominal", g => pc(govChange(S["^BVSP"], g))],
+    ["Ibovespa real", "descontada a inflação", g => { const b = govChange(S["^BVSP"], g), i = govIpca(g); return b && i ? pc({ tot: ((1 + b.tot / 100) / i.acc - 1) * 100, ano: (Math.pow((1 + b.tot / 100) / i.acc, 12 / Math.max(1, ymDiff(ymPrev(g.ini), g.fim || S["^BVSP"].at(-1)[0]))) - 1) * 100 }) : pc(null); }],
+    ["IFIX", "fundos imobiliários", g => pc(govChange(S.IFIX, g))],
+    ["Dólar", "R$ por US$ · alta = real mais fraco", g => g.id === "fhc" ? `<b class="num">≈ +315%</b><div class="hint">R$ 0,85 → R$ 3,53 (Banco Central)</div>` : pc(govChange(S["USDBRL=X"], g), false)],
+    ["Euro", "R$ por €", g => pc(govChange(S["EURBRL=X"], g), false)],
+    ["S&P 500", "EUA, em US$", g => pc(govChange(S["^GSPC"], g))],
+    ["Nasdaq", "EUA, em US$", g => pc(govChange(S["^IXIC"], g))],
+    ["Euro Stoxx 50", "Europa, em €", g => pc(govChange(S["^STOXX50E"], g))],
+    ["Bitcoin", "em US$", g => pc(govChange(S["BTC-USD"], g))],
+    ["Selic", "início → fim, % ao ano", g => lv(govLevel(govData.mac.selic?.mensal, g))],
+    ["IPCA", "inflação acumulada", g => { const i = govIpca(g); return !i ? pc(null) : `<b class="num">${nf(1).format(i.tot)}%</b><div class="hint num">${nf(1).format(i.ano)}% ao ano</div>${g.fim ? "" : `<div class="hint">até ${ymBR(i.ate)}</div>`}`; }],
+    ["Desemprego", "início → fim", g => lv(govLevel(govData.mac.desemprego?.mensal, g), 1)],
+  ];
+  if (!govData.erro) box.dataset.feito = "1";
+  box.innerHTML = `
+    <div class="card scroll"><table class="grid gov-t"><thead><tr><th></th>${GOVS.map(g => `<th><b>${g.nome}</b><div class="hint">${g.partido}</div><div class="hint">${g.per}</div></th>`).join("")}</tr></thead><tbody>
+      ${govData.erro ? `<tr><td colspan="7" class="empty">Não consegui carregar os dados agora. Tente de novo mais tarde.</td></tr>` : ROWS.map(([l, sub, f]) => `<tr><th><b>${l}</b><div class="hint">${sub}</div></th>${GOVS.map(g => `<td>${f(g)}</td>`).join("")}</tr>`).join("")}
+    </tbody></table></div>
+    <p class="hint" style="margin-top:8px">Variação do fim do mês anterior à posse ao fim do último mês do governo (fechamentos mensais; o governo Dilma vai até abril de 2016 e o de Temer começa em maio de 2016). "Ao ano" = média anual composta, que permite comparar mandatos de durações diferentes. O governo atual usa os dados mais recentes e muda todo mês. Itamar Franco (1992–1994), em cujo governo foi lançado o Plano Real, fica de fora porque quase todas as séries começam depois.</p>
+    <div class="gov-txt">${GOV_TXT.map(x => `<details class="card" data-gov="${x.k}" ${govOpen.has(x.k) ? "open" : ""}><summary><b>${x.titulo}</b><span>como se comportou em cada governo</span></summary>
+      <p class="hint">${x.intro}</p>
+      <ul>${GOVS.map(g => `<li><b>${g.nome} (${g.partido}, ${g.per}):</b> ${x.t[g.id]}</li>`).join("")}</ul></details>`).join("")}</div>`;
+}
+const govOpen = new Set();
+$("#govBox").addEventListener("toggle", e => { const d = e.target.closest?.("[data-gov]"); if (d) d.open ? govOpen.add(d.dataset.gov) : govOpen.delete(d.dataset.gov); }, true);
 
 /* ---------- educação: análise fundamentalista ---------- */
 // k = field in relatorios/ultimo.json → indicadores (from Fundamentus); fmt = how to show the example.
