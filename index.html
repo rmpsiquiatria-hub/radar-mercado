@@ -1125,6 +1125,7 @@ function renderWinHead(w) {
     q.dayLow && q.dayHigh ? `Dia: ${money(q.dayLow, q.currency, q.type)} – ${money(q.dayHigh, q.currency, q.type)}` : "",
     q.low52 && q.high52 ? `52 sem.: ${money(q.low52, q.currency, q.type)} – ${money(q.high52, q.currency, q.type)}` : "",
     q.volume ? `Volume: ${nf(0).format(q.volume)}` : "",
+    w.sym === "IFIX.SA" ? "Histórico diário: B3, desde 2011" : "",
   ].filter(Boolean).join("  ·  ");
 }
 function renderWins() { wins.forEach(w => { renderWinHead(w); syncWinControls(w); }); }
