@@ -89,6 +89,8 @@ header { display: flex; align-items: center; gap: 12px; padding: 18px 0 14px; fl
 .idx .lbl { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; display: flex; justify-content: space-between; gap: 6px; }
 .idx .px { font-size: clamp(14px, 1.55vw, 18px); font-weight: 600; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .idx .ch { font-size: 13px; }
+.since { font-size: 11px; font-weight: 400; color: var(--muted); white-space: nowrap; }
+.idx .ch .since { margin-top: 1px; }
 .idx svg { display: block; width: 100%; height: 30px; margin-top: 4px; }
 .mk { font-size: 10px; padding: 1px 6px; border-radius: 99px; background: var(--panel-2); color: var(--faint); text-transform: none; letter-spacing: 0; font-weight: 500; }
 .mk.on { background: var(--up-soft); color: var(--up); }
@@ -520,6 +522,14 @@ const brl = v => (v == null || !isFinite(v)) ? "—" : (v < 0 ? "-" : "") + "R$ 
 const pct = v => (v == null || !isFinite(v)) ? "—" : (v > 0 ? "+" : "") + nf(2).format(v) + "%";
 const cls = v => v > 0.0001 ? "up" : v < -0.0001 ? "down" : "flat";
 const change = q => q && q.prevClose ? (q.price / q.prevClose - 1) * 100 : null;
+// Crypto never closes: its "day" starts at 00:00 UTC (21h in Brasília), the first point of
+// the 1-day series. Says when the change is measured from, e.g. "desde 21h de ontem".
+function sinceTxt(q) {
+  if (q?.type !== "CRYPTOCURRENCY" || !q.points?.length) return "";
+  const d = new Date(q.points[0][0] * 1000), mm = String(d.getMinutes()).padStart(2, "0");
+  return `desde ${d.getHours()}h${mm === "00" ? "" : mm}${d.toDateString() === new Date().toDateString() ? "" : " de ontem"}`;
+}
+const since = q => { const t = sinceTxt(q); return t ? `<div class="since">${t}</div>` : ""; };
 function short(sym) { return sym.replace(/\.SA$/, "").replace(/=X$/, "").replace(/^\^/, ""); }
 function group(sym, q) {
   const t = q?.type;
@@ -631,7 +641,7 @@ function renderCounts() {
 function macroCards() {
   if (!macro) return "";
   const out = [];
-  const sl = macro.selic, ip = macro.ipca;
+  const sl = macro.selic, ip = macro.ipca, de = macro.desemprego;
   if (sl?.atual) {
     const m = sl.mensal, ago = m.length > 12 ? m[m.length - 13][1] : null, d = ago == null ? null : sl.atual.valor - ago;
     out.push(`<button class="card idx macro" data-edu="selic">
@@ -650,6 +660,16 @@ function macroCards() {
       ${sparkline(ip.doze_meses.slice(-24).map(([k, v], i) => [i, v]), null)}
     </button>`);
   }
+  if (de?.atual != null) {
+    // Rising unemployment is bad news, so an increase shows in red.
+    const m = de.mensal, ago = m.length > 12 ? m[m.length - 13][1] : null, d = ago == null ? null : de.atual - ago;
+    out.push(`<button class="card idx macro" data-edu="desemprego" title="Trimestre móvel ${esc(de.periodo || "")} (IBGE)">
+      <div class="lbl">Desemprego<span class="mk">emprego</span></div>
+      <div class="px num">${nf(1).format(de.atual)}%</div>
+      <div class="ch num ${d == null ? "flat" : d > 0 ? "down" : d < 0 ? "up" : "flat"}">${d == null ? "&nbsp;" : (d > 0 ? "+" : "") + nf(1).format(d) + " p.p. em 12m"}</div>
+      ${sparkline(m.slice(-24).map(([k, v], i) => [i, v]), null)}
+    </button>`);
+  }
   return out.join("");
 }
 function renderStrip() {
@@ -658,7 +678,7 @@ function renderStrip() {
     return `<button class="card idx" data-open="${esc(s)}">
       <div class="lbl">${label}${q ? `<span class="mk ${q.open ? "on" : ""}">${q.open ? "aberto" : "fechado"}</span>` : ""}</div>
       <div class="px num ${q?._flash ? "flash-" + q._flash : ""}">${q ? money(q.price, q.currency, q.type) : "…"}</div>
-      <div class="ch num ${cls(c)}">${q ? pct(c) : "&nbsp;"}</div>
+      <div class="ch num ${cls(c)}">${q ? pct(c) + since(q) : "&nbsp;"}</div>
       ${sparkline(q?.points, q?.prevClose)}
     </button>`;
   }).join(""));
@@ -666,8 +686,8 @@ function renderStrip() {
 const macroCardsWrap = html => html + macroCards();
 
 /* ---------- correlações (Spearman) ---------- */
-// Monthly changes: market series use the month's % return, Selic the change in p.p.,
-// IPCA its monthly rate. Spearman = Pearson correlation of the ranks (ties get the average rank).
+// Monthly changes: market series use the month's % return, Selic and unemployment the
+// change in p.p., IPCA its monthly rate. Spearman = Pearson correlation of the ranks (ties get the average rank).
 const CORR = [
   { k: "^BVSP", label: "Ibovespa" },
   { k: "XFIX11.SA", label: "IFIX", nota: "histórico via ETF XFIX11, que replica o IFIX" },
@@ -678,7 +698,9 @@ const CORR = [
   { k: "BTC-USD", label: "Bitcoin" },
   { k: "selic", label: "Selic" },
   { k: "ipca", label: "IPCA" },
+  { k: "desemprego", label: "Desemprego", nota: "taxa do trimestre móvel do IBGE, pelo último mês do trimestre" },
 ];
+const MACRO_KEYS = new Set(["selic", "ipca", "desemprego"]);
 let macro = null, monthly = null;   // monthly: { key: Map("AAAA-MM" -> variação) }
 const thisMonth = () => new Date().toISOString().slice(0, 7);
 function monthlyChanges(pairs, mode) {   // pairs: [["AAAA-MM", valor]] sorted
@@ -695,7 +717,7 @@ function monthlyChanges(pairs, mode) {   // pairs: [["AAAA-MM", valor]] sorted
 function buildMonthly(q) {
   const res = {};
   for (const { k } of CORR) {
-    if (k === "selic" || k === "ipca") continue;
+    if (MACRO_KEYS.has(k)) continue;
     const pts = q?.[k]?.points; if (!pts) continue;
     const byMonth = new Map();
     // +12h keeps month-start bars stamped just before midnight UTC in the right month.
@@ -704,6 +726,7 @@ function buildMonthly(q) {
   }
   if (macro?.selic?.mensal) res.selic = monthlyChanges(macro.selic.mensal, "diff");
   if (macro?.ipca?.mensal) res.ipca = new Map(macro.ipca.mensal.filter(([m]) => m < thisMonth()));
+  if (macro?.desemprego?.mensal) res.desemprego = monthlyChanges(macro.desemprego.mensal, "diff");
   return res;
 }
 function ranks(xs) {
@@ -760,7 +783,7 @@ function renderCorr() {
       <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [36, "3 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
       <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
     <div class="corr-row">${chips}</div>${matrix}
-    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11. Correlação não é causa e muda com o tempo.</p>`;
+    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11. Correlação não é causa e muda com o tempo.</p>`;
 }
 $("#corr").addEventListener("click", e => {
   const j = e.target.closest("[data-cj]"); if (j) { state.corr = { ...corrCfg(), janela: +j.dataset.cj }; save(); return renderCorr(); }
@@ -772,7 +795,7 @@ $("#corr").addEventListener("change", e => {
 async function loadCorrData() {
   const [m, h] = await Promise.allSettled([
     api("/api/macro"),
-    api("/api/cotacoes?range=5y&s=" + CORR.filter(x => x.k !== "selic" && x.k !== "ipca").map(x => encodeURIComponent(x.k)).join(",")),
+    api("/api/cotacoes?range=5y&s=" + CORR.filter(x => !MACRO_KEYS.has(x.k)).map(x => encodeURIComponent(x.k)).join(",")),
   ]);
   if (m.status === "fulfilled") macro = m.value;
   monthly = buildMonthly(h.status === "fulfilled" ? h.value.quotes : null);
@@ -791,7 +814,7 @@ function renderFavs() {
       <div style="min-width:0"><div class="t">${esc(short(s))}</div><div class="nm">${q?.error ? "Código não encontrado" : esc(q?.name || "…")}</div></div>
       <div class="spark">${sparkline(q?.points, q?.prevClose)}</div>
       <div class="px num ${q?._flash ? "flash-" + q._flash : ""}">${q && !q.error ? money(q.price, q.currency, q.type) : "—"}</div>
-      <div class="pill num ${cls(c)}">${pct(c)}</div>
+      <div class="pill num ${cls(c)}">${pct(c)}${since(q)}</div>
       <button class="simb" data-sim="${esc(s)}" title="Simular compra e venda (impostos e taxas)" aria-label="Simular compra e venda de ${esc(short(s))}">🧮</button>
       <button class="del" data-unfav="${esc(s)}" title="Tirar da lista" aria-label="Tirar ${esc(short(s))} da lista">×</button>
     </div>`; }).join("")}</div>`).join("");
@@ -816,7 +839,7 @@ function renderCart() {
       <td class="num">${nf(p.qty % 1 ? 4 : 0).format(p.qty)}</td>
       <td class="num">${money(p.avg, cur)}</td>
       <td class="num">${q ? money(q.price, cur) : "…"}</td>
-      <td class="num ${cls(change(q))}">${pct(change(q))}</td>
+      <td class="num ${cls(change(q))}">${pct(change(q))}${since(q)}</td>
       <td class="num">${money(value, cur)}</td>
       <td class="num ${cls(res)}">${res == null ? "—" : (res > 0 ? "+" : "") + money(res, cur)}<div style="font-size:12px">${pct(resPct)}</div></td>
       <td style="white-space:nowrap"><button class="btn small" data-sim="${esc(p.symbol)}" title="Simular a venda com impostos e taxas">🧮</button> <button class="del" data-uncart="${esc(p.symbol)}" title="Remover da carteira" aria-label="Remover ${esc(short(p.symbol))}">×</button></td>
@@ -956,7 +979,7 @@ function renderWinHead(w) {
   const q = quotes[w.sym]; if (!q) return;
   const c = change(q);
   w.el.querySelector(".win-px").textContent = money(q.price, q.currency, q.type);
-  const ch = w.el.querySelector(".win-ch"); ch.textContent = pct(c); ch.className = "win-ch num " + cls(c);
+  const ch = w.el.querySelector(".win-ch"); ch.textContent = pct(c) + (sinceTxt(q) ? " " + sinceTxt(q) : ""); ch.className = "win-ch num " + cls(c);
   w.el.querySelector(".win-sub").textContent = [q.name, q.open ? "aberto" : "fechado"].filter(Boolean).join(" · ");
   w.el.querySelector(".win-stats").textContent = [
     q.dayLow && q.dayHigh ? `Dia: ${money(q.dayLow, q.currency, q.type)} – ${money(q.dayHigh, q.currency, q.type)}` : "",
@@ -1615,6 +1638,12 @@ function eduItems() {
       porque: "Inflação alta corrói o poder de compra e leva o Banco Central a subir a Selic. Por isso, o mercado acompanha cada divulgação de perto.",
       horario: [["Divulgação", "uma vez por mês, por volta do dia 10, às 9h"], ["Prévia (IPCA-15)", "por volta do dia 25 de cada mês"]],
       nota: "Fonte: IBGE (SIDRA). Valor negativo no mês = deflação, quando os preços caíram." },
+    { id: "desemprego", titulo: "Taxa de desemprego", sub: "Quantos procuram trabalho e não encontram",
+      valor: () => macro?.desemprego?.atual != null ? `<b class="num">${nf(1).format(macro.desemprego.atual)}%</b> <span class="hint">no trimestre ${esc(macro.desemprego.periodo || "")}</span>` : "",
+      oque: "Medida pelo <b>IBGE</b> na PNAD Contínua, é a porcentagem das pessoas de 14 anos ou mais que querem trabalhar, procuraram emprego e não encontraram. Quem não está procurando (estudantes, aposentados, quem desistiu) não entra na conta. Cada número cobre um <b>trimestre móvel</b>: por exemplo, junho, julho e agosto.",
+      porque: "Desemprego baixo indica economia aquecida: mais renda e mais consumo, o que ajuda varejo e bancos, mas pode pressionar a inflação e manter a Selic alta. Desemprego subindo costuma sinalizar desaceleração.",
+      horario: [["Divulgação", "uma vez por mês, no fim do mês, às 9h"], ["Defasagem", "cerca de 2 meses: em outubro sai o trimestre jun-jul-ago"]],
+      nota: "Fonte: IBGE (SIDRA, tabela 6381). Nas correlações entra a mudança mensal da taxa, em pontos percentuais." },
     { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler a linha de correlações",
       oque: "Mede se dois indicadores costumam se mover <b>na mesma direção</b>. Vai de <b>−1</b> a <b>+1</b>: +1 significa que, quando um tem um mês melhor, o outro também tem; −1, que um sobe quando o outro cai; 0, que não há relação. Diferente da correlação comum (Pearson), a de Spearman compara a <i>ordem</i> dos meses, do pior ao melhor, e por isso é menos afetada por meses extremos.",
       porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
@@ -1655,7 +1684,7 @@ function renderEdu() {
       <div class="edu-h"><div><h3>${it.titulo}</h3><div class="hint">${it.sub}</div></div>
         ${q ? `<span class="mk ${q.open ? "on" : ""}">${q.open ? "aberto agora" : "fechado agora"}</span>` : ""}</div>
       ${it.valor && it.valor() ? `<div class="edu-px" style="cursor:default">${it.valor()}</div>` : ""}
-      ${q ? `<button class="edu-px" data-open="${esc(it.s)}"><span class="num">${money(q.price, q.currency, q.type)}</span> <span class="num ${cls(c)}">${pct(c)}</span> <span class="hint">· ver gráfico</span></button>` : ""}
+      ${q ? `<button class="edu-px" data-open="${esc(it.s)}"><span class="num">${money(q.price, q.currency, q.type)}</span> <span class="num ${cls(c)}">${pct(c)}</span>${sinceTxt(q) ? ` <span class="hint">${sinceTxt(q)}</span>` : ""} <span class="hint">· ver gráfico</span></button>` : ""}
       <h4>O que é</h4><p>${it.oque}</p>
       <h4>Por que importa</h4><p>${it.porque}</p>
       <h4>Horário (Brasília)</h4>

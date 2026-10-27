@@ -1,7 +1,9 @@
-// GET /api/macro → Selic and IPCA, current value plus monthly history (for cards and correlations).
+// GET /api/macro → Selic, IPCA and unemployment, current value plus monthly history (for cards and correlations).
 // Selic: IPEA series BM366_TJOVER366 (daily, % a.a., mirrors the Central Bank's SGS, which
 //        does not answer requests from outside Brazil).
 // IPCA:  IBGE SIDRA table 1737 — monthly change (v63) and 12-month change (v2265).
+// Desemprego: IBGE SIDRA table 6381 (PNAD Contínua) — unemployment rate (v4099), rolling
+//        3-month period stamped with its last month.
 
 import { json, bad } from "./_yahoo.js";
 
@@ -43,11 +45,23 @@ async function ipca() {
   return { mes: mensal.at(-1)?.[0] || null, mensal_atual: mensal.at(-1)?.[1] ?? null, doze_meses_atual: doze.at(-1)?.[1] ?? null, mensal, doze_meses: doze };
 }
 
+async function desemprego() {
+  const rows = await getJson("https://apisidra.ibge.gov.br/values/t/6381/n1/all/v/4099/p/last%2084");
+  const mensal = [];
+  let periodo = null;
+  for (const r of rows.slice(1)) {
+    const v = Number(r.V);
+    if (!Number.isFinite(v)) continue;
+    mensal.push([`${r.D3C.slice(0, 4)}-${r.D3C.slice(4)}`, v]);
+    periodo = r.D3N;
+  }
+  mensal.sort((a, b) => a[0].localeCompare(b[0]));
+  return { mes: mensal.at(-1)?.[0] || null, atual: mensal.at(-1)?.[1] ?? null, periodo, mensal };
+}
+
 export async function GET() {
-  const [s, i] = await Promise.allSettled([selic(), ipca()]);
-  if (s.status === "rejected" && i.status === "rejected") return bad("fontes indisponíveis", 502);
-  return json({
-    selic: s.status === "fulfilled" ? s.value : { erro: String(s.reason?.message || s.reason) },
-    ipca: i.status === "fulfilled" ? i.value : { erro: String(i.reason?.message || i.reason) },
-  }, 21600);
+  const [s, i, d] = await Promise.allSettled([selic(), ipca(), desemprego()]);
+  if ([s, i, d].every(x => x.status === "rejected")) return bad("fontes indisponíveis", 502);
+  const val = x => x.status === "fulfilled" ? x.value : { erro: String(x.reason?.message || x.reason) };
+  return json({ selic: val(s), ipca: val(i), desemprego: val(d) }, 21600);
 }
