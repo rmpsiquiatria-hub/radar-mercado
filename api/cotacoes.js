@@ -1,11 +1,11 @@
 // GET /api/cotacoes?s=PETR4.SA,AAPL,^BVSP&range=1d[&iv=1d][&ohlc=1]
 // Returns the latest price plus a price series for each symbol.
-// - range picks the period; iv overrides the candle interval (default per range below).
+// - range picks the period (up to 20y, or max = all history, monthly); iv overrides the candle interval (default per range below).
 // - ohlc=1 adds full candles as bars: [[t, open, high, low, close, volume], ...].
 
 import { yahoo, json, bad, SYMBOL } from "./_yahoo.js";
 
-const INTERVAL = { "1d": "5m", "5d": "30m", "1mo": "1d", "6mo": "1d", "1y": "1wk", "2y": "1d", "5y": "1mo", "10y": "1wk", "20y": "1mo" };
+const INTERVAL = { "1d": "5m", "5d": "30m", "1mo": "1d", "6mo": "1d", "1y": "1wk", "2y": "1d", "5y": "1mo", "10y": "1wk", "20y": "1mo", "max": "1mo" };
 const INTERVALS = new Set(["5m", "15m", "30m", "1h", "1d", "1wk", "1mo"]);
 const MIN_GAP_DAYS = { "1d": 0.5, "1wk": 6, "1mo": 27 };
 const r4 = x => +x.toFixed(4);
