@@ -547,6 +547,7 @@ const STRIP = [
   { s: "EURBRL=X", label: "Euro" },
   { s: "^GSPC", label: "S&P 500" },
   { s: "^IXIC", label: "Nasdaq" },
+  { s: "^STOXX50E", label: "Euro Stoxx 50" },
   { s: "BTC-USD", label: "Bitcoin" },
 ];
 const DEFAULT_FAVS = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBAS3.SA", "WEGE3.SA", "AAPL", "NVDA", "MSFT", "USDBRL=X", "EURBRL=X", "BTC-USD", "ETH-USD"];
@@ -754,6 +755,7 @@ const CORR = [
   { k: "EURBRL=X", label: "Euro" },
   { k: "^GSPC", label: "S&P 500" },
   { k: "^IXIC", label: "Nasdaq" },
+  { k: "^STOXX50E", label: "Euro Stoxx 50" },
   { k: "BTC-USD", label: "Bitcoin" },
   { k: "selic", label: "Selic" },
   { k: "ipca", label: "IPCA" },
@@ -1836,8 +1838,12 @@ document.addEventListener("click", e => { if (!e.target.closest(".search")) $("#
 function usSummerTime() {
   return /EDT/.test(new Date().toLocaleString("en-US", { timeZone: "America/New_York", timeZoneName: "short" }));
 }
+// Europe changes clocks on the last Sundays of March and October (not the same dates as the US).
+function euSummerTime() {
+  try { return /GMT\+2/.test(new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Berlin", timeZoneName: "shortOffset" }).format(new Date())); } catch { return false; }
+}
 function eduItems() {
-  const dst = usSummerTime();
+  const dst = usSummerTime(), euDst = euSummerTime();
   const usHours = dst ? "10h30 às 17h" : "11h30 às 18h";
   const usPre = dst ? "a partir das 5h" : "a partir das 6h";
   return [
@@ -1894,6 +1900,11 @@ function eduItems() {
       porque: "É o termômetro do setor de tecnologia. Costuma subir e cair mais que o S&P 500, ou seja, é mais volátil.",
       horario: [["Pregão regular", usHours], ["Pré-mercado", usPre], ["Dias", "segunda a sexta, exceto feriados americanos"]],
       nota: "Mesmo horário do S&P 500." },
+    { s: "^STOXX50E", titulo: "Euro Stoxx 50", sub: "As 50 maiores empresas da zona do euro",
+      oque: "Reúne as 50 maiores empresas dos países que usam o euro, como ASML (Holanda), LVMH (França), SAP e Siemens (Alemanha), TotalEnergies (França) e Santander (Espanha). É calculado pela STOXX, empresa do grupo da bolsa alemã (Deutsche Börse), e medido em <b>pontos</b>.",
+      porque: "É o principal termômetro das bolsas da Europa. Como abre de madrugada no horário de Brasília, mostra o humor do mercado internacional antes de a B3 e Nova York abrirem.",
+      horario: [["Pregão regular", euDst ? "4h às 12h30" : "5h às 13h30"], ["Na Europa", "9h às 17h30 (horário de Frankfurt e Paris)"], ["Dias", "segunda a sexta, exceto feriados europeus"]],
+      nota: "A Europa muda o relógio no último domingo de março e no último domingo de outubro. Por isso, de abril a outubro o pregão vai das 4h às 12h30 de Brasília, e de novembro a março, das 5h às 13h30." },
     { s: "BTC-USD", titulo: "Bitcoin", sub: "A maior criptomoeda do mundo",
       oque: "Moeda digital criada em 2009, sem banco central nem governo por trás. É negociada em corretoras do mundo inteiro, e o preço aqui é em <b>dólares (US$)</b>.",
       porque: "É bem mais volátil que ações: variações de 5% num único dia são comuns. É o termômetro do mercado de criptomoedas.",
