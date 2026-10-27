@@ -134,6 +134,7 @@ nav.tabs button[aria-selected="true"] { color: var(--text); border-color: var(--
 .del { border: 0; background: none; color: var(--faint); cursor: pointer; font-size: 18px; border-radius: 6px; width: 30px; height: 30px; }
 .simb { border: 0; background: none; cursor: pointer; font-size: 16px; border-radius: 6px; width: 30px; height: 30px; }
 .simb:hover { background: var(--accent-soft); }
+.vacts { white-space: nowrap; text-align: right; }
 .del:hover { background: var(--down-soft); color: var(--down); }
 
 table.grid { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -428,7 +429,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
     <div class="totals" id="cartTotals"></div>
     <div class="card scroll" id="cartList"></div>
     <p class="note" style="margin-top:12px">Para incluir ou alterar uma posição, use o botão 🧮 Simular compra e venda: ele mostra custos e impostos e, no final, tem o botão para salvar a compra (ou registrar a venda) na carteira. Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do momento.</p>
-    <div class="vhead" style="margin-top:26px"><h3>Carteiras virtuais <span class="hint" style="font-weight:400">· simulação com dinheiro fictício</span></h3></div>
+    <div class="vhead" style="margin-top:26px"><h3>Carteira virtual <span class="hint" style="font-weight:400">· simulação com dinheiro fictício</span></h3></div>
     <div id="vList" class="vlist"></div>
   </section>
 
@@ -2139,12 +2140,14 @@ function vValor(p) {
   const q = quotes[p.symbol]; return q?.price ? toBRL(q.price * p.qty, q.currency) : null;
 }
 function virtuais() { return state.virtuais || []; }
-const vOpen = new Set();   // portfolios whose asset list is expanded
+const vClosed = new Set();   // portfolios whose asset list the user collapsed (open by default)
 
 function renderVirt() {
   const box = $("#vList"); if (!box) return;
   const list = virtuais();
-  if (!list.length) { box.innerHTML = `<div class="card empty">Nenhuma carteira virtual ainda. Crie uma para simular com dinheiro fictício e acompanhar como ela se sai.</div>`; return; }
+  // Only one virtual portfolio: the create button disappears while one exists.
+  $("#vNew").hidden = list.length > 0;
+  if (!list.length) { box.innerHTML = `<div class="card empty">Nenhuma carteira virtual ainda. Crie uma para simular com dinheiro fictício e acompanhar como ela se sai. Você pode ter uma carteira virtual por vez; para começar outra, exclua a atual.</div>`; return; }
   const ibov = quotes["^BVSP"]?.price, selic = macro?.selic?.atual?.valor;
   box.innerHTML = list.map(v => {
     let total = v.caixa, missing = 0;
@@ -2154,7 +2157,8 @@ function renderVirt() {
       const r = val != null && p.custo ? (val / p.custo - 1) * 100 : null;
       const mk = VMKT.find(m => m.k === p.mercado);
       return `<tr data-open="${esc(p.symbol)}"><td><span class="vdot" style="background:${mk.cor}"></span><b>${esc(short(p.symbol))}</b><div class="hint">${esc(p.motivo || "")}</div></td>
-        <td class="num">${nf(p.qty % 1 ? 4 : 0).format(p.qty)}</td><td class="num">${brl(p.custo)}</td><td class="num">${brl(val)}</td><td class="num ${cls(r)}">${pct(r)}</td></tr>`;
+        <td class="num">${nf(p.qty % 1 ? 4 : 0).format(p.qty)}</td><td class="num">${brl(p.custo)}</td><td class="num">${brl(val)}</td><td class="num ${cls(r)}">${pct(r)}</td>
+        <td class="vacts"><button class="simb" data-open="${esc(p.symbol)}" title="Ver o gráfico" aria-label="Ver o gráfico de ${esc(short(p.symbol))}">📈</button><button class="simb" data-sim="${esc(p.symbol)}" title="Simular compra e venda (impostos e taxas)" aria-label="Simular compra e venda de ${esc(short(p.symbol))}">🧮</button></td></tr>`;
     }).join("");
     const res = total - v.inicial, resPct = res / v.inicial * 100;
     const ibovPct = ibov && v.ibov0 ? (ibov / v.ibov0 - 1) * 100 : null;
@@ -2173,7 +2177,7 @@ function renderVirt() {
       <div class="vbar">${bar}</div>
       <div class="vleg">${VMKT.filter(m => byM[m.k]).map(m => `<span><span class="vdot" style="background:${m.cor}"></span>${m.label} ${nf(0).format(byM[m.k] / total * 100)}%</span>`).join("")}${v.caixa > 0.5 ? `<span><span class="vdot" style="background:var(--faint)"></span>Caixa ${brl(v.caixa)}</span>` : ""}</div>
       ${missing ? `<p class="hint">${missing} ativo(s) ainda sem cotação; o total está incompleto.</p>` : ""}
-      <details data-vdet="${v.id}" ${vOpen.has(v.id) ? "open" : ""}><summary>Ver os ${v.posicoes.length} ativos</summary><div class="scroll"><table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Investido</th><th>Valor hoje</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></div></details>
+      <details data-vdet="${v.id}" ${vClosed.has(v.id) ? "" : "open"}><summary>Os ${v.posicoes.length} ativos</summary><div class="scroll"><table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Investido</th><th>Valor hoje</th><th>Resultado</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></details>
     </article>`;
   }).join("");
 }
@@ -2181,15 +2185,16 @@ function renderVirt() {
 /* creation dialog */
 let vDraft = null;
 function vOpenDialog() {
-  const n = virtuais().length + 1;
-  vDraft = { nome: `Carteira virtual ${n}`, inicial: 10000, metodo: "sinais", mercados: Object.fromEntries(VMKT.map(m => [m.k, m.k === "b3" ? 100 : 0])) };
+  if (virtuais().length) { toast("Você já tem uma carteira virtual. Exclua a atual para criar outra."); return; }
+  vDraft = { nome: "Carteira virtual", inicial: 10000, metodo: "sinais", mercados: Object.fromEntries(VMKT.map(m => [m.k, m.k === "b3" ? 100 : 0])) };
   $("#vDlgBody").innerHTML = `
     <div class="vdlg-h"><h2>Nova carteira virtual</h2><button type="button" class="icon-btn" data-vd="cancel" aria-label="Fechar">✕</button></div>
     <p class="hint">Simulação com <b>dinheiro fictício</b>, para acompanhar como uma carteira se sairia. Os ativos são escolhidos por regras automáticas e transparentes a partir do relatório diário. <b>Não é recomendação de investimento.</b></p>
     <div class="vgrid">
       <div class="field"><label for="vNome">Nome</label><input id="vNome" value="${esc(vDraft.nome)}" maxlength="40"></div>
-      <div class="field"><label for="vIni">Valor inicial (R$)</label><input id="vIni" type="number" min="100" step="100" value="${vDraft.inicial}"></div>
+      <div class="field"><label for="vIni">Valor inicial (R$)</label><input id="vIni" inputmode="numeric" autocomplete="off" value="${nf(2).format(vDraft.inicial)}"></div>
     </div>
+    <p class="hint" style="margin:4px 0 0">Digite só os números: os centavos se ajustam sozinhos. Mínimo de R$ 100,00.</p>
     <h4>Em quais mercados entrar? <span class="hint">(ajuste quanto vai para cada um)</span></h4>
     <div class="vmkts">${VMKT.map(m => `<label class="vmk"><input type="checkbox" data-vm="${m.k}" ${vDraft.mercados[m.k] ? "checked" : ""}><span class="vdot" style="background:${m.cor}"></span>${m.label}<span class="vpct"><input type="number" min="0" max="100" step="5" data-vp="${m.k}" value="${vDraft.mercados[m.k]}" ${vDraft.mercados[m.k] ? "" : "disabled"}>%</span></label>`).join("")}</div>
     <div class="hint" id="vSoma"></div>
@@ -2203,7 +2208,7 @@ function vOpenDialog() {
 }
 function vReadForm() {
   vDraft.nome = $("#vNome").value.trim() || vDraft.nome;
-  vDraft.inicial = Math.max(100, +$("#vIni").value || 0);
+  vDraft.inicial = Math.max(100, +$("#vIni").value.replace(/\D/g, "") / 100 || 0);
   vDraft.metodo = document.querySelector('[name="vmet"]:checked')?.value || "sinais";
   for (const m of VMKT) {
     const on = document.querySelector(`[data-vm="${m.k}"]`).checked, inp = document.querySelector(`[data-vp="${m.k}"]`);
@@ -2239,6 +2244,7 @@ async function vPreview() {
   }).join("") + `<div class="vprev-r" style="margin-top:6px"><span>Sobra em caixa (ações só em quantidades inteiras)</span><b class="num">${brl(plan.caixa)}</b></div>`;
 }
 $("#vDlg").addEventListener("input", e => {
+  if (e.target.id === "vIni") { const d = e.target.value.replace(/\D/g, "").replace(/^0+/, "").slice(0, 13); e.target.value = nf(2).format(+d / 100); }
   if (e.target.matches("[data-vm]")) vEqualize();
   vPreview();
 });
@@ -2257,7 +2263,7 @@ $("#vDlg").addEventListener("click", e => {
 $("#vNew").addEventListener("click", vOpenDialog);
 $("#vList").addEventListener("toggle", e => {
   const d = e.target.closest?.("[data-vdet]"); if (!d) return;
-  d.open ? vOpen.add(d.dataset.vdet) : vOpen.delete(d.dataset.vdet);
+  d.open ? vClosed.delete(d.dataset.vdet) : vClosed.add(d.dataset.vdet);
 }, true);
 $("#vList").addEventListener("click", e => {
   const d = e.target.closest("[data-vdel]"); if (!d) return;
