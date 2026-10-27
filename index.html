@@ -398,7 +398,21 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .cst.forming { background: var(--warn-soft); color: var(--warn); }
 .cst.closed { background: var(--up-soft); color: var(--up); }
 .cst.late { background: var(--panel-2); color: var(--muted); }
-.tec-acts { margin-top: 6px; }
+.tec-acts { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+.tec-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.tside { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; white-space: nowrap; margin-right: 4px; }
+.tside.up { background: var(--up-soft); color: var(--up); } .tside.down { background: var(--down-soft); color: var(--down); } .tside.mix { background: var(--warn-soft); color: var(--warn); } .tside.flat { background: var(--panel-2); color: var(--muted); }
+.tec-filt { display: flex; flex-wrap: wrap; gap: 8px 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.tec-filt .seg { flex: 0 1 auto; }
+.tec-g { border-bottom: 1px solid var(--line); }
+.tec-g.novo { background: var(--accent-soft); }
+.tec-gh { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px 12px; flex-wrap: wrap; padding: 12px 14px 6px; }
+.tec-gh .tec-acts { margin: 0; }
+.tec-sym { font-size: 16px; margin-right: 8px; }
+.tec-g .tec-ev { border-bottom: 0; border-top: 1px dashed var(--line); cursor: default; padding: 9px 14px 9px 20px; }
+.tec-g .tec-ev:hover, .tec-g .tec-ev.novo { background: transparent; }
+.tec-g .tec-ev > .tside { margin-top: 2px; min-width: 70px; text-align: center; }
+.tec-px { font-size: 13px; margin-top: 3px; }
 .tec-dt { text-align: right; font-size: 11.5px; line-height: 1.3; }
 .sim-save { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .sim-save .hint { width: 100%; margin: 0; }
@@ -465,7 +479,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
     <div class="note" id="notifNote">Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). <button class="btn small" id="notifBtn" type="button">Ativar avisos no computador/celular</button></div>
     <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">🔔 Alertas de preço</h3><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></div>
     <div class="card" id="alertList"></div>
-    <h3 class="sec-t">📈 Sinais técnicos recentes <span class="hint" style="font-weight:400">· gráfico diário dos ativos vigiados</span></h3>
+    <h3 class="sec-t">📈 Sinais técnicos recentes <span class="hint" style="font-weight:400">· gráfico diário dos ativos vigiados, agrupados por ativo</span></h3>
     <div class="card tec-feed" id="tecFeed"></div>
     <p class="hint" id="tecResumo" style="margin-top:10px"></p>
   </section>
@@ -1510,7 +1524,7 @@ async function tecLoad() {
   try {
     for (let i = 0; i < need.length; i += 20) {
       const r = await api(`/api/cotacoes?range=2y&iv=1d&ohlc=1&s=${need.slice(i, i + 20).map(encodeURIComponent).join(",")}`);
-      for (const [s, q] of Object.entries(r.quotes)) if (!q.error && q.bars) tecBars[s] = { at: Date.now(), bars: q.bars.map(([t, o, h, l, c, v]) => ({ t, o, h, l, c, v })) };
+      for (const [s, q] of Object.entries(r.quotes)) if (!q.error && q.bars) tecBars[s] = { at: Date.now(), cur: q.currency, type: q.type, bars: q.bars.map(([t, o, h, l, c, v]) => ({ t, o, h, l, c, v })) };
     }
   } catch {}
   tecBusy = false;
@@ -1560,17 +1574,19 @@ function tecEvaluate() {
       const key = `${sym}|${ev.tipo}|${ev.sinal}|${ev.data}`;
       if (vistos[key]) continue;
       vistos[key] = Date.now();
-      novos.push({ key, sym, ...ev, ts: Date.now(), lido: false });
+      const q = quotes[sym];
+      novos.push({ key, sym, ...ev, ts: Date.now(), lido: false, px: q?.price ?? d.bars.at(-1).c, cur: q?.currency ?? d.cur, qtype: q?.type ?? d.type });
     }
   }
   if (!novos.length) return;
   const limite = Date.now() - 40 * 864e5;
   for (const [k, t] of Object.entries(vistos)) if (t < limite) delete vistos[k];
   setTec({ vistos, feed: novos.concat(c.feed).slice(0, 150) });
-  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)}: ${n.titulo}`, true));
+  const lado = n => n.sinal === "alta" ? "▲ sinal de compra" : n.sinal === "baixa" ? "▼ sinal de venda" : "◆";
+  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)} · ${lado(n)}: ${n.titulo}`, true));
   else toast(`📈 ${novos.length} novos sinais técnicos nos seus ativos — veja em Alertas`, true);
   beep();
-  try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)}: ${n.titulo}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); } catch {}
+  try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)} · ${lado(n)}: ${n.titulo}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); } catch {}
   renderAlerts();
 }
 
@@ -1636,18 +1652,52 @@ function candleWhen(n) {
   else selo = `<span class="cst closed">✔ candle fechado</span>`;
   return `🕯️ Candle diário de <b>${d}</b>${periodo} ${selo}`;
 }
+// Feed grouped by asset: every finding for the same asset stacks in one card (newest first).
+// ▲ = technical buy signal (bullish), ▼ = technical sell signal (bearish).
+let tecDir = "todos", tecMkt = "todos";
+const SIDE = { alta: ["up", "▲", "Compra"], baixa: ["down", "▼", "Venda"] };
+function tecPxAt(n) {   // price when the alert fired; older alerts (saved before this was stored) fall back to the candle's close
+  if (n.px != null) return { v: n.px, cur: n.cur, type: n.qtype, lbl: "no momento do alerta" };
+  const d = tecBars[n.sym], b = d?.bars.find(b => dayBR(b.t) === n.data);
+  return b ? { v: b.c, cur: d.cur, type: d.type, lbl: "no fechamento do candle" } : null;
+}
 function tecFeedHTML() {
   const feed = tecCfg().feed;
   if (!feed.length) return `<div class="empty">Nenhum sinal técnico ainda. Os alertas aparecem aqui quando um dos sinais acontece no gráfico diário dos ativos vigiados.</div>`;
-  return feed.slice(0, 40).map(n => `<div class="tec-ev ${n.lido ? "" : "novo"}" data-open="${esc(n.sym)}">
-      <span class="tec-ic ${n.sinal === "alta" ? "up" : n.sinal === "baixa" ? "down" : "flat"}">${n.sinal === "alta" ? "▲" : n.sinal === "baixa" ? "▼" : "◆"}</span>
-      <div><b>${esc(short(n.sym))}</b> · <b class="${n.sinal === "alta" ? "up" : n.sinal === "baixa" ? "down" : ""}">${esc(n.titulo)}</b>
-        <div class="tec-when">${candleWhen(n)}</div>
-        <div class="hint">${esc(n.texto)}</div>
-        ${n.tipo === "candles" && CANDLE_EDU[n.titulo.replace(/^Candle: /, "")] ? `<details class="cedu" data-ckey="${esc(n.key)}" ${cOpen.has(n.key) ? "open" : ""}><summary>📖 Ver como é este candle</summary>${candleSheet(n.titulo.replace(/^Candle: /, ""))}</details>` : ""}
-        <div class="tec-acts"><button class="btn small" type="button" data-sim="${esc(n.sym)}">🧮 Simular compra ou venda</button></div></div>
-      <span class="hint tec-dt" title="Quando o alerta foi gerado">avisado em<br>${new Date(n.ts).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span>
-    </div>`).join("") + `<div class="row2" style="justify-content:flex-end"><button class="btn small" data-tec-clear type="button">Limpar lista</button></div>`;
+  const mkt = n => group(n.sym, quotes[n.sym]);
+  const mkts = GROUPS.filter(g => feed.some(n => mkt(n) === g));
+  if (tecMkt !== "todos" && !mkts.includes(tecMkt)) tecMkt = "todos";
+  const items = feed.filter(n => (tecDir === "todos" || n.sinal === (tecDir === "compra" ? "alta" : "baixa")) && (tecMkt === "todos" || mkt(n) === tecMkt));
+  const by = new Map();
+  for (const n of items) { if (!by.has(n.sym)) by.set(n.sym, []); by.get(n.sym).push(n); }
+  const legend = `<div class="tec-legend">
+      <span><b class="tside up">▲ Compra</b> sinal de <b>alta</b>: o gráfico sugere que o preço pode <b>subir</b>.</span>
+      <span><b class="tside down">▼ Venda</b> sinal de <b>baixa</b>: o gráfico sugere que o preço pode <b>cair</b>.</span>
+      <span class="hint">São leituras do gráfico (análise técnica): probabilidades, não certezas. Não é recomendação de investimento.</span></div>`;
+  const filters = `<div class="tec-filt">
+      <span class="seg" role="group" aria-label="Lado">${[["todos", "Todos"], ["compra", "▲ Compra"], ["venda", "▼ Venda"]].map(([k, l]) => `<button type="button" data-tdir="${k}" aria-pressed="${tecDir === k}">${l}</button>`).join("")}</span>
+      <span class="seg" role="group" aria-label="Mercado">${[["todos", "Todos os mercados"], ...mkts.map(g => [g, g])].map(([k, l]) => `<button type="button" data-tmkt="${esc(k)}" aria-pressed="${tecMkt === k}">${esc(l)}</button>`).join("")}</span></div>`;
+  const cards = [...by.entries()].map(([sym, list]) => {
+    const q = quotes[sym], nC = list.filter(n => n.sinal === "alta").length, nV = list.filter(n => n.sinal === "baixa").length;
+    const head = nC && nV ? `<span class="tside mix">▲▼ Sinais mistos</span>` : nC ? `<span class="tside up">▲ Sinal de compra</span>` : `<span class="tside down">▼ Sinal de venda</span>`;
+    return `<article class="tec-g ${list.some(n => !n.lido) ? "novo" : ""}">
+      <div class="tec-gh"><div><b class="tec-sym">${esc(short(sym))}</b>${head}
+          <div class="hint">${esc(q?.name || names[sym] || "")}${q?.name || names[sym] ? " · " : ""}${esc(group(sym, q))} · ${list.length} achado${list.length > 1 ? "s" : ""}${nC && nV ? ` (${nC} de compra, ${nV} de venda)` : ""} · agora <b class="num">${q?.price ? money(q.price, q.currency, q.type) : "…"}</b></div></div>
+        <div class="tec-acts"><button class="btn small" type="button" data-open="${esc(sym)}">📈 Ver gráfico</button><button class="btn small" type="button" data-sim="${esc(sym)}">🧮 Simular compra ou venda</button></div></div>
+      ${list.map(n => {
+        const [c, ic, lbl] = SIDE[n.sinal] || ["flat", "◆", "Neutro"], p = tecPxAt(n), dv = p && q?.price ? (q.price / p.v - 1) * 100 : null;
+        const nome = n.titulo.replace(/^Candle: /, "");
+        return `<div class="tec-ev ${n.lido ? "" : "novo"}"><span class="tside ${c}">${ic} ${lbl}</span>
+          <div><b class="${c}">${esc(n.titulo)}</b>
+            <div class="tec-when">${candleWhen(n)}</div>
+            <div class="hint">${esc(n.texto)}</div>
+            ${p ? `<div class="tec-px">💲 Preço ${p.lbl}: <b class="num">${money(p.v, p.cur, p.type)}</b>${dv != null ? ` · desde então <span class="num ${cls(dv)}">${pct(dv)}</span>` : ""}</div>` : ""}
+            ${n.tipo === "candles" && CANDLE_EDU[nome] ? `<details class="cedu" data-ckey="${esc(n.key)}" ${cOpen.has(n.key) ? "open" : ""}><summary>📖 Ver como é este candle</summary>${candleSheet(nome)}</details>` : ""}</div>
+          <span class="hint tec-dt" title="Quando o alerta foi gerado">avisado em<br>${new Date(n.ts).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span></div>`;
+      }).join("")}
+    </article>`;
+  }).join("");
+  return legend + filters + (cards || `<div class="empty">Nenhum sinal neste filtro.</div>`) + `<div class="row2" style="justify-content:flex-end"><button class="btn small" data-tec-clear type="button">Limpar lista</button></div>`;
 }
 document.addEventListener("change", e => {
   const t = e.target;
@@ -1667,6 +1717,8 @@ document.addEventListener("click", e => {
   }
   const rm = t.closest("[data-tec-rm]"); if (rm) { setTec({ extras: tecCfg().extras.filter(x => x !== rm.dataset.tecRm) }); renderAlerts(); return; }
   if (t.closest("[data-tec-clear]")) { setTec({ feed: [] }); renderAlerts(); return; }
+  const td = t.closest("[data-tdir]"); if (td) { tecDir = td.dataset.tdir; renderAlerts(); return; }
+  const tm = t.closest("[data-tmkt]"); if (tm) { tecMkt = tm.dataset.tmkt; renderAlerts(); return; }
   if (t.closest("[data-pa-add]")) {
     const box = t.closest(".pa-add"), s = normSym(box.querySelector('[data-pa-new="sym"]').value), op = box.querySelector('[data-pa-new="op"]').value, v = +box.querySelector('[data-pa-new="val"]').value;
     if (!s || !(v > 0)) { toast("Preencha o ativo e o preço"); return; }
