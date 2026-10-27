@@ -189,6 +189,8 @@ footer a, footer button.link { color: var(--muted); background: none; border: 0;
 .chip.compra { border-left: 3px solid var(--up); } .chip.atencao { border-left: 3px solid var(--warn); }
 .rep-part { margin: 22px 0 10px; padding: 9px 14px; border-radius: 8px; font-weight: 700; font-size: 15px; color: #fff; }
 .rep-part.f { background: #0f766e; } .rep-part.t { background: #6d28d9; } .rep-part.c { background: #b45309; } .rep-part.x { background: var(--panel-2); color: var(--text); border: 1px solid var(--line); }
+.rep-goto { display: block; width: 100%; text-align: left; cursor: pointer; font: inherit; font-weight: 700; font-size: 15px; }
+.rep-goto:hover { border-color: var(--accent); color: var(--accent); }
 .rep-part + .hint { margin: -2px 0 10px; }
 .conv-why { display: block; font-size: 12px; color: var(--muted); font-weight: 400; }
 #toTop { position: fixed; right: 16px; bottom: 16px; z-index: 40; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-size: 20px; cursor: pointer; box-shadow: var(--shadow), 0 6px 20px rgba(0,0,0,.15); opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s, transform .2s; }
@@ -433,6 +435,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
     <button role="tab" data-tab="favs" aria-selected="true">Favoritos <span class="badge" id="nFavs">0</span></button>
     <button role="tab" data-tab="cart">Carteira <span class="badge" id="nCart">0</span></button>
     <button role="tab" data-tab="report">Relatório diário</button>
+    <button role="tab" data-tab="empresas">Empresas</button>
     <button role="tab" data-tab="edu">Educação</button>
   </nav>
 
@@ -470,6 +473,11 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   <!-- RELATÓRIO -->
   <section data-panel="report" hidden>
     <div class="card" id="reportBox"><div class="empty">Carregando relatório…</div></div>
+  </section>
+
+  <!-- EMPRESAS: a tabela completa do relatório, com filtros -->
+  <section data-panel="empresas" hidden>
+    <div class="card" id="empBox"><div class="empty">Carregando empresas…</div></div>
   </section>
 
   <!-- CONFIGURAÇÕES -->
@@ -1291,7 +1299,7 @@ function showTab(name) {
   document.querySelectorAll(".hdr-tab").forEach(b => b.setAttribute("aria-pressed", b.dataset.tab === name));
   document.querySelectorAll("[data-panel]").forEach(p => p.hidden = p.dataset.panel !== name);
   try { localStorage.setItem(KEY + ".tab", name); } catch {}
-  if (name === "report") loadReport();
+  if (name === "report" || name === "empresas") loadReport();
   if (name === "edu") renderEdu();
   if (name === "config") renderConfig();
   if (name === "alerts") { renderAlerts(); setTimeout(() => { const f = tecCfg().feed; if (f.some(x => !x.lido)) setTec({ feed: f.map(x => ({ ...x, lido: true })) }); }, 5000); }
@@ -1976,6 +1984,7 @@ async function loadReport(force) {
     renderReport();
   } catch {
     $("#reportBox").innerHTML = `<div class="empty"><b>O primeiro relatório ainda não foi gerado.</b><br>Toda manhã aparece aqui um resumo do que os sites de análise fundamentalista dizem sobre as empresas do Ibovespa e os papéis da sua lista.</div>`;
+    $("#empBox").innerHTML = `<div class="empty">A tabela aparece quando o primeiro relatório for gerado.</div>`;
   }
 }
 
@@ -1985,18 +1994,8 @@ function renderReport() {
   const emps = report.empresas || [];
   const sigs = emps.map(e => [e, signal(e)]);
   const buys = sigs.filter(([, s]) => s?.kind === "compra"), warns = sigs.filter(([, s]) => s?.kind === "atencao");
-  const covered = new Set(emps.map(e => e.ticker));
-  const notCovered = [...mine].filter(t => !covered.has(t) && !/=X$|-USD$|^\^/.test(t));
   const d = new Date(report.data + "T12:00:00");
   const old = (Date.now() - new Date(report.gerado_em || report.data).getTime()) / 864e5 > 3;
-
-  let list = emps;
-  if (repFilter === "minha") list = list.filter(e => mine.has(e.ticker));
-  if (repFilter === "criterios") list = list.filter(e => { const f = criteriaCheck(e); return f && !f.length; });
-  if (repFilter === "sinais") list = list.filter(e => signal(e));
-  if (repFilter === "mudancas") list = list.filter(e => (e.mudancas || []).length);
-  if (repFilter === "tecnicos") list = list.filter(e => techEvents(e).length);
-  if (repQuery) { const q = repQuery.toLowerCase(); list = list.filter(e => e.ticker.toLowerCase().includes(q) || (e.nome || "").toLowerCase().includes(q)); }
 
   const techList = emps.map(e => [e, techEvents(e)]).filter(([, ev]) => ev.length).sort((a, b) => b[1][0].peso - a[1][0].peso);
   const conv = convergence(emps);
@@ -2029,16 +2028,34 @@ function renderReport() {
       <div class="rep-box"><h3>▼ Para o lado da venda <small>${conv.venda.length}</small></h3>${conv.venda.map(convChip("atencao")).join("") || `<p class="hint">Nenhum ativo hoje.</p>`}</div>
     </div>
     <p class="hint">Concordância não é garantia: as duas análises podem errar juntas. Não é recomendação de investimento.</p>
-    <div class="rep-part x">📋 Tabela completa</div>
+    <button class="rep-part x rep-goto" data-goto="empresas">📋 Ver as ${emps.length} empresas em uma tabela, com filtros → aba <u>Empresas</u></button>
+    <p class="hint" style="margin-top:10px">Resumo automático do que as fontes publicaram, feito por IA — pode conter erros; confira os links. Indicadores: Fundamentus. Não é recomendação de investimento.</p>`;
+  renderEmpresas();
+}
+function renderEmpresas() {
+  const box = $("#empBox"); if (!box || !report) return;
+  const mine = myTickers(), emps = report.empresas || [];
+  const covered = new Set(emps.map(e => e.ticker));
+  const notCovered = [...mine].filter(t => !covered.has(t) && !/=X$|-USD$|^\^/.test(t));
+  let list = emps;
+  if (repFilter === "minha") list = list.filter(e => mine.has(e.ticker));
+  if (repFilter === "criterios") list = list.filter(e => { const f = criteriaCheck(e); return f && !f.length; });
+  if (repFilter === "sinais") list = list.filter(e => signal(e));
+  if (repFilter === "mudancas") list = list.filter(e => (e.mudancas || []).length);
+  if (repFilter === "tecnicos") list = list.filter(e => techEvents(e).length);
+  if (repQuery) { const q = repQuery.toLowerCase(); list = list.filter(e => e.ticker.toLowerCase().includes(q) || (e.nome || "").toLowerCase().includes(q)); }
+  box.innerHTML = `
+    <div class="rep-head"><div><h2>Empresas acompanhadas</h2>
+      <div class="sub">${emps.length} empresas (Ibovespa + sua lista) · relatório de ${new Date(report.data + "T12:00:00").toLocaleDateString("pt-BR")} · toque em uma linha para ver o resumo, as recomendações, a análise técnica e os indicadores</div></div></div>
     ${notCovered.length ? `<div class="note">Da sua lista, ainda fora do relatório: <b>${notCovered.map(esc).join(", ")}</b>. Peça ao Claude para incluí-los em <code>relatorios/acompanhar.json</code>.</div>` : ""}
     <div class="toolbar" style="margin-top:12px">
       <div class="seg" role="group">${[["todas", "Todas"], ["minha", "Minha lista"], ["sinais", "Com sinal"], ["criterios", "Passam nos critérios"], ["mudancas", "Mudanças recentes"], ["tecnicos", "Sinais técnicos"]].map(([k, l]) => `<button data-rf="${k}" aria-pressed="${repFilter === k}">${l}</button>`).join("")}</div>
       <input id="repQ" type="search" placeholder="Filtrar empresa" value="${esc(repQuery)}" style="flex:0 1 200px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel)">
     </div>
-    <div class="card scroll"><table class="grid rep"><thead><tr><th>Empresa</th><th>Casas (compra · neutro · venda)</th><th>Alvo médio</th><th>Potencial</th><th>P/L</th><th>Div.</th><th>ROE</th><th>Técnico (${FRAMES.find(f => f[0] === frame())[1].toLowerCase()})</th><th>Sinal</th></tr></thead><tbody>
-      ${list.map(e => repRow(e, mine)).join("") || `<tr><td colspan="9" class="empty">Nenhuma empresa neste filtro.</td></tr>`}
+    <div class="card scroll"><table class="grid rep"><thead><tr><th>Empresa</th><th>Casas (compra · neutro · venda)</th><th>Alvo médio</th><th>Potencial</th><th>P/L</th><th>Div.</th><th>ROE</th><th>Técnico (${FRAMES.find(f => f[0] === frame())[1].toLowerCase()})</th><th>Sinal</th><th></th></tr></thead><tbody>
+      ${list.map(e => repRow(e, mine)).join("") || `<tr><td colspan="10" class="empty">Nenhuma empresa neste filtro.</td></tr>`}
     </tbody></table></div>
-    <p class="hint" style="margin-top:10px">Resumo automático do que as fontes publicaram, feito por IA — pode conter erros; confira os links. Indicadores: Fundamentus. Não é recomendação de investimento.</p>`;
+    <p class="hint" style="margin-top:10px">Seus critérios: <b>${esc(critSummary(crit()))}</b>. Resumo automático do que as fontes publicaram, feito por IA — pode conter erros; confira os links. Indicadores: Fundamentus. Não é recomendação de investimento.</p>`;
 }
 function repRow(e, mine) {
   const k = e.consenso || {}, tot = (k.compra || 0) + (k.neutro || 0) + (k.venda || 0), i = e.indicadores || {};
@@ -2055,7 +2072,8 @@ function repRow(e, mine) {
     <td class="num">${i.roe != null ? nf(1).format(i.roe) + "%" : "—"}</td>
     <td>${(() => { const t = e.tecnica?.[frame()]; if (!t) return "—"; const [c, l] = VIES[t.vies]; return `<span class="num ${c}" title="tendência: ${t.tendencia} · pontuação ${t.pontuacao}">${c === "up" ? "▲" : c === "down" ? "▼" : "■"} ${l}</span>${techEvents(e).length ? " ✦" : ""}`; })()}</td>
     <td>${s ? `<span class="tag ${s.kind === "compra" ? "buy" : "fired"}">${s.kind === "compra" ? "Compra" : "Atenção"}</span>` : ""}</td>
-  </tr>${open ? `<tr class="detail-row"><td colspan="9">${repDetail(e, s)}</td></tr>` : ""}`;
+    <td><button class="simb" data-sim="${esc(e.bolsa === "B3" ? e.ticker + ".SA" : e.ticker)}" title="Simular compra e venda (impostos e taxas)" aria-label="Simular compra e venda de ${esc(e.ticker)}">🧮</button></td>
+  </tr>${open ? `<tr class="detail-row"><td colspan="10">${repDetail(e, s)}</td></tr>` : ""}`;
 }
 function repDetail(e, s) {
   const i = e.indicadores, k = e.consenso || {}, fails = criteriaCheck(e);
@@ -2089,25 +2107,28 @@ function techDetail(e) {
 }
 $("#reportBox").addEventListener("click", e => {
   const tf = e.target.closest("[data-tf]"); if (tf) { state.tempoGrafico = tf.dataset.tf; save(); syncEmailTf(tf.dataset.tf); return renderReport(); }
-  const f = e.target.closest("[data-rf]"); if (f) { repFilter = f.dataset.rf; return renderReport(); }
   if (e.target.closest("#critReset")) { delete state.criterios; save(); return renderReport(); }
-  if (e.target.closest("[data-open]")) return;
   const r = e.target.closest("[data-rep]");
-  if (r && !e.target.closest("a")) {
-    repOpen = repOpen === r.dataset.rep ? null : r.dataset.rep;
-    if (r.classList.contains("chip")) { repFilter = "todas"; repQuery = ""; repOpen = r.dataset.rep; }
-    renderReport();
-    if (r.classList.contains("chip")) document.querySelector(`tr[data-rep="${CSS.escape(repOpen)}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" });
+  if (r) {   // a company card: open its row in the Empresas tab
+    repFilter = "todas"; repQuery = ""; repOpen = r.dataset.rep;
+    showTab("empresas"); renderEmpresas();
+    setTimeout(() => document.querySelector(`#empBox tr[data-rep="${CSS.escape(repOpen)}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" }), 50);
   }
+});
+$("#empBox").addEventListener("click", e => {
+  const f = e.target.closest("[data-rf]"); if (f) { repFilter = f.dataset.rf; return renderEmpresas(); }
+  if (e.target.closest("[data-open], [data-sim]")) return;
+  const r = e.target.closest("[data-rep]");
+  if (r && !e.target.closest("a")) { repOpen = repOpen === r.dataset.rep ? null : r.dataset.rep; renderEmpresas(); }
 });
 $("#reportBox").addEventListener("change", e => {
   const inp = e.target.closest("[data-crit]"); if (!inp) return;
   state.criterios = { ...crit(), [inp.dataset.crit]: inp.value === "" ? "" : +inp.value }; save(); renderReport();
 });
 $("#reportBox").addEventListener("toggle", e => { if (e.target.matches("details.crit")) { state.criteriosAbertos = e.target.open; save(); } }, true);
-$("#reportBox").addEventListener("input", e => {
+$("#empBox").addEventListener("input", e => {
   if (e.target.id !== "repQ") return;
-  repQuery = e.target.value; const pos = e.target.selectionStart; renderReport();
+  repQuery = e.target.value; const pos = e.target.selectionStart; renderEmpresas();
   const q = $("#repQ"); q.focus(); q.setSelectionRange(pos, pos);
 });
 
