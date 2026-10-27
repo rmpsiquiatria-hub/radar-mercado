@@ -65,6 +65,9 @@ header { display: flex; align-items: center; gap: 12px; padding: 18px 0 14px; fl
 .corr { margin-top: 12px; padding: 12px 14px; }
 .corr-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 13px; color: var(--muted); }
 .corr-head b { color: var(--text); font-size: 14px; }
+.corr-fold { border: 0; background: none; padding: 2px 0; cursor: pointer; font: inherit; display: inline-flex; align-items: center; gap: 6px; }
+.corr-fold i { font-style: normal; color: var(--muted); font-size: 12px; display: inline-block; transition: transform .15s; }
+.corr-fold[aria-expanded="false"] i { transform: rotate(-90deg); }
 .corr-head select { padding: 4px 8px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); }
 .corr-head .seg { flex: 0 0 auto; }
 .corr-head .link { margin-left: auto; border: 0; background: none; color: var(--accent); font-weight: 600; cursor: pointer; padding: 4px 0; }
@@ -236,6 +239,8 @@ tr.detail-row td { white-space: normal; text-align: left; background: var(--pane
 .win-stats { padding: 3px 12px 0; font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .win-chart { flex: 1; min-height: 0; position: relative; padding: 2px 2px 0; }
 .win-chart svg { display: block; touch-action: pan-y; }
+.win-chart.zoomed svg { cursor: grab; }
+.win-chart.zoomed svg:active { cursor: grabbing; }
 .win-tip { position: absolute; z-index: 2; pointer-events: none; max-width: 260px; background: var(--text); color: var(--bg); font-size: 12px; line-height: 1.4; padding: 7px 9px; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
 .win-tip .tt-d { font-weight: 600; margin-bottom: 2px; }
 .win-tip .tt-ma span { margin-right: 6px; }
@@ -757,11 +762,13 @@ function spearman(ka, kb, months) {
 }
 const forca = r => { const a = Math.abs(r); return a < 0.2 ? "muito fraca" : a < 0.4 ? "fraca" : a < 0.6 ? "moderada" : a < 0.8 ? "forte" : "muito forte"; };
 const corrStyle = r => r == null ? "" : `background: color-mix(in srgb, var(${r >= 0 ? "--pos" : "--neg"}) ${Math.round(Math.abs(r) * 55)}%, var(--panel));${Math.abs(r) > 0.6 ? "color:#fff;" : ""}`;
-function corrCfg() { return { base: "^BVSP", janela: 36, matriz: false, ...(state.corr || {}) }; }
+function corrCfg() { return { base: "^BVSP", janela: 36, matriz: false, fechado: false, ...(state.corr || {}) }; }
+const corrFold = c => `<button class="corr-fold" id="corrFold" aria-expanded="${!c.fechado}" title="${c.fechado ? "Mostrar" : "Recolher"} as correlações"><i>▾</i><b>Correlações</b></button>`;
 function renderCorr() {
   const box = $("#corr"); if (!box) return;
   const c = corrCfg(), lbl = k => CORR.find(x => x.k === k)?.label || k;
-  if (!monthly) { box.innerHTML = `<div class="corr-head"><b>Correlações</b> carregando histórico mensal…</div>`; return; }
+  if (c.fechado) { box.innerHTML = `<div class="corr-head">${corrFold(c)}<span>Spearman entre índices, moedas, Selic, IPCA e desemprego</span></div>`; return; }
+  if (!monthly) { box.innerHTML = `<div class="corr-head">${corrFold(c)} carregando histórico mensal…</div>`; return; }
   const others = CORR.filter(x => x.k !== c.base);
   const chips = others.map(o => {
     const x = spearman(c.base, o.k, c.janela);
@@ -778,7 +785,7 @@ function renderCorr() {
       const x = spearman(a.k, b.k, c.janela), r = x?.r;
       return `<td style="${corrStyle(r)}" title="${esc(r == null ? "sem dados suficientes" : `${a.label} × ${b.label}: ρ = ${nf(2).format(r)} (${forca(r)}), ${x.n} meses${x.sig ? ", significativa" : ""}`)}">${r == null ? "·" : nf(2).format(r) + (x.sig ? "*" : "")}</td>`;
     }).join("")}</tr>`).join("")}</table></div>`;
-  box.innerHTML = `<div class="corr-head"><b>Correlações</b>
+  box.innerHTML = `<div class="corr-head">${corrFold(c)}
       <span>de <select id="corrBase" aria-label="Índice base">${CORR.map(o => `<option value="${esc(o.k)}" ${o.k === c.base ? "selected" : ""}>${o.label}</option>`).join("")}</select> com os demais</span>
       <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [36, "3 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
       <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
@@ -787,6 +794,7 @@ function renderCorr() {
 }
 $("#corr").addEventListener("click", e => {
   const j = e.target.closest("[data-cj]"); if (j) { state.corr = { ...corrCfg(), janela: +j.dataset.cj }; save(); return renderCorr(); }
+  if (e.target.closest("#corrFold")) { state.corr = { ...corrCfg(), fechado: !corrCfg().fechado }; save(); return renderCorr(); }
   if (e.target.closest("#corrToggle")) { state.corr = { ...corrCfg(), matriz: !corrCfg().matriz }; save(); renderCorr(); }
 });
 $("#corr").addEventListener("change", e => {
@@ -919,6 +927,7 @@ function openWin(sym) {
       <span class="seg">${WRANGES.map(r => `<button data-wr="${r.k}">${r.k}</button>`).join("")}</span>
       <span class="seg"><button data-wt="line" title="Linha">Linha</button><button data-wt="candle" title="Candlestick">Candles</button></span>
       <span class="seg">${IND_DEF.map(([k, l]) => `<button data-wi="${k}">${l}</button>`).join("")}</span>
+      <span class="seg"><button data-wz="out" title="Diminuir zoom (ou role a roda do mouse / afaste dois dedos)" aria-label="Diminuir zoom">−</button><button data-wz="in" title="Aumentar zoom (ou role a roda do mouse / aproxime dois dedos)" aria-label="Aumentar zoom">+</button><button data-wz="reset" title="Voltar ao período inteiro" aria-label="Voltar ao período inteiro">↺</button></span>
     </div>
     <div class="win-stats hint"></div>
     <div class="win-chart"><div class="empty">Carregando…</div></div>
@@ -928,8 +937,55 @@ function openWin(sym) {
   wins.push(w);
   placeWin(w); focusWin(w); syncWinControls(w); renderWinHead(w);
   new ResizeObserver(() => { clearTimeout(w.rt); w.rt = setTimeout(() => drawWin(w), 60); }).observe(el.querySelector(".win-chart"));
+  bindZoom(w);
   loadWin(w);
   renderDock();
+}
+// Zoom: w.vz = { span, endOff } = how many bars are visible and how far the view ends from the
+// latest bar (0 = up to date), so intraday refreshes keep the view anchored. null = whole range.
+// f < 1 zooms in; "at" is where the zoom is anchored (0 = left edge, 1 = right edge of the plot);
+// shift moves the view that many bars back in time.
+function zoomWin(w, f, at = 0.5, shift = 0) {
+  const v = w._v; if (!v) return;
+  const span0 = v.to - v.from;
+  const span = Math.round(Math.min(v.len, Math.max(Math.min(10, v.len), span0 * f)));
+  const from = Math.max(0, Math.min(v.len - span, Math.round(v.from + (span0 - span) * at - shift)));
+  w._v = { from, to: from + span, len: v.len };
+  w.vz = { span, endOff: v.len - from - span };
+  if (!w._zt) w._zt = setTimeout(() => { w._zt = null; drawWin(w); }, 16);
+}
+function bindZoom(w) {
+  const box = w.el.querySelector(".win-chart");
+  const plot = () => { const r = box.getBoundingClientRect(); return { left: r.left + 6, width: Math.max(1, r.width - 68) }; };   // padL 6, padR 62
+  const at = x => { const p = plot(); return Math.min(1, Math.max(0, (x - p.left) / p.width)); };
+  const bars = px => w._v ? px / plot().width * (w._v.to - w._v.from) : 0;
+  box.addEventListener("wheel", e => {
+    if (!w._v) return;
+    e.preventDefault();
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) zoomWin(w, 1, 0, -bars(e.deltaX));
+    else zoomWin(w, Math.exp(e.deltaY * 0.0015), at(e.clientX));
+  }, { passive: false });
+  // Two fingers: spreading zooms in, pinching zooms out, moving both pans.
+  let pz = null;
+  const two = e => { const [a, b] = e.touches; return { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) || 1, x: (a.clientX + b.clientX) / 2 }; };
+  box.addEventListener("touchstart", e => { if (e.touches.length === 2) { pz = two(e); e.preventDefault(); w.el.querySelector(".win-tip").hidden = true; } }, { passive: false });
+  box.addEventListener("touchmove", e => {
+    if (!pz || e.touches.length !== 2) return;
+    e.preventDefault();
+    const t = two(e);
+    zoomWin(w, pz.d / t.d, at(t.x), bars(t.x - pz.x));
+    pz = t;
+  }, { passive: false });
+  box.addEventListener("touchend", e => { if (e.touches.length < 2) pz = null; });
+  // Mouse: drag sideways to move through a zoomed chart.
+  box.addEventListener("pointerdown", e => {
+    if (e.pointerType !== "mouse" || e.button || !w.vz) return;
+    let x0 = e.clientX;
+    box.setPointerCapture(e.pointerId);
+    const move = ev => { zoomWin(w, 1, 0, bars(ev.clientX - x0)); x0 = ev.clientX; };
+    const end = () => { box.removeEventListener("pointermove", move); box.removeEventListener("pointerup", end); box.removeEventListener("pointercancel", end); };
+    box.addEventListener("pointermove", move); box.addEventListener("pointerup", end); box.addEventListener("pointercancel", end);
+  });
 }
 function placeWin(w) {
   if (isPhone()) { w.el.style.cssText = `z-index:${w.z || topZ}`; return; }
@@ -1020,8 +1076,11 @@ function drawWin(w) {
   const C = all.map(b => b.c);
   const ma = { mme9: A.ema(C, 9), mms21: A.sma(C, 21), mms50: A.sma(C, 50), mms200: A.sma(C, 200) };
   const rsiS = A.rsi(C), mac = A.macd(C);
-  const from = r.show ? Math.max(0, all.length - r.show) : 0;
-  const bars = all.slice(from), n = bars.length, sl = s => s.slice(from);
+  let from = r.show ? Math.max(0, all.length - r.show) : 0, to = all.length;
+  if (w.vz) { to = Math.max(Math.min(all.length, w.vz.span), all.length - w.vz.endOff); from = Math.max(0, to - w.vz.span); }
+  w._v = { from, to, len: all.length };
+  box.classList.toggle("zoomed", !!w.vz);
+  const bars = all.slice(from, to), n = bars.length, sl = s => s.slice(from, to);
   const move = PATTERN_MOVE[r.iv] || 0.02;
   const flags = w.ind.pad ? bars.map((_, i) => A.patternsAt(all, from + i, move)) : [];
   const sr = w.ind.sr ? A.supportResistance(all, 20) : null;
@@ -1137,7 +1196,10 @@ $("#wins").addEventListener("click", e => {
   if (a === "fav") { toggleFav(w.sym); return syncWinControls(w); }
   if (a === "alert") { gotoAlertSettings(w.sym); return; }
   if (a === "cart") { simOpen({ sym: w.sym }); return; }
-  const rg = e.target.closest("[data-wr]"); if (rg) { w.range = rg.dataset.wr; syncWinControls(w); return loadWin(w); }
+  const rg = e.target.closest("[data-wr]"); if (rg) { w.range = rg.dataset.wr; w.vz = null; syncWinControls(w); return loadWin(w); }
+  const z = e.target.closest("[data-wz]")?.dataset.wz;
+  if (z === "reset") { w.vz = null; return drawWin(w); }
+  if (z) return zoomWin(w, z === "in" ? 0.6 : 1 / 0.6, 1);
   const tp = e.target.closest("[data-wt]");
   const ind = e.target.closest("[data-wi]");
   if (tp) w.tipo = tp.dataset.wt;
