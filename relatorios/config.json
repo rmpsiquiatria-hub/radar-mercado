@@ -1,7 +1,7 @@
 {
   "comentario": "Configuração do e-mail diário. tempo_grafico: gráfico da análise técnica do e-mail (diario, semanal ou mensal) — o mesmo escolhido em Configurações no site. criterios: os mesmos da aba Relatório do site (padrão) — usados para os sinais de compra do e-mail.",
   "site": "https://radar-mercado-xi.vercel.app",
-  "tempo_grafico": "semanal",
+  "tempo_grafico": "mensal",
   "criterios": {
     "pl_max": 15,
     "dy_min": 4,
