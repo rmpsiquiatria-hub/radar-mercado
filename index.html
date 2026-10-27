@@ -392,8 +392,12 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .sim-row .sim-l span { font-size: 12px; color: var(--muted); }
 .sim-row input[type=range] { width: 100%; accent-color: var(--faint); margin: 0; }
 .sim-bar { position: relative; }
-.sim-bar::after { content: ""; position: absolute; left: 50%; top: 2px; width: 2px; height: 16px; background: var(--muted); transform: translateX(-50%); pointer-events: none; opacity: .6; }
-.sim-bar .sim-z { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); }
+.sim-bar::after { content: ""; position: absolute; left: var(--mid, 50%); top: 2px; width: 2px; height: 16px; background: var(--muted); transform: translateX(-50%); pointer-events: none; opacity: .6; }
+.sim-bar .sim-z { position: relative; height: 16px; font-size: 11px; color: var(--faint); }
+.sim-bar .sim-z span { position: absolute; top: 0; white-space: nowrap; }
+.sim-bar .sim-z span:first-child { left: 0; }
+.sim-bar .sim-z span:nth-child(2) { left: var(--mid, 50%); transform: translateX(-50%); }
+.sim-bar .sim-z span:last-child { right: 0; }
 .sim-row.ativo input[type=range] { accent-color: var(--accent); }
 .sim-row.est input[type=range] { accent-color: var(--pos); }
 .sim-row.fraca { opacity: .5; }
@@ -556,7 +560,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <div class="fgal" id="fundList"></div>
     </div>
     <div data-esec-panel="simulacao" hidden>
-      <p class="note">Cada barra começa no <b>valor atual</b> do indicador e vai de zero até o dobro dele. Mova a barra de <b>um</b> indicador para o valor que quiser: as outras barras se movem, em azul, para onde cada indicador costuma ir <b>junto</b>, pelo histórico dos últimos <b>4 anos</b> (correlação de Spearman entre as variações mensais). Para simular outro indicador, é só mover a barra dele: a simulação anterior é desfeita.</p>
+      <p class="note">Cada barra começa no <b>valor atual</b> do indicador e vai de zero até o dobro dele (o IPCA do mês pode ir até −1%, porque pode haver deflação). Mova a barra de <b>um</b> indicador para o valor que quiser: as outras barras se movem, em azul, para onde cada indicador costuma ir <b>junto</b>, pelo histórico dos últimos <b>4 anos</b> (correlação de Spearman entre as variações mensais). Para simular outro indicador, é só mover a barra dele: a simulação anterior é desfeita.</p>
       <div id="simBox" class="card"></div>
       <p class="hint" style="margin-top:8px">Como é calculado: para cada par, efeito estimado = ρ × (desvio padrão do outro ÷ desvio padrão do escolhido) × variação escolhida, com as variações medidas em % para preços e índices e em pontos percentuais para Selic, IPCA (do mês) e desemprego. É uma regressão linear simples sobre as variações mensais, usando a correlação de Spearman (ρ) dos últimos 48 meses no lugar da correlação comum, por ser menos afetada por meses extremos. Vale melhor para movimentos do tamanho dos que acontecem num mês; movimentos muito grandes (como dobrar o Ibovespa) extrapolam o histórico e dão estimativas pouco realistas. Relações sem significância estatística aparecem apagadas: nelas o número é pouco confiável. Correlação não é causa, e o passado não garante o futuro. É um exercício educativo, não uma recomendação de investimento.</p>
     </div>
@@ -2122,18 +2126,21 @@ function simLevel(k, v) {
   const q = simQuote(k); return money(v, q?.currency, q?.type);
 }
 const simDelta = (k, v, base) => SIM_PP.has(k) ? v - base : (v / base - 1) * 100;   // level → monthly change
-const simApply = (k, d, base) => Math.max(0, SIM_PP.has(k) ? base + d : base * (1 + d / 100));   // monthly change → level
+// Everything stops at 0, except monthly inflation, which can be negative (deflation), down to −1%.
+const simMin = k => k === "ipca" ? -1 : 0;
+const simApply = (k, d, base) => Math.max(simMin(k), SIM_PP.has(k) ? base + d : base * (1 + d / 100));   // monthly change → level
 let simBases = {};
-function simItems() { return CORR.filter(o => simBase(o.k) > 0 && monthly?.[o.k]?.size >= 8); }
+function simItems() { return CORR.filter(o => (o.k === "ipca" ? simBase(o.k) != null : simBase(o.k) > 0) && monthly?.[o.k]?.size >= 8); }
+const simHi = (k, b) => k === "ipca" ? Math.max(2 * b, 1) : 2 * b;   // a month of deflation still leaves room above
 function renderSim() {
   const box = $("#simBox"); if (!box) return;
   if (!monthly) { box.innerHTML = `<div class="empty">Carregando o histórico mensal…</div>`; return; }
   simSel = null; simVal = 0; simBases = {};
   const items = simItems();
   box.innerHTML = `<div class="sim-head"><span class="hint"></span><button class="btn" id="simZero" disabled>↺ Voltar aos valores atuais</button></div>` +
-    items.map(o => { const b = simBases[o.k] = simBase(o.k); return `<div class="sim-row" data-row="${esc(o.k)}">
+    items.map(o => { const b = simBases[o.k] = simBase(o.k), lo = simMin(o.k), hi = simHi(o.k, b), mid = (b - lo) / (hi - lo) * 100; return `<div class="sim-row" data-row="${esc(o.k)}">
       <div class="sim-l"><b>${o.label}</b><span>atual: ${simLevel(o.k, b)}</span></div>
-      <div class="sim-bar"><input type="range" data-sk="${esc(o.k)}" min="0" max="${2 * b}" step="${2 * b / 1000}" value="${b}" aria-label="${esc(o.label)}"><div class="sim-z"><span>0</span><span>atual</span><span>${simLevel(o.k, 2 * b)}</span></div></div>
+      <div class="sim-bar" style="--mid:${mid}%"><input type="range" data-sk="${esc(o.k)}" min="${lo}" max="${hi}" step="${(hi - lo) / 1000}" value="${b}" aria-label="${esc(o.label)}"><div class="sim-z"><span>${lo ? simLevel(o.k, lo) : "0"}</span><span>atual</span><span>${simLevel(o.k, hi)}</span></div></div>
       <div class="sim-v"></div></div>`; }).join("");
   updateSim();
 }
@@ -2149,7 +2156,7 @@ function updateSim() {
     const pr = simPair(simSel, k);
     if (!pr) { inp.value = base; out.innerHTML = `<b>${simLevel(k, base)}</b><small>poucos dados</small>`; return; }
     const v = simApply(k, pr.beta * dSel, base);
-    inp.value = Math.min(v, 2 * base); row.classList.add("est"); if (!pr.sig) row.classList.add("fraca");
+    inp.value = Math.min(v, simHi(k, base)); row.classList.add("est"); if (!pr.sig) row.classList.add("fraca");
     out.innerHTML = `<b>≈ ${simLevel(k, v)}</b><small>${chg(k, simDelta(k, v, base))} · ρ ${nf(2).format(pr.r)} · ${pr.sig ? forca(pr.r) : "não significativa"}</small>`;
   });
   const z = $("#simZero"); if (z) z.disabled = !simSel;
