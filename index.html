@@ -1902,7 +1902,7 @@ function priceAlertsView() {
         <div style="font-size:13px;color:var(--muted)">Agora: <span class="num">${q ? money(q.price, q.currency, q.type) : "…"}</span>${a.fired ? " · disparou em " + new Date(a.fired).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : ""}</div></div>
       <span class="tag ${a.fired ? "fired" : "on"}">${a.fired ? "Disparado" : "Vigiando"}</span>
     </div>`;
-  }).join("") : `<div class="empty">Nenhum alerta de preço. Crie em <button class="linkbtn" type="button" data-goto-alertas>Configurações</button>.</div>`;
+  }).join("") : `<div class="empty">Nenhum alerta de preço.</div>`;
 }
 function tecSettingsHTML() {
   const c = tecCfg(), cand = tecCandidates();
