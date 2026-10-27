@@ -923,7 +923,7 @@ function renderCorr() {
     }).join("")}</tr>`).join("")}</table></div>`;
   box.innerHTML = `<div class="corr-head">${corrFold(c)}
       <span>de <select id="corrBase" aria-label="Índice base">${CORR.map(o => `<option value="${esc(o.k)}" ${o.k === c.base ? "selected" : ""}>${o.label}</option>`).join("")}</select> com os demais</span>
-      <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [36, "3 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
+      <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [24, "2 anos"], [36, "3 anos"], [48, "4 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
       <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
     <div class="corr-row">${chips}</div>${matrix}
     <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Commodities BR pelo IC-Br do Banco Central. Correlação não é causa e muda com o tempo.</p>`;
