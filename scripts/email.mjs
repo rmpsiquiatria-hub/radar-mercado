@@ -68,6 +68,10 @@ function techEvents(e, f) {
 const emps = rep.empresas;
 const sig = emps.map(e => [e, signal(e)]);
 const buys = sig.filter(([, s]) => s?.kind === "compra"), warns = sig.filter(([, s]) => s?.kind === "atencao");
+// Both analyses on the same side (mirrors convergence() in index.html): buy signal + technical
+// bias "alta" on TF, or attention + technical bias "baixa".
+const convBuy = buys.filter(([e]) => e.tecnica?.[TF]?.vies === "alta");
+const convSell = warns.filter(([e]) => e.tecnica?.[TF]?.vies === "baixa");
 const staleResearch = rep.pesquisa_data && rep.pesquisa_data !== rep.data;
 const h2 = t => `<h2 style="font-size:17px;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid ${LINE}">${t}</h2>`;
 const hint = t => `<p style="margin:0 0 8px;color:${MUTED};font-size:13px">${t}</p>`;
@@ -92,6 +96,14 @@ function techSection(f) {
       <tr><td style="padding:5px 0;border-bottom:1px solid ${LINE};width:70px;vertical-align:top">${link(e)}</td>
         <td style="padding:5px 0 5px 8px;border-bottom:1px solid ${LINE}">${x.map(t => `<span style="color:${color(t.sinal)}">${arrow(t.sinal)} ${esc(t.texto)}</span>`).join("<br>")}</td></tr>`).join("")}</table>
       ${ev.length > 30 ? hint(`…e mais ${ev.length - 30} no site.`) : ""}` : hint("Nenhuma empresa com cruzamento de médias ou candle de reversão recente neste gráfico.")}`;
+}
+
+function convRows(list, kind) {
+  if (!list.length) return hint("Nenhum ativo hoje.");
+  return `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px">${list.map(([e, s]) => { const t = e.tecnica[TF], ev = techEvents(e, TF); return `
+    <tr><td style="padding:8px 0;border-bottom:1px solid ${LINE};vertical-align:top;width:70px">${link(e)}</td>
+      <td style="padding:8px 0 8px 8px;border-bottom:1px solid ${LINE}"><b>${esc(e.nome)}</b> · ${money(price(e), cur(e))}
+        <div style="font-size:13px"><span style="color:#0f766e">📊 ${esc(s.why[0])}</span><br><span style="color:#6d28d9">📈 tendência ${esc(t.tendencia)}${ev.length ? " · " + esc(ev.map(x => x.texto).join(" · ")) : ""}</span></div></td></tr>`; }).join("")}</table>`;
 }
 
 function changesSection() {
@@ -141,7 +153,7 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
       Olha só para o <b>gráfico de preços</b>: tendência, médias móveis, candles, suporte e resistência. Não diz se a empresa é boa —
       diz <i>"como o preço está se comportando agora?"</i> e ajuda a escolher o <b>momento</b> de entrar ou sair. Pensa em <b>dias a semanas</b>${TF === "semanal" ? " (no gráfico semanal, semanas a meses)" : TF === "mensal" ? " (no gráfico mensal, meses)" : ""}.
     </td></tr>
-    <tr><td style="font-size:13px;color:${MUTED};padding:0 4px">As duas se complementam: uma empresa pode ser boa (fundamentalista positiva) e o preço ainda estar caindo (técnica negativa), ou o contrário.</td></tr>
+    <tr><td style="font-size:13px;color:${MUTED};padding:0 4px">As duas se complementam: uma empresa pode ser boa (fundamentalista positiva) e o preço ainda estar caindo (técnica negativa), ou o contrário. A <b>Parte 3</b> mostra só os ativos em que as duas apontam para o mesmo lado.</td></tr>
   </table>
 
   <div style="margin:26px 0 0;padding:10px 14px;border-radius:8px;background:#0f766e;color:#ffffff;font-weight:700;font-size:16px">📊 PARTE 1 · ANÁLISE FUNDAMENTALISTA</div>
@@ -162,7 +174,15 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   ${hint(`Calculada por programa a partir dos preços, sem IA. Sinais considerados: cruzamento das médias curtas (MME 9 × MMS 21), golden/death cross (MMS 50 × MMS 200) e candles de reversão. Cada candle deste gráfico representa ${{ diario: "um dia de negociação", semanal: "uma semana de negociação", mensal: "um mês de negociação" }[TF]}. O gráfico é o escolhido em Configurações no site.`)}
   ${techSection(TF)}
 
-  ${h2("📋 Visão geral: fundamentalista e técnica lado a lado")}
+  <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#b45309;color:#ffffff;font-weight:700;font-size:16px">🎯 PARTE 3 · ONDE AS DUAS ANÁLISES CONCORDAM</div>
+  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa.`)}
+  ${h2(`▲ Para o lado da compra (${convBuy.length})`)}
+  ${convRows(convBuy)}
+  ${h2(`▼ Para o lado da venda (${convSell.length})`)}
+  ${convRows(convSell)}
+  ${hint("Concordância não é garantia: as duas análises podem errar juntas.")}
+
+  ${h2("📋 Anexo: fundamentalista e técnica lado a lado")}
   ${overviewTable()}
 
   <p style="margin:28px 0 8px"><a href="${esc(cfg.site)}" style="display:inline-block;background:#0f766e;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700">Abrir o painel completo</a></p>
@@ -173,6 +193,7 @@ const text = [
   `Radar do Mercado — relatório de ${dayLong}`, "", rep.resumo_mercado, "",
   `Sinais de compra (${buys.length}): ${buys.map(([e]) => e.ticker).join(", ") || "nenhum"}`,
   `Pontos de atenção (${warns.length}): ${warns.map(([e]) => e.ticker).join(", ") || "nenhum"}`, "",
+  `As duas análises concordam — compra: ${convBuy.map(([e]) => e.ticker).join(", ") || "nenhum"}; venda: ${convSell.map(([e]) => e.ticker).join(", ") || "nenhum"}`, "",
   `Painel completo: ${cfg.site}`,
 ].join("\n");
 

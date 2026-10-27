@@ -183,6 +183,13 @@ footer a, footer button.link { color: var(--muted); background: none; border: 0;
 .chip { display: flex; gap: 8px; align-items: baseline; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 7px 10px; margin-top: 6px; cursor: pointer; font-size: 13px; }
 .chip span { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chip.compra { border-left: 3px solid var(--up); } .chip.atencao { border-left: 3px solid var(--warn); }
+.rep-part { margin: 22px 0 10px; padding: 9px 14px; border-radius: 8px; font-weight: 700; font-size: 15px; color: #fff; }
+.rep-part.f { background: #0f766e; } .rep-part.t { background: #6d28d9; } .rep-part.c { background: #b45309; } .rep-part.x { background: var(--panel-2); color: var(--text); border: 1px solid var(--line); }
+.rep-part + .hint { margin: -2px 0 10px; }
+.conv-why { display: block; font-size: 12px; color: var(--muted); font-weight: 400; }
+#toTop { position: fixed; right: 16px; bottom: 16px; z-index: 40; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-size: 20px; cursor: pointer; box-shadow: var(--shadow), 0 6px 20px rgba(0,0,0,.15); opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s, transform .2s; }
+#toTop.show { opacity: 1; transform: none; pointer-events: auto; }
+#toTop:hover { background: var(--accent-soft); color: var(--accent); }
 .tech-box { margin-bottom: 12px; } .tech-box .seg { flex: 0 0 auto; flex-wrap: nowrap; } .tech-box h3 { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
 .chips2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0 8px; }
 table.tech td, table.tech th { padding: 6px 10px; font-size: 13px; } table.tech td:first-child { color: var(--muted); }
@@ -501,6 +508,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   window.dispatchEvent(new Event("analise-pronta"));
 </script>
 <div class="toasts" id="toasts" aria-live="polite"></div>
+<button id="toTop" type="button" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
 
 <script>
 "use strict";
@@ -622,6 +630,8 @@ async function refresh() {
 setInterval(() => { if (!document.hidden) refresh(); }, REFRESH_MS);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastOk > REFRESH_MS) refresh(); });
 setInterval(renderStamp, 1000);
+addEventListener("scroll", () => $("#toTop").classList.toggle("show", scrollY > 600), { passive: true });
+$("#toTop").addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
 
 /* ---------- cripto ao vivo (Binance) ---------- */
 const liveCrypto = {};
@@ -1932,6 +1942,18 @@ function techEvents(e) {
           ...t.candles.filter(c => c.sinal !== "neutro").map(c => ({ sinal: c.sinal, texto: "Candle " + c.nome, peso: 2 }))]
     .sort((a, b) => b.peso - a.peso);
 }
+// Where both analyses point the same way, on the chart chosen in Settings:
+// fundamental buy signal + technical bias "alta", or fundamental attention + technical bias "baixa".
+// Mirrors convergence() in scripts/email.mjs — keep both in step.
+function convergence(emps) {
+  const out = { compra: [], venda: [] };
+  for (const e of emps) {
+    const s = signal(e), v = e.tecnica?.[frame()]?.vies;
+    if (s?.kind === "compra" && v === "alta") out.compra.push([e, s]);
+    if (s?.kind === "atencao" && v === "baixa") out.venda.push([e, s]);
+  }
+  return out;
+}
 function myTickers() {
   return new Set([...state.favs, ...state.cart.map(c => c.symbol)].map(s => s.replace(/\.SA$/, "")));
 }
@@ -1973,6 +1995,8 @@ function renderReport() {
   if (repQuery) { const q = repQuery.toLowerCase(); list = list.filter(e => e.ticker.toLowerCase().includes(q) || (e.nome || "").toLowerCase().includes(q)); }
 
   const techList = emps.map(e => [e, techEvents(e)]).filter(([, ev]) => ev.length).sort((a, b) => b[1][0].peso - a[1][0].peso);
+  const conv = convergence(emps);
+  const convChip = kind => ([e, s]) => { const t = e.tecnica[frame()]; return `<button class="chip ${kind}" data-rep="${esc(e.ticker)}" title="${esc(s.why.join(" · "))}"><b>${esc(e.ticker)}</b> <span>${esc(s.why[0])}<span class="conv-why">técnica: tendência ${esc(t.tendencia)}${techEvents(e).length ? " · " + esc(techEvents(e).map(x => x.texto).join(" · ")) : ""}</span></span></button>`; };
   const chip = ([e, s]) => `<button class="chip ${s.kind}" data-rep="${esc(e.ticker)}" title="${esc(s.why.join(" · "))}"><b>${esc(e.ticker)}</b> <span>${esc(s.why[0])}</span></button>`;
   box.innerHTML = `
     <div class="rep-head">
@@ -1980,16 +2004,28 @@ function renderReport() {
         <div class="sub">${emps.length} empresas · gerado ${report.gerado_em ? new Date(report.gerado_em).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : ""}${old ? ` · <b style="color:var(--warn)">relatório com mais de 3 dias</b>` : ""}</div></div>
     </div>
     <p class="rep-sum">${esc(report.resumo_mercado || "")}</p>
+    <div class="rep-part f">📊 Análise fundamentalista</div>
+    <p class="hint">Olha para a <b>empresa</b>: o que as casas de análise recomendam e os indicadores (lucro, dividendos, dívida). Responde a "esta empresa é boa e está barata?".</p>
     <div class="rep-cols">
       <div class="rep-box"><h3>🟢 Sinais de compra <small>${buys.length}</small></h3><p class="hint">A maioria das casas consultadas recomenda compra <b>e</b> o papel passa nos seus critérios.</p>${buys.map(chip).join("") || `<p class="hint">Nenhum papel hoje.</p>`}</div>
       <div class="rep-box"><h3>🟠 Pontos de atenção <small>${warns.length}</small></h3><p class="hint">Recomendações de venda, rebaixamentos recentes ou notícias negativas com indicadores fracos.</p>${warns.map(chip).join("") || `<p class="hint">Nenhum papel hoje.</p>`}</div>
     </div>
+    <div class="crit-line">Seus critérios: <b>${esc(critSummary(c))}</b><button class="link" data-goto="config">alterar em Configurações</button></div>
+    <div class="rep-part t">📈 Análise técnica · gráfico ${FRAMES.find(f => f[0] === frame())[1].toLowerCase()}</div>
+    <p class="hint">Olha só para o <b>gráfico de preços</b>: tendência, médias móveis e candles. Responde a "como o preço está se comportando agora?". Tendência das ${emps.length} empresas neste gráfico: <b class="up">${emps.filter(e => e.tecnica?.[frame()]?.vies === "alta").length} de alta</b>, <b class="down">${emps.filter(e => e.tecnica?.[frame()]?.vies === "baixa").length} de baixa</b>, ${emps.filter(e => e.tecnica?.[frame()]?.vies === "neutro").length} neutras.</p>
     <div class="rep-box tech-box"><h3>📈 Sinais técnicos <small>${techList.length}</small>
         <span class="seg" role="group" style="flex:0;display:inline-flex;margin-left:8px">${FRAMES.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${frame() === k}">${l}</button>`).join("")}</span></h3>
       <p class="hint">Cruzamentos de médias móveis, MACD e candles de reversão no gráfico ${{ diario: "diário (último pregão)", semanal: "semanal (última semana fechada)", mensal: "mensal (último mês fechado)" }[frame()]}. Calculado a partir dos preços, sem IA.</p>
       <div class="chips2">${techList.map(([e, ev]) => `<button class="chip ${ev[0].sinal === "alta" ? "compra" : "atencao"}" data-rep="${esc(e.ticker)}" title="${esc(ev.map(x => x.texto).join(" · "))}"><b>${esc(e.ticker)}</b> <span>${esc(ev.map(x => x.texto).join(" · "))}</span></button>`).join("") || `<p class="hint">Nenhum cruzamento ou candle de reversão recente.</p>`}</div>
     </div>
-    <div class="crit-line">Seus critérios: <b>${esc(critSummary(c))}</b><button class="link" data-goto="config">alterar em Configurações</button></div>
+    <div class="rep-part c">🎯 Onde as duas análises concordam</div>
+    <p class="hint">Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAMES.find(f => f[0] === frame())[1].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa.</p>
+    <div class="rep-cols">
+      <div class="rep-box"><h3>▲ Para o lado da compra <small>${conv.compra.length}</small></h3>${conv.compra.map(convChip("compra")).join("") || `<p class="hint">Nenhum ativo hoje.</p>`}</div>
+      <div class="rep-box"><h3>▼ Para o lado da venda <small>${conv.venda.length}</small></h3>${conv.venda.map(convChip("atencao")).join("") || `<p class="hint">Nenhum ativo hoje.</p>`}</div>
+    </div>
+    <p class="hint">Concordância não é garantia: as duas análises podem errar juntas. Não é recomendação de investimento.</p>
+    <div class="rep-part x">📋 Tabela completa</div>
     ${notCovered.length ? `<div class="note">Da sua lista, ainda fora do relatório: <b>${notCovered.map(esc).join(", ")}</b>. Peça ao Claude para incluí-los em <code>relatorios/acompanhar.json</code>.</div>` : ""}
     <div class="toolbar" style="margin-top:12px">
       <div class="seg" role="group">${[["todas", "Todas"], ["minha", "Minha lista"], ["sinais", "Com sinal"], ["criterios", "Passam nos critérios"], ["mudancas", "Mudanças recentes"], ["tecnicos", "Sinais técnicos"]].map(([k, l]) => `<button data-rf="${k}" aria-pressed="${repFilter === k}">${l}</button>`).join("")}</div>
