@@ -385,6 +385,8 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .gov-txt summary { cursor: pointer; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
 .gov-txt summary span { font-size: 12px; color: var(--muted); }
 .gov-txt ul { margin: 6px 0 0; padding-left: 18px; font-size: 14px; } .gov-txt li { margin: 6px 0; }
+.edu-more { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; }
+.edu-more summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 14px; }
 .fund-intro { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 12px; margin-bottom: 14px; }
 .fgrp { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 16px 0 6px; grid-column: 1 / -1; }
 .fgal { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 10px; align-items: start; }
@@ -511,18 +513,34 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
 
   <!-- EDUCAÇÃO -->
   <section data-panel="edu" hidden>
-    <p class="note">O que significa cada indicador do topo da tela, como ler as correlações e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
-    <div class="edu-grid" id="eduList"></div>
-    <h3 class="sec-t" style="margin-top:26px" id="edu-governo">🏛️ Governo: os índices em cada mandato</h3>
-    <p class="hint">Como cada indicador do painel se comportou nos governos desde o Plano Real: presidente, partido e período. Os mercados dependem muito de fatores de fora do país (crises mundiais, juros nos EUA, preço das commodities) e de decisões que não são só do governo, como a Selic, definida pelo Banco Central. Os mandatos têm durações diferentes e começaram em situações diferentes. Os números mostram <b>o que aconteceu</b> em cada período, não provam que o governo foi a causa. Os textos foram escritos por IA (Claude) com base nos dados do painel e em fatos amplamente documentados, e podem conter imprecisões; a tabela é calculada ao vivo.</p>
-    <div id="govBox"></div>
-    <h3 class="sec-t" style="margin-top:26px">📊 Análise fundamentalista: os indicadores</h3>
-    <p class="hint">A análise fundamentalista olha para a <b>empresa</b>: quanto ela lucra, quanto deve, quanto paga de dividendos e se o preço da ação está caro ou barato perto disso. (A análise técnica, dos gráficos e candles, olha só para o comportamento do preço.) Estes são os indicadores que aparecem no Relatório e no e-mail. Toque em um para ver a explicação. Os exemplos usam os números da <b>empresa com mais peso no Ibovespa</b> no último relatório.</p>
-    <div class="fund-intro" id="fundIntro"></div>
-    <div class="fgal" id="fundList"></div>
-    <h3 class="sec-t" style="margin-top:26px">🕯️ Padrões de candlestick</h3>
-    <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
-    <div class="cgal" id="cgal"></div>
+    <div class="ftabs etabs" role="tablist" aria-label="Seções da Educação">
+      <button role="tab" data-esec="mercados">📈 Mercados e horários</button>
+      <button role="tab" data-esec="economia">🏦 Juros, inflação e emprego</button>
+      <button role="tab" data-esec="governo">🏛️ Governo</button>
+      <button role="tab" data-esec="fundamentos">📊 Análise fundamentalista</button>
+      <button role="tab" data-esec="candles">🕯️ Candlesticks</button>
+    </div>
+    <div data-esec-panel="mercados">
+      <p class="note">O que significa cada índice, moeda e criptomoeda do topo da tela e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
+      <div class="edu-grid" id="eduList"></div>
+    </div>
+    <div data-esec-panel="economia" hidden>
+      <p class="note">Os indicadores da economia brasileira que aparecem no topo da tela e como ler a linha de correlações.</p>
+      <div class="edu-grid" id="eduEco"></div>
+    </div>
+    <div data-esec-panel="governo" hidden id="edu-governo">
+      <p class="hint">Como cada indicador do painel se comportou nos governos desde o Plano Real: presidente, partido e período. Os mercados dependem muito de fatores de fora do país (crises mundiais, juros nos EUA, preço das commodities) e de decisões que não são só do governo, como a Selic, definida pelo Banco Central. Os mandatos têm durações diferentes e começaram em situações diferentes. Os números mostram <b>o que aconteceu</b> em cada período, não provam que o governo foi a causa. Os textos foram escritos por IA (Claude) com base nos dados do painel e em fatos amplamente documentados, e podem conter imprecisões; a tabela é calculada ao vivo.</p>
+      <div id="govBox"></div>
+    </div>
+    <div data-esec-panel="fundamentos" hidden>
+      <p class="hint">A análise fundamentalista olha para a <b>empresa</b>: quanto ela lucra, quanto deve, quanto paga de dividendos e se o preço da ação está caro ou barato perto disso. (A análise técnica, dos gráficos e candles, olha só para o comportamento do preço.) Estes são os indicadores que aparecem no Relatório e no e-mail. Toque em um para ver a explicação. Os exemplos usam os números da <b>empresa com mais peso no Ibovespa</b> no último relatório.</p>
+      <div class="fund-intro" id="fundIntro"></div>
+      <div class="fgal" id="fundList"></div>
+    </div>
+    <div data-esec-panel="candles" hidden>
+      <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
+      <div class="cgal" id="cgal"></div>
+    </div>
   </section>
 
   <datalist id="symList"></datalist>
@@ -1414,7 +1432,12 @@ document.addEventListener("click", e => {
   const uc = t.closest("[data-uncart]"); if (uc) { e.stopPropagation(); if (confirm("Remover " + short(uc.dataset.uncart) + " da carteira?")) { state.cart = state.cart.filter(p => p.symbol !== uc.dataset.uncart); save(); renderCart(); } return; }
   const ua = t.closest("[data-unalert]"); if (ua) { state.alerts = state.alerts.filter(a => a.id !== ua.dataset.unalert); save(); renderAlerts(); return; }
   const ra = t.closest("[data-rearm]"); if (ra) { const a = state.alerts.find(a => a.id === ra.dataset.rearm); if (a) a.fired = 0; save(); renderAlerts(); return; }
-  const ed = t.closest("[data-edu]"); if (ed) { showTab("edu"); setTimeout(() => document.getElementById("edu-" + ed.dataset.edu)?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); return; }
+  const ed = t.closest("[data-edu]"); if (ed) {
+    showTab("edu");
+    setTimeout(() => { const el = document.getElementById("edu-" + ed.dataset.edu); const sec = el?.closest("[data-esec-panel]"); if (sec) showEduSec(sec.dataset.esecPanel);
+      const more = el?.querySelector("details[data-emore]"); if (more) { more.open = true; eduOpen.add(more.dataset.emore); } el?.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
+    return;
+  }
   const sm = t.closest("[data-sim]"); if (sm) { simOpen({ sym: sm.dataset.sim }); return; }
   if (t.closest("[data-simall]")) { simOpen({ modo: "carteira" }); return; }
   if (t.closest("[data-goto-alertas]")) { gotoAlertSettings(); return; }
@@ -1957,25 +1980,42 @@ function eduItems() {
   ];
 }
 function renderEdu() {
-  const box = $("#eduList"); if (!box || box.closest("[hidden]")) return;
+  const box = $("#eduList"); if (!box || box.closest("[data-panel]").hidden) return;
   if (!$("#govBox").dataset.feito) renderGov();
   getReport().then(renderFundEdu);
   renderFundEdu();
-  box.innerHTML = eduItems().sort((a, b) => (a.id === "spearman") - (b.id === "spearman")).map(it => {
+  const card = it => {
+    const id = it.id || it.s.replace(/[^a-z0-9]/gi, "").toLowerCase();
     const q = it.s ? quotes[it.s] : null, c = change(q);
     return `<article class="card edu" id="edu-${it.id || it.s.replace(/[^a-z0-9]/gi, "").toLowerCase()}">
       <div class="edu-h"><div><h3>${it.titulo}</h3><div class="hint">${it.sub}</div></div>
         ${q ? `<span class="mk ${q.open ? "on" : ""}">${q.open ? "aberto agora" : "fechado agora"}</span>` : ""}</div>
       ${it.valor && it.valor() ? `<div class="edu-px" style="cursor:default">${it.valor()}</div>` : ""}
       ${q ? `<button class="edu-px" data-open="${esc(it.s)}"><span class="num">${money(q.price, q.currency, q.type)}</span> <span class="num ${cls(c)}">${pct(c)}</span>${sinceTxt(q) ? ` <span class="hint">${sinceTxt(q)}</span>` : ""} <span class="hint">· ver gráfico</span></button>` : ""}
-      <h4>O que é</h4><p>${it.oque}</p>
-      <h4>Por que importa</h4><p>${it.porque}</p>
       <h4>Horário (Brasília)</h4>
       <table class="edu-t">${it.horario.map(([a, b]) => `<tr><td>${a}</td><td><b>${b}</b></td></tr>`).join("")}</table>
-      ${it.nota ? `<p class="hint" style="margin-top:8px">${it.nota}</p>` : ""}
+      <details class="edu-more" data-emore="${id}" ${eduOpen.has(id) ? "open" : ""}><summary>Saiba mais: o que é e por que importa</summary>
+        <h4>O que é</h4><p>${it.oque}</p>
+        <h4>Por que importa</h4><p>${it.porque}</p>
+        ${it.nota ? `<p class="hint" style="margin-top:8px">${it.nota}</p>` : ""}
+      </details>
     </article>`;
-  }).join("");
+  };
+  const items = eduItems();
+  box.innerHTML = items.filter(it => it.s).map(card).join("");
+  $("#eduEco").innerHTML = items.filter(it => !it.s).sort((a, b) => (a.id === "spearman") - (b.id === "spearman")).map(card).join("");
 }
+const eduOpen = new Set();   // "Saiba mais" boxes the user opened (the cards re-render with the quotes)
+document.addEventListener("toggle", e => { const d = e.target; if (d.matches?.("details[data-emore]")) d.open ? eduOpen.add(d.dataset.emore) : eduOpen.delete(d.dataset.emore); }, true);
+// Education sub-sections: one visible at a time, remembered in this browser.
+function eduSec() { try { return localStorage.getItem(KEY + ".edu") || "mercados"; } catch { return "mercados"; } }
+function showEduSec(name) {
+  document.querySelectorAll("[data-esec]").forEach(b => b.setAttribute("aria-selected", b.dataset.esec === name));
+  document.querySelectorAll("[data-esec-panel]").forEach(p => p.hidden = p.dataset.esecPanel !== name);
+  try { localStorage.setItem(KEY + ".edu", name); } catch {}
+}
+showEduSec(eduSec());
+document.querySelector(".etabs").addEventListener("click", e => { const b = e.target.closest("[data-esec]"); if (b) showEduSec(b.dataset.esec); });
 
 
 /* ---------- educação: governos ---------- */
