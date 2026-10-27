@@ -579,6 +579,7 @@ const STRIP = [
   { s: "^GSPC", label: "S&P 500" },
   { s: "^IXIC", label: "Nasdaq" },
   { s: "^STOXX50E", label: "Euro Stoxx 50" },
+  { s: "ZS=F", label: "Soja (Chicago)" },
   { s: "BTC-USD", label: "Bitcoin" },
 ];
 const DEFAULT_FAVS = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBAS3.SA", "WEGE3.SA", "AAPL", "NVDA", "MSFT", "USDBRL=X", "EURBRL=X", "BTC-USD", "ETH-USD"];
@@ -603,6 +604,7 @@ const nf = (d) => new Intl.NumberFormat("pt-BR", { minimumFractionDigits: d, max
 function decimals(v) { const a = Math.abs(v); return a >= 1000 ? 2 : a >= 1 ? 2 : a >= 0.01 ? 4 : 6; }
 function money(v, cur, type) {
   if (v == null || !isFinite(v)) return "—";
+  if (cur === "USX") { v /= 100; cur = "USD"; }   // grãos de Chicago vêm em centavos de dólar
   if (type === "INDEX") return nf(0).format(v) + " pts";
   const n = nf(decimals(v)).format(Math.abs(v));
   return (v < 0 ? "-" : "") + (cur === "BRL" ? "R$ " : cur === "USD" ? "US$ " : cur === "EUR" ? "€ " : (cur ? cur + " " : "")) + n;
@@ -787,6 +789,7 @@ const CORR = [
   { k: "^GSPC", label: "S&P 500" },
   { k: "^IXIC", label: "Nasdaq" },
   { k: "^STOXX50E", label: "Euro Stoxx 50" },
+  { k: "ZS=F", label: "Soja", nota: "contrato futuro mais próximo da Bolsa de Chicago, em US$" },
   { k: "BTC-USD", label: "Bitcoin" },
   { k: "selic", label: "Selic" },
   { k: "ipca", label: "IPCA" },
@@ -1972,11 +1975,17 @@ function eduItems() {
       porque: "É o principal termômetro das bolsas da Europa. Como abre de madrugada no horário de Brasília, mostra o humor do mercado internacional antes de a B3 e Nova York abrirem.",
       horario: [["Pregão regular", euDst ? "4h às 12h30" : "5h às 13h30"], ["Na Europa", "9h às 17h30 (horário de Frankfurt e Paris)"], ["Dias", "segunda a sexta, exceto feriados europeus"]],
       nota: "A Europa muda o relógio no último domingo de março e no último domingo de outubro. Por isso, de abril a outubro o pregão vai das 4h às 12h30 de Brasília, e de novembro a março, das 5h às 13h30." },
+    { s: "ZS=F", titulo: "Soja (Chicago)", sub: "O principal produto do agronegócio brasileiro",
+      oque: "Preço do contrato futuro de soja mais próximo do vencimento na Bolsa de Chicago (CBOT), a referência mundial para o grão. É cotado em <b>dólares por bushel</b>, uma medida americana: 1 bushel de soja tem cerca de 27,2 kg, e uma saca de 60 kg tem cerca de 2,2 bushels.",
+      porque: "A soja é o maior produto de exportação do Brasil. Quando o preço em Chicago sobe, a receita dos produtores, das tradings e das empresas do agro tende a subir, e mais dólares entram no país. O que o produtor recebe em reais depende também do dólar: dólar alto compensa soja barata, e vice-versa.",
+      valor: () => { const q = quotes["ZS=F"], u = quotes["USDBRL=X"]?.price; if (!q?.price) return ""; const saca = q.price / 100 * 60 / 27.2155; return `<b class="num">≈ US$ ${nf(2).format(saca)} por saca de 60 kg</b>${u ? ` <span class="hint">· ≈ ${brl(saca * u)} pelo dólar de agora</span>` : ""}`; },
+      horario: [["Sessão principal", dst ? "10h30 às 15h20" : "11h30 às 16h20"], ["Sessão noturna", dst ? "21h às 9h45 do dia seguinte" : "22h às 10h45 do dia seguinte"], ["Dias", "de domingo à noite até sexta, exceto feriados americanos"]],
+      nota: "O valor em reais por saca é só uma conversão do preço de Chicago. O preço pago no Brasil (por exemplo, o indicador CEPEA/ESALQ no porto de Paranaguá) inclui ainda o \"prêmio\" de exportação e pode ser diferente. O contrato futuro vence algumas vezes por ano: na troca de vencimento o preço pode dar um pequeno salto que não é variação real do mercado." },
     { s: "BTC-USD", titulo: "Bitcoin", sub: "A maior criptomoeda do mundo",
       oque: "Moeda digital criada em 2009, sem banco central nem governo por trás. É negociada em corretoras do mundo inteiro, e o preço aqui é em <b>dólares (US$)</b>.",
       porque: "É bem mais volátil que ações: variações de 5% num único dia são comuns. É o termômetro do mercado de criptomoedas.",
       horario: [["Funcionamento", "24 horas por dia, 7 dias por semana"], ["Fecha?", "nunca, nem em fins de semana ou feriados"]],
-      nota: "Por isso é o único do topo da tela que se mexe no sábado e no domingo." },
+      nota: "Por isso é o único do topo da tela que se mexe no sábado e durante o dia de domingo." },
   ];
 }
 function renderEdu() {
