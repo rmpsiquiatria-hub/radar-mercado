@@ -85,17 +85,24 @@ function signalRows(list, kind) {
         <div style="color:${kind === "compra" ? GREEN : AMBER};font-size:13px">${esc(s.why.join(" · "))}</div></td></tr>`).join("")}</table>`;
 }
 
+// Each company goes to the side its signals point to (weighted: golden/death cross > candles > short
+// averages); buy alerts are listed first, then sell alerts, then the few that point both ways.
+const techLado = x => { const n = x.reduce((a, t) => a + (t.sinal === "alta" ? 1 : t.sinal === "baixa" ? -1 : 0) * (t.peso + 1), 0); return n > 0 ? "alta" : n < 0 ? "baixa" : "misto"; };
 function techSection(f) {
   const ev = emps.map(e => [e, techEvents(e, f)]).filter(([, x]) => x.length).sort((a, b) => b[1][0].peso - a[1][0].peso);
+  const grupos = [["alta", "▲ Alerta de compra", GREEN], ["baixa", "▼ Alerta de venda", RED], ["misto", "◆ Sinais nos dois sentidos", MUTED]]
+    .map(([lado, titulo, cor]) => ({ titulo, cor, lista: ev.filter(([, x]) => techLado(x) === lado).map(([e, x]) => [e, x.slice().sort((a, b) => (b.sinal === lado) - (a.sinal === lado) || b.peso - a.peso)]) }))
+    .filter(g => g.lista.length);
+  const tabela = lista => `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px">${lista.slice(0, 20).map(([e, x]) => `
+      <tr><td style="padding:5px 0;border-bottom:1px solid ${LINE};width:70px;vertical-align:top">${link(e)}</td>
+        <td style="padding:5px 0 5px 8px;border-bottom:1px solid ${LINE}">${x.map(t => `<span style="color:${color(t.sinal)}">${arrow(t.sinal)} ${esc(t.texto)}</span>`).join("<br>")}</td></tr>`).join("")}</table>
+      ${lista.length > 20 ? hint(`…e mais ${lista.length - 20} no site.`) : ""}`;
   const bias = { alta: 0, baixa: 0, neutro: 0 };
   emps.forEach(e => { const v = e.tecnica?.[f]?.vies; if (v) bias[v]++; });
   const when = { diario: "último pregão", semanal: "última semana fechada", mensal: "último mês fechado" }[f];
   return `<h3 style="font-size:15px;margin:16px 0 4px">Empresas com sinais técnicos no gráfico ${FRAME_LABEL[f].toLowerCase()} (${ev.length}) <span style="font-weight:400;color:${MUTED};font-size:13px">· ${when}</span></h3>
     ${hint(`Tendência geral das ${emps.length} empresas acompanhadas neste gráfico: <b style="color:${GREEN}">${bias.alta} de alta</b>, <b style="color:${RED}">${bias.baixa} de baixa</b>, ${bias.neutro} neutras.`)}
-    ${ev.length ? `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px">${ev.slice(0, 30).map(([e, x]) => `
-      <tr><td style="padding:5px 0;border-bottom:1px solid ${LINE};width:70px;vertical-align:top">${link(e)}</td>
-        <td style="padding:5px 0 5px 8px;border-bottom:1px solid ${LINE}">${x.map(t => `<span style="color:${color(t.sinal)}">${arrow(t.sinal)} ${esc(t.texto)}</span>`).join("<br>")}</td></tr>`).join("")}</table>
-      ${ev.length > 30 ? hint(`…e mais ${ev.length - 30} no site.`) : ""}` : hint("Nenhuma empresa com cruzamento de médias ou candle de reversão recente neste gráfico.")}`;
+    ${ev.length ? grupos.map(g => `<div style="font-size:14px;font-weight:700;color:${g.cor};margin:12px 0 2px">${g.titulo} (${g.lista.length})</div>${tabela(g.lista)}`).join("") : hint("Nenhuma empresa com cruzamento de médias ou candle de reversão recente neste gráfico.")}`;
 }
 
 function convRows(list, kind) {
