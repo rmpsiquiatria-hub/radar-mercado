@@ -1046,7 +1046,9 @@ function renderCorr() {
     const r = x?.r;
     const bar = r == null ? "" : `<div class="cbar2"><i style="${r >= 0 ? "left:50%" : "right:50%"};width:${Math.abs(r) * 50}%;background:var(${r >= 0 ? "--pos" : "--neg"})"></i></div>`;
     const tip = r == null ? (x?.semVariacao ? "sem variação no período" : "dados insuficientes") : `ρ = ${nf(2).format(r)} · correlação ${forca(r)} ${r >= 0 ? "positiva" : "negativa"} · ${corrN(x)}${x.sig ? " · estatisticamente significativa (p < 0,05)" : " · não significativa"}`;
-    return `<div class="cchip" title="${esc(tip)}"><div class="n"><span>${o.label}</span>${x?.sig ? "<span>*</span>" : ""}</div>
+    // |ρ| of 0,3 or more gets a tinted background (blue = move together, orange = opposite)
+    const dest = r != null && Math.abs(+r.toFixed(2)) >= 0.3 ? ` style="background:color-mix(in srgb, var(${r >= 0 ? "--pos" : "--neg"}) ${Math.round(8 + Math.abs(r) * 22)}%, var(--panel));border-color:var(${r >= 0 ? "--pos" : "--neg"})"` : "";
+    return `<div class="cchip" title="${esc(tip)}"${dest}><div class="n"><span>${o.label}</span>${x?.sig ? "<span>*</span>" : ""}</div>
       <div class="v num ${r == null ? "" : r >= 0 ? "pos" : "neg"}">${r == null ? "—" : (r > 0 ? "+" : "") + nf(2).format(r)}</div>
       <div class="w">${r == null ? (x?.semVariacao ? "sem variação" : "poucos dados") : forca(r)}${x?.anual ? " · anual" : ""}</div>${bar}</div>`;
   }).join("");
@@ -1061,7 +1063,7 @@ function renderCorr() {
       <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [24, "2 anos"], [36, "3 anos"], [48, "4 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
       <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
     <div class="corr-row">${chips}</div>${matrix}
-    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Agro Brasil é uma cesta de futuros agrícolas montada pelo site. Salário mínimo e carga tributária mudam uma vez por ano: nas relações com eles entram as <b>variações anuais</b> de todo o histórico disponível (a carga tributária desde 2010), e os botões de janela não se aplicam. Correlação não é causa e muda com o tempo.</p>`;
+    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). Fundo colorido = correlação de 0,3 ou mais (para mais ou para menos). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Agro Brasil é uma cesta de futuros agrícolas montada pelo site. Salário mínimo e carga tributária mudam uma vez por ano: nas relações com eles entram as <b>variações anuais</b> de todo o histórico disponível (a carga tributária desde 2010), e os botões de janela não se aplicam. Correlação não é causa e muda com o tempo.</p>`;
 }
 $("#corr").addEventListener("click", e => {
   const j = e.target.closest("[data-cj]"); if (j) { state.corr = { ...corrCfg(), janela: +j.dataset.cj }; save(); return renderCorr(); }
