@@ -825,7 +825,7 @@ function macroCards() {
   }
   const sm = macro.salmin, usd = quotes["USDBRL=X"]?.price;
   if (sm?.valor) {
-    out.push(`<button class="card idx macro" data-edu="salmin" title="Salário mínimo nacional · saiba mais">
+    out.push(`<button class="card idx macro" data-open="MACRO:salmin" data-max="1" title="Salário mínimo nacional · ver o histórico">
       <div class="lbl">Salário mínimo<span class="mk">desde ${mesCurto(sm.desde)}</span></div>
       <div class="px num">${brl(sm.valor)}</div>
       <div class="ch num flat">${usd ? `≈ US$ ${nf(2).format(sm.valor / usd)}` : "&nbsp;"}</div>
@@ -833,7 +833,7 @@ function macroCards() {
     </button>`);
   }
   const ct = CARGA.anos.at(-1), ctp = CARGA.anos.at(-2), dct = ct[1] - ctp[1];
-  out.push(`<button class="card idx macro" data-edu="carga" title="Impostos pagos no país ÷ PIB (Tesouro Nacional) · saiba mais">
+  out.push(`<button class="card idx macro" data-open="MACRO:carga" data-max="1" title="Impostos pagos no país ÷ PIB (Tesouro Nacional) · ver o histórico">
       <div class="lbl">Carga tributária<span class="mk">${ct[0]}</span></div>
       <div class="px num">${nf(1).format(ct[1])}% <span style="font-size:12px;font-weight:500">do PIB</span></div>
       <div class="ch num flat">${dct > 0 ? "+" : ""}${nf(2).format(dct)} p.p. em 1 ano</div>
@@ -1135,7 +1135,20 @@ const MACRO_WIN = {
     serie: m => m.ipca?.doze_meses?.filter(([k]) => k >= "1996-01"), fmt: v => nf(2).format(v) + "%" },
   "MACRO:desemprego": { titulo: "Desemprego", sub: "Taxa de desocupação · trimestre móvel (pelo último mês)", edu: "desemprego", fonte: "IBGE, PNAD Contínua, desde 2012",
     serie: m => m.desemprego?.mensal, fmt: v => nf(1).format(v) + "%" },
+  // Both change once a year: drawn month by month as steps, so the 1/5/10-year buttons still work.
+  "MACRO:salmin": { titulo: "Salário mínimo", sub: "Valor em reais, mês a mês (muda a cada reajuste)", edu: "salmin", fonte: "IPEA (série do Ministério do Trabalho), desde o Plano Real (julho de 1994)",
+    carregar: async () => degraus((await loadMacroHist()).salmin?.reajustes), variacao: "pct", fmt: v => brl(v) },
+  "MACRO:carga": { titulo: "Carga tributária", sub: "Todos os impostos do país ÷ PIB · dado anual", edu: "carga", fonte: "Tesouro Nacional, série revisada de 2010 a 2025 (dado anual, repetido nos meses de cada ano)",
+    carregar: async () => degraus(CARGA.anos.map(([y, t]) => [y + "-01", t]), CARGA.anos.at(-1)[0] + "-12"), fmt: v => nf(1).format(v) + "% do PIB" },
 };
+// Turns change points [["AAAA-MM", value], ...] into one value per month, up to `ate` (default: this month).
+function degraus(pts, ate) {
+  if (!pts?.length) return [];
+  const fim = ate || new Date().toISOString().slice(0, 7), out = [];
+  let [y, m] = pts[0][0].split("-").map(Number);
+  for (;;) { const k = `${y}-${String(m).padStart(2, "0")}`; if (k > fim) break; out.push([k, valAt(pts, k)]); if (++m > 12) { m = 1; y++; } }
+  return out;
+}
 const isMacro = sym => sym in MACRO_WIN;
 const MRANGES = [{ k: "1A", range: "macro", iv: "1mo", show: 12 }, { k: "5A", range: "macro", iv: "1mo", show: 60 }, { k: "10A", range: "macro", iv: "1mo", show: 120 }, { k: "Máx", range: "macro", iv: "1mo", show: 0 }];
 const winRange = w => (isMacro(w.sym) ? MRANGES : WRANGES).find(x => x.k === w.range);
