@@ -70,6 +70,7 @@ const empresas = [...byTicker.values()].map(c => {
 
 await mkdir(OUT_DIR, { recursive: true });
 const today = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
+if (!empresas.length) { console.error("nenhuma empresa baixada; indicadores.json mantido"); process.exit(1); }
 await writeFile(new URL("indicadores.json", OUT_DIR), JSON.stringify({ data: today, fonte: "B3 (composição do Ibovespa) e Fundamentus (indicadores)", empresas }, null, 1));
 const missing = empresas.filter(e => e.bolsa === "B3" && !e.indicadores).map(e => e.ticker);
 console.log(`${empresas.length} empresas (${ibov.length} do Ibovespa). Sem indicadores: ${missing.join(", ") || "nenhuma"}`);

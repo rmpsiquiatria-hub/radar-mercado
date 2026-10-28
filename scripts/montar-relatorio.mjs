@@ -46,12 +46,17 @@ const empresas = ind.empresas.map(base => {
   };
 });
 
-const now = new Date();
+// With research, the report is dated today in Brasília, even if the indicators are older (the GitHub
+// job that refreshes them at 5h30 is sometimes hours late); otherwise the research looked a day old and
+// the e-mail waited for a research that had already run.
+const now = new Date(), hoje = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(now);
+const data = dir && hoje > ind.data ? hoje : ind.data;
 const out = {
-  data: ind.data,
+  data,
   gerado_em: now.toISOString(),
   // Day the news research last ran (differs from `data` when only prices/technicals were refreshed).
-  pesquisa_data: dir ? ind.data : (prev.pesquisa_data || prev.data || ind.data),
+  pesquisa_data: dir ? data : (prev.pesquisa_data || prev.data || ind.data),
+  indicadores_data: ind.data,
   resumo_mercado: mercado.resumo_mercado || prev.resumo_mercado || "",
   fontes_mercado: mercado.fontes || prev.fontes_mercado || [],
   tecnica_data: tec?.data || null,
@@ -60,5 +65,5 @@ const out = {
 await mkdir(new URL("historico/", rel), { recursive: true });
 const text = JSON.stringify(out, null, 1);
 await writeFile(new URL("ultimo.json", rel), text);
-await writeFile(new URL(`historico/${ind.data}.json`, rel), text);
-console.log(`Relatório ${ind.data}: ${empresas.length} empresas (${found.size} pesquisadas agora).`);
+await writeFile(new URL(`historico/${data}.json`, rel), text);
+console.log(`Relatório ${data}${data !== ind.data ? ` (indicadores de ${ind.data})` : ""}: ${empresas.length} empresas (${found.size} pesquisadas agora).`);

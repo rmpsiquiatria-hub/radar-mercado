@@ -148,5 +148,7 @@ async function worker() {
 await Promise.all(Array.from({ length: 6 }, worker));
 
 const today = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
+// Without network (e.g. inside the cloud routine) nothing comes back: keep the previous file.
+if (!Object.keys(ativos).length) { console.error("nenhum ativo baixado; tecnica.json mantido"); process.exit(1); }
 await writeFile(new URL("tecnica.json", rel), JSON.stringify({ data: today, fonte: "Yahoo Finance (candles)", ativos }, null, 1));
 console.log(`Análise técnica: ${Object.keys(ativos).length} ativos.${falhas.length ? " Falhas: " + falhas.join("; ") : ""}`);
