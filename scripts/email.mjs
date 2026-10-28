@@ -120,9 +120,9 @@ function changesSection() {
 }
 
 function overviewTable() {
-  const mine = emps.filter(e => e.origem?.includes("lista pessoal"));
-  const top = emps.filter(e => e.peso_ibov != null).slice(0, cfg.maiores_do_ibovespa_na_tabela || 15);
-  const rows = [...new Map([...mine, ...top].map(e => [e.ticker, e])).values()];
+  // Only the assets where both analyses point the same way: buy side first, then sell side.
+  const rows = [...convBuy, ...convSell].map(([e]) => e);
+  if (!rows.length) return hint("Hoje nenhum ativo tem a análise fundamentalista e a técnica apontando para o mesmo lado.");
   const th = t => `<th style="text-align:right;padding:5px 3px;font-size:10px;color:${MUTED};border-bottom:2px solid ${LINE};white-space:nowrap">${t}</th>`;
   const td = (t, extra = "") => `<td style="text-align:right;padding:5px 3px;border-bottom:1px solid ${LINE};white-space:nowrap;${extra}">${t}</td>`;
   const tech = e => { const v = e.tecnica?.[TF]?.vies; return v ? `<span style="color:${color(v)}">${arrow(v)} ${v}</span>` : "·"; };
@@ -189,7 +189,7 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   ${convRows(convSell)}
   ${hint("Concordância não é garantia: as duas análises podem errar juntas.")}
 
-  ${h2("📋 Anexo: fundamentalista e técnica lado a lado")}
+  ${h2("📋 Anexo: onde as duas análises concordam, lado a lado")}
   ${overviewTable()}
 
   <p style="margin:28px 0 8px"><a href="${esc(cfg.site)}" style="display:inline-block;background:#0f766e;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700">Abrir o painel completo</a></p>
