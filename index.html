@@ -469,6 +469,14 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .ftabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .ftabs button { border: 1px solid var(--line); background: var(--panel); border-radius: 10px 10px 0 0; border-bottom-width: 2px; padding: 8px 14px; cursor: pointer; font-weight: 600; color: var(--muted); }
 .ftabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); background: var(--panel-2); }
+.stabs { margin: 0 0 10px; }
+.ideb3 { display: flex; gap: 10px; margin: 6px 0 2px; }
+.ideb3 span { display: flex; flex-direction: column; }
+.ideb3 b { font-size: 20px; }
+.ideb3 small { font-size: 11px; color: var(--muted); }
+.stabs button { font-size: 15px; }
+.stabs button .hint { font-weight: 400; font-size: 12px; margin-left: 4px; }
+@media (max-width: 640px) { .stabs button { flex: 1; } .stabs button .hint { display: none; } }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
 
 @media (max-width: 560px) {
@@ -492,6 +500,10 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
     <button class="icon-btn" id="theme" title="Mudar tema claro/escuro" aria-label="Mudar tema">◐</button>
   </header>
 
+  <div class="ftabs stabs" role="tablist" aria-label="Grupos de indicadores">
+    <button role="tab" data-stab="mercados">📈 Mercados <span class="hint">bolsas, moedas, cripto e agro</span></button>
+    <button role="tab" data-stab="economia">🏛️ Economia e sociedade <span class="hint">juros, inflação, emprego, impostos, saúde e educação</span></button>
+  </div>
   <section class="strip" id="strip" aria-label="Principais indicadores"></section>
   <section class="card corr" id="corr" aria-label="Correlações entre os indicadores"></section>
 
@@ -865,14 +877,24 @@ function macroCards() {
     </button>`); }
   out.push(`<button class="card idx macro" data-open="MACRO:ideb" data-max="1" title="Índice de Desenvolvimento da Educação Básica (0 a 10) · ver o histórico">
       <div class="lbl">IDEB<span class="mk">${id[0]}</span></div>
-      <div class="px num" style="font-size:19px">${id.slice(1).map(x => nf(1).format(x)).join(" · ")}</div>
-      <div class="ch num flat" style="font-size:11px">fund. I · fund. II · médio</div>
+      <div class="ideb3">${id.slice(1).map((x, i) => `<span><b class="num">${nf(1).format(x)}</b><small>${["fund. I", "fund. II", "médio"][i]}</small></span>`).join("")}</div>
       <div class="since">médio: ${id[3] - idp[3] > 0 ? "+" : ""}${nf(1).format(id[3] - idp[3])} vs ${idp[0]}</div>
     </button>`);
   return out.join("");
 }
+// The top cards come in two groups, one shown at a time: live market prices, and the economy and
+// society indicators (monthly or yearly). The chosen group is remembered in this browser.
+function stripTab() { try { return localStorage.getItem(KEY + ".strip") || "mercados"; } catch { return "mercados"; } }
+document.querySelector(".stabs").addEventListener("click", e => {
+  const b = e.target.closest("[data-stab]"); if (!b) return;
+  try { localStorage.setItem(KEY + ".strip", b.dataset.stab); } catch {}
+  renderStrip();
+});
 function renderStrip() {
-  $("#strip").innerHTML = macroCardsWrap(STRIP.map(({ s, label }) => {
+  const tab = stripTab();
+  document.querySelectorAll("[data-stab]").forEach(b => b.setAttribute("aria-selected", b.dataset.stab === tab));
+  if (tab === "economia") { $("#strip").innerHTML = macroCards() || `<div class="card empty">Carregando os indicadores…</div>`; return; }
+  $("#strip").innerHTML = (STRIP.map(({ s, label }) => {
     const q = quotes[s]; const c = change(q);
     return `<button class="card idx" data-open="${esc(s)}" data-max="1">
       <div class="lbl">${label}${q ? `<span class="mk ${q.open ? "on" : ""}">${q.open ? "aberto" : "fechado"}</span>` : ""}</div>
@@ -882,7 +904,6 @@ function renderStrip() {
     </button>`;
   }).join(""));
 }
-const macroCardsWrap = html => html + macroCards();
 
 /* ---------- correlações (Spearman) ---------- */
 // Monthly changes: market series use the month's % return, Selic and unemployment the
