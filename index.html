@@ -791,6 +791,15 @@ const CARGA = {
     [2022, 31.2, 20.6, 8.5, 2.2], [2023, 30.3, 19.9, 8.1, 2.3], [2024, 32.22, 21.3, 8.5, 2.4], [2025, 32.40, 21.6, 8.4, 2.4]],
 };
 const cargaAno = y => CARGA.anos.find(a => a[0] === y);
+// IDEB (0 to 10), every two years: [year, early primary (1º–5º), late primary (6º–9º), high school].
+// Brazil, all school networks. Typed in from INEP; the next edition (2027) comes out around August/2028.
+const IDEB = {
+  fonte: "INEP/MEC, Brasil (todas as redes)",
+  anos: [[2005, 3.8, 3.5, 3.4], [2007, 4.2, 3.8, 3.5], [2009, 4.6, 4.0, 3.6], [2011, 5.0, 4.1, 3.7], [2013, 5.2, 4.2, 3.7], [2015, 5.5, 4.5, 3.7],
+    [2017, 5.8, 4.7, 3.8], [2019, 5.9, 4.9, 4.2], [2021, 5.8, 5.1, 4.2], [2023, 6.0, 5.0, 4.3], [2025, 6.3, 5.3, 4.5]],
+};
+const IDEB_ETAPAS = ["Anos iniciais (1º ao 5º)", "Anos finais (6º ao 9º)", "Ensino médio"];
+const serieAnual = k => k === "carga" ? CARGA.anos.map(a => [a[0], a[1]]) : macro?.[k]?.anos || null;
 function macroCards() {
   if (!macro) return "";
   const out = [];
@@ -839,6 +848,27 @@ function macroCards() {
       <div class="ch num flat">${dct > 0 ? "+" : ""}${nf(2).format(dct)} p.p. em 1 ano</div>
       <div class="since">dado anual</div>
     </button>`);
+  const ev = macro.expvida?.anos, ih = macro.idh?.anos, id = IDEB.anos.at(-1), idp = IDEB.anos.at(-2);
+  if (ev?.length > 1) { const [y, v] = ev.at(-1), d = v - ev.at(-2)[1];
+    out.push(`<button class="card idx macro" data-open="MACRO:expvida" data-max="1" title="Quantos anos, em média, vive quem nasce hoje · ver o histórico">
+      <div class="lbl">Expectativa de vida<span class="mk">${y}</span></div>
+      <div class="px num">${nf(1).format(v)} <span style="font-size:12px;font-weight:500">anos</span></div>
+      <div class="ch num ${cls(d)}">${d > 0 ? "+" : ""}${nf(2).format(d)} ano em 1 ano</div>
+      ${sparkline(ev.slice(-20).map(([, x], i) => [i, x]), null)}
+    </button>`); }
+  if (ih?.length > 1) { const [y, v] = ih.at(-1), d = v - ih.at(-2)[1];
+    out.push(`<button class="card idx macro" data-open="MACRO:idh" data-max="1" title="Índice de Desenvolvimento Humano (saúde, educação e renda) · ver o histórico">
+      <div class="lbl">IDH<span class="mk">${y}</span></div>
+      <div class="px num">${nf(3).format(v)}</div>
+      <div class="ch num ${cls(d)}">${d > 0 ? "+" : ""}${nf(3).format(d)} em 1 ano</div>
+      ${sparkline(ih.map(([, x], i) => [i, x]), null)}
+    </button>`); }
+  out.push(`<button class="card idx macro" data-open="MACRO:ideb" data-max="1" title="Índice de Desenvolvimento da Educação Básica (0 a 10) · ver o histórico">
+      <div class="lbl">IDEB<span class="mk">${id[0]}</span></div>
+      <div class="px num" style="font-size:19px">${id.slice(1).map(x => nf(1).format(x)).join(" · ")}</div>
+      <div class="ch num flat" style="font-size:11px">fund. I · fund. II · médio</div>
+      <div class="since">médio: ${id[3] - idp[3] > 0 ? "+" : ""}${nf(1).format(id[3] - idp[3])} vs ${idp[0]}</div>
+    </button>`);
   return out.join("");
 }
 function renderStrip() {
@@ -874,8 +904,10 @@ const CORR = [
   { k: "desemprego", label: "Desemprego", nota: "taxa do trimestre móvel do IBGE, pelo último mês do trimestre" },
   { k: "salmin", label: "Salário mínimo", nota: "reajuste anual, em %" },
   { k: "carga", label: "Carga tributária", nota: "mudança anual, em p.p. do PIB" },
+  { k: "expvida", label: "Expectativa de vida", nota: "mudança anual, em anos" },
+  { k: "idh", label: "IDH", nota: "mudança anual do índice" },
 ];
-const MACRO_KEYS = new Set(["selic", "ipca", "desemprego", "salmin", "carga"]);
+const MACRO_KEYS = new Set(["selic", "ipca", "desemprego", "salmin", "carga", "expvida", "idh"]);
 let macro = null, monthly = null;   // monthly: { key: Map("AAAA-MM" -> variação) }
 const thisMonth = () => new Date().toISOString().slice(0, 7);
 function monthlyChanges(pairs, mode) {   // pairs: [["AAAA-MM", valor]] sorted
@@ -933,7 +965,7 @@ function spearman(ka, kb, months) {
 // The minimum wage and the tax burden change once a year, so any pair with one of them uses yearly
 // changes over all the history available (the window buttons don't apply): price series Dec→Dec in %,
 // Selic and unemployment in p.p., IPCA accumulated in the year, minimum wage in %, tax burden in p.p.
-const ANUAIS = new Set(["salmin", "carga"]);
+const ANUAIS = new Set(["salmin", "carga", "expvida", "idh"]);
 let anual = null;   // { key: Map(year -> change) }, finished years only
 function anualDe(ends, mode) {   // ends: Map(year -> value at the end of the year)
   const out = new Map(), now = new Date().getFullYear();
@@ -963,6 +995,7 @@ async function loadAnnual() {
     if (rj?.length) { const ends = new Map(); for (let y = +rj[0][0].slice(0, 4); y < now; y++) ends.set(y, valAt(rj, y + "-12")); a.salmin = anualDe(ends, "ret"); }
   }
   a.carga = anualDe(new Map(CARGA.anos.map(x => [x[0], x[1]])), "diff");
+  for (const k of ["expvida", "idh"]) { const an = macro?.[k]?.anos || (mh.status === "fulfilled" ? mh.value[k]?.anos : null); if (an?.length) a[k] = anualDe(new Map(an), "diff"); }
   anual = a;
   renderCorr(); renderSim();
 }
@@ -1149,6 +1182,17 @@ function degraus(pts, ate) {
   for (;;) { const k = `${y}-${String(m).padStart(2, "0")}`; if (k > fim) break; out.push([k, valAt(pts, k)]); if (++m > 12) { m = 1; y++; } }
   return out;
 }
+Object.assign(MACRO_WIN, {
+  "MACRO:expvida": { titulo: "Expectativa de vida", sub: "Anos que, em média, vive quem nasce em cada ano · dado anual", edu: "expvida", fonte: "Banco Mundial (estimativas da ONU), desde 1990",
+    carregar: async () => anualMeses(macro?.expvida?.anos || (await loadMacroHist()).expvida?.anos), fmt: v => nf(1).format(v) + " anos", dfmt: d => (d > 0 ? "+" : "") + nf(2).format(d) + " ano", lagTxt: "em 1 ano" },
+  "MACRO:idh": { titulo: "IDH (Brasil)", sub: "Índice de Desenvolvimento Humano: saúde, educação e renda (0 a 1) · dado anual", edu: "idh", fonte: "Atlas do Desenvolvimento Humano (PNUD, IPEA, FJP), desde 2012",
+    carregar: async () => anualMeses(macro?.idh?.anos || (await loadMacroHist()).idh?.anos), fmt: v => nf(3).format(v), dfmt: d => (d > 0 ? "+" : "") + nf(3).format(d), lagTxt: "em 1 ano" },
+  "MACRO:ideb": { titulo: "IDEB", sub: "Nota de 0 a 10 · linha principal: anos iniciais (1º ao 5º); também anos finais e ensino médio · a cada 2 anos", edu: "ideb", fonte: "INEP/MEC, desde 2005",
+    carregar: async () => anualMeses(IDEB.anos.map(a => [a[0], a[1]])), fmt: v => nf(1).format(v), dfmt: d => (d > 0 ? "+" : "") + nf(1).format(d), lag: 24, lagTxt: "em 2 anos", principal: "Anos iniciais",
+    extras: () => [["Anos finais", "var(--pos)", 2], ["Ensino médio", "var(--warn)", 3]].map(([nome, cor, i]) => ({ nome, cor, v: anualMeses(IDEB.anos.map(a => [a[0], a[i]])).map(x => x[1]) })) },
+});
+// Yearly values drawn month by month as steps, from January of the first year to December of the last.
+const anualMeses = anos => anos?.length ? degraus(anos.map(([y, v]) => [y + "-01", v]), anos.at(-1)[0] + "-12") : [];
 const isMacro = sym => sym in MACRO_WIN;
 const MRANGES = [{ k: "1A", range: "macro", iv: "1mo", show: 12 }, { k: "5A", range: "macro", iv: "1mo", show: 60 }, { k: "10A", range: "macro", iv: "1mo", show: 120 }, { k: "Máx", range: "macro", iv: "1mo", show: 0 }];
 const winRange = w => (isMacro(w.sym) ? MRANGES : WRANGES).find(x => x.k === w.range);
@@ -1289,9 +1333,9 @@ function syncWinControls(w) {
 function renderWinHead(w) {
   if (isMacro(w.sym)) {
     const M = MACRO_WIN[w.sym], c = Object.values(w.cache)[0], b = c?.q.bars; if (!b?.length) return;
-    const last = b.at(-1), ago = b.length > 12 ? b.at(-13)[4] : null, pc = M.variacao === "pct", d = ago == null ? null : pc ? (last[4] / ago - 1) * 100 : last[4] - ago;
+    const lag = M.lag || 12, last = b.at(-1), ago = b.length > lag ? b.at(-1 - lag)[4] : null, pc = M.variacao === "pct", d = ago == null ? null : pc ? (last[4] / ago - 1) * 100 : last[4] - ago;
     w.el.querySelector(".win-px").textContent = M.fmt(last[4]);
-    const ch = w.el.querySelector(".win-ch"); ch.textContent = d == null ? "" : pc ? pct(d) + " em 12 meses" : (d > 0 ? "+" : "") + nf(2).format(d) + " p.p. em 12 meses"; ch.className = "win-ch num " + (pc ? cls(d) : "flat");
+    const ch = w.el.querySelector(".win-ch"); ch.textContent = d == null ? "" : (pc ? pct(d) : M.dfmt ? M.dfmt(d) : (d > 0 ? "+" : "") + nf(2).format(d) + " p.p.") + " " + (M.lagTxt || "em 12 meses"); ch.className = "win-ch num " + (pc ? cls(d) : "flat");
     w.el.querySelector(".win-sub").textContent = M.sub + " · último dado: " + new Date(last[0] * 1000).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
     w.el.querySelector(".win-stats").innerHTML = `Fonte: ${esc(M.fonte)}. A última linha mostra quem era o presidente. <button class="linkbtn" type="button" data-edu="${M.edu}">O que é?</button>`;
     return;
@@ -1342,7 +1386,7 @@ async function loadWin(w, force) {
         const M = MACRO_WIN[w.sym], serie = (M.carregar ? await M.carregar() : M.serie(await loadMacroHist())) || [];
         if (!serie.length) throw new Error("fonte indisponível");
         // one bar per month (mid-month timestamp), open = high = low = close = the value
-        w.cache[key] = { at: Date.now(), q: { type: "MACRO", fmt: MACRO_WIN[w.sym].fmt, bars: serie.map(([m, v]) => [Date.UTC(+m.slice(0, 4), +m.slice(5) - 1, 15) / 1000, v, v, v, v, 0]) } };
+        w.cache[key] = { at: Date.now(), q: { type: "MACRO", fmt: MACRO_WIN[w.sym].fmt, extras: M.extras ? M.extras() : null, principal: M.principal, bars: serie.map(([m, v]) => [Date.UTC(+m.slice(0, 4), +m.slice(5) - 1, 15) / 1000, v, v, v, v, 0]) } };
       } catch (e) { box.innerHTML = `<div class="empty">Não consegui carregar o histórico (${esc(e.message)}).</div>`; return; }
       renderWinHead(w);
     }
@@ -1420,6 +1464,7 @@ function drawWin(w) {
   const vals = [];
   bars.forEach(b => candle ? vals.push(b.h, b.l) : vals.push(b.c));
   if (w.ind.mm) for (const [k] of MA_DEF) sl(ma[k]).forEach(v => v != null && vals.push(v));
+  for (const x of c.q.extras || []) sl(x.v).forEach(v => v != null && vals.push(v));
   if (sr) vals.push(sr.suporte, sr.resistencia);
   if (prev) vals.push(prev);
   let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.07 || hi * 0.01; lo -= pad; hi += pad;
@@ -1448,6 +1493,13 @@ function drawWin(w) {
     svg += `<path d="${line}L${X(n - 1)} ${mainH}L${X(0)} ${mainH}Z" fill="url(#${gid})"/><path d="${line}" fill="none" stroke="var(${lineVar})" stroke-width="1.8" stroke-linejoin="round"/>`;
   }
   if (w.ind.mm) for (const [k, , col] of MA_DEF) svg += `<path d="${path(sl(ma[k]), Y)}" fill="none" stroke="${col}" stroke-width="1.4" opacity=".95"/>`;
+  // Extra series drawn over the main one (IDEB's other school stages), with a small legend.
+  if (c.q.extras) {
+    c.q.extras.forEach(x => { svg += `<path d="${path(sl(x.v), Y)}" fill="none" stroke="${x.cor}" stroke-width="1.8" stroke-linejoin="round"/>`; });
+    [{ nome: c.q.principal, cor: `var(${lineVar})`, v: [bars.at(-1).c] }, ...c.q.extras].forEach((x, i) => {
+      svg += `<text x="${padL + 6}" y="${20 + i * 15}" font-size="11.5" fill="${x.cor}" font-weight="600">― ${esc(x.nome || "")}: ${c.q.fmt(x.v.at(-1))}</text>`;
+    });
+  }
   // Candlestick pattern flags: ▲ below the candle for bullish, ▼ above for bearish, ◆ for doji.
   flags.forEach((ps, i) => {
     if (!ps.length) return;
@@ -2120,6 +2172,27 @@ function eduItems() {
       porque: "Mostra o peso do Estado na economia. Carga alta financia serviços públicos e reduz o déficit, mas encarece produtos e tira dinheiro de famílias e empresas. O Brasil cobra perto da média dos países ricos da OCDE (cerca de 34% do PIB) e bem acima da média da América Latina (cerca de 22%). A <b>reforma tributária</b>, em fase de teste desde 2026, vai trocar PIS, Cofins, IPI, ICMS e ISS por dois impostos sobre consumo (CBS e IBS) até 2033.",
       horario: [["Divulgação", "uma vez por ano, por volta de abril (Tesouro Nacional)"], ["Dado oficial", "a Receita Federal publica o seu cálculo mais tarde"]],
       nota: "Fonte: Tesouro Nacional, série de 2010 a 2025. Em 2026 o Tesouro revisou a metodologia de toda a série (tirou, por exemplo, os recursos do Fundeb e subsídios de energia), por isso alguns números antigos publicados na imprensa são diferentes. Os dados de 2025 ainda são preliminares." },
+    { id: "expvida", titulo: "Expectativa de vida", sub: "Quantos anos, em média, vive quem nasce hoje",
+      valor: () => { const a = macro?.expvida?.anos; if (!a?.length) return ""; const [y, v] = a.at(-1), y20 = a.find(x => x[0] === y - 20);
+        return `<b class="num">${nf(1).format(v)} anos em ${y}</b>${y20 ? ` <span class="hint">· ${nf(1).format(y20[1])} anos em ${y20[0]}</span>` : ""}`; },
+      oque: "É o número de anos que uma pessoa nascida naquele ano viveria, em média, se as taxas de mortalidade de cada idade continuassem iguais às do ano. Não é a idade com que as pessoas morrem hoje: é um retrato das condições de saúde do momento.",
+      porque: "Resume a saúde de um país inteiro: saneamento, vacinação, atendimento médico, alimentação e também violência e acidentes. Quedas bruscas mostram choques, como a pandemia de covid-19 em 2020–2021, quando a expectativa de vida no Brasil caiu quase 3 anos e depois se recuperou.",
+      horario: [["Divulgação", "anual"], ["Atualização aqui", "automática, quando o Banco Mundial publica"]],
+      nota: "Fonte: Banco Mundial, com estimativas da ONU (série SP.DYN.LE00.IN). O IBGE publica números próprios (as Tábuas de Mortalidade), um pouco diferentes por diferenças de método." },
+    { id: "idh", titulo: "IDH (Índice de Desenvolvimento Humano)", sub: "Saúde, educação e renda numa nota de 0 a 1",
+      valor: () => { const a = macro?.idh?.anos; if (!a?.length) return ""; const [y, v] = a.at(-1);
+        return `<b class="num">${nf(3).format(v)} em ${y}</b> <span class="hint">· ${v >= 0.8 ? "faixa \"muito alto\" (0,800 ou mais)" : v >= 0.7 ? "faixa \"alto\" (0,700 a 0,799)" : "abaixo de 0,700"}</span>`; },
+      oque: "Criado pela ONU, junta três dimensões com o mesmo peso: <b>saúde</b> (expectativa de vida), <b>educação</b> (escolaridade dos adultos e frequência escolar das crianças e jovens) e <b>renda</b> (renda por pessoa). Vai de 0 a 1: acima de 0,800 é considerado desenvolvimento humano muito alto.",
+      porque: "Mostra se a vida das pessoas está melhorando de forma ampla, não só a economia. O PIB pode crescer sem que saúde e educação acompanhem; o IDH capta isso.",
+      horario: [["Divulgação", "anual, com cerca de 1 a 2 anos de atraso"], ["Atualização aqui", "automática, quando o IPEA publica"]],
+      nota: "Fonte: Atlas do Desenvolvimento Humano no Brasil (PNUD, IPEA e Fundação João Pinheiro), que calcula o IDH do Brasil com dados da PNAD desde 2012. O número do relatório mundial da ONU é parecido mas não igual, porque usa outras fontes; os valores dos Censos de 1991, 2000 e 2010 usam outro método e não entram aqui." },
+    { id: "ideb", titulo: "IDEB", sub: "A nota da educação básica brasileira (0 a 10)",
+      valor: () => { const [y, ...v] = IDEB.anos.at(-1), [py, ...pv] = IDEB.anos.at(-2);
+        return `<table class="edu-t"><tr><td class="hint">Etapa</td><td class="hint">${y}</td><td class="hint">${py}</td></tr>${IDEB_ETAPAS.map((n, i) => `<tr><td>${n}</td><td><b class="num">${nf(1).format(v[i])}</b></td><td class="num">${nf(1).format(pv[i])}</td></tr>`).join("")}</table>`; },
+      oque: "Criado pelo INEP/MEC em 2007, junta duas coisas: o <b>aprendizado</b>, medido pelas provas de português e matemática do Saeb, e o <b>fluxo</b>, a taxa de aprovação. Assim uma rede não melhora a nota só reprovando menos, nem só preparando os alunos para a prova. Sai separado para os anos iniciais (1º ao 5º ano), anos finais (6º ao 9º) e ensino médio.",
+      porque: "É o principal termômetro da qualidade da educação pública no país. O ensino médio é historicamente o ponto mais fraco: ficou quase parado entre 2005 e 2017 e só começou a subir depois.",
+      horario: [["Divulgação", "a cada 2 anos, cerca de 9 meses depois da prova (o de 2025 saiu em agosto de 2026)"], ["Próxima edição", "2027, com resultado previsto para 2028"]],
+      nota: "Fonte: INEP/MEC, nota do Brasil somando todas as redes (públicas e privadas). Na rede pública as notas são um pouco menores." },
     { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler a linha de correlações",
       oque: "Mede se dois indicadores costumam se mover <b>na mesma direção</b>. Vai de <b>−1</b> a <b>+1</b>: +1 significa que, quando um tem um mês melhor, o outro também tem; −1, que um sobe quando o outro cai; 0, que não há relação. Diferente da correlação comum (Pearson), a de Spearman compara a <i>ordem</i> dos meses, do pior ao melhor, e por isso é menos afetada por meses extremos.",
       porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
@@ -2199,8 +2272,8 @@ function eduSec() { try { return localStorage.getItem(KEY + ".edu") || "mercados
 // last 48 monthly changes would expect: slope = Spearman ρ × (σ other ÷ σ moved).
 const SIM_MESES = 48;
 let simSel = null, simVal = 0;
-const simUnit = k => k === "selic" || k === "desemprego" || k === "ipca" || k === "carga" ? " p.p." : "%";
-const simFmt = (k, v) => (v > 0.0005 ? "+" : v < -0.0005 ? "−" : "") + nf(2).format(Math.abs(v)) + simUnit(k);
+const simUnit = k => k === "expvida" ? " ano" : k === "idh" ? "" : k === "selic" || k === "desemprego" || k === "ipca" || k === "carga" ? " p.p." : "%";
+const simFmt = (k, v) => (v > 0.00005 ? "+" : v < -0.00005 ? "−" : "") + nf(k === "idh" ? 3 : 2).format(Math.abs(v)) + simUnit(k);
 function simMonths(ka, kb) {   // the same months spearman() uses
   const A = monthly?.[ka], B = monthly?.[kb]; if (!A || !B) return null;
   const last = [...A.keys(), ...B.keys()].sort().at(-1); if (!last) return null;
@@ -2228,7 +2301,7 @@ function simTipico(k) {
 }
 // Plain-language explanations shown when hovering (or tapping) a result.
 const simLbl = k => CORR.find(o => o.k === k)?.label || k;
-const simUn = (k, v) => v === 1 ? (SIM_PP.has(k) ? "1 ponto percentual" : "1%") : SIM_PP.has(k) ? nf(2).format(v) + " pontos percentuais" : nf(2).format(v) + "%";
+const simUn = (k, v) => k === "expvida" ? (v === 1 ? "1 ano" : nf(2).format(v) + " ano") : k === "idh" ? (v === 1 ? "1 ponto do índice" : nf(3).format(v) + " ponto do índice") : v === 1 ? (SIM_PP.has(k) ? "1 ponto percentual" : "1%") : SIM_PP.has(k) ? nf(2).format(v) + " pontos percentuais" : nf(2).format(v) + "%";
 function simTipEst(kx, ky, pr, v, base, vx, bx, dx) {
   const X = simLbl(kx), Y = simLbl(ky), dy = simDelta(ky, v, base), per = pr.anual ? `nos ${pr.n} anos com dados dos dois (comparando um ano com o anterior)` : `nos últimos ${pr.n} meses`;
   const folga = pr.sy * Math.sqrt(1 - pr.r * pr.r), lo = simApply(ky, pr.beta * dx - folga, base), hi = simApply(ky, pr.beta * dx + folga, base);
@@ -2251,7 +2324,7 @@ function simTipSel(k, v, base, d) {
 // Sliders work on levels: each starts at the indicator's current value and goes from 0 to twice
 // that. Moving one turns its move into a monthly change (% for prices and indices, p.p. for
 // Selic, IPCA and unemployment), and the others move by the regression estimate.
-const SIM_PP = new Set(["selic", "ipca", "desemprego", "carga"]);
+const SIM_PP = new Set(["selic", "ipca", "desemprego", "carga", "expvida", "idh"]);   // changes measured as differences, not %
 const simQuote = k => quotes[k === "XFIX11.SA" ? "IFIX.SA" : k];
 function simBase(k) {
   if (k === "selic") return macro?.selic?.atual?.valor;
@@ -2259,6 +2332,7 @@ function simBase(k) {
   if (k === "ipca") return macro?.ipca?.mensal_atual;
   if (k === "salmin") return macro?.salmin?.valor;
   if (k === "carga") return CARGA.anos.at(-1)[1];
+  if (k === "expvida" || k === "idh") return macro?.[k]?.anos?.at(-1)?.[1];
   return simQuote(k)?.price;
 }
 function simLevel(k, v) {
@@ -2266,6 +2340,8 @@ function simLevel(k, v) {
   if (k === "ipca") return nf(2).format(v) + "% no mês";
   if (k === "salmin") return brl(v);
   if (k === "carga") return nf(1).format(v) + "% do PIB";
+  if (k === "expvida") return nf(1).format(v) + " anos";
+  if (k === "idh") return nf(3).format(v);
   if (k === "desemprego") return nf(1).format(v) + "%";
   const q = simQuote(k); return money(v, q?.currency, q?.type);
 }
@@ -2275,7 +2351,7 @@ const simMin = k => k === "ipca" ? -1 : 0;
 const simApply = (k, d, base) => Math.max(simMin(k), SIM_PP.has(k) ? base + d : base * (1 + d / 100));   // monthly change → level
 let simBases = {};
 function simItems() { return CORR.filter(o => (o.k === "ipca" ? simBase(o.k) != null : simBase(o.k) > 0) && (ANUAIS.has(o.k) ? anual?.[o.k]?.size >= 8 : monthly?.[o.k]?.size >= 8)); }
-const simHi = (k, b) => k === "ipca" ? Math.max(2 * b, 1) : 2 * b;   // a month of deflation still leaves room above
+const simHi = (k, b) => k === "ipca" ? Math.max(2 * b, 1) : k === "idh" ? 1 : k === "expvida" ? 100 : 2 * b;   // a month of deflation still leaves room above
 function renderSim() {
   const box = $("#simBox"); if (!box) return;
   if (!monthly) { box.innerHTML = `<div class="empty">Carregando o histórico mensal…</div>`; return; }
@@ -2449,6 +2525,27 @@ const GOV_TXT = [
     temer: "Subiu de 29,7% (2015) para 30,4% do PIB (2018), com a saída da recessão e alguns aumentos de tributos, como o dos combustíveis (PIS/Cofins) em 2017.",
     bolsonaro: "Subiu de 30,4% (2018) para 31,2% do PIB (2022). Caiu para 29,2% em 2020, na pandemia, com a economia parada e impostos adiados, e voltou a subir em 2021–2022 com a retomada, a inflação alta e os preços das commodities. Em 2022 houve cortes de impostos sobre combustíveis e energia.",
     lula3: "Subiu de 31,2% (2022) para 32,4% do PIB (2025), o maior nível da série. Em 2023 caiu para 30,3%; em 2024–2025 subiu com medidas como a volta de tributos federais sobre combustíveis, a tributação de fundos exclusivos e de apostas, o aumento do IOF e a reoneração da folha." } },
+  { k: "expvida", titulo: "Expectativa de vida", intro: "Anos que, em média, vive quem nasce em cada ano (Banco Mundial, com estimativas da ONU). Sobe devagar quase todo ano; por isso as diferenças entre governos são pequenas e dependem muito de tendências longas, como queda da mortalidade infantil e envelhecimento.", t: {
+    fhc: "Subiu de cerca de 67,3 anos (1994) para 70,4 (2002), num período de queda forte da mortalidade infantil, expansão da vacinação e do saneamento e consolidação do SUS.",
+    lula12: "Subiu de 70,4 (2002) para 73,8 anos (2010), mantendo o ritmo de alta, com a expansão da atenção básica (Saúde da Família) e a queda da pobreza.",
+    dilma: "Subiu de 73,8 (2010) para 75,1 anos (2015).",
+    temer: "Subiu pouco, de 75,1 (2015) para 75,6 anos (2018).",
+    bolsonaro: "Caiu de 75,6 (2018) para 74,9 anos (2022), por causa da pandemia: chegou a cerca de 73 anos em 2021, a maior queda da série, e começou a se recuperar em 2022.",
+    lula3: "Subiu de 74,9 (2022) para cerca de 76 anos (2024), voltando acima do nível de antes da pandemia." } },
+  { k: "idh", titulo: "IDH", intro: "Índice de Desenvolvimento Humano do Brasil (0 a 1), calculado pelo Atlas do Desenvolvimento Humano com dados da PNAD desde 2012. Junta saúde, educação e renda.", t: {
+    fhc: "Sem dados nesta série (começa em 2012). Pelos Censos, com outro método, o IDH do Brasil passou de 0,493 (1991) para 0,612 (2000), puxado sobretudo pela educação.",
+    lula12: "Sem dados nesta série (começa em 2012). Pelo Censo, o IDH chegou a 0,727 em 2010, contra 0,612 em 2000.",
+    dilma: "Subiu de 0,744 (2012, início da série) para 0,762 (2015), com melhora em educação e renda até 2014; a recessão de 2015 freou a alta.",
+    temer: "Subiu de 0,762 (2015) para 0,777 (2018).",
+    bolsonaro: "Subiu de 0,777 (2018) para 0,788 (2022), mas caiu para 0,757 em 2021, com a pandemia afetando a expectativa de vida e a renda, e se recuperou em 2022.",
+    lula3: "Subiu de 0,788 (2022) para 0,805 (2024), passando pela primeira vez da marca de 0,800, a faixa de desenvolvimento humano \"muito alto\"." } },
+  { k: "ideb", titulo: "IDEB", intro: "Nota da educação básica (0 a 10), do INEP/MEC, a cada 2 anos desde 2005, para anos iniciais, anos finais e ensino médio. Compara a última edição antes da posse com a última do governo.", t: {
+    fhc: "Sem dados (o IDEB começa em 2005). No período, o grande avanço foi de acesso: o ensino fundamental chegou perto da universalização, com o Fundef (1996).",
+    lula12: "De 2005 a 2009: anos iniciais de 3,8 para 4,6, anos finais de 3,5 para 4,0 e ensino médio de 3,4 para 3,6. O IDEB e suas metas foram criados em 2007, junto com o Fundeb.",
+    dilma: "De 2009 a 2015: anos iniciais de 4,6 para 5,5, anos finais de 4,0 para 4,5; o ensino médio ficou praticamente parado (3,6 para 3,7).",
+    temer: "De 2015 a 2017: anos iniciais de 5,5 para 5,8, anos finais de 4,5 para 4,7 e ensino médio de 3,7 para 3,8. Foram aprovadas a reforma do ensino médio (2017) e a BNCC.",
+    bolsonaro: "De 2017 a 2021: anos iniciais estáveis em 5,8 (subiram a 5,9 em 2019 e caíram com a pandemia), anos finais de 4,7 para 5,1 e ensino médio de 3,8 para 4,2. As notas de 2021 foram afetadas pelas escolas fechadas na pandemia e por regras de aprovação mais flexíveis.",
+    lula3: "De 2021 a 2025: anos iniciais de 5,8 para 6,3, anos finais de 5,1 para 5,3 e ensino médio de 4,2 para 4,5, os maiores valores da série nas três etapas, embora anos finais e ensino médio sigam abaixo das metas." } },
   { k: "salmin", titulo: "Salário mínimo", intro: "Valor do salário mínimo no mês anterior à posse e no fim do governo. O ganho \"real\" desconta a inflação do IPCA no período. O valor em dólares usa a cotação de cada data, o que mostra também o efeito do câmbio.", t: {
     fhc: "Passou de R$ 70 para R$ 200: +186%, cerca de 42% acima da inflação. Em dólares, porém, caiu de cerca de US$ 83 para US$ 57, por causa da desvalorização do real em 1999 e 2002.",
     lula12: "Passou de R$ 200 para R$ 510: +155%, cerca de 63% acima da inflação, o maior ganho real da série, com a política de reajustes pela inflação mais o crescimento do PIB. Em dólares, saltou de US$ 57 para cerca de US$ 307, ajudado também pela valorização do real.",
@@ -2517,6 +2614,16 @@ function cargaChart() {
     <div class="cg-g">${grupos.map(x => `<span style="flex:${x.n}">${esc(x.g.nome)}</span>`).join("")}</div>
     <p class="hint" style="margin:6px 0 0">Fonte: ${CARGA.fonte}. Série revisada, que começa em 2010; anos anteriores não são comparáveis. A barra começa em ${lo}% para mostrar melhor as diferenças. Cada ano fica com o governo que comandou a maior parte dele.</p></div>`;
 }
+// Yearly data by government: the year before taking office (or the first year with data) to the
+// last full year in office (Dilma left in May/2016, so 2016 counts for Temer).
+function govAnos(g) { return { ini: +g.ini.slice(0, 4) - 1, fim: g.fim ? (g.fim.slice(5) === "12" ? +g.fim.slice(0, 4) : +g.fim.slice(0, 4) - 1) : new Date().getFullYear() }; }
+function govAnual(anos, g, dec, un) {
+  if (!anos?.length) return `<span class="hint">—</span>`;
+  const { ini, fim } = govAnos(g), a = anos.filter(x => x[0] <= ini).at(-1) || (anos[0][0] <= fim ? anos[0] : null), b = anos.filter(x => x[0] <= fim).at(-1);
+  if (!a || !b || b[0] <= a[0]) return `<span class="hint">—</span>`;
+  const d = b[1] - a[1];
+  return `<b class="num">${nf(dec).format(a[1])} → ${nf(dec).format(b[1])}${un}</b><div class="hint num">${d > 0 ? "+" : ""}${nf(dec).format(d)} · ${a[0]}–${b[0]}</div>`;
+}
 function renderGov() {
   const box = $("#govBox"); if (!box) return;
   if (!govData) { box.innerHTML = `<div class="empty">Carregando os dados históricos…</div>`; loadGov(); return; }
@@ -2549,6 +2656,13 @@ function renderGov() {
       if (a[0] === b[0]) return `<b class="num">${nf(1).format(a[1])}%</b><div class="hint">só ${a[0]} (a série começa em ${CARGA.anos[0][0]})</div>`;
       const d = b[1] - a[1];
       return `<b class="num">${nf(1).format(a[1])}% → ${nf(1).format(b[1])}%</b><div class="hint num">${d > 0 ? "+" : ""}${nf(1).format(d)} p.p. · ${a[0] === b[0] ? a[0] : a[0] + "–" + b[0]}</div>${desde ? `<div class="hint">série começa em ${CARGA.anos[0][0]}</div>` : ""}`;
+    }],
+    ["Expectativa de vida", "anos · ano anterior à posse → último ano", g => govAnual(macro?.expvida?.anos, g, 1, " anos")],
+    ["IDH", "0 a 1 · ano anterior à posse → último ano", g => govAnual(macro?.idh?.anos, g, 3, "")],
+    ["IDEB", "edição antes da posse → última no governo", g => {
+      const { ini, fim } = govAnos(g), a = IDEB.anos.filter(x => x[0] <= ini).at(-1) || (IDEB.anos[0][0] <= fim ? IDEB.anos[0] : null), b = IDEB.anos.filter(x => x[0] <= fim).at(-1);
+      if (!a || !b || b[0] <= a[0]) return pc(null);
+      return ["fund. I", "fund. II", "médio"].map((n, i) => `<div class="num"><span class="hint">${n}</span> <b>${nf(1).format(a[i + 1])} → ${nf(1).format(b[i + 1])}</b></div>`).join("") + `<div class="hint">${a[0]} → ${b[0]}</div>`;
     }],
     ["Salário mínimo", "início → fim · real = descontado o IPCA", g => {
       const rj = govData.mac.salmin?.reajustes; if (!rj?.length) return pc(null);

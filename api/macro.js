@@ -1,4 +1,4 @@
-// GET /api/macro → Selic, IPCA, unemployment and the minimum wage, current value plus monthly history (for cards and correlations).
+// GET /api/macro → Selic, IPCA, unemployment, the minimum wage, life expectancy and HDI, current value plus monthly history (for cards and correlations).
 // GET /api/macro?historico=1 → the longest history (Selic since 1996, IPCA since the Real in 1995,
 //        unemployment since 2012), for the charts opened from the top cards.
 // Selic: IPEA series BM366_TJOVER366 (daily, % a.a., mirrors the Central Bank's SGS, which
@@ -8,6 +8,9 @@
 //        3-month period stamped with its last month.
 // Salário mínimo: IPEA series MTE12_SALMIN12 (monthly, in reais since the Real, July 1994);
 //        the series already carries the months ahead of a value set for the year.
+// Expectativa de vida: World Bank SP.DYN.LE00.IN (UN estimates, yearly, includes the pandemic dip).
+// IDH: IPEA series IDHM, Brazil level (Atlas do Desenvolvimento Humano, PNUD/IPEA/FJP), yearly from
+//        2012 on PNAD data (the 1991/2000/2010 census values use another method, so they are left out).
 
 import { json, bad } from "./_yahoo.js";
 
@@ -79,10 +82,24 @@ async function salmin() {
   return { valor, desde: mensal[i][0], reajustes };
 }
 
+async function expvida() {
+  const rows = await getJson("https://api.worldbank.org/v2/country/BRA/indicator/SP.DYN.LE00.IN?format=json&per_page=100");
+  const anos = (rows[1] || []).filter(r => r.value != null && +r.date >= 1990).map(r => [+r.date, Math.round(r.value * 100) / 100]).sort((a, b) => a[0] - b[0]);
+  if (!anos.length) throw new Error("sem dados");
+  return { fonte: "Banco Mundial (estimativas da ONU)", anos };
+}
+
+async function idh() {
+  const rows = (await getJson("http://www.ipeadata.gov.br/api/odata4/ValoresSerie(SERCODIGO='IDHM')")).value;
+  const anos = rows.filter(r => r.NIVNOME === "Brasil" && r.VALVALOR != null && +r.VALDATA.slice(0, 4) >= 2012).map(r => [+r.VALDATA.slice(0, 4), r.VALVALOR]).sort((a, b) => a[0] - b[0]);
+  if (!anos.length) throw new Error("sem dados");
+  return { fonte: "Atlas do Desenvolvimento Humano (PNUD, IPEA, FJP), via IPEA", anos };
+}
+
 export async function GET(request) {
   const longo = new URL(request.url).searchParams.has("historico");
-  const [s, i, d, sm] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin()]);
+  const [s, i, d, sm, ev, ih] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh()]);
   if ([s, i, d].every(x => x.status === "rejected")) return bad("fontes indisponíveis", 502);
   const val = x => x.status === "fulfilled" ? x.value : { erro: String(x.reason?.message || x.reason) };
-  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm) }, 21600);
+  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih) }, 21600);
 }
