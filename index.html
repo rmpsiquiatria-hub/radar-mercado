@@ -350,6 +350,9 @@ dialog.simdlg { width: min(760px, calc(100vw - 20px)); }
 .sim-big span { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; width: 100%; }
 .sim-big b { font-size: 26px; } .sim-big.pos b { color: var(--up); } .sim-big.neg b { color: var(--down); }
 .sim-big small { color: var(--muted); }
+.sim-big .sim-big-x { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; padding-top: 8px; margin-top: 4px; border-top: 1px solid var(--line); font-size: 14px; }
+.sim-big .sim-big-x span { width: auto; flex: 1 1 200px; font-size: 14px; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--text); }
+.sim-big .sim-big-x b { font-size: 15px; color: var(--text); }
 .sim-t { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
 .sim-t td { padding: 6px 4px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .sim-t td.num { text-align: right; white-space: nowrap; }
@@ -3405,7 +3408,9 @@ function simRun() {
   const r = simCalc(p), sign = v => (v > 0 ? "+" : "") + brl(v);
   const unit = p.kind === "exterior" ? "US$ " + nf(2).format(r.empate) : brl(r.empate);
   res.innerHTML = `
-    <div class="sim-big ${r.lucro >= 0 ? "pos" : "neg"}"><span>Lucro líquido estimado</span><b class="num">${sign(r.lucro)}</b><small class="num">${pct(r.rent)} sobre ${brl(r.custoTotal)} investidos</small></div>
+    <div class="sim-big ${r.lucro >= 0 ? "pos" : "neg"}"><span>Lucro líquido estimado</span><b class="num">${sign(r.lucro)}</b><small class="num">${pct(r.rent)} sobre ${brl(r.custoTotal)} investidos</small>
+      <div class="sim-big-x"><span>Preço de venda para empatar (cobrindo custos e imposto)</span><b class="num">${unit}</b></div>
+      ${r.cdi != null ? `<div class="sim-big-x"><span>O mesmo valor no CDI por ${p.dias} dias (já com IR)</span><b class="num">${sign(r.cdi)}</b></div>` : ""}</div>
     <table class="sim-t">
       ${["Compra", "Venda"].map(g => `<tr class="g"><td colspan="2">${g}</td></tr>` + r.linhas.filter(l => l.grupo === g).map(l => `<tr><td>${esc(l.rot)}</td><td class="num">${brl(l.v)}</td></tr>`).join("")).join("")}
       <tr class="g"><td colspan="2">Resultado</td></tr>
@@ -3415,8 +3420,6 @@ function simRun() {
       <tr><td>Imposto de renda <div class="hint">${esc(r.motivo)}</div></td><td class="num">${r.imposto ? "−" + brl(r.imposto) : "R$ 0,00"}</td></tr>
       <tr class="tot"><td>Lucro líquido</td><td class="num ${cls(r.lucro)}">${sign(r.lucro)}</td></tr>
       <tr><td>Taxas e custos pagos no total</td><td class="num">${brl(r.taxas)}</td></tr>
-      <tr><td>Preço de venda para empatar (cobrindo custos e imposto)</td><td class="num">${unit}</td></tr>
-      ${r.cdi != null ? `<tr><td>O mesmo valor no CDI por ${p.dias} dias (já com IR)</td><td class="num">${sign(r.cdi)}</td></tr>` : ""}
     </table>
     ${r.darf ? `<p class="sim-note">📄 ${esc(r.darf)}</p>` : ""}
     ${r.avisos.map(a => `<p class="sim-note">ℹ️ ${esc(a)}</p>`).join("")}
