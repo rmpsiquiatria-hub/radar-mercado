@@ -1,43 +1,31 @@
 {
- "data": "2026-10-27",
- "gerado_em": "2026-10-27T14:46:10.032Z",
- "pesquisa_data": "2026-10-26",
- "resumo_mercado": "Segundo o InfoMoney, o Ibovespa fechou a segunda (26/10), primeiro pregão após a vitória de Lula no 2º turno, em queda de 13,88%, aos 176.608 pontos, após circuit breaker na abertura. A Folha BV relata dólar a R$ 5,403 (alta de 8,21%) e o InfoMoney cita DIs em forte alta. Segundo o InfoMoney e a Rio Times, Wall Street subiu (S&P 500 +0,7%, Nasdaq +0,8%, Dow +0,3%, com petróleo em queda). Níveis exatos dos juros não foram localizados.",
+ "data": "2026-10-28",
+ "gerado_em": "2026-10-28T06:20:00-03:00",
+ "pesquisa_data": "2026-10-27",
+ "resumo_mercado": "Segundo Money Times e outras fontes, o Ibovespa fechou em queda de 0,51%, aos 175.710 pontos, pressionado por Petrobras e pelos ajustes após a reeleição de Lula; o dólar recuou a R$ 5,349. Em Nova York, S&P 500 subiu 0,60% (7.722,60) e Nasdaq 1,18% (26.477,81). As fontes apontam a decisão de juros do Fed como destaque desta quarta (28).",
  "fontes_mercado": [
   {
-   "nome": "InfoMoney",
-   "titulo": "Ibovespa desaba 13% após eleição, em dia de circuit breaker; dólar dispara 8%",
-   "url": "https://www.infomoney.com.br/mercados/ibovespa-hoje-bolsa-de-valores-ao-vivo-26102026/",
-   "data": "2026-10-26"
-  },
-  {
-   "nome": "Folha BV",
-   "titulo": "Dólar sobe 8,21% após reeleição de Lula e bolsa cai 13,88%",
-   "url": "https://www.folhabv.com.br/economia/dolar-sobe-821-apos-reeleicao-de-lula-e-bolsa-cai-1388/",
-   "data": "2026-10-26"
-  },
-  {
    "nome": "Money Times",
-   "titulo": "Tempo real: Ibovespa afunda 13% com vitória de Lula após circuit breaker; dólar e juros futuros disparam",
-   "url": "https://www.moneytimes.com.br/tempo-real-ibovespa-reage-a-vitoria-de-lula-rens-apsa-lils-jcav/",
-   "data": "2026-10-26"
-  },
-  {
-   "nome": "Seu Dinheiro",
-   "titulo": "Ibovespa cai 14%, dólar sobe a R$ 5,40, mas nem todo mundo perdeu — entenda o caos nos mercados",
-   "url": "https://www.seudinheiro.com/2026/bolsa-dolar/ibovespa-cai-17-dolar-vai-a-r-550-mas-nem-todo-mundo-perde-entenda-o-caos-nos-mercados-hoje-ccgg/",
-   "data": "2026-10-26"
-  },
-  {
-   "nome": "The Rio Times",
-   "titulo": "Brazil Stocks Plunge 13.9% as Fed Week Begins",
-   "url": "https://riotimesonline.com/global-economy-briefing-october-27-2026",
+   "titulo": "Ibovespa recua com pressão de 'pesos-pesados' após choque eleitoral; dólar cai",
+   "url": "https://www.moneytimes.com.br/ibovespa-27-10-26-lils/",
    "data": "2026-10-27"
   },
   {
-   "nome": "MarketScreener",
-   "titulo": "Trading Day: AI light, Brazil flight",
-   "url": "https://www.marketscreener.com/news/trading-day-ai-light-brazil-flight-ce785cdcde8ff02c",
+   "nome": "Sou Brasília",
+   "titulo": "Dólar fecha a R$ 5,349 e Ibovespa cai 0,51% em 27/10",
+   "url": "https://soubrasilia.com/dolar-fecha-r-5-349-ibovespa-175-mil-pontos-27-outubro-2026/",
+   "data": "2026-10-27"
+  },
+  {
+   "nome": "DGABC",
+   "titulo": "Fechamento do mercado financeiro - 27/10/2026",
+   "url": "https://www.dgabc.com.br/Noticia/4365379/fechamento-do-mercado-financeiro",
+   "data": "2026-10-27"
+  },
+  {
+   "nome": "Minhas Economias",
+   "titulo": "Ibovespa fecha em queda após tombo histórico na véspera",
+   "url": "https://minhaseconomias.com.br/blog/planejamento-financeiro/ibovespa-fecha-em-queda-apos-tombo-historico-na-vespera",
    "data": "2026-10-27"
   }
  ],
@@ -5701,7 +5689,7 @@
      ]
     }
    },
-   "resumo": "A cobertura é concentrada em BBDC4; para a ON há pouco material recente. A XP aparece neutra com alvo de R$ 24 para o papel, e o Clube Acionista cita lucro de R$ 7,05 bilhões no 2T26, com inadimplência acima de 90 dias em 4,3%. Prévias para o 3T26 projetam lucro de cerca de R$ 7,1 bilhões, com pressão de crédito. Alvos de BTG, BB Investimentos e Itaú BBA para BBDC3 são de julho de 2025 e ficaram fora da janela de 6 meses.",
+   "resumo": "Segundo Investidor10 e Money Times, o Bradesco divulgou em 22/10 o resultado do 3T26: lucro líquido recorrente de R$ 7,1 bilhões (+14,6% a/a e +0,8% t/t), em linha com o consenso Bloomberg de R$ 7,145 bilhões, e ROAE de 16,1%. A inadimplência acima de 90 dias ficou em 4,6% e as provisões somaram R$ 10,6 bilhões (+24,3% a/a); as fontes citam ainda um programa de recompra de ações. A cobertura é concentrada em BBDC4; a XP aparece neutra com alvo de R$ 24 para o papel, sem data clara. Alvos de BTG, BB Investimentos e Itaú BBA para BBDC3 são de julho de 2025 e ficaram fora da janela de 6 meses.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 0,
@@ -5718,8 +5706,27 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Lucro recorrente de R$ 7,1 bi no 3T26 (+14,6% a/a), em linha com o consenso; ROAE de 16,1%; inadimplência acima de 90 dias em 4,6%; fontes citam programa de recompra de ações.",
+     "fonte": "Investidor10",
+     "data": "2026-10-22"
+    }
+   ],
    "fontes": [
+    {
+     "nome": "Investidor10",
+     "titulo": "Bradesco (BBDC4) lucra R$ 7,1 bilhões no 3T26 e abre recompra de ações",
+     "url": "https://investidor10.com.br/noticias/bradesco-bbdc4-lucra-r-7-1-bilhoes-no-3t26-alta-de-14-6-123437/",
+     "data": "2026-10-22"
+    },
+    {
+     "nome": "Money Times",
+     "titulo": "Lucro do Bradesco (BBDC4) no 3T26: rentabilidade, ROE e expectativas",
+     "url": "https://moneytimes.com.br/lucro-do-bradesco-bbdc4-3t26-rentabilidade-roe-expectativas-miql/",
+     "data": "2026-10-22"
+    },
     {
      "nome": "Clube Acionista",
      "titulo": "Bradesco (BBDC4) tem recomendação razoável e preço-alvo acima da cotação atual",
@@ -5739,7 +5746,7 @@
      "data": "2025-07-31"
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-28"
   },
   {
    "ticker": "RADL3",
@@ -15182,12 +15189,6 @@
     ]
    },
    "mudancas": [
-    {
-     "tipo": "elevacao",
-     "descricao": "Itaú BBA elevou o preço-alvo de R$ 5 para R$ 9 e manteve compra.",
-     "fonte": "Money Times / BP Money",
-     "data": "2026-10-20"
-    },
     {
      "tipo": "resultado",
      "descricao": "Prévia operacional do 3T26: receita total de R$ 1,59 bilhão (+4,3% a/a) e receita de locação de R$ 1,15 bilhão (+11,5%), números não auditados.",
