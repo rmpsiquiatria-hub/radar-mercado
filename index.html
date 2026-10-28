@@ -3122,7 +3122,7 @@ function renderVirt() {
     const bar = VMKT.filter(m => byM[m.k]).map(m => `<i style="flex:${byM[m.k]};background:${m.cor}" title="${m.label}: ${nf(1).format(byM[m.k] / total * 100)}%"></i>`).join("") + (v.caixa > 0.5 ? `<i style="flex:${v.caixa};background:var(--faint)" title="Caixa: ${nf(1).format(v.caixa / total * 100)}%"></i>` : "");
     return `<article class="card vcard">
       <div class="vcard-h"><div><h3>${esc(v.nome)}</h3><div class="hint">criada em ${new Date(v.criada).toLocaleDateString("pt-BR")} · ${brl(v.inicial)} iniciais · ${esc(VMETODO[v.metodo]?.label || "")}</div></div>
-        <button class="del" data-vdel="${v.id}" title="Excluir carteira virtual" aria-label="Excluir ${esc(v.nome)}">×</button></div>
+        <span class="row2" style="margin:0">${v.naCarteira ? "" : `<button class="btn small" type="button" data-vcopy="${v.id}" title="Adiciona os ativos desta carteira virtual à Minha carteira">➕ Levar para Minha carteira</button>`}<button class="del" data-vdel="${v.id}" title="Excluir carteira virtual" aria-label="Excluir ${esc(v.nome)}">×</button></span></div>
       <div class="vnums">
         <div><span>Valor hoje</span><b class="num">${brl(total)}</b></div>
         <div><span>Resultado</span><b class="num ${cls(res)}">${(res > 0 ? "+" : "") + brl(res)} (${pct(resPct)})</b></div>
@@ -3157,7 +3157,8 @@ function vOpenDialog() {
     <div class="vmet">${Object.entries(VMETODO).map(([k, m]) => `<label><input type="radio" name="vmet" value="${k}" ${vDraft.metodo === k ? "checked" : ""}> <b>${m.label}</b><div class="hint">${m.desc}</div></label>`).join("")}</div>
     <h4>Prévia</h4>
     <div id="vPrev" class="vprev"><div class="hint">Calculando…</div></div>
-    <div class="vdlg-f"><button type="button" class="btn" data-vd="cancel">Cancelar</button><button type="button" class="btn primary" data-vd="create" id="vCreate">Criar carteira</button></div>`;
+    <div class="vdlg-f"><button type="button" class="btn" data-vd="cancel">Cancelar</button><button type="button" class="btn primary" data-vd="create" id="vCreate">Criar carteira</button></div>
+    <p class="hint" style="margin:8px 0 0;text-align:right">Os ativos comprados também entram em <b>Minha carteira</b>.</p>`;
   $("#vDlg").showModal();
   vPreview();
 }
@@ -3203,16 +3204,31 @@ $("#vDlg").addEventListener("input", e => {
   if (e.target.matches("[data-vm]")) vEqualize();
   vPreview();
 });
+// The virtual portfolio's purchases also go into "Minha carteira", merged with what is already
+// there. Average price is in the asset's own currency, as in the rest of the portfolio (the dollar
+// position keeps the rate paid, in reais; B3 shares include the purchase cost).
+function vToCart(v) {
+  for (const pz of v.posicoes || []) {
+    if (!(pz.qty > 0)) continue;
+    const avg = pz.symbol === "USDBRL=X" ? pz.fx : pz.moeda === "BRL" && pz.custo ? pz.custo / pz.qty : pz.preco;
+    const ex = state.cart.find(x => x.symbol === pz.symbol);
+    if (ex) { ex.avg = (ex.qty * ex.avg + pz.qty * avg) / (ex.qty + pz.qty); ex.qty += pz.qty; }
+    else state.cart.push({ symbol: pz.symbol, qty: pz.qty, avg });
+  }
+  v.naCarteira = true;
+}
 $("#vDlg").addEventListener("click", e => {
   const a = e.target.closest("[data-vd]")?.dataset.vd;
   if (a === "cancel" || e.target === $("#vDlg")) return $("#vDlg").close();
   if (a === "create" && vDraft?.plan) {
     const plan = vDraft.plan;
-    state.virtuais = virtuais().concat({
+    const nova = {
       id: Math.random().toString(36).slice(2, 10), nome: vDraft.nome, criada: new Date().toISOString(), inicial: vDraft.inicial,
       metodo: vDraft.metodo, mercados: { ...vDraft.mercados }, posicoes: plan.posicoes.filter(p => !p.erro), caixa: plan.caixa, ibov0: quotes["^BVSP"]?.price || null,
-    });
-    save(); $("#vDlg").close(); renderVirt(); toast(`"${vDraft.nome}" criada`); refresh();
+    };
+    vToCart(nova);
+    state.virtuais = virtuais().concat(nova);
+    save(); $("#vDlg").close(); renderVirt(); renderCart(); toast(`"${vDraft.nome}" criada; os ativos entraram em Minha carteira`); refresh();
   }
 });
 $("#vNew").addEventListener("click", vOpenDialog);
@@ -3221,6 +3237,13 @@ $("#vList").addEventListener("toggle", e => {
   d.open ? vClosed.delete(d.dataset.vdet) : vClosed.add(d.dataset.vdet);
 }, true);
 $("#vList").addEventListener("click", e => {
+  const c = e.target.closest("[data-vcopy]");
+  if (c) {
+    e.preventDefault(); e.stopPropagation();
+    const v = virtuais().find(x => x.id === c.dataset.vcopy);
+    if (v && confirm(`Adicionar os ativos de "${v.nome}" à Minha carteira?`)) { vToCart(v); save(); renderVirt(); renderCart(); toast("Ativos adicionados à Minha carteira"); refresh(); }
+    return;
+  }
   const d = e.target.closest("[data-vdel]"); if (!d) return;
   e.stopPropagation();
   const v = virtuais().find(x => x.id === d.dataset.vdel);
