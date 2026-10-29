@@ -1,0 +1,525 @@
+{
+ "data": "2026-10-29",
+ "gerado_em": "2026-10-29T17:10:11.246Z",
+ "resumo_geral": "No federal, o dia teve muitas portarias do Ministério da Saúde que mudam a Tabela do SUS (oncologia sobretudo), a incorporação da iptacopana no SUS, a prorrogação de prazo de transações tributárias da Receita (até 30/12) e novo convênio do ICMS sobre gasolina e etanol anidro. No RS, destaque para a regulamentação dos CRAIs, o Programa Infância em Rede, o teletrabalho parcial no DETRAN e a criação de sete estabelecimentos penais. O Diário Oficial de Lajeado não trouxe atos nesta data. Todas as fontes foram coletadas com sucesso.",
+ "destaques": [
+  {
+   "id": "dou-741172556",
+   "relevancia": "alta",
+   "temas": [
+    "tributos"
+   ],
+   "o_que_muda": "A Receita Federal prorrogou para 30/12/2026 o prazo para aderir às transações de dívidas tributárias em discussão administrativa dos Editais nº 9 e nº 10 de 2026.",
+   "quem_afeta": "Contribuintes e empresas com créditos tributários em contencioso administrativo.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "PORTARIA RFB Nº 742, DE 27 DE OUTUBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-rfb-n-742-de-27-de-outubro-de-2026-741172556",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741106783",
+   "relevancia": "alta",
+   "temas": [
+    "tributos",
+    "combustíveis"
+   ],
+   "o_que_muda": "O CONFAZ alterou o convênio do ICMS monofásico: a gasolina e o etanol anidro passam a ter alíquota fixa de R$ 1,64 por litro e mudam as regras de repartição do imposto entre os estados. O texto também revoga o convênio sobre nafta não petroquímica.",
+   "quem_afeta": "Distribuidoras, importadores, postos e quem consome combustível; secretarias de fazenda estaduais.",
+   "vigencia": "Conforme o convênio; verificar a cláusula final",
+   "esfera": "federal",
+   "titulo": "DESPACHO Nº 51, DE 28 DE OUTUBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "tipo": "Ato Normativo",
+   "url": "https://www.in.gov.br/web/dou/-/despacho-n-51-de-28-de-outubro-de-2026-741106783",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741113197",
+   "relevancia": "alta",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "O SUS passa a oferecer a iptacopana para hemoglobinúria paroxística noturna em pacientes já tratados com inibidor de C5. Crovalimabe e pegcetacoplana não foram incorporados e o ravulizumabe foi excluído para essa doença.",
+   "quem_afeta": "Hematologistas, pacientes com HPN e serviços de saúde do SUS.",
+   "vigencia": "Na publicação; oferta no SUS em até 180 dias",
+   "esfera": "federal",
+   "titulo": "PORTARIA SCTIE/MS Nº 64, DE 27 DE OUTUBRO DE 2026",
+   "orgao": "Ministério da Saúde / Secretaria de Ciência, Tecnologia e Inovação em Saúde",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-sctie/ms-n-64-de-27-de-outubro-de-2026-741113197",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741116295",
+   "relevancia": "alta",
+   "temas": [
+    "saúde",
+    "SUS",
+    "oncologia"
+   ],
+   "o_que_muda": "Cria o registro do rituximabe (fornecido pelo Ministério da Saúde) no tratamento de linfoma folicular, linfoma difuso de grandes células B e leucemia linfocítica crônica, com autorização prévia, e reajusta valores dos procedimentos de quimioterapia. Destina R$ 3,3 milhões/ano a estados e municípios.",
+   "quem_afeta": "Oncologistas, hematologistas, hospitais habilitados em oncologia e gestores do SUS.",
+   "vigencia": "Na publicação, com efeitos a partir da competência seguinte",
+   "esfera": "federal",
+   "titulo": "PORTARIA GM/MS Nº 12.306, DE 28 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.306-de-28-de-outubro-de-2026-741116295",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741113517",
+   "relevancia": "alta",
+   "temas": [
+    "saúde",
+    "SUS",
+    "oncologia"
+   ],
+   "o_que_muda": "Inclui e altera procedimentos do SUS para o tratamento do adenocarcinoma de próstata e define recurso para custear o acetato de abiraterona.",
+   "quem_afeta": "Oncologistas, urologistas e hospitais habilitados em oncologia.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/ms Nº 12.311, DE 28 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.311-de-28-de-outubro-de-2026-741113517",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741169904",
+   "relevancia": "alta",
+   "temas": [
+    "saúde",
+    "SUS",
+    "oncologia"
+   ],
+   "o_que_muda": "Inclui na Tabela do SUS procedimentos para a terapia com pazopanibe (câncer de rim metastático de células claras), com registro obrigatório da dispensação, aquisição centralizada pelo Ministério da Saúde e novos recursos financeiros.",
+   "quem_afeta": "Oncologistas, farmácias hospitalares e hospitais habilitados em oncologia.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/ms Nº 12.304, DE 28 de outuBRO DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.304-de-28-de-outubro-de-2026-741169904",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741113438",
+   "relevancia": "alta",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "Suspende por um mês o repasse de recursos do Programa Melhor em Casa (equipes de atenção domiciliar EMAD/EMAP) aos municípios listados que não tinham cadastro no SCNES em fevereiro e março de 2026.",
+   "quem_afeta": "Gestores municipais e equipes de atenção domiciliar.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/ms Nº 12.317, DE 28 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.317-de-28-de-outubro-de-2026-741113438",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1498876",
+   "relevancia": "alta",
+   "temas": [
+    "saúde",
+    "crianças"
+   ],
+   "o_que_muda": "Regulamenta os Centros de Referência ao Atendimento Infantojuvenil (CRAIs) no RS: define regras de habilitação, funcionamento, financiamento e monitoramento, para os serviços atuais e os novos.",
+   "quem_afeta": "Serviços de saúde e segurança que atendem crianças e adolescentes vítimas ou testemunhas de violência; gestores municipais.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA CONJUNTA SES/SSP Nº 01/2026",
+   "orgao": "Gabinete",
+   "tipo": "Instruções Normativas",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1498876",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "dou-741176397",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "SUS",
+    "oncologia"
+   ],
+   "o_que_muda": "Inclui procedimentos para registrar a dispensação de mesilato de imatinibe e altera atributos dos procedimentos de leucemia mieloide crônica e GIST na Tabela do SUS, com recursos para estados e municípios.",
+   "quem_afeta": "Oncologistas, hematologistas e hospitais habilitados.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/MS Nº 12.315, DE 28 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.315-de-28-de-outubro-de-2026-741176397",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741175663",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "SUS",
+    "oncologia"
+   ],
+   "o_que_muda": "Inclui e altera procedimentos do tratamento sistêmico do câncer de mama HER-2 positivo na Tabela do SUS e destina recursos a estados e municípios.",
+   "quem_afeta": "Oncologistas e hospitais habilitados em oncologia.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/ms Nº 12.310, DE 28 de outuBRO DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.310-de-28-de-outubro-de-2026-741175663",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741175584",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "SUS",
+    "oncologia"
+   ],
+   "o_que_muda": "Inclui e altera procedimentos do SUS relacionados ao tratamento do câncer de pulmão.",
+   "quem_afeta": "Oncologistas e hospitais habilitados em oncologia.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "PORTARIA SAES/MS Nº 5.182, DE 15 DE OUTUBRO DE 2026",
+   "orgao": "Ministério da Saúde / Secretaria de Atenção Especializada à Saúde",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-saes/ms-n-5.182-de-15-de-outubro-de-2026-741175584",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741098845",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "SUS",
+    "oncologia"
+   ],
+   "o_que_muda": "Inclui procedimentos para tratar sintomas de tumores neuroendócrinos gastroenteropancreáticos funcionais com acetato de lanreotida e destina recursos a estados e municípios.",
+   "quem_afeta": "Oncologistas, endocrinologistas e hospitais habilitados.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/MS Nº 12.312, DE 28 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.312-de-28-de-outubro-de-2026-741098845",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741160691",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "Inclui na Tabela do SUS a terapia fotodinâmica para carcinoma basocelular superficial e nodular (câncer de pele não melanoma), com recurso do FAEC.",
+   "quem_afeta": "Dermatologistas e serviços de saúde.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "PORTARIA GM/MS Nº 12.305, DE 28 DE OUTUBRO DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.305-de-28-de-outubro-de-2026-741160691",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741175027",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "Inclui mais um procedimento na Tabela do SUS, com recurso do FAEC a estados, DF e municípios.",
+   "quem_afeta": "Serviços de saúde e gestores do SUS.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/ms Nº 12.307, DE 28 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.307-de-28-de-outubro-de-2026-741175027",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741176374",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "Inclui procedimentos e altera valores e forma de financiamento da iodoterapia do carcinoma diferenciado de tireoide, com recursos do FAEC.",
+   "quem_afeta": "Endocrinologistas, medicina nuclear e hospitais habilitados.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/ms Nº 12.314, DE 28 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.314-de-28-de-outubro-de-2026-741176374",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741166669",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "Inclui procedimentos e compatibilidades na Tabela do SUS e destina recursos do FAEC a estados, DF e municípios.",
+   "quem_afeta": "Serviços de saúde e gestores do SUS.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "Portaria GM/MS Nº 12.318, DE 28 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.318-de-28-de-outubro-de-2026-741166669",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741162024",
+   "relevancia": "media",
+   "temas": [
+    "psicologia",
+    "profissões"
+   ],
+   "o_que_muda": "O Conselho Federal de Psicologia criou a Carteira de Identidade Funcional para conselheiros e psicólogos fiscais (só para quem já tem a carteira profissional biométrica) e ajustou regras de segunda via e coleta biométrica.",
+   "quem_afeta": "Psicólogos, conselheiros e fiscais dos Conselhos de Psicologia.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "Resolução Nº 14, DE 16 DE outubro DE 2026",
+   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Psicologia",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-n-14-de-16-de-outubro-de-2026-741162024",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741171313",
+   "relevancia": "media",
+   "temas": [
+    "saúde"
+   ],
+   "o_que_muda": "Consulta pública, por 20 dias, sobre a minuta da Linha de Cuidado para a Atenção Integral à Saúde das Pessoas Expostas ou Intoxicadas por Mercúrio.",
+   "quem_afeta": "Profissionais de saúde e quem quiser opinar.",
+   "vigencia": "Prazo de 20 dias a partir da publicação",
+   "esfera": "federal",
+   "titulo": "Consulta Pública nº 13, DE 21 DE outubro DE 2026",
+   "orgao": "Ministério da Saúde / Secretaria de Atenção Especializada à Saúde",
+   "tipo": "Aviso de Consulta Pública",
+   "url": "https://www.in.gov.br/web/dou/-/consulta-publica-n-13-de-21-de-outubro-de-2026-741171313",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741159506",
+   "relevancia": "media",
+   "temas": [
+    "comércio exterior",
+    "tributos"
+   ],
+   "o_que_muda": "A Gecex incluiu produtos e alterou medida na lista de elevações do Imposto de Importação por desequilíbrios comerciais.",
+   "quem_afeta": "Importadores e consumidores dos produtos listados.",
+   "vigencia": "Na publicação",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO GECEX Nº 976, DE 26 DE OUTUBRO DE 2026 (*)",
+   "orgao": "Presidência da República / Comitê-Executivo de Gestão",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-gecex-n-976-de-26-de-outubro-de-2026-*-741159506",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741171099",
+   "relevancia": "media",
+   "temas": [
+    "telecomunicações"
+   ],
+   "o_que_muda": "A Anatel abriu consulta pública sobre a revisão do seu Regimento Interno.",
+   "quem_afeta": "Operadoras e interessados em regulação de telecom.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "CONSULTA PÚBLICA Nº 49, DE 28 DE OUTUBRO DE 2026",
+   "orgao": "Ministério das Comunicações / Conselho Diretor",
+   "tipo": "Aviso de Consulta Pública",
+   "url": "https://www.in.gov.br/web/dou/-/consulta-publica-n-49-de-28-de-outubro-de-2026-741171099",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1499001",
+   "relevancia": "media",
+   "temas": [
+    "saúde",
+    "patrimônio"
+   ],
+   "o_que_muda": "Declara de utilidade pública, para desapropriação, imóveis do Hospital São Vicente de Paulo, em Osório.",
+   "quem_afeta": "Hospital e proprietários dos imóveis em Osório.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.032, DE 28 DE OUTUBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499001",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499005",
+   "relevancia": "media",
+   "temas": [
+    "crianças",
+    "assistência social"
+   ],
+   "o_que_muda": "Institui o Programa Infância em Rede: cria uma Sala de Governança e prevê Centros Regionais de Proteção à Criança e ao Adolescente nas nove regiões do RS, com apoio aos municípios e atenção à violência digital.",
+   "quem_afeta": "Redes municipais de proteção de crianças, profissionais de saúde, educação e assistência social.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.034, DE 28 DE OUTUBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499005",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1498907",
+   "relevancia": "media",
+   "temas": [
+    "servidores"
+   ],
+   "o_que_muda": "O DETRAN/RS passou a permitir teletrabalho parcial para servidores, com regras de presencialidade, teletrabalho fora do Estado ou País e situações de saúde.",
+   "quem_afeta": "Servidores do DETRAN/RS.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "PORTARIA DETRAN/RS Nº 533, DE 28 DE OUTUBRO DE 2026.",
+   "orgao": "Gabinete da Diretora-Geral",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1498907",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1498750",
+   "relevancia": "media",
+   "temas": [
+    "trânsito"
+   ],
+   "o_que_muda": "O DETRAN/RS define a classificação e a rastreabilidade das peças de veículos utilitários desmontados por desmanches credenciados.",
+   "quem_afeta": "Centros de desmanche credenciados e compradores de peças usadas.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "PORTARIA DETRAN/RS N.° 502, DE 07 DE OUTUBRO DE 2026.",
+   "orgao": "Diretoria Técnica",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1498750",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499006",
+   "relevancia": "media",
+   "temas": [
+    "segurança pública"
+   ],
+   "o_que_muda": "Cria sete novos estabelecimentos penais no RS (cadeias em Passo Fundo e Alegrete; penitenciárias em São Borja, Caxias do Sul II e III e Rio Grande II e III), sem aumento de despesa.",
+   "quem_afeta": "Sistema prisional e municípios envolvidos.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.035, DE 28 DE OUTUBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499006",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1498998",
+   "relevancia": "media",
+   "temas": [
+    "economia",
+    "inovação"
+   ],
+   "o_que_muda": "Institui o Programa Avançar Deep Tech, que investe via fundos geridos pelo Badesul em empresas de tecnologia de base científica sediadas no RS; a CADIP pode destinar até R$ 40 milhões.",
+   "quem_afeta": "Startups e empresas de tecnologia gaúchas.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.029, DE 28 DE OUTUBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1498998",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499002",
+   "relevancia": "media",
+   "temas": [
+    "meio ambiente",
+    "energia"
+   ],
+   "o_que_muda": "Institui o Comitê de Implementação e Monitoramento do Plano de Transição Energética Justa para as Regiões Carboníferas do RS.",
+   "quem_afeta": "Municípios e trabalhadores das regiões carboníferas.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.033, DE 28 DE OUTUBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499002",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499000",
+   "relevancia": "media",
+   "temas": [
+    "calamidade"
+   ],
+   "o_que_muda": "Homologa a situação de emergência em Encantado, Veranópolis e Santo Antônio das Missões, o que facilita o acesso a ajuda estadual e federal.",
+   "quem_afeta": "Moradores e prefeituras desses municípios.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.031, DE 28 DE OUTUBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499000",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1498203",
+   "relevancia": "media",
+   "temas": [
+    "previdência"
+   ],
+   "o_que_muda": "O IPE Prev notifica pensionistas que fizeram aniversário em agosto de 2026 e não fizeram a prova de vida: o pagamento fica suspenso até que a façam, pelo app do Servidor RS, no Banrisul ou por formulário.",
+   "quem_afeta": "Pensionistas do IPE Prev.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "EDITAL Nº 031/2026",
+   "orgao": "Gabinete da Presidência",
+   "tipo": "Diversos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1498203",
+   "fonte": "DOE-RS"
+  }
+ ],
+ "demais": {
+  "federal": "Cerca de 300 atos sem destaque: decisões individuais da ANVISA, concessões e indeferimentos de CEBAS, decisões da ANTT, despachos da ANEEL e ANP, atos de radiodifusão, portarias de pessoal e remanejamentos orçamentários. Outras portarias do Ministério da Saúde (12.303, 12.308, 12.309, 12.313) ajustam atributos da Tabela do SUS.",
+  "estadual": "Cerca de 80 atos sem destaque: notificações de trânsito (TNT), portarias de pessoal e comissões, súmulas de contrato, decreto de homologação de emergência em outros municípios e ano dos centenários.",
+  "municipal": "Sem atos publicados no Diário Oficial de Lajeado nesta data."
+ },
+ "fontes": {
+  "federal": {
+   "ok": true,
+   "atos": 338
+  },
+  "estadual": {
+   "ok": true,
+   "atos": 109,
+   "publicados": 976
+  },
+  "municipal": {
+   "ok": true,
+   "atos": 0,
+   "edicoes": []
+  }
+ },
+ "totais": {
+  "federal": 338,
+  "estadual": 109,
+  "municipal": 0
+ }
+}
