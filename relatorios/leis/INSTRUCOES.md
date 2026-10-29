@@ -6,13 +6,13 @@ O leitor é uma pessoa leiga em Direito, que mora em Lajeado (RS). Ele quer sabe
 
 ## Passo 1: conferir se há trabalho a fazer
 
-1. Leia `relatorios/leis/coleta.json` só até o campo `itens` (use `node -p "const c=require('./relatorios/leis/coleta.json'); JSON.stringify({data:c.data, fontes:c.fontes})"`).
-2. Se `relatorios/leis/ultimo.json` já existir com o mesmo `data`, **pare**: a análise do dia já foi feita.
+1. Leia `relatorios/leis/coleta.json` só até o campo `itens` (use `node -p "const c=require('./relatorios/leis/coleta.json'); JSON.stringify({data:c.data, coletado_em:c.coletado_em, fontes:c.fontes})"`). O arquivo é grande: nunca o leia inteiro.
+2. Se `relatorios/leis/ultimo.json` já existir com o mesmo `data` **e** o mesmo `coletado_em`, **pare**: a análise dessa coleta já foi feita. (Mesmo `data` com `coletado_em` diferente = o dia foi coletado de novo, por exemplo porque Lajeado publicou mais tarde: faça a análise inteira de novo.)
 3. Se a data da coleta for mais antiga que ontem (horário de Brasília), pare também: a coleta não rodou.
 
 ## Passo 2: triagem
 
-Leia `relatorios/leis/textos/triagem.txt` (uma linha por ato: id | tipo | órgão | título | começo do texto).
+Leia `relatorios/leis/textos/triagem.txt` (uma linha por ato: id | tipo | órgão | título | começo do texto). Ela traz só os atos normativos. Atos de pessoal, contratos e licitações (Seções 2 e 3 do DOU e boa parte do DOE-RS) também estão na coleta, marcados com `"lista": true`, mas só aparecem na lista do site: **nunca** são destaque.
 
 Marque como **candidato a destaque** todo ato que **cria, muda ou revoga regras** que valem para pessoas, empresas, profissionais, contribuintes, servidores em geral ou para o funcionamento de serviços públicos. Exemplos: leis, medidas provisórias, decretos regulamentares, instruções normativas, resoluções de agências e conselhos, portarias que mudam procedimentos, atos que mudam impostos, preços públicos, benefícios ou prazos.
 
@@ -45,6 +45,7 @@ Leia em lotes de até 10 ids. Se o texto for longo, concentre-se na ementa, nos 
     {
       "id": "id exato da triagem (ex.: dou-740643110, rs-1498861, laj-2677-2)",
       "relevancia": "alta | media",
+      "area": "fazenda | saude | outros",
       "temas": ["saúde", "tributos"],
       "o_que_muda": "1 a 3 frases simples. Diga a regra nova, não repita a ementa.",
       "quem_afeta": "quem precisa prestar atenção (ex.: médicos, empresas do Simples, motoristas de Lajeado).",
@@ -68,6 +69,7 @@ Leia em lotes de até 10 ids. Se o texto for longo, concentre-se na ementa, nos 
 
 Regras:
 
+- `area`: `fazenda` para impostos, taxas, orçamento, dívida, finanças públicas e regras do sistema financeiro; `saude` para saúde, SUS, medicamentos, vigilância sanitária e profissões da saúde; `outros` para o resto. O site e o e-mail filtram os destaques por ela.
 - Use **só ids que existem** na triagem. Título, órgão e link são preenchidos depois pelo programa a partir do id: não os escreva.
 - **Relevância alta**: lei, MP, decreto ou norma que afeta muita gente ou o bolso (impostos, salário, benefícios, saúde, trânsito), e qualquer coisa que afete médicos ou serviços de saúde. O resto é média.
 - Ordene: primeiro alta, depois média; dentro disso, federal, estadual, municipal.

@@ -2,19 +2,22 @@
 //   node scripts/leis-coleta.mjs [AAAA-MM-DD]   (default: today in Brasília)
 // Sources:
 //   federal   Diário Oficial da União, Seção 1 (+ extra edition), in.gov.br "leiturajornal" index
-//             and each act's page for the full text;
-//   estadual  Diário Oficial do RS, the site's own REST backend (doe-backend.pro.rs.gov.br), minus
-//             personnel acts, contracts, tenders and the like (EXCLUIR_RS);
+//             and each act's page for the full text; Seções 2 (people) and 3 (contracts, tenders,
+//             companies) only as a list (lista: true), for the site's filters;
+//   estadual  Diário Oficial do RS, the site's own REST backend (doe-backend.pro.rs.gov.br); personnel
+//             acts, contracts, tenders and the like (EXCLUIR_RS) only as a list, from the list's snippet;
 //   municipal Diário Oficial Eletrônico de Lajeado (Thema GRP, a JSF app): the edition's PDF,
 //             turned into text by pdftotext and split at each act's heading.
-// Writes relatorios/leis/coleta.json (index: title, summary, link) and relatorios/leis/textos/
-// <esfera>.txt (full texts, "=== <id> ===" separated, capped per act) for the analysis routine.
+// Writes relatorios/leis/coleta.json (index: title, summary, link, categories) and relatorios/leis/
+// textos/<esfera>.txt (full texts, "=== <id> ===" separated, capped per act) for the analysis routine.
+// List-only acts are left out of the texts and of the triage: they are never highlights.
 // A source that fails is recorded in coleta.json and the others still go out.
 
 import { writeFile, mkdir, readFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { categorias } from "./leis-categorias.mjs";
 
 const dia = process.argv[2] || new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
 const [Y, M, D] = dia.split("-");
@@ -40,25 +43,27 @@ async function pool(list, n, fn) {
 }
 
 /* ---------- federal: DOU ---------- */
+const SECOES_DOU = { do1: "DOU", do1e: "DOU (extra)", do2: "DOU Seção 2", do3: "DOU Seção 3" };
 async function dou() {
   const itens = [];
-  for (const secao of ["do1", "do1e"]) {
+  for (const secao of Object.keys(SECOES_DOU)) {
     const h = await (await get(`https://www.in.gov.br/leiturajornal?data=${D}-${M}-${Y}&secao=${secao}`)).text();
     const m = h.match(/<script id="params" type="application\/json">([\s\S]*?)<\/script>/);
     if (!m) throw new Error("índice do DOU sem dados (" + secao + ")");
     for (const x of JSON.parse(m[1]).jsonArray || []) itens.push({
-      id: "dou-" + x.urlTitle.match(/(\d+)$/)?.[1], esfera: "federal", fonte: "DOU" + (secao === "do1e" ? " (extra)" : ""),
+      id: "dou-" + x.urlTitle.match(/(\d+)$/)?.[1], esfera: "federal", fonte: SECOES_DOU[secao], ...(/^do[23]/.test(secao) ? { lista: true } : {}),
       tipo: x.artType, orgao: x.hierarchyList?.[0] || x.hierarchyStr,
       unidade: x.hierarchyList?.length > 1 ? x.hierarchyList[0] + " / " + x.hierarchyList.at(-1) : x.hierarchyStr, titulo: x.title || x.titulo,
       ementa: (x.content || "").replace(/\s+/g, " ").replace((x.title || "").replace(/\s+/g, " "), "").trim(), url: "https://www.in.gov.br/web/dou/-/" + x.urlTitle, pagina: x.numberPage,
     });
   }
-  const textos = await pool(itens, 4, async it => {
+  const normas = itens.filter(it => !it.lista);
+  const textos = await pool(normas, 4, async it => {
     const h = await (await get(it.url)).text();
     const i = h.indexOf('class="texto-dou"'); if (i < 0) return "";
     return limpa(h.slice(i, h.indexOf("</article>", i) > 0 ? h.indexOf("</article>", i) : i + 200000).replace(/^[^>]*>/, ""));
   });
-  itens.forEach((it, k) => { it.texto = typeof textos[k] === "string" ? textos[k] : ""; });
+  normas.forEach((it, k) => { it.texto = typeof textos[k] === "string" ? textos[k] : ""; });
   return itens;
 }
 
@@ -74,6 +79,14 @@ async function doeRS() {
   const resto = await pool(Array.from({ length: Math.max(0, pags - 1) }, (_, i) => i + 2), 4, async p => (await (await get(q(p))).json()).collection);
   resto.forEach(c => Array.isArray(c) && lista.push(...c));
   const normas = lista.filter(m => !EXCLUIR_RS.test(m.tipoMateria || ""));
+  // the rest only from the list's 500-character snippet (a detail call each would be ~900 more requests)
+  const outros = lista.filter(m => EXCLUIR_RS.test(m.tipoMateria || "")).map(m => {
+    const linhas = limpa(m.texto).split("\n").map(s => s.trim()).filter(s => s && !/^ESTADO DO RIO GRANDE DO SUL$/i.test(s));
+    if (/prefeitura municipal|munic[íi]pio de/i.test(linhas.slice(0, 3).join(" ")) && !/lajeado/i.test(linhas.join(" "))) return null;
+    const titulo = linhas.find(s => /\bn[º°o]\.?\s*\d|^(contrato|extrato|edital|aviso|termo|portaria|ata|s[úu]mula)/i.test(s) && s.length < 200) || linhas[0] || m.tipoMateria;
+    return { id: "rs-" + m.id, esfera: "estadual", fonte: "DOE-RS", lista: true, tipo: m.tipoMateria, orgao: "", titulo: titulo.slice(0, 200),
+      ementa: linhas.filter(s => s !== titulo).join(" ").slice(0, 250), url: "https://www.diariooficial.rs.gov.br/materia?id=" + m.id };
+  }).filter(Boolean);
   const det = await pool(normas, 4, async m => (await get(RS + "materias/" + m.id)).json());
   // Other cities also publish in the state gazette; only Lajeado's are kept (its own gazette is read below anyway).
   const fora = (m, k) => det[k]?.tipoEntidade === "PREFEITURA" && !/lajeado/i.test(det[k].nomeEntidade || "");
@@ -90,7 +103,7 @@ async function doeRS() {
     return { id: "rs-" + m.id, esfera: "estadual", fonte: "DOE-RS", tipo: d.nomeTipoMateria || m.tipoMateria, orgao: d.nomeEntidade || "",
       unidade: d.nomeEntidadeCliente || "", titulo: titulo.slice(0, 200), ementa: linhas.filter(s => s !== titulo).slice(0, 3).join(" ").slice(0, 400),
       url: "https://www.diariooficial.rs.gov.br/materia?id=" + m.id, texto };
-  }).filter(Boolean) };
+  }).filter(Boolean).concat(outros) };
 }
 
 /* ---------- municipal: Lajeado ---------- */
@@ -161,7 +174,7 @@ for (const [nome, fn] of [["federal", dou], ["estadual", doeRS], ["municipal", l
   try {
     const res = await fn(), lst = Array.isArray(res) ? res : res.itens;
     itens.push(...lst);
-    fontes[nome] = { ok: true, atos: lst.length, ...(res.total != null ? { publicados: res.total } : {}), ...(res.edicoes ? { edicoes: res.edicoes } : {}) };
+    fontes[nome] = { ok: true, atos: lst.filter(i => !i.lista).length, lista: lst.filter(i => i.lista).length, ...(res.total != null ? { publicados: res.total } : {}), ...(res.edicoes ? { edicoes: res.edicoes } : {}) };
     console.log(nome, lst.length);
   } catch (e) { fontes[nome] = { ok: false, erro: String(e.message || e) }; console.error(nome, "falhou:", e.message || e); }
 }
@@ -169,15 +182,16 @@ for (const [nome, fn] of [["federal", dou], ["estadual", doeRS], ["municipal", l
 // e-mail find a day already done and stop.
 if (!itens.length) { console.log(`coleta de ${dia}: nada publicado; arquivos anteriores mantidos`); process.exit(0); }
 for (const esf of ["federal", "estadual", "municipal"]) {
-  const t = itens.filter(i => i.esfera === esf).map(i => `=== ${i.id} ===\n${i.titulo}\n${(i.texto || i.ementa || "").slice(0, MAX_TEXTO)}${(i.texto || "").length > MAX_TEXTO ? "\n[… texto cortado; íntegra no link]" : ""}\n`).join("\n");
+  const t = itens.filter(i => i.esfera === esf && !i.lista).map(i => `=== ${i.id} ===\n${i.titulo}\n${(i.texto || i.ementa || "").slice(0, MAX_TEXTO)}${(i.texto || "").length > MAX_TEXTO ? "\n[… texto cortado; íntegra no link]" : ""}\n`).join("\n");
   await writeFile(new URL(`textos/${esf}.txt`, dir), t);
 }
 // One line per act, for the analysis to pick what deserves a full read (the full index is too big).
 const linha = i => [i.id, i.tipo, i.unidade || i.orgao, i.titulo, (i.ementa || "").replace(/\s+/g, " ").slice(0, 250)].map(x => String(x || "").replace(/\s*\|\s*/g, " / ")).join(" | ");
 await writeFile(new URL("textos/triagem.txt", dir), [`Atos normativos publicados em ${dia} — id | tipo | órgão | título | começo do texto`,
-  ...["federal", "estadual", "municipal"].flatMap(e => [``, `## ${e.toUpperCase()} (${itens.filter(i => i.esfera === e).length})${fontes[e]?.ok === false ? " — FONTE FALHOU: " + fontes[e].erro : ""}`, ...itens.filter(i => i.esfera === e).map(linha)])].join("\n") + "\n");
+  ...["federal", "estadual", "municipal"].flatMap(e => [``, `## ${e.toUpperCase()} (${itens.filter(i => i.esfera === e && !i.lista).length})${fontes[e]?.ok === false ? " — FONTE FALHOU: " + fontes[e].erro : ""}`, ...itens.filter(i => i.esfera === e && !i.lista).map(linha)])].join("\n") + "\n");
 const index = { data: dia, coletado_em: new Date().toISOString(), fontes,
-  itens: itens.map(({ texto, ...i }) => ({ ...i, ementa: (i.ementa || "").replace(/\s+/g, " ").slice(0, 400), tamanho: (texto || "").length })) };
+  itens: itens.map(({ texto, ...i }) => ({ ...i, unidade: i.unidade && i.unidade !== i.orgao ? i.unidade : undefined,
+    ementa: (i.ementa || "").replace(/\s+/g, " ").slice(0, i.lista ? 250 : 400), cats: categorias(i), ...(i.lista ? {} : { tamanho: (texto || "").length }) })) };
 await writeFile(new URL("coleta.json", dir), JSON.stringify(index, null, 1));
 console.log(`coleta de ${dia}: ${itens.length} atos`);
 if (!Object.values(fontes).some(f => f.ok)) process.exit(1);

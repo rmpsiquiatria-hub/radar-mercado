@@ -482,6 +482,10 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .dir-esf { margin-top: 8px; }
 .dir-tudo { margin-top: 12px; }
 .dir-tudo summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 15px; margin-bottom: 8px; }
+.dir-chips { margin: 8px 0 4px; }
+.dir-chips button:disabled { opacity: .45; cursor: default; }
+.dir-n { font-weight: 400; opacity: .75; }
+.dir-busca { width: 100%; margin: 8px 0 2px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--text); font: inherit; font-size: 14px; }
 .dir-imp { margin-top: 10px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; display: grid; gap: 4px; }
 .dir-imp-g { display: flex; flex-wrap: wrap; align-items: end; gap: 6px 16px; }
 .dir-imp-g > div { display: grid; }
@@ -519,7 +523,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
   </header>
 
   <div class="ftabs stabs" role="tablist" aria-label="Grupos de indicadores">
-    <button role="tab" data-stab="mercados">📈 Mercados <span class="hint">bolsas, moedas, cripto e agro</span></button>
+    <button role="tab" data-stab="mercados">📈 Mercados <span class="hint">bolsas, moedas, cripto, petróleo e agro</span></button>
     <button role="tab" data-stab="economia">🏛️ Economia e sociedade <span class="hint">juros, inflação, emprego, impostos, saúde e educação</span></button>
   </div>
   <section class="strip" id="strip" aria-label="Principais indicadores"></section>
@@ -667,6 +671,7 @@ const STRIP = [
   { s: "^IXIC", label: "Nasdaq" },
   { s: "^STOXX50E", label: "Euro Stoxx 50" },
   { s: "AGRO-BR", label: "Agro Brasil" },
+  { s: "BZ=F", label: "Petróleo Brent" },
   { s: "BTC-USD", label: "Bitcoin" },
 ];
 const DEFAULT_FAVS = ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBAS3.SA", "WEGE3.SA", "AAPL", "NVDA", "MSFT", "USDBRL=X", "EURBRL=X", "BTC-USD", "ETH-USD"];
@@ -946,6 +951,7 @@ const CORR = [
   { k: "^IXIC", label: "Nasdaq" },
   { k: "^STOXX50E", label: "Euro Stoxx 50" },
   { k: "AGRO-BR", label: "Agro Brasil", nota: "cesta de futuros agrícolas em reais, montada pelo site" },
+  { k: "BZ=F", label: "Petróleo (Brent)", nota: "contrato futuro, em US$ por barril; histórico desde 2007" },
   { k: "BTC-USD", label: "Bitcoin" },
   { k: "selic", label: "Selic" },
   { k: "ipca", label: "IPCA" },
@@ -2309,6 +2315,11 @@ function eduItems() {
       porque: "Mostra, ao vivo, quanto vale em reais o que o agro brasileiro vende para fora. Sobe quando as commodities agrícolas sobem lá fora ou quando o dólar sobe. Ajuda a entender a receita dos produtores, das tradings e de empresas como SLC Agrícola, BrasilAgro e 3tentos, e o preço dos alimentos aqui dentro.",
       horario: [["Todos abertos", dst ? "10h30 às 14h, aproximadamente" : "11h30 às 15h, aproximadamente"], ["Soja e milho", dst ? "também das 21h às 9h45" : "também das 22h às 10h45"], ["Dias", "segunda a sexta (soja e milho abrem domingo à noite)"]],
       nota: "Cada produto tem um horário diferente; fora do horário de um deles, o índice usa o último preço dele. Fontes: CBOT (soja, milho), ICE (café, açúcar, algodão, suco de laranja) e CME (boi), com cerca de 10 minutos de atraso. Os preços em Chicago e Nova York são a referência, mas o preço pago no Brasil pode ser diferente (inclui frete e prêmio de exportação). Os contratos futuros vencem algumas vezes por ano, e a troca de vencimento pode causar pequenos saltos." },
+    { id: "petroleo", s: "BZ=F", titulo: "Petróleo Brent", sub: "Preço do barril de petróleo, referência mundial",
+      oque: "Preço de um <b>barril</b> (159 litros) do petróleo tipo Brent, extraído no Mar do Norte e usado como referência para cerca de dois terços do petróleo vendido no mundo, inclusive o do Brasil. O valor mostrado é o do <b>contrato futuro</b> mais próximo do vencimento, em <b>dólares (US$)</b>.",
+      porque: "Mexe com o preço da gasolina, do diesel e do gás no mundo todo e, por isso, com a inflação. No Brasil, afeta a Petrobras (PETR3, PETR4) e as outras petroleiras da bolsa (PRIO, Brava), as companhias aéreas (o combustível é o maior custo delas) e as contas do governo (royalties). A Petrobras não repassa cada variação na hora: os preços nas refinarias mudam de tempos em tempos.",
+      horario: [["Negociação", "quase 24 horas, de domingo à noite até sexta à tarde"], ["Pausa diária", dst ? "18h às 19h (horário de Brasília)" : "19h às 20h (horário de Brasília)"], ["Abre", dst ? "domingo, 19h" : "domingo, 20h"]],
+      nota: "O preço vem do contrato futuro negociado na CME (Nova York), com cerca de 10 minutos de atraso. Os contratos vencem todo mês, e a troca de vencimento pode causar pequenos saltos. O outro preço de referência é o WTI, do petróleo americano, que costuma ficar alguns dólares abaixo do Brent." },
     { s: "BTC-USD", titulo: "Bitcoin", sub: "A maior criptomoeda do mundo",
       oque: "Moeda digital criada em 2009, sem banco central nem governo por trás. É negociada em corretoras do mundo inteiro, e o preço aqui é em <b>dólares (US$)</b>.",
       porque: "É bem mais volátil que ações: variações de 5% num único dia são comuns. É o termômetro do mercado de criptomoedas.",
@@ -3109,8 +3120,14 @@ function critSummary(c) {
   return [isSet(c.pl_max) ? `P/L ≤ ${c.pl_max}` : "", isSet(c.dy_min) ? `dividendos ≥ ${c.dy_min}%` : "", isSet(c.roe_min) ? `ROE ≥ ${c.roe_min}%` : "",
     isSet(c.div_max) ? `dív. líq./patrim. ≤ ${c.div_max}` : "", `mín. ${c.min_casas || 1} casas`].filter(Boolean).join(" · ");
 }
+// Settings are split in tabs, one section each; the last one opened is remembered.
+const CFG_TABS = [["criterios", "🎯 Critérios"], ["alertas", "🔔 Alertas"], ["custos", "🧮 Custos e impostos"], ["relatorio", "📧 Relatório diário"],
+  ["leis", "⚖️ Radar de leis"], ["graficos", "📈 Gráficos"], ["aparencia", "🎨 Aparência"], ["dados", "💾 Meus dados"]];
+function cfgTab() { try { const t = localStorage.getItem(KEY + ".cfgtab"); return CFG_TABS.some(([k]) => k === t) ? t : "criterios"; } catch { return "criterios"; } }
+function setCfgTab(t) { try { localStorage.setItem(KEY + ".cfgtab", t); } catch {} }
 // Opens Settings at the alerts section; optionally pre-fills a new price alert.
 function gotoAlertSettings(sym) {
+  setCfgTab("alertas");
   showTab("config");
   const sec = document.getElementById("cfgAlertas"); if (!sec) return;
   sec.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -3126,7 +3143,7 @@ function gotoAlertSettings(sym) {
 // published copy of the file is read and changes here stay in this browser.
 let emailCfg = null, emailSync = false, emailSyncMsg = "";
 fetch("/api/preferencias", { cache: "no-store" }).then(r => r.json()).then(j => {
-  if (j.configurado && j.tempo_grafico) { emailSync = true; emailCfg = { tempo_grafico: j.tempo_grafico }; renderConfig(); return; }
+  if (j.configurado && j.tempo_grafico) { emailSync = true; emailCfg = { tempo_grafico: j.tempo_grafico, leis: j.leis }; renderConfig(); return; }
   throw 0;
 }).catch(() => fetch("/relatorios/config.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(c => { emailCfg = c; renderConfig(); }).catch(() => {}));
 async function syncEmailTf(tf) {
@@ -3141,10 +3158,29 @@ async function syncEmailTf(tf) {
   } catch (e) { emailSyncMsg = `⚠️ Não consegui atualizar o e-mail (${e.message}). Tente de novo.`; }
   renderConfig();
 }
+// What goes into the Radar de leis e-mail (config.json → leis), saved through /api/preferencias.
+const LEIS_AREAS = { fazenda: "💰 Fazenda", saude: "🩺 Saúde", outros: "📌 Outros" };
+const LEIS_CATS = { fazenda: "💰 Fazenda", saude: "🩺 Saúde", nomeacoes: "🪪 Nomeações", comissoes: "👥 Comissões", contratos: "📑 Contratos",
+  empresas: "🏢 Empresas", servidores: "🧑‍💼 Servidores", outros: "📌 Outros" };
+let leisMsg = "";
+const leisPref = () => ({ destaques: Object.keys(LEIS_AREAS), lista: [], ...(emailCfg?.leis || {}) });
+async function syncLeis(leis) {
+  if (!emailSync) { leisMsg = "⚠️ A gravação no e-mail não está configurada neste site; a mudança não foi salva."; renderConfig(); return; }
+  emailCfg = { ...emailCfg, leis }; leisMsg = "⏳ salvando…"; renderConfig();
+  try {
+    const r = await fetch("/api/preferencias", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ leis }) });
+    const j = await r.json();
+    if (!r.ok || !j.ok) throw new Error(j.erro || r.status);
+    emailCfg = { ...emailCfg, leis: j.leis }; leisMsg = "✔ Salvo. Vale a partir do próximo e-mail.";
+  } catch (e) { leisMsg = `⚠️ Não consegui salvar (${e.message}). Tente de novo.`; }
+  renderConfig();
+}
 function renderConfig() {
   const box = $("#cfgBox"); if (!box || box.closest("[hidden]")) return;
   const c = crit(), d = chartDefaults(), th = themeChoice();
-  safeHTML(box, `
+  const lp = leisPref();
+  const sec = {
+    criterios: `
     <section class="card">
       <h3>Meus critérios</h3>
       <p class="hint">Usados nos <b>sinais de compra</b> da aba Relatório diário: um papel só vira sinal de compra se a maioria das casas recomenda compra <b>e</b> ele passa nesses critérios. Deixe um campo vazio para ignorar o critério.</p>
@@ -3158,7 +3194,8 @@ function renderConfig() {
       </div>
       <p class="hint" style="margin-top:10px"><b>P/L</b>: quantos anos de lucro o preço representa (menor = mais barato). <b>Dividendos</b>: quanto a empresa pagou nos últimos 12 meses, em % do preço. <b>ROE</b>: lucro sobre o patrimônio (maior = mais rentável). <b>Dívida líquida/patrimônio</b>: endividamento (menor = mais folga).</p>
       <p class="hint">Estes critérios valem para este navegador. O e-mail das 7h usa os critérios padrão (${esc(critSummary(CRIT_DEFAULT))}). Para mudar os do e-mail, peça ao Claude.</p>
-    </section>
+    </section>`,
+    alertas: `
     <section class="card" id="cfgAlertas">
       <h3>Alertas</h3>
       <p class="hint">Os mesmos alertas da aba Alertas. Funcionam enquanto o site estiver aberto (pode ficar em outra aba do navegador).</p>
@@ -3166,14 +3203,16 @@ function renderConfig() {
       <div id="cfgPA">${priceAlertsHTML(true)}</div>
       <h4 class="cfg-sub">📈 Alertas técnicos (gráfico diário)</h4>
       <div id="cfgTec" class="tec-cfg">${tecSettingsHTML()}</div>
-    </section>
+    </section>`,
+    custos: `
     <section class="card">
       <h3>Custos e impostos do simulador</h3>
       <p class="hint">Usados no "Simular compra e venda" da aba Carteira. Os valores padrão seguem as regras de 2026 e as taxas mais comuns; ajuste para as da sua corretora.</p>
       <div class="form">${Object.entries(CUSTOS_LABEL).map(([k, [l, u]]) => `<div class="field"><label>${l} (${u})</label><input type="number" step="any" min="0" data-custo="${k}" value="${custos()[k]}"></div>`).join("")}
         <button class="btn" type="button" data-cfg="custosReset">Voltar ao padrão</button></div>
       <p class="hint" style="margin-top:10px"><b>Impostos (fixos em lei):</b> ações 15% (isentas se as vendas do mês somarem até R$ 20 mil) e 20% no day trade; ETFs 15%; fundos imobiliários 20%; ações no exterior 15% no ajuste anual; cripto 15% acima de R$ 35 mil de vendas no mês; dólar em espécie isento até US$ 5 mil por ano.</p>
-    </section>
+    </section>`,
+    relatorio: `
     <section class="card">
       <h3>Relatório diário</h3>
       <p class="hint">Gráfico usado nos sinais técnicos e na coluna "Técnico" da tabela.</p>
@@ -3184,22 +3223,40 @@ function renderConfig() {
           : `<p class="note" style="margin:10px 0 0">📧 O e-mail das 7h está usando o gráfico <b>${lbl.toLowerCase()}</b>, diferente do escolhido aqui. A sincronização automática com o e-mail ainda não foi configurada.</p>`; })() : ""}
       ${emailSyncMsg && emailCfg?.tempo_grafico === frame() ? `<p class="hint">${emailSyncMsg}</p>` : ""}
       <div class="row2"><span class="seg">${FRAMES.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${frame() === k}">${l}</button>`).join("")}</span></div>
-    </section>
+    </section>`,
+    leis: `
+    <section class="card">
+      <h3>Radar de leis</h3>
+      <p class="hint">Escolha o que entra no <b>e-mail diário do Radar de leis</b>. O site (Educação → Direito) continua mostrando tudo, com os mesmos filtros.</p>
+      <h4 class="cfg-sub">⭐ Destaques analisados pela IA</h4>
+      <div class="checks">${Object.entries(LEIS_AREAS).map(([k, l]) => `<label><input type="checkbox" data-leis-d="${k}" ${lp.destaques.includes(k) ? "checked" : ""}> ${l}</label>`).join("")}</div>
+      <p class="hint"><b>Fazenda</b>: impostos, taxas, orçamento e finanças públicas. <b>Saúde</b>: SUS, medicamentos, vigilância sanitária e profissões da saúde. <b>Outros</b>: o resto (trânsito, educação, meio ambiente, trabalho…).</p>
+      <h4 class="cfg-sub">📋 Também listar no e-mail (sem análise: só título e link)</h4>
+      <div class="checks">${Object.entries(LEIS_CATS).map(([k, l]) => `<label><input type="checkbox" data-leis-l="${k}" ${lp.lista.includes(k) ? "checked" : ""}> ${l}</label>`).join("")}</div>
+      <p class="hint">Cada categoria marcada aparece no fim de cada esfera (Federal, Estadual, Municipal), com até 15 itens; o resto fica no site. Nomeações, servidores, contratos e empresas costumam ter centenas por dia. As categorias são dadas por palavras-chave e podem errar.</p>
+      ${leisMsg ? `<p class="note" style="margin:10px 0 0">${leisMsg}</p>` : !emailSync && emailCfg ? `<p class="note" style="margin:10px 0 0">A gravação no e-mail ainda não está configurada neste site.</p>` : ""}
+    </section>`,
+    graficos: `
     <section class="card">
       <h3>Gráficos</h3>
       <p class="hint">Como cada gráfico abre. Dentro da janela do gráfico você também pode mudar na hora, e a última escolha passa a ser o padrão.</p>
       <div class="row2"><span class="seg"><button data-cdef="tipo" data-v="line" aria-pressed="${d.tipo === "line"}">Linha</button><button data-cdef="tipo" data-v="candle" aria-pressed="${d.tipo === "candle"}">Candles</button></span></div>
       <div class="checks">${IND_DEF.map(([k, l]) => `<label><input type="checkbox" data-cind="${k}" ${d[k] ? "checked" : ""}> ${{ mm: "Médias móveis (MME 9, MMS 21, 50, 200)", ifr: "IFR (índice de força relativa)", macd: "MACD", sr: "Suporte e resistência (20 períodos)", pad: "Bandeiras de candles de reversão" }[k]}</label>`).join("")}</div>
-    </section>
+    </section>`,
+    aparencia: `
     <section class="card">
       <h3>Aparência</h3>
       <div class="row2"><span class="seg">${[["auto", "Automático"], ["light", "Claro"], ["dark", "Escuro"]].map(([k, l]) => `<button data-theme-set="${k}" aria-pressed="${th === k}">${l}</button>`).join("")}</span></div>
-    </section>
+    </section>`,
+    dados: `
     <section class="card">
       <h3>Meus dados</h3>
       <p class="hint">Favoritos, carteira, alertas e estas configurações ficam guardados só neste navegador. Para levar para outro aparelho, salve uma cópia aqui e restaure lá.</p>
       <div class="row2"><button class="btn" data-cfg="export">Salvar cópia dos meus dados</button><button class="btn" data-cfg="import">Restaurar cópia</button></div>
-    </section>`);
+    </section>`,
+  };
+  const t = cfgTab();
+  safeHTML(box, `<div class="ftabs cfgtabs" role="tablist" aria-label="Seções das configurações">${CFG_TABS.map(([k, l]) => `<button role="tab" type="button" data-cfgtab="${k}" aria-selected="${k === t}">${l}</button>`).join("")}</div>${sec[t]}`);
 }
 $("#cfgBox").addEventListener("change", e => {
   const cu = e.target.closest("[data-custo]");
@@ -3207,10 +3264,15 @@ $("#cfgBox").addEventListener("change", e => {
   const inp = e.target.closest("[data-crit]");
   if (inp) { state.criterios = { ...crit(), [inp.dataset.crit]: inp.value === "" ? "" : +inp.value }; save(); renderReport(); return; }
   const ci = e.target.closest("[data-cind]");
-  if (ci) { state.chart = { ...chartDefaults(), [ci.dataset.cind]: ci.checked }; save(); }
+  if (ci) { state.chart = { ...chartDefaults(), [ci.dataset.cind]: ci.checked }; save(); return; }
+  if (e.target.closest("[data-leis-d], [data-leis-l]")) {
+    const marcados = a => [...$("#cfgBox").querySelectorAll(`[${a}]`)].filter(x => x.checked).map(x => x.getAttribute(a));
+    syncLeis({ destaques: marcados("data-leis-d"), lista: marcados("data-leis-l") });
+  }
 });
 $("#cfgBox").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.cfgtab) { setCfgTab(b.dataset.cfgtab); leisMsg = ""; renderConfig(); return; }
   if (b.dataset.cfg === "custosReset") { delete state.custos; save(); renderConfig(); return; }
   if (b.dataset.cfg === "critReset") { delete state.criterios; save(); renderConfig(); renderReport(); return; }
   if (b.dataset.cfg === "export") return $("#exportBtn").click();

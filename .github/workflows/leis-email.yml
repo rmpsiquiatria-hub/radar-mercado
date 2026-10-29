@@ -3,7 +3,8 @@
 # - At 08:00 (Brasília, every day) a scheduled run sends the plain list if nothing went out for that
 #   day (the routine failed or GitHub delayed the collection).
 # - "Run workflow" by hand sends immediately.
-# relatorios/leis/email-enviado.txt records the last collection day e-mailed.
+# relatorios/leis/email-enviado.txt records the last collection e-mailed (day + collection time: a day
+# collected again, e.g. because Lajeado published late, is analysed and sent again).
 name: Radar de leis - e-mail
 
 on:
@@ -38,14 +39,15 @@ jobs:
         run: |
           [ -f relatorios/leis/coleta.json ] || { echo "Sem coleta."; exit 0; }
           dia=$(node -p "require('./relatorios/leis/coleta.json').data")
+          chave=$(node -p "const c=require('./relatorios/leis/coleta.json'); c.data+' '+c.coletado_em")
           sent=$(cat relatorios/leis/email-enviado.txt 2>/dev/null || true)
           if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-            [ "$sent" = "$dia" ] && { echo "Dia $dia já enviado."; exit 0; }
+            [ "$sent" = "$chave" ] && { echo "Coleta $chave já enviada."; exit 0; }
             # an old collection (the 21:00 run did not happen) is not worth an e-mail
             [ "$dia" \< "$(TZ=America/Sao_Paulo date -d '3 days ago' +%F)" ] && { echo "Coleta antiga ($dia)."; exit 0; }
           fi
           node scripts/leis-email.mjs
-          echo "$dia" > relatorios/leis/email-enviado.txt
+          echo "$chave" > relatorios/leis/email-enviado.txt
           git config user.name "radar-mercado-bot"
           git config user.email "radar-mercado-bot@users.noreply.github.com"
           git add relatorios/leis/email-enviado.txt

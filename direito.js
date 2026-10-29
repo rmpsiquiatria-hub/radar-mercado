@@ -141,14 +141,28 @@ function dirEducacao() {
 /* ---------- Radar de leis ---------- */
 const ESFERA = { federal: "🏛️ Federal", estadual: "🧉 Estadual (RS)", municipal: "🏘️ Municipal (Lajeado)" };
 const ESFERAS = ["federal", "estadual", "municipal"];
+// same labels as scripts/leis-categorias.mjs (the collector tags each act with these keys)
+const CATEGORIAS = { fazenda: "💰 Fazenda", saude: "🩺 Saúde", nomeacoes: "🪪 Nomeações", comissoes: "👥 Comissões",
+  contratos: "📑 Contratos", empresas: "🏢 Empresas", servidores: "🧑‍💼 Servidores", outros: "📌 Outros" };
+const AREAS = { fazenda: "💰 Fazenda", saude: "🩺 Saúde", outros: "📌 Outros" };
+const PAGINA = 100;   // rows of the full list drawn at a time
 const dataBR = s => s ? new Date(s + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" }) : "";
 const nf1 = v => new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(v);
+const nf0 = v => new Intl.NumberFormat("pt-BR").format(v);
+const semAcento = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 let coleta = null, analise = null, filtro = "todos";
+// per sphere: highlight area, list category, search text, rows shown, list open
+const st = Object.fromEntries(ESFERAS.map(e => [e, { area: "todas", cat: "todos", busca: "", limite: PAGINA, aberto: false }]));
 
 async function carregar() {
   const get = u => fetch(u + "?t=" + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null);
   [analise, coleta] = await Promise.all([get("relatorios/leis/ultimo.json"), get("relatorios/leis/coleta.json")]);
 }
+const an = () => analise && (!coleta || analise.data === coleta.data) ? analise : null;
+const itensDe = e => (coleta?.itens || []).filter(i => i.esfera === e);
+const destDe = e => (an()?.destaques || []).filter(d => d.esfera === e);
+const cats = i => i.cats?.length ? i.cats : ["outros"];
+
 // A tax change: before → after and the change in %, red when it goes up, green when it goes down.
 function impostoHtml(t) {
   if (!t) return "";
@@ -165,7 +179,7 @@ function impostoHtml(t) {
 function cardDestaque(d) {
   return `<article class="card edu">
     <div class="edu-h"><div><h3 style="font-size:16px">${esc(d.titulo)}</h3><div class="hint">${esc(d.orgao || "")}</div></div>
-      ${d.relevancia === "alta" ? `<span class="mk on">alta</span>` : ""}</div>
+      <span style="display:flex;gap:4px;flex-wrap:wrap;justify-content:end">${d.relevancia === "alta" ? `<span class="mk on">alta</span>` : ""}<span class="mk">${AREAS[d.area] || AREAS.outros}</span></span></div>
     ${impostoHtml(d.imposto)}
     <table class="edu-t" style="margin-top:8px">
       <tr><td>O que muda</td><td>${esc(d.o_que_muda)}</td></tr>
@@ -176,38 +190,58 @@ function cardDestaque(d) {
     ${d.url ? `<p style="margin-top:8px;font-size:14px">🔗 ${a(esc(d.url), "Ler a norma")}</p>` : ""}
   </article>`;
 }
+const chips = (attr, e, atual, ops) => `<div class="seg dir-chips" role="group">${ops.map(([k, l, n]) =>
+  `<button type="button" ${attr}="${k}" data-esf="${e}" aria-pressed="${k === atual}"${n === 0 && k !== atual ? " disabled" : ""}>${l}${n != null ? ` <span class="dir-n">${nf0(n)}</span>` : ""}</button>`).join("")}</div>`;
+
+// The full list of one sphere, after the category chip and the search box.
+function listaHtml(e) {
+  const s = st[e], dest = new Set(destDe(e).map(d => d.id)), q = semAcento(s.busca).trim();
+  const l = itensDe(e).filter(i => (s.cat === "todos" || (s.cat === "destaques" ? dest.has(i.id) : cats(i).includes(s.cat)))
+    && (!q || semAcento(`${i.titulo} ${i.ementa} ${i.orgao} ${i.unidade || ""} ${i.tipo}`).includes(q)));
+  if (!l.length) return `<p class="hint" style="padding:10px 0">Nada encontrado com esse filtro.</p>`;
+  return `<p class="hint" style="margin:6px 0 0">${nf0(l.length)} ${l.length === 1 ? "publicação" : "publicações"}${l.length > s.limite ? `, mostrando ${nf0(s.limite)}` : ""}</p>
+    ${l.slice(0, s.limite).map(i => `
+    <div class="dir-it"><span class="hint">${dest.has(i.id) ? "⭐ " : ""}${esc(i.tipo || "")}${i.orgao ? " · " + esc(i.orgao) : ""} · ${cats(i).map(k => CATEGORIAS[k]).join(" ")}${i.lista ? ` · ${esc(i.fonte)}` : ""}</span>
+      <div>${i.url ? a(esc(i.url), esc(i.titulo)) : esc(i.titulo)}</div>
+      ${i.ementa ? `<div class="hint">${esc(i.ementa)}</div>` : ""}</div>`).join("")}
+    ${l.length > s.limite ? `<button type="button" class="btn" data-dmais="${e}" style="margin:10px 0">Mostrar mais ${nf0(Math.min(PAGINA, l.length - s.limite))}</button>` : ""}`;
+}
+// one block per sphere: its summary, the highlights (by area), then everything published (folded)
+function bloco(e) {
+  const s = st[e], de = destDe(e), it = itensDe(e), res = an()?.resumo?.[e];
+  const dv = de.filter(d => s.area === "todas" || (d.area || "outros") === s.area);
+  const destIds = new Set(de.map(d => d.id)), conta = k => it.filter(i => cats(i).includes(k)).length;
+  const normas = it.filter(i => !i.lista).length;
+  return `<section class="dir-esf" id="dir-s-${e}">
+    <h3 class="dir-h">${ESFERA[e]} <span class="hint">· ${nf0(it.length)} publicações${normas !== it.length ? ` (${nf0(normas)} atos normativos)` : ""} · ${de.length} destaques</span></h3>
+    ${res ? `<div class="card edu"><p>${esc(res)}</p></div>` : ""}
+    ${de.length ? `<h4 class="dir-sub">⭐ Destaques analisados</h4>
+      ${chips("data-darea", e, s.area, [["todas", "Todas", de.length], ...Object.entries(AREAS).map(([k, l]) => [k, l, de.filter(d => (d.area || "outros") === k).length])])}
+      ${dv.length ? `<div class="edu-grid" style="margin-top:10px">${dv.map(cardDestaque).join("")}</div>` : `<p class="hint">Nenhum destaque nesta área.</p>`}` : ""}
+    <details class="dir-tudo" data-desf="${e}"${s.aberto ? " open" : ""}><summary>📋 Tudo o que foi publicado (${nf0(it.length)})</summary>
+      ${it.length ? `<div class="card dir-lista">
+        ${chips("data-dcat", e, s.cat, [["todos", "Todos", it.length], ["destaques", "⭐ Destaques", destIds.size], ...Object.entries(CATEGORIAS).map(([k, l]) => [k, l, conta(k)])])}
+        <input type="search" class="dir-busca" data-dbusca="${e}" value="${esc(s.busca)}" placeholder="Buscar por palavra (ex.: ICMS, Lajeado, enfermagem)" aria-label="Buscar nas publicações">
+        <div id="dir-l-${e}">${s.aberto ? listaHtml(e) : ""}</div></div>` : `<p class="hint">Nada publicado nesta esfera neste dia.</p>`}
+    </details>
+  </section>`;
+}
 function dirRadar() {
   if (!analise && !coleta) return `<div class="card edu"><p>O radar ainda não rodou. A primeira coleta sai às 21h e a análise chega por e-mail na manhã seguinte.</p></div>`;
-  const an = analise && (!coleta || analise.data === coleta.data) ? analise : null;
-  const itens = coleta?.itens || [], dest = an?.destaques || [];
-  const cont = e => itens.filter(i => i.esfera === e).length;
+  const A = an(), itens = coleta?.itens || [];
   const vis = ESFERAS.filter(e => filtro === "todos" || filtro === e);
   const filtros = `<div class="ftabs dir-f" role="tablist" aria-label="Filtrar por esfera">${["todos", ...ESFERAS].map(f => `<button role="tab" data-dirf="${f}" aria-selected="${f === filtro}">${f === "todos" ? "Todas as esferas" : ESFERA[f]}</button>`).join("")}</div>`;
-  // one block per sphere: its summary, the highlights, then everything published (folded)
-  const bloco = e => {
-    const de = dest.filter(d => d.esfera === e), it = itens.filter(i => i.esfera === e), res = an?.resumo?.[e];
-    return `<section class="dir-esf">
-      <h3 class="dir-h">${ESFERA[e]} <span class="hint">· ${it.length} atos publicados · ${de.length} destaques</span></h3>
-      ${res ? `<div class="card edu"><p>${esc(res)}</p></div>` : ""}
-      ${de.length ? `<h4 class="dir-sub">⭐ Destaques analisados</h4><div class="edu-grid">${de.map(cardDestaque).join("")}</div>` : ""}
-      <details class="dir-tudo"${filtro !== "todos" ? " open" : ""}><summary>📋 Tudo o que foi publicado (${it.length})</summary>
-        ${it.length ? `<div class="card dir-lista">${it.map(i => `
-          <div class="dir-it"><span class="hint">${esc(i.tipo || "")}${i.orgao ? " · " + esc(i.orgao) : ""}</span>
-            <div>${i.url ? a(esc(i.url), esc(i.titulo)) : esc(i.titulo)}</div>
-            ${i.ementa ? `<div class="hint">${esc(i.ementa)}</div>` : ""}</div>`).join("")}</div>` : `<p class="hint">Nada publicado nesta esfera neste dia.</p>`}
-      </details>
-    </section>`;
-  };
   return `
     <div class="card edu">
-      <div class="edu-h"><div><h3>📡 Publicações de ${esc(dataBR(coleta?.data || an?.data))}</h3>
-        <div class="hint">${ESFERAS.map(e => `${ESFERA[e]}: ${cont(e)}`).join(" · ")} atos</div></div></div>
-      ${!an ? `<p class="hint" style="margin-top:10px">A análise deste dia ainda não ficou pronta; abaixo, a lista do que foi publicado.</p>` : !an.resumo && an.resumo_geral ? `<p style="margin-top:10px">${esc(an.resumo_geral)}</p>` : ""}
-      <p class="hint" style="margin-top:10px"><b>Tudo o que foi publicado</b> = a lista completa de atos do dia, coletada por programa: inclui nomeações, decisões sobre um caso só (uma empresa, um servidor), autorizações e contratos de órgãos. <b>Destaques</b> = só os atos que mudam regras para a população, empresas ou profissionais; esses a IA lê na íntegra e explica.</p>
+      <div class="edu-h"><div><h3>📡 Publicações de ${esc(dataBR(coleta?.data || A?.data))}</h3>
+        <div class="hint">${ESFERAS.map(e => `${ESFERA[e]}: ${nf0(itens.filter(i => i.esfera === e).length)}`).join(" · ")} publicações</div></div></div>
+      ${!A ? `<p class="hint" style="margin-top:10px">A análise deste dia ainda não ficou pronta; abaixo, a lista do que foi publicado.</p>` : !A.resumo && A.resumo_geral ? `<p style="margin-top:10px">${esc(A.resumo_geral)}</p>` : ""}
+      <p class="hint" style="margin-top:10px"><b>Tudo o que foi publicado</b> = a lista completa do dia, coletada por programa: inclui nomeações, servidores, contratos, licitações e decisões sobre um caso só (uma empresa, um servidor). <b>Destaques</b> = só os atos que mudam regras para a população, empresas ou profissionais; esses a IA lê na íntegra e explica.</p>
+      <p class="hint">Filtros: os destaques se dividem em Fazenda, Saúde e Outros; a lista completa, também em Nomeações, Comissões, Contratos, Empresas e Servidores (um ato pode estar em mais de uma). O que vai para o seu e-mail você escolhe em ⚙ Configurações → Radar de leis.</p>
     </div>
     ${filtros}
     ${vis.map(bloco).join("")}
-    <p class="hint" style="margin-top:10px">Lista: coletada por programa, sem IA, do Diário Oficial da União (Seção 1), do Diário Oficial do RS (sem atos de pessoal, contratos e licitações) e do Diário Oficial de Lajeado. Análise: resumo automático feito por IA, pode conter erros; confira sempre o texto oficial. Não é orientação jurídica.</p>`;
+    <p class="hint" style="margin-top:10px">Lista: coletada por programa, sem IA, do Diário Oficial da União (Seção 1 completa; Seções 2 e 3, de pessoal e contratos, só pelo título e começo do texto), do Diário Oficial do RS e do Diário Oficial de Lajeado. As categorias são dadas automaticamente por palavras-chave e podem errar. Análise: resumo automático feito por IA, pode conter erros; confira sempre o texto oficial. Não é orientação jurídica.</p>`;
 }
 
 async function render() {
@@ -215,13 +249,29 @@ async function render() {
   if (!box.dataset.feito) { box.dataset.feito = "1"; document.getElementById("dirEdu").innerHTML = dirEducacao(); await carregar(); }
   document.getElementById("dirRadar").innerHTML = dirRadar();
 }
+const redesenha = e => { const sec = document.getElementById("dir-s-" + e); if (sec) sec.outerHTML = bloco(e); };
 document.addEventListener("click", e => {
-  const f = e.target.closest("[data-dirf]"); if (f) { filtro = f.dataset.dirf; render(); return; }
+  const f = e.target.closest("[data-dirf]"); if (f) { filtro = f.dataset.dirf; if (filtro !== "todos") st[filtro].aberto = true; render(); return; }
+  const ar = e.target.closest("[data-darea]"); if (ar) { st[ar.dataset.esf].area = ar.dataset.darea; redesenha(ar.dataset.esf); return; }
+  const ct = e.target.closest("[data-dcat]"); if (ct) { const s = st[ct.dataset.esf]; s.cat = ct.dataset.dcat; s.limite = PAGINA; redesenha(ct.dataset.esf); return; }
+  const m = e.target.closest("[data-dmais]"); if (m) { st[m.dataset.dmais].limite += PAGINA; document.getElementById("dir-l-" + m.dataset.dmais).innerHTML = listaHtml(m.dataset.dmais); return; }
   const s = e.target.closest("[data-dsub]");
   if (s) {
     document.querySelectorAll("[data-dsub]").forEach(b => b.setAttribute("aria-selected", b === s));
     document.querySelectorAll("[data-dsub-panel]").forEach(p => p.hidden = p.dataset.dsubPanel !== s.dataset.dsub);
   }
+});
+// the list is drawn only when opened (the federal one has thousands of rows)
+document.addEventListener("toggle", e => {
+  const d = e.target; if (!d.matches?.("[data-desf]")) return;
+  const esf = d.dataset.desf; st[esf].aberto = d.open;
+  if (d.open) document.getElementById("dir-l-" + esf).innerHTML = listaHtml(esf);
+}, true);
+let tBusca;
+document.addEventListener("input", e => {
+  const b = e.target.closest("[data-dbusca]"); if (!b) return;
+  const esf = b.dataset.dbusca; st[esf].busca = b.value; st[esf].limite = PAGINA;
+  clearTimeout(tBusca); tBusca = setTimeout(() => { document.getElementById("dir-l-" + esf).innerHTML = listaHtml(esf); }, 200);
 });
 window.renderDireito = render;
 // the Education tab may already be on "Direito" when this file loads
