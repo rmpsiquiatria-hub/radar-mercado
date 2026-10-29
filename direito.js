@@ -139,44 +139,74 @@ function dirEducacao() {
 }
 
 /* ---------- Radar de leis ---------- */
-const ESFERA = { federal: "🏛️ Federal", estadual: "🧉 RS", municipal: "🏘️ Lajeado" };
+const ESFERA = { federal: "🏛️ Federal", estadual: "🧉 Estadual (RS)", municipal: "🏘️ Municipal (Lajeado)" };
+const ESFERAS = ["federal", "estadual", "municipal"];
 const dataBR = s => s ? new Date(s + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" }) : "";
+const nf1 = v => new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(v);
 let coleta = null, analise = null, filtro = "todos";
 
 async function carregar() {
   const get = u => fetch(u + "?t=" + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null);
   [analise, coleta] = await Promise.all([get("relatorios/leis/ultimo.json"), get("relatorios/leis/coleta.json")]);
 }
+// A tax change: before → after and the change in %, red when it goes up, green when it goes down.
+function impostoHtml(t) {
+  if (!t) return "";
+  const v = typeof t.variacao_pct === "number" ? t.variacao_pct : null;
+  const cor = v == null ? "var(--muted)" : v > 0 ? "var(--neg)" : v < 0 ? "var(--pos)" : "var(--muted)";
+  return `<div class="dir-imp">
+      <div class="hint">💰 ${esc(t.tributo || "Imposto")}</div>
+      <div class="dir-imp-g"><div><span class="hint">Antes</span><b>${esc(t.antes || "não informado")}</b></div><span class="dir-seta">→</span>
+        <div><span class="hint">Agora</span><b>${esc(t.depois || "—")}</b></div>
+        ${v != null ? `<div><span class="hint">Variação</span><b style="color:${cor}">${v > 0 ? "+" : ""}${nf1(v)}%</b></div>` : ""}</div>
+      ${t.obs ? `<div class="hint">${esc(t.obs)}</div>` : ""}
+    </div>`;
+}
+function cardDestaque(d) {
+  return `<article class="card edu">
+    <div class="edu-h"><div><h3 style="font-size:16px">${esc(d.titulo)}</h3><div class="hint">${esc(d.orgao || "")}</div></div>
+      ${d.relevancia === "alta" ? `<span class="mk on">alta</span>` : ""}</div>
+    ${impostoHtml(d.imposto)}
+    <table class="edu-t" style="margin-top:8px">
+      <tr><td>O que muda</td><td>${esc(d.o_que_muda)}</td></tr>
+      ${d.quem_afeta ? `<tr><td>Quem é afetado</td><td>${esc(d.quem_afeta)}</td></tr>` : ""}
+      ${d.vigencia ? `<tr><td>Vigência</td><td>${esc(d.vigencia)}</td></tr>` : ""}
+      ${d.temas?.length ? `<tr><td>Temas</td><td>${d.temas.map(esc).join(", ")}</td></tr>` : ""}
+    </table>
+    ${d.url ? `<p style="margin-top:8px;font-size:14px">🔗 ${a(esc(d.url), "Ler a norma")}</p>` : ""}
+  </article>`;
+}
 function dirRadar() {
-  if (!analise && !coleta) return `<div class="card edu"><p>O radar ainda não rodou. A primeira coleta sai na próxima noite de dia útil e a análise chega por e-mail na manhã seguinte.</p></div>`;
+  if (!analise && !coleta) return `<div class="card edu"><p>O radar ainda não rodou. A primeira coleta sai às 21h e a análise chega por e-mail na manhã seguinte.</p></div>`;
   const an = analise && (!coleta || analise.data === coleta.data) ? analise : null;
-  const dest = an?.destaques || [];
-  const itens = coleta?.itens || [];
+  const itens = coleta?.itens || [], dest = an?.destaques || [];
   const cont = e => itens.filter(i => i.esfera === e).length;
+  const vis = ESFERAS.filter(e => filtro === "todos" || filtro === e);
+  const filtros = `<div class="ftabs dir-f" role="tablist" aria-label="Filtrar por esfera">${["todos", ...ESFERAS].map(f => `<button role="tab" data-dirf="${f}" aria-selected="${f === filtro}">${f === "todos" ? "Todas as esferas" : ESFERA[f]}</button>`).join("")}</div>`;
+  // one block per sphere: its summary, the highlights, then everything published (folded)
+  const bloco = e => {
+    const de = dest.filter(d => d.esfera === e), it = itens.filter(i => i.esfera === e), res = an?.resumo?.[e];
+    return `<section class="dir-esf">
+      <h3 class="dir-h">${ESFERA[e]} <span class="hint">· ${it.length} atos publicados · ${de.length} destaques</span></h3>
+      ${res ? `<div class="card edu"><p>${esc(res)}</p></div>` : ""}
+      ${de.length ? `<h4 class="dir-sub">⭐ Destaques analisados</h4><div class="edu-grid">${de.map(cardDestaque).join("")}</div>` : ""}
+      <details class="dir-tudo"${filtro !== "todos" ? " open" : ""}><summary>📋 Tudo o que foi publicado (${it.length})</summary>
+        ${it.length ? `<div class="card dir-lista">${it.map(i => `
+          <div class="dir-it"><span class="hint">${esc(i.tipo || "")}${i.orgao ? " · " + esc(i.orgao) : ""}</span>
+            <div>${i.url ? a(esc(i.url), esc(i.titulo)) : esc(i.titulo)}</div>
+            ${i.ementa ? `<div class="hint">${esc(i.ementa)}</div>` : ""}</div>`).join("")}</div>` : `<p class="hint">Nada publicado nesta esfera neste dia.</p>`}
+      </details>
+    </section>`;
+  };
   return `
     <div class="card edu">
       <div class="edu-h"><div><h3>📡 Publicações de ${esc(dataBR(coleta?.data || an?.data))}</h3>
-        <div class="hint">${ESFERA.federal}: ${cont("federal")} · ${ESFERA.estadual}: ${cont("estadual")} · ${ESFERA.municipal}: ${cont("municipal")} atos normativos</div></div></div>
-      ${an?.resumo_geral ? `<p style="margin-top:10px">${esc(an.resumo_geral)}</p>` : `<p class="hint" style="margin-top:10px">A análise deste dia ainda não ficou pronta; abaixo, a lista do que foi publicado.</p>`}
+        <div class="hint">${ESFERAS.map(e => `${ESFERA[e]}: ${cont(e)}`).join(" · ")} atos</div></div></div>
+      ${!an ? `<p class="hint" style="margin-top:10px">A análise deste dia ainda não ficou pronta; abaixo, a lista do que foi publicado.</p>` : !an.resumo && an.resumo_geral ? `<p style="margin-top:10px">${esc(an.resumo_geral)}</p>` : ""}
+      <p class="hint" style="margin-top:10px"><b>Tudo o que foi publicado</b> = a lista completa de atos do dia, coletada por programa: inclui nomeações, decisões sobre um caso só (uma empresa, um servidor), autorizações e contratos de órgãos. <b>Destaques</b> = só os atos que mudam regras para a população, empresas ou profissionais; esses a IA lê na íntegra e explica.</p>
     </div>
-    ${dest.length ? `<h3 class="dir-h">⭐ Destaques analisados (${dest.length})</h3><div class="edu-grid">${dest.map(d => `
-      <article class="card edu">
-        <div class="edu-h"><div><h3 style="font-size:16px">${esc(d.titulo)}</h3><div class="hint">${ESFERA[d.esfera] || ""} · ${esc(d.orgao || "")}</div></div>
-          ${d.relevancia === "alta" ? `<span class="mk on">alta</span>` : ""}</div>
-        <table class="edu-t" style="margin-top:8px">
-          <tr><td>O que muda</td><td>${esc(d.o_que_muda)}</td></tr>
-          ${d.quem_afeta ? `<tr><td>Quem é afetado</td><td>${esc(d.quem_afeta)}</td></tr>` : ""}
-          ${d.vigencia ? `<tr><td>Vigência</td><td>${esc(d.vigencia)}</td></tr>` : ""}
-          ${d.temas?.length ? `<tr><td>Temas</td><td>${d.temas.map(esc).join(", ")}</td></tr>` : ""}
-        </table>
-        ${d.url ? `<p style="margin-top:8px;font-size:14px">🔗 ${a(esc(d.url), "Ler a norma")}</p>` : ""}
-      </article>`).join("")}</div>` : ""}
-    ${itens.length ? `<h3 class="dir-h">📋 Tudo o que foi publicado (${itens.length})</h3>
-      <div class="ftabs dir-f" role="tablist">${["todos", "federal", "estadual", "municipal"].map(f => `<button role="tab" data-dirf="${f}" aria-selected="${f === filtro}">${f === "todos" ? "Todos" : ESFERA[f]}</button>`).join("")}</div>
-      <div class="card dir-lista">${itens.filter(i => filtro === "todos" || i.esfera === filtro).map(i => `
-        <div class="dir-it"><span class="hint">${ESFERA[i.esfera]} · ${esc(i.tipo || "")}${i.orgao ? " · " + esc(i.orgao) : ""}</span>
-          <div>${i.url ? a(esc(i.url), esc(i.titulo)) : esc(i.titulo)}</div>
-          ${i.ementa ? `<div class="hint">${esc(i.ementa)}</div>` : ""}</div>`).join("")}</div>` : ""}
+    ${filtros}
+    ${vis.map(bloco).join("")}
     <p class="hint" style="margin-top:10px">Lista: coletada por programa, sem IA, do Diário Oficial da União (Seção 1), do Diário Oficial do RS (sem atos de pessoal, contratos e licitações) e do Diário Oficial de Lajeado. Análise: resumo automático feito por IA, pode conter erros; confira sempre o texto oficial. Não é orientação jurídica.</p>`;
 }
 

@@ -8,7 +8,8 @@ const esfera = id => id.startsWith("dou-") ? "federal" : id.startsWith("rs-") ? 
 const cache = {};
 for (const id of ids) {
   const e = esfera(id);
-  cache[e] ??= await readFile(new URL(`../relatorios/leis/textos/${e}.txt`, import.meta.url), "utf8");
+  // a Windows checkout turns the line ends into CRLF
+  cache[e] ??= (await readFile(new URL(`../relatorios/leis/textos/${e}.txt`, import.meta.url), "utf8")).replace(/\r\n/g, "\n");
   const i = cache[e].indexOf(`=== ${id} ===\n`);
   if (i < 0) { console.log(`=== ${id} === (não encontrado)\n`); continue; }
   const fim = cache[e].indexOf("\n=== ", i + 5);

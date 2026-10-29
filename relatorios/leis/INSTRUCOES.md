@@ -1,6 +1,6 @@
 # Radar de leis: instruções da análise diária
 
-Você vai analisar as normas publicadas num dia no **Diário Oficial da União (Seção 1)**, no **Diário Oficial do Rio Grande do Sul** e no **Diário Oficial de Lajeado (RS)**. Elas já foram baixadas por um programa (`scripts/leis-coleta.mjs`). **Não use a internet**: tudo o que você precisa está no repositório.
+Você vai analisar as normas publicadas num dia no **Diário Oficial da União (Seção 1)**, no **Diário Oficial do Rio Grande do Sul** e no **Diário Oficial de Lajeado (RS)**. Elas já foram baixadas por um programa (`scripts/leis-coleta.mjs`). Tudo o que você precisa está no repositório. **A internet só pode ser usada para uma coisa:** descobrir o valor anterior de um imposto que mudou (veja o Passo 4).
 
 O leitor é uma pessoa leiga em Direito, que mora em Lajeado (RS). Ele quer saber, em linguagem simples, **o que mudou nas regras** e se isso o afeta. A abrangência é total e todos os temas interessam (saúde, tributos, trabalho, trânsito, educação, meio ambiente, economia, previdência, consumidor, servidores…).
 
@@ -36,7 +36,11 @@ Leia em lotes de até 10 ids. Se o texto for longo, concentre-se na ementa, nos 
 {
   "data": "AAAA-MM-DD (o mesmo da coleta)",
   "gerado_em": "data e hora ISO",
-  "resumo_geral": "3 a 5 frases: o que de mais importante saiu no dia, nas três esferas.",
+  "resumo": {
+    "federal": "2 a 4 frases sobre o que de mais importante saiu no Diário Oficial da União.",
+    "estadual": "2 a 4 frases sobre o Rio Grande do Sul.",
+    "municipal": "1 a 3 frases sobre Lajeado (ou: 'Não houve publicação em Lajeado neste dia.')"
+  },
   "destaques": [
     {
       "id": "id exato da triagem (ex.: dou-740643110, rs-1498861, laj-2677-2)",
@@ -44,7 +48,14 @@ Leia em lotes de até 10 ids. Se o texto for longo, concentre-se na ementa, nos 
       "temas": ["saúde", "tributos"],
       "o_que_muda": "1 a 3 frases simples. Diga a regra nova, não repita a ementa.",
       "quem_afeta": "quem precisa prestar atenção (ex.: médicos, empresas do Simples, motoristas de Lajeado).",
-      "vigencia": "quando passa a valer (ex.: na publicação; em 90 dias; 1º/01/2027). Vazio se o texto não disser."
+      "vigencia": "quando passa a valer (ex.: na publicação; em 90 dias; 1º/01/2027). Vazio se o texto não disser.",
+      "imposto": {
+        "tributo": "só quando a norma muda o valor de um imposto, taxa ou contribuição (ex.: ICMS sobre a gasolina)",
+        "antes": "(exemplo) R$ 1,00 por litro",
+        "depois": "(exemplo) R$ 1,10 por litro",
+        "variacao_pct": 10.0,
+        "obs": "de onde veio o valor anterior (norma e site consultado) e qualquer ressalva"
+      }
     }
   ],
   "demais": {
@@ -61,8 +72,18 @@ Regras:
 - **Relevância alta**: lei, MP, decreto ou norma que afeta muita gente ou o bolso (impostos, salário, benefícios, saúde, trânsito), e qualquer coisa que afete médicos ou serviços de saúde. O resto é média.
 - Ordene: primeiro alta, depois média; dentro disso, federal, estadual, municipal.
 - Escreva em português do Brasil, frases curtas, sem juridiquês. Não dê opinião política nem conselho jurídico: descreva o que a norma diz.
-- Se uma fonte falhou (veja `fontes` na coleta), diga isso no `resumo_geral`.
-- Num dia sem destaques, deixe `destaques` vazio e explique no `resumo_geral`.
+- Se uma fonte falhou (veja `fontes` na coleta), diga isso no `resumo` daquela esfera.
+- Num dia sem destaques, deixe `destaques` vazio e explique no `resumo`.
+
+### Impostos: sempre "antes → depois → %"
+
+Quando um destaque **muda o valor** de um imposto, taxa, contribuição ou tarifa pública (alíquota, valor fixo, base de cálculo, isenção que acaba ou começa), inclua o campo `imposto`:
+
+- `depois`: o valor novo, como está no texto.
+- `antes`: o valor que valia até agora. Procure primeiro no próprio texto (às vezes ele diz "de X para Y"). Se não estiver lá, **pesquise na internet** (WebSearch / WebFetch) em fontes oficiais ou jornalísticas, e diga a fonte em `obs`. Se as fontes divergirem ou você não tiver certeza, escreva o valor mais provável seguido de "(não confirmado)" e explique em `obs`. **Nunca invente.** Se não achar, use `"antes": "não encontrado"` e deixe `variacao_pct` de fora.
+- `variacao_pct`: (depois ÷ antes − 1) × 100, com 1 casa decimal (número, positivo se aumentou, negativo se diminuiu). Para alíquotas em %, é a variação da própria alíquota (ex.: de 17% para 19% = +11,8%); diga também os pontos percentuais em `obs`.
+- Em `o_que_muda`, diga em palavras se o imposto **aumentou ou diminuiu** e para quem.
+- Normas que só mudam prazos ou procedimentos de um imposto (sem mudar o valor) não levam o campo `imposto`.
 
 ## Passo 5: validar e publicar
 

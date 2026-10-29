@@ -14,17 +14,28 @@ const ok = an && an.data === col.data;
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const dataBR = (s, o) => new Date(s + "T12:00:00").toLocaleDateString("pt-BR", o);
 const MUTED = "#5d6b76", LINE = "#e3e8ec", NAVY = "#1e3a8a";
-const ESF = { federal: "🏛️ Federal", estadual: "🧉 Rio Grande do Sul", municipal: "🏘️ Lajeado" };
+const ESF = { federal: "🏛️ Federal", estadual: "🧉 Estadual (RS)", municipal: "🏘️ Municipal (Lajeado)" };
 const h2 = t => `<h2 style="font-size:17px;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid ${LINE}">${t}</h2>`;
 const hint = t => `<p style="margin:0 0 8px;color:${MUTED};font-size:13px">${t}</p>`;
 const cont = e => col.itens.filter(i => i.esfera === e).length;
 const falhas = Object.entries(col.fontes).filter(([, f]) => !f.ok).map(([e, f]) => `${ESF[e]}: ${esc(f.erro)}`);
 
+// Tax change: before → after and the change in %.
+function imposto(t) {
+  if (!t) return "";
+  const v = typeof t.variacao_pct === "number" ? t.variacao_pct : null, cor = v > 0 ? "#c9302c" : v < 0 ? "#0a8a4a" : MUTED;
+  const cel = (k, x, st = "") => `<td style="padding:2px 14px 2px 0;vertical-align:bottom"><div style="font-size:11px;color:${MUTED}">${k}</div><div style="font-weight:700;font-size:14px;${st}">${x}</div></td>`;
+  return `<div style="background:#f6f8fa;border:1px solid ${LINE};border-radius:6px;padding:6px 10px;margin:0 0 6px">
+    <div style="font-size:12px;color:${MUTED}">💰 ${esc(t.tributo)}</div>
+    <table cellpadding="0" cellspacing="0"><tr>${cel("Antes", esc(t.antes))}${cel("Agora", esc(t.depois))}${v != null ? cel("Variação", (v > 0 ? "+" : "") + v.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%", "color:" + cor) : ""}</tr></table>
+    ${t.obs ? `<div style="font-size:12px;color:${MUTED}">${esc(t.obs)}</div>` : ""}</div>`;
+}
 function card(d) {
   const row = (k, v) => v ? `<tr><td style="padding:3px 10px 3px 0;color:${MUTED};font-size:13px;vertical-align:top;width:110px">${k}</td><td style="padding:3px 0;font-size:14px">${esc(v)}</td></tr>` : "";
   return `<div style="border:1px solid ${LINE};border-left:4px solid ${d.relevancia === "alta" ? "#c9302c" : "#b26b00"};border-radius:8px;padding:10px 12px;margin:0 0 10px">
-    <div style="font-size:12px;color:${MUTED}">${ESF[d.esfera]} · ${esc(d.orgao)}${d.temas?.length ? " · " + d.temas.map(esc).join(", ") : ""}</div>
+    <div style="font-size:12px;color:${MUTED}">${esc(d.orgao)}${d.temas?.length ? " · " + d.temas.map(esc).join(", ") : ""}</div>
     <div style="font-weight:700;font-size:15px;margin:2px 0 6px"><a href="${esc(d.url)}" style="color:${NAVY};text-decoration:none">${esc(d.titulo)}</a></div>
+    ${imposto(d.imposto)}
     <table cellpadding="0" cellspacing="0" style="border-collapse:collapse">${row("O que muda", d.o_que_muda)}${row("Quem é afetado", d.quem_afeta)}${row("Vigência", d.vigencia)}</table></div>`;
 }
 
@@ -32,13 +43,14 @@ let corpo, subject;
 if (ok) {
   const alta = an.destaques.filter(d => d.relevancia === "alta"), media = an.destaques.filter(d => d.relevancia !== "alta");
   subject = `Radar de leis · ${dataBR(col.data, { day: "2-digit", month: "2-digit" })} · ${an.destaques.length} destaques${alta.length ? ` (${alta.length} importantes)` : ""}`;
-  corpo = `
-  <div style="background:#eef2ff;border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.5">${esc(an.resumo_geral)}</div>
-  ${alta.length ? h2(`🔴 Mais importantes (${alta.length})`) + alta.map(card).join("") : ""}
-  ${media.length ? h2(`🟡 Outras mudanças (${media.length})`) + media.map(card).join("") : ""}
-  ${!an.destaques.length ? hint("Nenhuma norma com efeito geral neste dia.") : ""}
-  ${h2("📋 O restante do dia")}
-  ${["federal", "estadual", "municipal"].filter(e => an.demais?.[e]).map(e => `<p style="font-size:14px;margin:0 0 6px"><b>${ESF[e]}</b> (${cont(e)} atos): ${esc(an.demais[e])}</p>`).join("")}`;
+  // one section per sphere: summary, highlights (most important first), then the rest of the day
+  corpo = ["federal", "estadual", "municipal"].map(e => {
+    const de = an.destaques.filter(d => d.esfera === e);
+    return h2(`${ESF[e]} <span style="font-weight:400;color:${MUTED};font-size:13px">· ${cont(e)} atos · ${de.length} destaques</span>`)
+      + `<div style="background:#eef2ff;border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.5;margin:0 0 10px">${esc(an.resumo?.[e] || "")}</div>`
+      + de.map(card).join("")
+      + (an.demais?.[e] ? `<p style="font-size:13px;color:${MUTED};margin:4px 0 0"><b>O restante:</b> ${esc(an.demais[e])}</p>` : "");
+  }).join("");
 } else {
   // No analysis: the main acts by type, straight from the collection.
   const PRINC = /^(lei|medida provis|decreto|emenda|instru[çc][ãa]o normativa|resolu|portaria (interministerial|conjunta|normativa)|ato normativo)/i;
@@ -60,7 +72,7 @@ const html = `<!doctype html><html><body style="margin:0;background:#f4f6f8;font
   <p style="margin-top:22px;font-size:14px">Lista completa e explicação de cada fonte: <a href="${esc(cfg.site)}" style="color:${NAVY}">Radar do Mercado → Educação → Direito</a></p>
   <p style="font-size:12px;color:#8c99a3;margin-top:18px">Coleta automática dos diários oficiais, sem IA. Resumos feitos por IA a partir do texto publicado: podem conter erros, confira sempre o link oficial. Não é orientação jurídica.</p>
 </div></body></html>`;
-const text = [subject, "", ok ? an.resumo_geral : "A análise deste dia não ficou pronta; veja a lista no site.", "",
+const text = [subject, "", ok ? ["federal", "estadual", "municipal"].map(e => `${ESF[e]}: ${an.resumo?.[e] || ""}`).join("\n") : "A análise deste dia não ficou pronta; veja a lista no site.", "",
   ...(ok ? an.destaques.map(d => `• [${d.relevancia}] ${d.titulo} — ${d.o_que_muda} ${d.url}`) : []), "", `Site: ${cfg.site}`].join("\n");
 
 const args = process.argv.slice(2);

@@ -9,7 +9,7 @@ const an = JSON.parse(await readFile(new URL("ultimo.json", dir), "utf8"));
 const porId = new Map(col.itens.map(i => [i.id, i]));
 const erros = [];
 if (an.data !== col.data) erros.push(`data ${an.data} diferente da coleta (${col.data})`);
-if (typeof an.resumo_geral !== "string" || an.resumo_geral.length < 20) erros.push("resumo_geral vazio ou curto demais");
+for (const e of ["federal", "estadual", "municipal"]) if (typeof an.resumo?.[e] !== "string" || an.resumo[e].length < 10) erros.push(`resumo.${e} vazio ou curto demais`);
 if (!Array.isArray(an.destaques)) erros.push("destaques precisa ser uma lista");
 const vistos = new Set();
 for (const [k, d] of (an.destaques || []).entries()) {
@@ -19,6 +19,12 @@ for (const [k, d] of (an.destaques || []).entries()) {
   vistos.add(d.id);
   if (!["alta", "media"].includes(d.relevancia)) erros.push(`${d.id}: relevancia deve ser "alta" ou "media"`);
   if (!d.o_que_muda || d.o_que_muda.length < 15) erros.push(`${d.id}: o_que_muda vazio`);
+  if (d.imposto) {
+    const t = d.imposto;
+    if (!t.tributo || !t.depois || !t.antes) erros.push(`${d.id}: imposto precisa de tributo, antes e depois`);
+    if (t.variacao_pct != null && typeof t.variacao_pct !== "number") erros.push(`${d.id}: imposto.variacao_pct deve ser número`);
+    if (/exemplo/i.test(`${t.antes} ${t.depois}`)) erros.push(`${d.id}: imposto ainda com os valores de exemplo`);
+  }
   Object.assign(d, { esfera: it.esfera, titulo: it.titulo, orgao: it.unidade || it.orgao, tipo: it.tipo, url: it.url, fonte: it.fonte });
   d.temas = Array.isArray(d.temas) ? d.temas : [];
 }
