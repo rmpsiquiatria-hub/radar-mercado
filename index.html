@@ -1641,8 +1641,6 @@ function drawWin(w) {
     xh.setAttribute("x1", x); xh.setAttribute("x2", x); xh.setAttribute("visibility", "visible");
     const cur = c.q.currency, ty = c.q.type, mv = v => c.q.fmt ? c.q.fmt(v) : money(v, cur, ty);
     let html = `<div class="tt-d">${fmtT(b.t)}</div>`;
-    const pr = presidenteEm(b.t); if (pr && r.k !== "1D" && r.k !== "5D") html += `<div class="hint">Presidente: ${esc(pr.nome)} (${esc(pr.partido)})</div>`;
-    const evt = evH ? eventoEm(b.t) : null; if (evt) html += `<div class="hint" style="color:#b45309">Evento: ${esc(evt.nome)} (${dBR(evt.ini)} a ${evt.fim ? dBR(evt.fim) : "hoje"})</div>`;
     html += candle ? `<div class="num">A ${mv(b.o)} · M ${mv(b.h)}<br>m ${mv(b.l)} · F <b>${mv(b.c)}</b></div>` : `<div class="num"><b>${mv(b.c)}</b></div>`;
     if (w.ind.mm) html += `<div class="num tt-ma">${MA_DEF.map(([k, l, col]) => { const v = ma[k][from + i]; return v == null ? "" : `<span style="color:${col}">${l} ${fmt(v)}</span>`; }).filter(Boolean).join(" ")}</div>`;
     if (w.ind.ifr && rsiS[from + i] != null) html += `<div class="num">IFR ${nf(0).format(rsiS[from + i])}</div>`;
