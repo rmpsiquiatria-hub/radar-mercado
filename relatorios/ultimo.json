@@ -1,32 +1,39 @@
 {
- "data": "2026-10-28",
- "gerado_em": "2026-10-28T15:16:24.415Z",
- "pesquisa_data": "2026-10-28",
- "resumo_mercado": "Segundo Money Times e outras fontes, o Ibovespa fechou em queda de 0,51%, aos 175.710 pontos, pressionado por Petrobras e pelos ajustes após a reeleição de Lula; o dólar recuou a R$ 5,349. Em Nova York, S&P 500 subiu 0,60% (7.722,60) e Nasdaq 1,18% (26.477,81). As fontes apontam a decisão de juros do Fed como destaque desta quarta (28).",
+ "data": "2026-10-29",
+ "gerado_em": "2026-10-29T09:13:02.798Z",
+ "pesquisa_data": "2026-10-29",
+ "indicadores_data": "2026-10-28",
+ "resumo_mercado": "Segundo as fontes, o Ibovespa fechou em queda de 2,68%, a 171.006 pontos, o terceiro pregão seguido de perdas, com cautela sobre a política fiscal. O dólar comercial encerrou a R$ 5,34 (-0,19%), após tocar cerca de R$ 5,40. Em Wall Street, S&P 500 (+0,28%), Nasdaq (+0,27%) e Dow subiram após o Fed manter os juros em 3,75%-4%, com balanços de big techs em foco.",
  "fontes_mercado": [
   {
-   "nome": "Money Times",
-   "titulo": "Ibovespa recua com pressão de 'pesos-pesados' após choque eleitoral; dólar cai",
-   "url": "https://www.moneytimes.com.br/ibovespa-27-10-26-lils/",
-   "data": "2026-10-27"
+   "nome": "Boca (Agência Brasil)",
+   "titulo": "Ibovespa fecha em queda de 2,68%, enquanto dólar cai para R$ 5,34",
+   "url": "https://boca.com.br/economia/ibovespa-fecha-em-queda-dolar-cai",
+   "data": "2026-10-28"
   },
   {
-   "nome": "Sou Brasília",
-   "titulo": "Dólar fecha a R$ 5,349 e Ibovespa cai 0,51% em 27/10",
-   "url": "https://soubrasilia.com/dolar-fecha-r-5-349-ibovespa-175-mil-pontos-27-outubro-2026/",
-   "data": "2026-10-27"
+   "nome": "Tribuna PR",
+   "titulo": "Ibovespa cai 2,68% e renova mínima em três pregões seguidos",
+   "url": "https://www.tribunapr.com.br/noticias/economia/ibovespa-cai-268-e-renova-minima-em-tres-pregoes-seguidos/amp/",
+   "data": "2026-10-28"
   },
   {
-   "nome": "DGABC",
-   "titulo": "Fechamento do mercado financeiro - 27/10/2026",
-   "url": "https://www.dgabc.com.br/Noticia/4365379/fechamento-do-mercado-financeiro",
-   "data": "2026-10-27"
+   "nome": "The Motley Fool",
+   "titulo": "Stock Market Today, Oct. 28: Markets Edge Higher as Fed Holds Rates Steady",
+   "url": "https://www.fool.com/coverage/stock-market-today/2026/10/28/stock-market-today-oct-28-markets-edge-higher-as-fed-holds-rates-steady/",
+   "data": "2026-10-28"
   },
   {
-   "nome": "Minhas Economias",
-   "titulo": "Ibovespa fecha em queda após tombo histórico na véspera",
-   "url": "https://minhaseconomias.com.br/blog/planejamento-financeiro/ibovespa-fecha-em-queda-apos-tombo-historico-na-vespera",
-   "data": "2026-10-27"
+   "nome": "Honolulu Star-Advertiser",
+   "titulo": "Wall Street rises as Fed holds rates steady, earnings in focus",
+   "url": "https://staradvertiser.com/2026/10/28/breaking-news/wall-street-rises-as-fed-holds-rates-steady-earnings-in-focus",
+   "data": "2026-10-28"
+  },
+  {
+   "nome": "CNBC",
+   "titulo": "Fed rate decision October 2026",
+   "url": "https://cnbc.com/2026/10/28/fed-meeting-today-live-updates.html",
+   "data": "2026-10-28"
   }
  ],
  "tecnica_data": "2026-10-28",
@@ -217,14 +224,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "dividendos",
-     "descricao": "BTG estima dividendos de US$ 3,8 a 4,2 bilhões no 3T26, acima do consenso de US$ 3,2 bilhões.",
-     "fonte": "Suno Notícias",
-     "data": "2026-10-21"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Money Times",
@@ -414,14 +414,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "outro",
-     "descricao": "UBS BB cortou o preço-alvo de VALE3 de R$ 77 para R$ 73 (segundo corte em um mês) e manteve recomendação neutra, citando risco de revisões negativas em minério, custos e volumes.",
-     "fonte": "BPMoney",
-     "data": "2026-10-21"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "BPMoney",
@@ -1277,15 +1270,28 @@
      ]
     }
    },
-   "resumo": "A cobertura encontrada sobre a Sabesp traz preços-alvo e recomendações muito divergentes e quase sempre sem data clara (por exemplo, XP com compra e alvo de R$ 110 em reportagem de agosto de 2026, e relatos conflitantes sobre UBS BB), por isso o consenso foi deixado zerado. Os textos destacam a privatização, o ciclo de investimentos e a revisão tarifária como pontos centrais. Não foi encontrada nenhuma mudança nos últimos 7 dias.",
-   "sentimento": "neutro",
+   "resumo": "O JPMorgan elevou o preço-alvo de R$ 34 para R$ 35 e manteve overweight (compra) em 08/09/2026, segundo o Money Times, e o Itaú BBA reduziu o alvo de fim de 2026 de R$ 34 para R$ 33,10, mantendo compra, após o 2T26 (lucro líquido de R$ 1,46 bilhão, com custos mais altos e execução de investimentos mais lenta, segundo as fontes). Há relatos conflitantes sobre outras casas e alvos antigos sem ajuste ao desdobramento de 1 para 5, por isso só entram no consenso as casas acima. Nenhuma mudança nos últimos 7 dias; o 3T26 não apareceu nas buscas.",
+   "sentimento": "positivo",
    "consenso": {
-    "compra": 0,
+    "compra": 2,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": null,
+    "preco_alvo_medio": 34.05,
     "moeda": "BRL",
-    "casas": []
+    "casas": [
+     {
+      "nome": "JPMorgan",
+      "recomendacao": "compra",
+      "preco_alvo": 35,
+      "data": "2026-09-08"
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "compra",
+      "preco_alvo": 33.1,
+      "data": null
+     }
+    ]
    },
    "mudancas": [],
    "fontes": [
@@ -1306,9 +1312,15 @@
      "titulo": "Sabesp (SBSP3): XP aumenta (bastante) o preço-alvo e reforça recomendação de compra",
      "url": "https://www.suno.com.br/noticias/?p=529544",
      "data": null
+    },
+    {
+     "nome": "Money Times",
+     "titulo": "Sabesp (SBSP3): JP Morgan eleva preço-alvo após conversas com CFO",
+     "url": "https://www.moneytimes.com.br/sabesp-sbsp3-jp-morgan-eleva-preco-alvo-apos-conversas-com-cfo-veja-o-potencial-lmrs/",
+     "data": "2026-09-08"
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-29"
   },
   {
    "ticker": "BBDC4",
@@ -2485,14 +2497,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Lucro do 3T26 de cerca de R$ 1,67 bi (+0,9% a/a), abaixo do esperado; margem Ebitda de 21,6%; ações caem após o balanço.",
-     "fonte": "Seu Dinheiro",
-     "data": "2026-10-21"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Seu Dinheiro",
@@ -4484,7 +4489,7 @@
      ]
     }
    },
-   "resumo": "Safra (21/06/2026) elevou o preço-alvo de R$ 25,50 para R$ 30 e manteve compra, apoiado em preços do aço mais favoráveis nos EUA; a XP reiterou compra em agosto com alvo de R$ 30 para o fim de 2027 e o BTG elevou para compra em abril com alvo de R$ 28. O 2T26 trouxe Ebitda ajustado de R$ 3,4 bilhões (+16% no trimestre) e lucro ajustado de R$ 1,5 bilhão. Safra mostra cautela com o mercado brasileiro. O 3T25 foi divulgado em 30/10, sugerindo balanço no fim de outubro (data de 2026 não confirmada). Após o 2T26 (Ebitda de R$ 3,4 bilhões, acima das projeções segundo o JPMorgan), JPMorgan reiterou compra com alvo de R$ 32 e Itaú BBA manteve compra com alvo de R$ 27, segundo o InfoMoney.",
+   "resumo": "A Gerdau divulgou o 3T26 em 26/10/2026: lucro líquido de cerca de R$ 1,52 bilhão (+39,7% em um ano, segundo o Investidor10), receita líquida de R$ 18,7 bilhões, Ebitda ajustado de R$ 3,8 bilhões e dívida líquida/Ebitda de 0,58x (Visno Invest). Foram anunciados dividendos de R$ 0,34 por ação, com data-com em 10/11 e pagamento em 15/12. Safra (compra, alvo R$ 30), XP (R$ 30), BTG (R$ 28), JPMorgan (R$ 32) e Itaú BBA (R$ 27) aparecem com compra em relatos anteriores ao 3T26; as datas de várias revisões não foram confirmadas.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 5,
@@ -4525,7 +4530,20 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Gerdau reportou lucro líquido de cerca de R$ 1,52 bilhão no 3T26 e Ebitda ajustado de R$ 3,8 bilhões.",
+     "fonte": "Investidor10",
+     "data": "2026-10-26"
+    },
+    {
+     "tipo": "dividendos",
+     "descricao": "Dividendos de R$ 0,34 por ação (cerca de R$ 667 milhões), data-com 10/11/2026 e pagamento em 15/12/2026, segundo o Investidor10.",
+     "fonte": "Investidor10",
+     "data": "2026-10-26"
+    }
+   ],
    "fontes": [
     {
      "nome": "Money Times",
@@ -4550,9 +4568,21 @@
      "titulo": "Gerdau (GGBR4) chega a cair forte, mas vira para alta com 2T superando projeções",
      "url": "https://www.infomoney.com.br/mercados/gerdau-ggbr4-supera-expectativas-no-2t-mas-acao-recua-veja-o-que-analistas-dizem/amp/",
      "data": null
+    },
+    {
+     "nome": "Investidor10",
+     "titulo": "GGBR4 e GOAU4 pagam dividendos ainda em 2026 e Gerdau mostra resultados do 3T26",
+     "url": "https://investidor10.com.br/noticias/ggbr4-e-goau4-pagam-dividendos-ainda-em-2026-e-gerdau-mostra-resultados-do-3t26-123529/",
+     "data": "2026-10-26"
+    },
+    {
+     "nome": "Visno Invest",
+     "titulo": "Gerdau (GGBR4) registra lucro ajustado de R$ 1,5 bi no 3T26",
+     "url": "https://visnoinvest.com.br/news/15906/gerdau-ggbr4-registra-lucro-ajustado-de-r-15-bi-no-3t26",
+     "data": "2026-10-26"
     }
    ],
-   "atualizado_em": "2026-10-27"
+   "atualizado_em": "2026-10-29"
   },
   {
    "ticker": "RENT3",
@@ -5496,14 +5526,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "fato_relevante",
-     "descricao": "Cosan (CSAN3) não avançou com a planejada venda de sua participação na Rumo e segue avaliando alternativas para otimizar a estrutura de capital.",
-     "fonte": "Investidor10",
-     "data": "2026-10-21"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "BTG Pactual",
@@ -12474,14 +12497,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "outro",
-     "descricao": "BTG Pactual prevê um 3º trimestre mais desafiador para o setor de educação, com matrículas presenciais mais fracas, menor poder de preço e provisões maiores.",
-     "fonte": "BTG Pactual",
-     "data": "2026-10-21"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "BTG Pactual",
@@ -14048,14 +14064,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "outro",
-     "descricao": "BTG Pactual prevê um 3º trimestre mais desafiador para a educação, com matrículas presenciais mais fracas e provisões maiores; vê digital e medicina como segmentos mais resilientes.",
-     "fonte": "BTG Pactual",
-     "data": "2026-10-21"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "BTG Pactual",
@@ -15143,14 +15152,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Prévia operacional do 3T26: receita total de R$ 1,59 bilhão (+4,3% a/a) e receita de locação de R$ 1,15 bilhão (+11,5%), números não auditados.",
-     "fonte": "BP Money",
-     "data": "2026-10-21"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "BP Money",
@@ -16043,10 +16045,10 @@
      ]
     }
    },
-   "resumo": "A Bernstein elevou em 19/10/2026 o preço-alvo de US$ 660 para US$ 662 e manteve Outperform antes do balanço do 1º trimestre fiscal de 2027, previsto para 28/10 após o fechamento (lucro esperado de cerca de US$ 4,72 por ação e receita de cerca de US$ 90,4 bilhões, segundo a Fiscal AI). Dados de agosto do Investing.com mostram preço-alvo médio de US$ 569,45, com 52 analistas em compra e nenhum em venda; a Koyfin cita 53 de 56 em compra. A Wedbush aparece com Outperform e alvo de US$ 625 em texto de data incerta.",
+   "resumo": "A Bernstein elevou em 19/10/2026 o preço-alvo de US$ 660 para US$ 662 e manteve Outperform antes do balanço do 1º trimestre fiscal de 2027, previsto para 28/10 após o fechamento (lucro esperado de cerca de US$ 4,72 por ação e receita de cerca de US$ 90,4 bilhões, segundo a Fiscal AI). Dados de agosto do Investing.com mostram preço-alvo médio de US$ 569,45, com 52 analistas em compra e nenhum em venda; a Koyfin cita 53 de 56 em compra. A Wedbush aparece com Outperform e alvo de US$ 625 em texto de data incerta. Segundo o Stocktwits, Oppenheimer elevou o alvo de US$ 570 para US$ 625 (Outperform) e a Truist de US$ 575 para US$ 600 (Buy) antes do balanço; os resultados efetivos do trimestre não foram localizados.",
    "sentimento": "positivo",
    "consenso": {
-    "compra": 2,
+    "compra": 4,
     "neutro": 0,
     "venda": 0,
     "preco_alvo_medio": 569.45,
@@ -16062,6 +16064,18 @@
       "nome": "Wedbush",
       "recomendacao": "compra",
       "preco_alvo": 625,
+      "data": null
+     },
+     {
+      "nome": "Oppenheimer",
+      "recomendacao": "compra",
+      "preco_alvo": 625,
+      "data": null
+     },
+     {
+      "nome": "Truist",
+      "recomendacao": "compra",
+      "preco_alvo": 600,
       "data": null
      }
     ]
@@ -16085,9 +16099,15 @@
      "titulo": "Analyst Ratings for Microsoft (MSFT)",
      "url": "https://www.streetinsider.com/rating_history.php?q=msft",
      "data": null
+    },
+    {
+     "nome": "Stocktwits",
+     "titulo": "MSFT Stock Gets Wall Street's Attention Ahead Of Earnings: Truist, Oppenheimer Raise Targets On Azure Growth Outlook",
+     "url": "https://stocktwits.com/news-articles/markets/equity/msft-stock-gets-wall-street-s-attention-ahead-of-earnings-truist-oppenheimer-raise-targets-on-azure-growth-outlook/cZU3d4BRByM",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-29"
   }
  ]
 }
