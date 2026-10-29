@@ -8,6 +8,10 @@ name: Radar de leis - coleta
 on:
   schedule:
     - cron: "0 0 * * 2-6"
+  # also when the collector itself changes, to check it from GitHub's servers
+  push:
+    branches: [main]
+    paths: [scripts/leis-coleta.mjs, .github/workflows/leis-coleta.yml]
   workflow_dispatch:
     inputs:
       dia:
