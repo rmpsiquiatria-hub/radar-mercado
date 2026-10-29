@@ -1,6 +1,6 @@
 # Radar de leis, step 3: sends the e-mail for the day collected in relatorios/leis/coleta.json.
 # - When the Claude routine pushes the analysis (relatorios/leis/ultimo.json), it sends right away.
-# - At 08:00 (Brasília, Tue–Sat) a scheduled run sends the plain list if nothing went out for that
+# - At 08:00 (Brasília, every day) a scheduled run sends the plain list if nothing went out for that
 #   day (the routine failed or GitHub delayed the collection).
 # - "Run workflow" by hand sends immediately.
 # relatorios/leis/email-enviado.txt records the last collection day e-mailed.
@@ -11,7 +11,7 @@ on:
     branches: [main]
     paths: [relatorios/leis/ultimo.json]
   schedule:
-    - cron: "0 11 * * 2-6"
+    - cron: "0 11 * * *"
   workflow_dispatch:
 
 permissions:

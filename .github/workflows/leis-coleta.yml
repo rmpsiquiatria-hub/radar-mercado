@@ -1,5 +1,6 @@
-# Radar de leis, step 1 — weekdays 21:00 (Brasília): lists the day's acts in the federal, RS and
-# Lajeado gazettes (scripts/leis-coleta.mjs). The Claude routine analyses them at 05:00 and the
+# Radar de leis, step 1 — every day 21:00 (Brasília): lists the day's acts in the federal, RS and
+# Lajeado gazettes (scripts/leis-coleta.mjs). Days with nothing published (most weekends and
+# holidays) leave the files as they were. The Claude routine analyses them at 05:00 and the
 # e-mail goes out on its push (leis-email.yml).
 # The day collected is "now minus 9 hours" in Brasília, so a run GitHub delays past midnight still
 # picks the right day.
@@ -7,7 +8,7 @@ name: Radar de leis - coleta
 
 on:
   schedule:
-    - cron: "0 0 * * 2-6"
+    - cron: "0 0 * * *"
   # also when the collector itself changes, to check it from GitHub's servers
   push:
     branches: [main]

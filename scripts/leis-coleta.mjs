@@ -165,6 +165,9 @@ for (const [nome, fn] of [["federal", dou], ["estadual", doeRS], ["municipal", l
     console.log(nome, lst.length);
   } catch (e) { fontes[nome] = { ok: false, erro: String(e.message || e) }; console.error(nome, "falhou:", e.message || e); }
 }
+// Weekends and holidays usually have nothing: keep the previous day's files, so the routine and the
+// e-mail find a day already done and stop.
+if (!itens.length) { console.log(`coleta de ${dia}: nada publicado; arquivos anteriores mantidos`); process.exit(0); }
 for (const esf of ["federal", "estadual", "municipal"]) {
   const t = itens.filter(i => i.esfera === esf).map(i => `=== ${i.id} ===\n${i.titulo}\n${(i.texto || i.ementa || "").slice(0, MAX_TEXTO)}${(i.texto || "").length > MAX_TEXTO ? "\n[… texto cortado; íntegra no link]" : ""}\n`).join("\n");
   await writeFile(new URL(`textos/${esf}.txt`, dir), t);
