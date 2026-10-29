@@ -469,6 +469,15 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .ftabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .ftabs button { border: 1px solid var(--line); background: var(--panel); border-radius: 10px 10px 0 0; border-bottom-width: 2px; padding: 8px 14px; cursor: pointer; font-weight: 600; color: var(--muted); }
 .ftabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); background: var(--panel-2); }
+.dir-h { font-size: 17px; margin: 22px 0 8px; }
+.dir-hier { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
+.dir-hier li { margin-left: calc(var(--i) * 18px); background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 8px; padding: 8px 12px; display: grid; gap: 2px; font-size: 14px; }
+.dir-hier li span { color: var(--muted); font-size: 13px; line-height: 1.45; }
+@media (max-width: 640px) { .dir-hier li { margin-left: calc(var(--i) * 6px); } }
+.dir-lista { padding: 4px 14px; max-height: 70vh; overflow: auto; }
+.dir-it { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; display: grid; gap: 2px; }
+.dir-it:last-child { border-bottom: 0; }
+.dir-it a, .edu a { color: var(--accent); }
 .stabs { margin: 0 0 10px; }
 .ideb3 { display: flex; gap: 10px; margin: 6px 0 2px; }
 .ideb3 span { display: flex; flex-direction: column; }
@@ -570,6 +579,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <button role="tab" data-esec="simulacao">🎚️ Simulação</button>
       <button role="tab" data-esec="fundamentos">📊 Análise fundamentalista</button>
       <button role="tab" data-esec="candles">🕯️ Candlesticks</button>
+      <button role="tab" data-esec="direito">⚖️ Direito</button>
     </div>
     <div data-esec-panel="mercados">
       <p class="note">O que significa cada índice, moeda e criptomoeda do topo da tela e quando cada mercado funciona. <b>Horários de Brasília.</b> O selo "aberto/fechado" é ao vivo. Feriados podem fechar os mercados (consulte o calendário em b3.com.br ou nyse.com).</p>
@@ -594,6 +604,14 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <p class="note">Cada barra começa no <b>valor atual</b> do indicador e vai de zero até o dobro dele (o IPCA do mês pode ir até −1%, porque pode haver deflação). Mova a barra de <b>um</b> indicador para o valor que quiser: as outras barras se movem, em azul, para onde cada indicador costuma ir <b>junto</b>, pelo histórico dos últimos <b>4 anos</b> (correlação de Spearman entre as variações mensais). Para simular outro indicador, é só mover a barra dele: a simulação anterior é desfeita.</p>
       <div id="simBox" class="card"></div>
       <p class="hint" style="margin-top:8px">Como é calculado: para cada par, efeito estimado = ρ × (desvio padrão do outro ÷ desvio padrão do escolhido) × variação escolhida, com as variações medidas em % para preços e índices e em pontos percentuais para Selic, IPCA (do mês) e desemprego. É uma regressão linear simples sobre as variações mensais, usando a correlação de Spearman (ρ) dos últimos 48 meses no lugar da correlação comum, por ser menos afetada por meses extremos. Vale melhor para movimentos do tamanho dos que acontecem num mês; movimentos muito grandes (como dobrar o Ibovespa) extrapolam o histórico e dão estimativas pouco realistas. Relações sem significância estatística aparecem apagadas: nelas o número é pouco confiável. Correlação não é causa, e o passado não garante o futuro. É um exercício educativo, não uma recomendação de investimento.</p>
+    </div>
+    <div data-esec-panel="direito" hidden id="dirBox">
+      <div class="ftabs" role="tablist" aria-label="Seções do Direito">
+        <button role="tab" data-dsub="radar" aria-selected="true">📡 Radar de leis</button>
+        <button role="tab" data-dsub="onde" aria-selected="false">🗺️ Onde estão as leis</button>
+      </div>
+      <div data-dsub-panel="radar" id="dirRadar"><div class="empty">Carregando…</div></div>
+      <div data-dsub-panel="onde" id="dirEdu" hidden></div>
     </div>
     <div data-esec-panel="candles" hidden>
       <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
@@ -2422,6 +2440,7 @@ $("#simBox").addEventListener("click", e => {
 });
 function showEduSec(name) {
   if (name === "simulacao") setTimeout(renderSim);
+  if (name === "direito") setTimeout(() => window.renderDireito?.());
   document.querySelectorAll("[data-esec]").forEach(b => b.setAttribute("aria-selected", b.dataset.esec === name));
   document.querySelectorAll("[data-esec-panel]").forEach(p => p.hidden = p.dataset.esecPanel !== name);
   try { localStorage.setItem(KEY + ".edu", name); } catch {}
@@ -3714,5 +3733,6 @@ try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {
 $("#cgal").innerHTML = Object.entries(CANDLE_EDU).map(([nome, i]) => `<details class="card cgal-i"><summary>${candleFigure(nome, 200, 92, true)}<div><b>${nome}</b><div class="hint ${i.sinal === "alta" ? "up" : i.sinal === "baixa" ? "down" : ""}">${i.sinal === "neutro" ? "indecisão" : "sinal de " + i.sinal}</div></div></summary>${candleSheet(nome)}</details>`).join("");
 renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 6000);
 </script>
+<script src="direito.js" defer></script>
 </body>
 </html>

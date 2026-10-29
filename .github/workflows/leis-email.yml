@@ -1,0 +1,53 @@
+# Radar de leis, step 3: sends the e-mail for the day collected in relatorios/leis/coleta.json.
+# - When the Claude routine pushes the analysis (relatorios/leis/ultimo.json), it sends right away.
+# - At 08:00 (Brasília, Tue–Sat) a scheduled run sends the plain list if nothing went out for that
+#   day (the routine failed or GitHub delayed the collection).
+# - "Run workflow" by hand sends immediately.
+# relatorios/leis/email-enviado.txt records the last collection day e-mailed.
+name: Radar de leis - e-mail
+
+on:
+  push:
+    branches: [main]
+    paths: [relatorios/leis/ultimo.json]
+  schedule:
+    - cron: "0 11 * * 2-6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: leis-email
+  cancel-in-progress: false
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Enviar
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          [ -f relatorios/leis/coleta.json ] || { echo "Sem coleta."; exit 0; }
+          dia=$(node -p "require('./relatorios/leis/coleta.json').data")
+          sent=$(cat relatorios/leis/email-enviado.txt 2>/dev/null || true)
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            [ "$sent" = "$dia" ] && { echo "Dia $dia já enviado."; exit 0; }
+            # an old collection (the 21:00 run did not happen) is not worth an e-mail
+            [ "$dia" \< "$(TZ=America/Sao_Paulo date -d '3 days ago' +%F)" ] && { echo "Coleta antiga ($dia)."; exit 0; }
+          fi
+          node scripts/leis-email.mjs
+          echo "$dia" > relatorios/leis/email-enviado.txt
+          git config user.name "radar-mercado-bot"
+          git config user.email "radar-mercado-bot@users.noreply.github.com"
+          git add relatorios/leis/email-enviado.txt
+          git commit -m "Radar de leis: e-mail de $dia enviado" || exit 0
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
