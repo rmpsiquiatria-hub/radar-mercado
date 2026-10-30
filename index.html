@@ -171,6 +171,10 @@ table.grid tbody tr { cursor: pointer; } table.grid tbody tr:hover { background:
 .toasts { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 8px; z-index: 100; max-width: calc(100vw - 32px); }
 .toast { padding: 12px 14px; border-radius: 10px; background: var(--text); color: var(--bg); box-shadow: 0 8px 30px rgba(0,0,0,.25); font-size: 14px; max-width: 360px; }
 .toast.alarm { background: var(--warn); color: #1a1000; font-weight: 600; }
+.toast { display: flex; gap: 10px; align-items: flex-start; }
+.toast span { flex: 1; }
+.toast-x { border: 0; background: none; color: inherit; opacity: .7; cursor: pointer; font-size: 15px; line-height: 1; padding: 2px; }
+.toast-x:hover { opacity: 1; }
 
 footer { margin-top: 28px; font-size: 12px; color: var(--faint); display: grid; gap: 8px; }
 footer .links { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -451,7 +455,8 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .tec-acts { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
 .tec-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
 .tside { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; white-space: nowrap; margin-right: 4px; }
-.tside.up { background: var(--up-soft); color: var(--up); } .tside.down { background: var(--down-soft); color: var(--down); } .tside.mix { background: var(--warn-soft); color: var(--warn); } .tside.flat { background: var(--panel-2); color: var(--muted); }
+.tside.up { background: var(--up-soft); color: var(--up); } .tside.down { background: var(--down-soft); color: var(--down); } .tside.mix { background: var(--warn-soft); color: var(--warn); } .tside.flat { background: var(--panel-2); color: var(--muted); } .tside.cart { background: var(--accent-soft); color: var(--accent); }
+.tec-del { font-size: 15px; align-self: flex-start; }
 .tec-filt { display: flex; flex-wrap: wrap; gap: 8px 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
 .tec-filt .seg { flex: 0 1 auto; }
 .tec-g { border-bottom: 1px solid var(--line); }
@@ -725,7 +730,11 @@ const GROUPS = ["Brasil (B3)", "Exterior", "Moedas", "Criptomoedas"];
 function toast(msg, alarm) {
   const el = document.createElement("div");
   el.className = "toast" + (alarm ? " alarm" : "");
-  el.textContent = msg;
+  const txt = document.createElement("span"), x = document.createElement("button");
+  txt.textContent = msg;
+  x.type = "button"; x.className = "toast-x"; x.textContent = "✕"; x.title = "Fechar este aviso"; x.setAttribute("aria-label", "Fechar este aviso");
+  x.addEventListener("click", () => el.remove());
+  el.append(txt, x);
   $("#toasts").append(el);
   setTimeout(() => el.remove(), alarm ? 15000 : 4000);
 }
@@ -1759,6 +1768,9 @@ function beep() {
     [0, .25].forEach(t => { const o = audio.createOscillator(), g = audio.createGain(); o.frequency.value = 880; g.gain.setValueAtTime(.15, audio.currentTime + t); g.gain.exponentialRampToValueAtTime(.001, audio.currentTime + t + .2); o.connect(g).connect(audio.destination); o.start(audio.currentTime + t); o.stop(audio.currentTime + t + .2); });
   } catch {}
 }
+// Position in Minha carteira, if any; flagged on alerts so the user knows the signal touches what they own.
+const naCarteira = sym => state.cart.find(p => p.symbol === sym);
+const tagCarteira = sym => naCarteira(sym) ? " · 💼 você tem na carteira" : "";
 function checkAlerts() {
   let changed = false;
   for (const a of state.alerts) {
@@ -1766,7 +1778,7 @@ function checkAlerts() {
     const q = quotes[a.symbol]; if (!q || q.price == null) continue;
     if (a.op === ">" ? q.price >= a.value : q.price <= a.value) {
       a.fired = Date.now(); changed = true;
-      const msg = `${short(a.symbol)} ${a.op === ">" ? "subiu acima de" : "caiu abaixo de"} ${money(a.value, q.currency, q.type)} — agora ${money(q.price, q.currency, q.type)}`;
+      const msg = `${short(a.symbol)} ${a.op === ">" ? "subiu acima de" : "caiu abaixo de"} ${money(a.value, q.currency, q.type)} — agora ${money(q.price, q.currency, q.type)}${tagCarteira(a.symbol)}`;
       toast("🔔 " + msg, true); beep();
       try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: msg, tag: a.id }); } catch {}
     }
@@ -2009,10 +2021,10 @@ function tecEvaluate() {
   for (const [k, t] of Object.entries(vistos)) if (t < limite) delete vistos[k];
   setTec({ vistos, feed: novos.concat(c.feed).slice(0, 150) });
   const lado = n => n.sinal === "alta" ? "▲ sinal de compra" : n.sinal === "baixa" ? "▼ sinal de venda" : "◆";
-  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)} · ${lado(n)}: ${n.titulo}`, true));
+  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`, true));
   else toast(`📈 ${novos.length} novos sinais técnicos nos seus ativos — veja em Alertas`, true);
   beep();
-  try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)} · ${lado(n)}: ${n.titulo}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); } catch {}
+  try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); } catch {}
   renderAlerts();
 }
 
@@ -2106,8 +2118,10 @@ function tecFeedHTML() {
   const cards = [...by.entries()].map(([sym, list]) => {
     const q = quotes[sym], nC = list.filter(n => n.sinal === "alta").length, nV = list.filter(n => n.sinal === "baixa").length;
     const head = nC && nV ? `<span class="tside mix">▲▼ Sinais mistos</span>` : nC ? `<span class="tside up">▲ Sinal de compra</span>` : `<span class="tside down">▼ Sinal de venda</span>`;
+    const pos = naCarteira(sym), curP = pos && (assetKind(sym) === "exterior" ? "USD" : q?.currency || "BRL");
+    const cart = pos ? `<span class="tside cart" title="Você tem este ativo em Minha carteira">💼 Na carteira: ${nf(pos.qty % 1 ? 4 : 0).format(pos.qty)} a ${money(pos.avg, curP)}</span>` : "";
     return `<article class="tec-g ${list.some(n => !n.lido) ? "novo" : ""}">
-      <div class="tec-gh"><div><b class="tec-sym">${esc(short(sym))}</b>${head}
+      <div class="tec-gh"><div><b class="tec-sym">${esc(short(sym))}</b>${head}${cart}
           <div class="hint">${esc(q?.name || names[sym] || "")}${q?.name || names[sym] ? " · " : ""}${esc(group(sym, q))} · ${list.length} achado${list.length > 1 ? "s" : ""}${nC && nV ? ` (${nC} de compra, ${nV} de venda)` : ""} · agora <b class="num">${q?.price ? money(q.price, q.currency, q.type) : "…"}</b></div></div>
         <div class="tec-acts"><button class="btn small" type="button" data-open="${esc(sym)}">📈 Ver gráfico</button><button class="btn small" type="button" data-sim="${esc(sym)}">🧮 Simular compra ou venda</button></div></div>
       ${list.map(n => {
@@ -2119,7 +2133,8 @@ function tecFeedHTML() {
             <div class="hint">${esc(n.texto)}</div>
             ${p ? `<div class="tec-px">💲 Preço ${p.lbl}: <b class="num">${money(p.v, p.cur, p.type)}</b>${dv != null ? ` · desde então <span class="num ${cls(dv)}">${pct(dv)}</span>` : ""}</div>` : ""}
             ${n.tipo === "candles" && CANDLE_EDU[nome] ? `<details class="cedu" data-ckey="${esc(n.key)}" ${cOpen.has(n.key) ? "open" : ""}><summary>📖 Ver como é este candle</summary>${candleSheet(nome)}</details>` : ""}</div>
-          <span class="hint tec-dt" title="Quando o alerta foi gerado">avisado em<br>${new Date(n.ts).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span></div>`;
+          <span class="hint tec-dt" title="Quando o alerta foi gerado">avisado em<br>${new Date(n.ts).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span>
+          <button class="linkx tec-del" type="button" data-tec-del="${esc(n.key)}" title="Apagar este alerta" aria-label="Apagar este alerta">✕</button></div>`;
       }).join("")}
     </article>`;
   }).join("");
@@ -2143,6 +2158,7 @@ document.addEventListener("click", e => {
   }
   const rm = t.closest("[data-tec-rm]"); if (rm) { setTec({ extras: tecCfg().extras.filter(x => x !== rm.dataset.tecRm) }); renderAlerts(); return; }
   if (t.closest("[data-tec-clear]")) { setTec({ feed: [] }); renderAlerts(); return; }
+  const del = t.closest("[data-tec-del]"); if (del) { setTec({ feed: tecCfg().feed.filter(n => n.key !== del.dataset.tecDel) }); renderAlerts(); return; }
   const td = t.closest("[data-tdir]"); if (td) { tecDir = td.dataset.tdir; renderAlerts(); return; }
   const tm = t.closest("[data-tmkt]"); if (tm) { tecMkt = tm.dataset.tmkt; renderAlerts(); return; }
   if (t.closest("[data-pa-add]")) {
@@ -3525,12 +3541,13 @@ $("#vList").addEventListener("click", e => {
 const CUSTOS_DEFAULT = {
   corretagem_b3: 0, taxa_b3_swing: 0.030, taxa_b3_day: 0.023,
   corretagem_eua: 0, spread_cambio: 0.5, iof_ida: 1.1, iof_volta: 0.38,
-  taxa_cripto: 0.3, iof_especie: 3.5, spread_especie: 3,
+  taxa_cripto: 0.3, iof_especie: 3.5, spread_especie: 3, aluguel_btc: 1,
 };
 const CUSTOS_LABEL = {
   corretagem_b3: ["Corretagem por ordem na B3", "R$"], taxa_b3_swing: ["Taxas da B3 — swing trade", "%"], taxa_b3_day: ["Taxas da B3 — day trade", "%"],
   corretagem_eua: ["Corretagem por ordem nos EUA", "US$"], spread_cambio: ["Spread do câmbio (corretora internacional)", "%"], iof_ida: ["IOF na remessa para investir no exterior", "%"], iof_volta: ["IOF no retorno do dinheiro ao Brasil", "%"],
   taxa_cripto: ["Taxa da corretora de cripto (por operação)", "%"], iof_especie: ["IOF na compra de dólar em espécie", "%"], spread_especie: ["Spread da casa de câmbio", "%"],
+  aluguel_btc: ["Taxa de aluguel de ações, para operar vendido", "% ao ano"],
 };
 function custos() { return { ...CUSTOS_DEFAULT, ...(state.custos || {}) }; }
 const KINDS = { acao: "Ação (B3)", etf: "ETF (B3)", fii: "Fundo imobiliário (B3)", exterior: "Ação no exterior (EUA)", cripto: "Criptomoeda", dolar: "Dólar em espécie" };
@@ -3625,18 +3642,51 @@ function simCalc(p, full = true) {
   return out;
 }
 
+// Short sale on the B3: sell borrowed shares now (ps), buy them back later (pb) and return them.
+// The lender's fee is charged per day on the sale value; a day trade needs no borrowing. The gain
+// is taxed at the buyback: 15% (FII 20%), or 20% in day trade. p also has aluguel (% a year).
+function simCalcVendido(p, full = true) {
+  const c = custos(), out = { linhas: [], avisos: [] }, L = (grupo, rot, v) => out.linhas.push({ grupo, rot, v });
+  const q = p.qty, day = p.op === "day", tx = (day ? c.taxa_b3_day : c.taxa_b3_swing) / 100, dias = Math.max(1, p.dias || 0);
+  const sG = q * p.ps, sF = c.corretagem_b3 + sG * tx, bG = q * p.pb, bF = c.corretagem_b3 + bG * tx;
+  const aluguel = day ? 0 : sG * (p.aluguel || 0) / 100 * dias / 365;
+  L("Venda, agora", "Valor da venda", sG); L("Venda, agora", "Corretagem e taxas da B3", -sF);
+  L("Recompra, depois", "Valor da recompra", bG); L("Recompra, depois", "Corretagem e taxas da B3", bF);
+  if (!day) L("Recompra, depois", `Aluguel das ações (${nf(2).format(p.aluguel || 0)}% ao ano por ${dias} dias)`, aluguel);
+  const recebido = sG - sF, custoTotal = bG + bF + aluguel, baseIR = recebido - custoTotal;
+  const aliq = day || p.kind === "fii" ? 0.20 : 0.15;
+  let irrf = day ? Math.max(0, baseIR) * 0.01 : sG * 0.00005;
+  if (!day && irrf <= 1) irrf = 0;
+  const imposto = Math.max(Math.max(0, baseIR - (p.prejuizo || 0)) * aliq, irrf);
+  Object.assign(out, { custoTotal, recebido, baseIR, imposto, irrf, aliq, isento: false, taxas: sF + bF + aluguel,
+    motivo: day ? "day trade: 20% sobre o lucro, sem isenção" : `venda a descoberto: ${aliq * 100}% sobre o lucro, apurado na recompra, sem a isenção de R$ 20 mil` });
+  out.lucro = recebido - custoTotal - imposto;
+  out.rent = sG ? out.lucro / sG * 100 : null;
+  if (!full) return out;
+  out.darf = imposto - irrf > 0.009 ? `DARF de ${brl(imposto - irrf)} (código 6015) até ${darfDue(new Date(Date.now() + (day ? 0 : dias) * 864e5))}, no mês seguinte ao da recompra${irrf > 0.009 ? `; ${brl(irrf)} já retidos` : ""}` : "";
+  if (baseIR < 0) out.avisos.push(`Prejuízo de ${brl(-baseIR)}: pode ser abatido de lucros futuros de ${day ? "day trade" : "swing trade"}, inclusive em meses seguintes.`);
+  out.avisos.push("Risco: operando vendido, você perde se o preço subir, e não há limite para a alta. A corretora exige uma garantia (dinheiro ou outros ativos) e pode encerrar a operação se ela ficar insuficiente.");
+  if (!day) out.avisos.push("A taxa de aluguel muda de ação para ação (nas mais negociadas costuma ficar entre 0,5% e 3% ao ano) e a corretora pode cobrar uma taxa própria. Se a empresa pagar dividendos enquanto você estiver vendido, você reembolsa esse valor a quem emprestou as ações.");
+  if (!day && p.kind === "acao") out.avisos.push("Isenção de R$ 20 mil: a lei não a prevê com clareza para a venda a descoberto, então a conta considera o imposto. Confirme com um contador.");
+  let lo = 0, hi = p.ps * 3 + 1;   // highest buyback price that still covers costs and taxes
+  for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (simCalcVendido({ ...p, pb: mid }, false).lucro >= 0) lo = mid; else hi = mid; }
+  out.empate = lo;
+  return out;
+}
+
 /* dialog */
 let simState = null;
+const SIM_MODOS = [["compra", "🛒 Simular compra"], ["venda", "💰 Simular venda"], ["carteira", "📦 Vender toda a carteira"]];
 function simOpen(pre = {}) {
-  const sym = pre.sym || state.cart[0]?.symbol || "PETR4.SA";
-  simState = { modo: pre.modo || "um" };
+  const sym = normSym(pre.sym || state.cart[0]?.symbol || "PETR4.SA");
+  simState = { modo: pre.modo || (naCarteira(sym) ? "venda" : "compra"), lado: "comprado" };
   $("#simBody").innerHTML = `
-    <div class="vdlg-h"><h2>🧮 Simular compra e venda</h2><button type="button" class="icon-btn" data-sd="close" aria-label="Fechar">✕</button></div>
-    <div class="seg sim-modo" role="group"><button data-smodo="um" aria-pressed="${simState.modo === "um"}">Uma operação</button><button data-smodo="carteira" aria-pressed="${simState.modo === "carteira"}" ${state.cart.length ? "" : "disabled title='Sua carteira está vazia'"}>Vender toda a carteira hoje</button></div>
+    <div class="vdlg-h"><h2>🧮 Simulador de compra e venda</h2><button type="button" class="icon-btn" data-sd="close" aria-label="Fechar">✕</button></div>
+    <div class="seg sim-modo" role="group">${SIM_MODOS.map(([k, l]) => `<button data-smodo="${k}" aria-pressed="${simState.modo === k}" ${k === "carteira" && !state.cart.length ? "disabled title='Sua carteira está vazia'" : ""}>${l}</button>`).join("")}</div>
     <div id="simForm"></div>
     <div id="simRes" class="sim-res"></div>
     <p class="hint">Estimativa com as regras de 2026 para pessoa física e as taxas de Configurações (cada corretora cobra diferente). Não substitui um contador. Lucro e prejuízo de day trade e de swing trade são apurados separadamente.</p>`;
-  simRenderForm(pre);
+  simRenderForm({ ...pre, sym });
   $("#simDlg").showModal();
 }
 function simRenderForm(pre = {}) {
@@ -3648,27 +3698,52 @@ function simRenderForm(pre = {}) {
     return simRun();
   }
   const sym = normSym(pre.sym || $("#sSym")?.value || state.cart[0]?.symbol || "PETR4.SA");
-  const held = state.cart.find(p => p.symbol === sym);
+  const held = naCarteira(sym), modo = simState.modo, curto = modo === "venda" && simState.lado === "vendido";
   const q = quotes[sym], kind = assetKind(sym), usd = quotes["USDBRL=X"]?.price || 5;
-  const px = kind === "dolar" ? usd : q?.price;
+  const px = kind === "dolar" ? usd : q?.price, pxs = px ? +px.toFixed(4) : "";
+  const moeda = kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)";
+  const curH = kind === "exterior" ? "USD" : q?.currency || "BRL", nq = n => nf(n % 1 ? 4 : 0).format(n);
+  const F = (lbl, inner, c = "") => `<div class="field${c ? " " + c : ""}"><label>${lbl}</label>${inner}</div>`;
+  const nbr = (k, v) => `<input type="text" inputmode="decimal" class="nbr" data-s="${k}" value="${nbrFmt(v)}">`;
+  const quick = (alvo, vals) => `<div class="sim-quick">${vals.map(v => `<button type="button" data-sq="${v}" data-sq-alvo="${alvo}">${v > 0 ? "+" : ""}${v === 0 ? "atual" : v + "%"}</button>`).join("")}</div>`;
+  const qtyF = F(`Quantidade${kind === "dolar" ? " (US$)" : ""}`, nbr("qty", pre.qty ?? (modo === "compra" ? 100 : held?.qty ?? 100)));
+  const opF = F("Operação", `<select data-s="op"><option value="swing">Swing trade (dias diferentes)</option><option value="day">Day trade (${curto ? "venda e recompra" : "compra e venda"} no mesmo dia)</option></select>`, "sim-b3");
+  const campos = modo === "compra" ? [
+    qtyF,
+    F("Preço de compra" + moeda, nbr("pb", pxs) + quick("pb", [-10, -5, -2, 0])),
+    F("Dólar na compra (R$)", nbr("fxb", +usd.toFixed(4)), "sim-ext"),
+  ] : [
+    F("Posição", `<select data-s="lado"><option value="comprado">Comprado: vender o que comprei</option><option value="vendido" ${curto ? "selected" : ""}>Vendido: vender agora e recomprar depois</option></select>`),
+    opF, qtyF,
+    ...(curto ? [
+      F("Preço da venda, agora" + moeda, nbr("ps", pxs)),
+      F("Preço da recompra, depois" + moeda, nbr("pb", pxs) + quick("pb", [-20, -10, -5, 0, 5, 10])),
+      F("Tempo até recomprar (dias)", `<input type="number" min="1" step="1" data-s="dias" value="30">`, "sim-swing"),
+      F("Taxa de aluguel das ações (% ao ano)", nbr("aluguel", custos().aluguel_btc), "sim-swing"),
+    ] : [
+      F("Preço de compra" + moeda, nbr("pb", held?.avg ?? pxs)),
+      F("Preço de venda" + moeda, nbr("ps", pxs) + quick("ps", [-10, -5, 0, 5, 10, 20])),
+      F("Dólar na compra (R$)", nbr("fxb", +usd.toFixed(4)), "sim-ext"),
+      F("Dólar na venda (R$)", nbr("fxs", +usd.toFixed(4)), "sim-ext"),
+      F("Tempo com o ativo (dias)", `<input type="number" min="0" step="1" data-s="dias" value="${pre.dias ?? 30}">`),
+      F("Outras vendas no mês (R$)", nbr("outras", 0), "sim-mes"),
+    ]),
+    F("Prejuízo a compensar (R$)", nbr("prejuizo", 0), "sim-b3"),
+  ];
+  const nota = modo === "compra"
+    ? (held ? `💼 Você já tem ${nq(held.qty)} de ${esc(short(sym))} na carteira, a ${money(held.avg, curH)}.` : "")
+    : curto ? "<b>Operar vendido</b> (venda a descoberto): você vende ações que não tem, emprestadas de outro investidor por meio da corretora, e recompra depois para devolvê-las. Ganha se o preço <b>cair</b> e perde se <b>subir</b>."
+    : held ? `💼 Preço de compra preenchido com o seu preço médio da carteira (${money(held.avg, curH)}).`
+    : `Você não tem ${esc(short(sym))} em Minha carteira: informe o preço que pagou.`;
   box.innerHTML = `
     <div class="vgrid">
       <div class="field"><label for="sSym">Ativo</label><input id="sSym" list="symList" value="${esc(sym.endsWith(".SA") ? short(sym) : sym)}" data-s="sym"></div>
       <div class="field"><label>Tipo</label><select data-s="kind">${Object.entries(KINDS).map(([k, l]) => `<option value="${k}" ${k === kind ? "selected" : ""}>${l}</option>`).join("")}</select></div>
-      <div class="field sim-b3"><label>Operação</label><select data-s="op"><option value="swing">Swing trade (dias diferentes)</option><option value="day">Day trade (compra e venda no mesmo dia)</option></select></div>
-      <div class="field"><label>Quantidade${kind === "dolar" ? " (US$)" : ""}</label><input type="text" inputmode="decimal" class="nbr" data-s="qty" value="${nbrFmt(pre.qty ?? held?.qty ?? 100)}"></div>
-      <div class="field"><label>Preço de compra${kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)"}</label><input type="text" inputmode="decimal" class="nbr" data-s="pb" value="${nbrFmt(pre.pb ?? held?.avg ?? (px ? +px.toFixed(4) : ""))}"></div>
-      <div class="field"><label>Preço de venda${kind === "exterior" || kind === "cripto" && q?.currency === "USD" ? " (US$)" : " (R$)"}</label><input type="text" inputmode="decimal" class="nbr" data-s="ps" value="${nbrFmt(px ? +px.toFixed(4) : "")}">
-        <div class="sim-quick">${[-10, -5, 0, 5, 10, 20].map(v => `<button type="button" data-sq="${v}">${v > 0 ? "+" : ""}${v === 0 ? "atual" : v + "%"}</button>`).join("")}</div></div>
-      <div class="field sim-ext"><label>Dólar na compra (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="fxb" value="${nbrFmt(+usd.toFixed(4))}"></div>
-      <div class="field sim-ext"><label>Dólar na venda (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="fxs" value="${nbrFmt(+usd.toFixed(4))}"></div>
-      <div class="field"><label>Tempo com o ativo (dias)</label><input type="number" min="0" step="1" data-s="dias" value="${pre.dias ?? 30}"></div>
-      <div class="field sim-mes"><label>Outras vendas no mês (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="outras" value="0"></div>
-      <div class="field sim-b3"><label>Prejuízo a compensar (R$)</label><input type="text" inputmode="decimal" class="nbr" data-s="prejuizo" value="0"></div>
+      ${campos.join("")}
     </div>
-    ${held ? `<p class="hint">Preço de compra preenchido com o seu preço médio da carteira (${money(held.avg, q?.currency || "BRL")}).</p>` : ""}`;
+    ${nota ? `<p class="hint">${nota}</p>` : ""}`;
   // crypto quoted in US$: convert to reais so the R$ 35k rule applies in reais
-  if (kind === "cripto" && q?.currency === "USD") { box.querySelector('[data-s="pb"]').value = nbrFmt(+(nbrParse(box.querySelector('[data-s="pb"]').value) * usd).toFixed(2)); box.querySelector('[data-s="ps"]').value = nbrFmt(+((q.price || 0) * usd).toFixed(2)); box.querySelectorAll("label").forEach(l => l.textContent = l.textContent.replace("(US$)", "(R$)")); }
+  if (kind === "cripto" && q?.currency === "USD") { box.querySelectorAll('[data-s="pb"], [data-s="ps"]').forEach(i => i.value = nbrFmt(+(nbrParse(i.value) * usd).toFixed(2))); box.querySelectorAll("label").forEach(l => l.textContent = l.textContent.replace("(US$)", "(R$)")); }
   simRun();
 }
 // Number fields in the simulator are text fields so they can show "12.588,13".
@@ -3685,27 +3760,32 @@ function nbrLive(el) {   // adds the thousands dots while typing, keeping the cu
 }
 function simRead() {
   const v = k => { const el = $(`#simForm [data-s="${k}"]`); return el ? (el.classList.contains("nbr") ? nbrParse(el.value) : el.type === "number" ? +el.value || 0 : el.value) : undefined; };
-  return { kind: v("kind"), op: v("op") || "swing", qty: v("qty"), pb: v("pb"), ps: v("ps"), fxb: v("fxb"), fxs: v("fxs"), dias: v("dias"), outras: v("outras"), prejuizo: v("prejuizo") };
+  return { kind: v("kind"), lado: v("lado") || "comprado", op: v("op") || "swing", qty: v("qty"), pb: v("pb"), ps: v("ps"), fxb: v("fxb"), fxs: v("fxs"), dias: v("dias"), outras: v("outras"), prejuizo: v("prejuizo"), aluguel: v("aluguel") };
 }
 function simRun() {
   const res = $("#simRes");
   if (simState.modo === "carteira") return simRunCarteira();
-  const p = simRead();
-  $("#simForm").querySelectorAll(".sim-b3").forEach(el => el.hidden = !isB3(p.kind));
-  $("#simForm").querySelectorAll(".sim-ext").forEach(el => el.hidden = p.kind !== "exterior");
-  $("#simForm").querySelectorAll(".sim-mes").forEach(el => el.hidden = !(p.kind === "acao" || p.kind === "cripto"));
+  const p = simRead(), f = $("#simForm"), curto = simState.modo === "venda" && p.lado === "vendido";
+  const show = (sel, on) => f.querySelectorAll(sel).forEach(el => el.hidden = !on);
+  show(".sim-b3", isB3(p.kind)); show(".sim-ext", p.kind === "exterior"); show(".sim-mes", p.kind === "acao" || p.kind === "cripto"); show(".sim-swing", p.op !== "day");
+  if (curto && !isB3(p.kind)) { res.innerHTML = `<p class="sim-note">ℹ️ Aqui dá para simular operar vendido só com ativos da B3 (ações, ETFs e fundos imobiliários). No exterior e em cripto isso é feito com outros instrumentos (margem, contratos futuros), com regras e custos próprios de cada corretora.</p>`; return; }
+  if (simState.modo === "compra") return simRunCompra(p);
   if (!(p.qty > 0 && p.pb > 0 && p.ps > 0) || (p.kind === "exterior" && !(p.fxb > 0 && p.fxs > 0))) { res.innerHTML = `<div class="hint">Preencha quantidade e preços para ver o resultado.</div>`; return; }
-  const r = simCalc(p), sign = v => (v > 0 ? "+" : "") + brl(v);
+  const r = curto ? simCalcVendido(p) : simCalc(p), sign = v => (v > 0 ? "+" : "") + brl(v);
   const unit = p.kind === "exterior" ? "US$ " + nf(2).format(r.empate) : brl(r.empate);
+  const grupos = curto ? ["Venda, agora", "Recompra, depois"] : ["Compra", "Venda"];
   res.innerHTML = `
-    <div class="sim-big ${r.lucro >= 0 ? "pos" : "neg"}"><span>Lucro líquido estimado</span><b class="num">${sign(r.lucro)}</b><small class="num">${pct(r.rent)} sobre ${brl(r.custoTotal)} investidos</small>
-      <div class="sim-big-x"><span>Preço de venda para empatar (cobrindo custos e imposto)</span><b class="num">${unit}</b></div>
-      ${r.cdi != null ? `<div class="sim-big-x"><span>O mesmo valor no CDI por ${p.dias} dias (já com IR)</span><b class="num">${sign(r.cdi)}</b></div>` : ""}</div>
+    <div class="sim-big ${r.lucro >= 0 ? "pos" : "neg"}"><span>Lucro líquido estimado${curto ? " operando vendido" : ""}</span><b class="num">${sign(r.lucro)}</b><small class="num">${pct(r.rent)} sobre ${curto ? brl(p.qty * p.ps) + " vendidos" : brl(r.custoTotal) + " investidos"}</small>
+      <div class="sim-big-x"><span>${curto ? "Preço de recompra para empatar (o máximo que cobre custos, aluguel e imposto)" : "Preço de venda para empatar (cobrindo custos e imposto)"}</span><b class="num">${unit}</b></div>
+      ${!curto && r.cdi != null ? `<div class="sim-big-x"><span>O mesmo valor no CDI por ${p.dias} dias (já com IR)</span><b class="num">${sign(r.cdi)}</b></div>` : ""}</div>
     <table class="sim-t">
-      ${["Compra", "Venda"].map(g => `<tr class="g"><td colspan="2">${g}</td></tr>` + r.linhas.filter(l => l.grupo === g).map(l => `<tr><td>${esc(l.rot)}</td><td class="num">${brl(l.v)}</td></tr>`).join("")).join("")}
+      ${grupos.map(g => `<tr class="g"><td colspan="2">${g}</td></tr>` + r.linhas.filter(l => l.grupo === g).map(l => `<tr><td>${esc(l.rot)}</td><td class="num">${brl(l.v)}</td></tr>`).join("")).join("")}
       <tr class="g"><td colspan="2">Resultado</td></tr>
-      <tr><td>Total gasto na compra (com custos)</td><td class="num">${brl(r.custoTotal)}</td></tr>
-      <tr><td>Total recebido na venda (descontados custos)</td><td class="num">${brl(r.recebido)}</td></tr>
+      ${curto
+        ? `<tr><td>Total recebido na venda (descontados custos)</td><td class="num">${brl(r.recebido)}</td></tr>
+      <tr><td>Total gasto na recompra (com custos e aluguel)</td><td class="num">${brl(r.custoTotal)}</td></tr>`
+        : `<tr><td>Total gasto na compra (com custos)</td><td class="num">${brl(r.custoTotal)}</td></tr>
+      <tr><td>Total recebido na venda (descontados custos)</td><td class="num">${brl(r.recebido)}</td></tr>`}
       <tr><td>Ganho antes do imposto</td><td class="num ${cls(r.recebido - r.custoTotal)}">${sign(r.recebido - r.custoTotal)}</td></tr>
       <tr><td>Imposto de renda <div class="hint">${esc(r.motivo)}</div></td><td class="num">${r.imposto ? "−" + brl(r.imposto) : "R$ 0,00"}</td></tr>
       <tr class="tot"><td>Lucro líquido</td><td class="num ${cls(r.lucro)}">${sign(r.lucro)}</td></tr>
@@ -3713,6 +3793,24 @@ function simRun() {
     </table>
     ${r.darf ? `<p class="sim-note">📄 ${esc(r.darf)}</p>` : ""}
     ${r.avisos.map(a => `<p class="sim-note">ℹ️ ${esc(a)}</p>`).join("")}
+    ${simSaveHTML(p)}`;
+}
+// Buy only: what it costs now and the price a later sale needs to break even.
+function simRunCompra(p) {
+  const res = $("#simRes");
+  if (!(p.qty > 0 && p.pb > 0) || (p.kind === "exterior" && !(p.fxb > 0))) { res.innerHTML = `<div class="hint">Preencha quantidade e preço para ver o resultado.</div>`; return; }
+  const r = simCalc({ ...p, op: "swing", ps: p.pb, fxs: p.fxb, dias: 0, outras: 0, prejuizo: 0 });
+  const bruto = p.qty * p.pb * (p.kind === "exterior" ? p.fxb : 1), unit = p.kind === "exterior" ? "US$ " + nf(2).format(r.empate) : brl(r.empate);
+  res.innerHTML = `
+    <div class="sim-big"><span>Total a pagar na compra</span><b class="num">${brl(r.custoTotal)}</b><small class="num">dos quais ${brl(r.custoTotal - bruto)} em custos e taxas</small>
+      <div class="sim-big-x"><span>Custo por unidade, já com os custos</span><b class="num">${brl(r.custoTotal / p.qty)}</b></div>
+      <div class="sim-big-x"><span>Preço de venda para empatar depois (cobrindo os custos da venda e o imposto)</span><b class="num">${unit}</b></div></div>
+    <table class="sim-t">
+      <tr class="g"><td colspan="2">Compra</td></tr>
+      ${r.linhas.filter(l => l.grupo === "Compra").map(l => `<tr><td>${esc(l.rot)}</td><td class="num">${brl(l.v)}</td></tr>`).join("")}
+      <tr class="tot"><td>Total a pagar</td><td class="num">${brl(r.custoTotal)}</td></tr>
+    </table>
+    <p class="sim-note">ℹ️ Para ver lucro, imposto e o resultado contra o CDI, use <b>💰 Simular venda</b>.${p.kind === "exterior" ? " O preço de empate considera o dólar igual ao de hoje." : ""}</p>
     ${simSaveHTML(p)}`;
 }
 // Average price stored in the portfolio, in the asset's own currency (B3: with fees, as the IR rules do).
@@ -3723,17 +3821,22 @@ function simAvg(p, sym) {
 }
 function simSaveHTML(p) {
   const sym = normSym($("#sSym")?.value || ""); if (!sym) return "";
-  const held = state.cart.find(x => x.symbol === sym), q = quotes[sym];
+  const held = naCarteira(sym), q = quotes[sym], nq = n => nf(n % 1 ? 4 : 0).format(n);
   const cur = p.kind === "cripto" ? (q?.currency || "BRL") : p.kind === "exterior" ? "USD" : "BRL";
-  const avg = simAvg(p, sym);
-  const novoQty = held ? held.qty + p.qty : p.qty, novoAvg = held ? (held.qty * held.avg + p.qty * avg) / novoQty : avg;
-  return `<div class="sim-save">
-    <button class="btn primary" type="button" data-ssave="compra">💾 Salvar a compra na carteira</button>
-    ${held ? `<button class="btn" type="button" data-ssave="venda">📤 Registrar a venda (tira da carteira)</button>` : ""}
-    <p class="hint">${held
-      ? `Você já tem ${nf(held.qty % 1 ? 4 : 0).format(held.qty)} de ${esc(short(sym))} a ${money(held.avg, cur)}. Salvar a compra soma ${nf(p.qty % 1 ? 4 : 0).format(p.qty)} e o preço médio passa a ${money(novoAvg, cur)}. Registrar a venda tira ${nf(p.qty % 1 ? 4 : 0).format(Math.min(p.qty, held.qty))} da carteira.`
-      : `Salva ${nf(p.qty % 1 ? 4 : 0).format(p.qty)} de ${esc(short(sym))} com preço médio de ${money(avg, cur)}${isB3(p.kind) ? " (já com as taxas da compra, como no cálculo do IR)" : ""}.`}</p>
-  </div>`;
+  if (simState.modo === "compra") {
+    const avg = simAvg(p, sym), novoQty = held ? held.qty + p.qty : p.qty, novoAvg = held ? (held.qty * held.avg + p.qty * avg) / novoQty : avg;
+    return `<div class="sim-save">
+      <button class="btn primary" type="button" data-ssave="compra">💾 Salvar a compra na carteira</button>
+      <p class="hint">${held
+        ? `Você já tem ${nq(held.qty)} de ${esc(short(sym))} a ${money(held.avg, cur)}. Salvar a compra soma ${nq(p.qty)} e o preço médio passa a ${money(novoAvg, cur)}.`
+        : `Salva ${nq(p.qty)} de ${esc(short(sym))} com preço médio de ${money(avg, cur)}${isB3(p.kind) ? " (já com as taxas da compra, como no cálculo do IR)" : ""}.`}</p>
+    </div>`;
+  }
+  if (p.lado === "vendido") return `<p class="sim-note">ℹ️ Operações vendidas não são salvas em Minha carteira, que guarda só o que você tem comprado.</p>`;
+  return held ? `<div class="sim-save">
+      <button class="btn primary" type="button" data-ssave="venda">📤 Registrar a venda (tira da carteira)</button>
+      <p class="hint">Você tem ${nq(held.qty)} de ${esc(short(sym))} a ${money(held.avg, cur)}. Registrar a venda tira ${nq(Math.min(p.qty, held.qty))} da carteira.</p>
+    </div>` : "";
 }
 function simSave(tipo) {
   const p = simRead(), sym = normSym($("#sSym").value);
@@ -3785,6 +3888,7 @@ function simRunCarteira() {
 }
 $("#simDlg").addEventListener("input", e => {
   if (e.target.matches("input.nbr")) nbrLive(e.target);
+  if (e.target.matches('[data-s="lado"]')) { simState.lado = e.target.value; simRenderForm({ qty: simRead().qty }); return; }
   if (e.target.matches('[data-s="sym"]')) { clearTimeout(simState.t); simState.t = setTimeout(async () => { const s = normSym(e.target.value); if (!s) return; if (!quotes[s]) { try { const r = await api("/api/cotacoes?range=1d&s=" + encodeURIComponent(s)); const q = r.quotes[s]; if (!q.error) { quotes[s] = q; names[s] = q.name; } } catch {} } simRenderForm({ sym: s }); setTimeout(() => { const i = $("#sSym"); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }, 0); }, 700); return; }
   simRun();
 });
@@ -3796,7 +3900,7 @@ $("#simDlg").addEventListener("click", e => {
   if (qk) {
     const sym = normSym($("#sSym").value), q = quotes[sym], kind = simRead().kind, usd = quotes["USDBRL=X"]?.price || 1;
     let base = kind === "dolar" ? usd : q?.price; if (kind === "cripto" && q?.currency === "USD") base *= usd;
-    if (base) { $('#simForm [data-s="ps"]').value = nbrFmt(+(base * (1 + +qk.dataset.sq / 100)).toFixed(4)); simRun(); }
+    if (base) { $(`#simForm [data-s="${qk.dataset.sqAlvo || "ps"}"]`).value = nbrFmt(+(base * (1 + +qk.dataset.sq / 100)).toFixed(4)); simRun(); }
   }
 });
 $("#simNew").addEventListener("click", () => simOpen());
