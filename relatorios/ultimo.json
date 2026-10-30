@@ -1,39 +1,33 @@
 {
- "data": "2026-10-29",
- "gerado_em": "2026-10-29T15:21:59.072Z",
- "pesquisa_data": "2026-10-29",
+ "data": "2026-10-30",
+ "gerado_em": "2026-10-30T09:10:14.467Z",
+ "pesquisa_data": "2026-10-30",
  "indicadores_data": "2026-10-29",
- "resumo_mercado": "Segundo as fontes, o Ibovespa fechou em queda de 2,68%, a 171.006 pontos, o terceiro pregão seguido de perdas, com cautela sobre a política fiscal. O dólar comercial encerrou a R$ 5,34 (-0,19%), após tocar cerca de R$ 5,40. Em Wall Street, S&P 500 (+0,28%), Nasdaq (+0,27%) e Dow subiram após o Fed manter os juros em 3,75%-4%, com balanços de big techs em foco.",
+ "resumo_mercado": "Segundo as fontes, o Ibovespa caiu 1,06% em 29/10, a 169.186 pontos, a quarta queda seguida, com Vale (-2,17%) e Petrobras PN (-0,59%) em baixa. O dólar comercial subiu a cerca de R$ 5,387, com atenção ao fiscal. Em Nova York, os índices fecharam em queda, com Nasdaq pressionado pela Alphabet (balanço abaixo do esperado) e inflação acima da prevista. As fontes consultadas não detalham a agenda de 30/10.",
  "fontes_mercado": [
   {
-   "nome": "Boca (Agência Brasil)",
-   "titulo": "Ibovespa fecha em queda de 2,68%, enquanto dólar cai para R$ 5,34",
-   "url": "https://boca.com.br/economia/ibovespa-fecha-em-queda-dolar-cai",
-   "data": "2026-10-28"
+   "nome": "InfoMoney",
+   "titulo": "Ibovespa tem quarta queda seguida, com exterior, balanços e fiscal; dólar dispara",
+   "url": "https://www.infomoney.com.br/mercados/ibovespa-hoje-bolsa-de-valores-ao-vivo-29102026/",
+   "data": "2026-10-29"
   },
   {
-   "nome": "Tribuna PR",
-   "titulo": "Ibovespa cai 2,68% e renova mínima em três pregões seguidos",
-   "url": "https://www.tribunapr.com.br/noticias/economia/ibovespa-cai-268-e-renova-minima-em-tres-pregoes-seguidos/amp/",
-   "data": "2026-10-28"
+   "nome": "Metrópoles",
+   "titulo": "Ibovespa cai pela 4ª vez seguida, e dólar fecha a R$ 5,38 nesta 5ª (29/10)",
+   "url": "https://www.metropoles.com/brasil/ibovespa-cai-pela-4a-vez-seguida-e-dolar-fecha-a-r-538",
+   "data": "2026-10-29"
   },
   {
-   "nome": "The Motley Fool",
-   "titulo": "Stock Market Today, Oct. 28: Markets Edge Higher as Fed Holds Rates Steady",
-   "url": "https://www.fool.com/coverage/stock-market-today/2026/10/28/stock-market-today-oct-28-markets-edge-higher-as-fed-holds-rates-steady/",
-   "data": "2026-10-28"
+   "nome": "Campo Grande News",
+   "titulo": "Dólar sobe 0,89% a R$ 5,3874 e Ibovespa cai 1,06% em 29/10",
+   "url": "https://www.campograndenews.com.br/economia/dolar-sobe-a-r-5-39-em-meio-a-pressao-sobre-o-mercado-financeiro",
+   "data": "2026-10-29"
   },
   {
-   "nome": "Honolulu Star-Advertiser",
-   "titulo": "Wall Street rises as Fed holds rates steady, earnings in focus",
-   "url": "https://staradvertiser.com/2026/10/28/breaking-news/wall-street-rises-as-fed-holds-rates-steady-earnings-in-focus",
-   "data": "2026-10-28"
-  },
-  {
-   "nome": "CNBC",
-   "titulo": "Fed rate decision October 2026",
-   "url": "https://cnbc.com/2026/10/28/fed-meeting-today-live-updates.html",
-   "data": "2026-10-28"
+   "nome": "Yahoo Finance",
+   "titulo": "Stock market today: Dow, S&P 500, Nasdaq slip as Alphabet stock sinks 12% and AI jitters return",
+   "url": "https://finance.yahoo.com/markets/live/stock-market-today-thursday-october-29-dow-sp-500-nasdaq-alphabet-microsoft-earnings-130305714.html",
+   "data": "2026-10-29"
   }
  ],
  "tecnica_data": "2026-10-29",
@@ -397,8 +391,8 @@
      ]
     }
    },
-   "resumo": "As fontes mostram visão dividida: BTG, Bradesco BBI e JPMorgan mantêm compra, enquanto o UBS BB, neutro, cortou o preço-alvo duas vezes em um mês (R$ 85 para R$ 77 em 29/09 e para R$ 73 em 21/10). O UBS BB cita risco de revisões negativas em minério, custos e volumes, com frete em alta; o BTG revisou para baixo as estimativas de EBITDA de 2027 (cerca de 15% a 20%) por minério mais fraco, frete e câmbio. O resultado do 3º trimestre está previsto para 29/10, segundo a Genial.",
-   "sentimento": "neutro",
+   "resumo": "As fontes mostram visão dividida: BTG, Bradesco BBI e JPMorgan mantêm compra, enquanto o UBS BB, neutro, cortou o preço-alvo duas vezes em um mês (R$ 85 para R$ 77 em 29/09 e para R$ 73 em 21/10). O UBS BB cita risco de revisões negativas em minério, custos e volumes, com frete em alta; o BTG revisou para baixo as estimativas de EBITDA de 2027 (cerca de 15% a 20%) por minério mais fraco, frete e câmbio. O resultado do 3º trimestre está previsto para 29/10, segundo a Genial. Em 29/10 a Vale divulgou o 3T26: lucro líquido de US$ 1,255 bilhão (-53% a/a), abaixo dos US$ 1,508 bilhão do consenso Bloomberg, com Ebitda proforma de US$ 3,508 bilhões (-20%, ligeiramente acima do esperado) e fluxo de caixa livre recorrente de US$ 1,4 bilhão, segundo o Money Times e o BPMoney; a companhia manteve as metas de produção de 2026. A reação de analistas ao balanço ainda não foi localizada.",
+   "sentimento": "negativo",
    "consenso": {
     "compra": 3,
     "neutro": 1,
@@ -432,8 +426,27 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Vale reportou lucro líquido de US$ 1,255 bilhão no 3T26 (-54% a/a), abaixo da expectativa da Bloomberg (US$ 1,508 bi); Ebitda proforma de US$ 3,508 bi, acima do esperado.",
+     "fonte": "Money Times",
+     "data": "2026-10-29"
+    }
+   ],
    "fontes": [
+    {
+     "nome": "Money Times",
+     "titulo": "Lucro líquido da Vale (VALE3) cai 54% no 3T26, para US$ 1,25 bilhão, abaixo das expectativas do mercado",
+     "url": "https://www.moneytimes.com.br/lucro-liquido-da-vale-vale3-cai-54-no-3t26-para-us-125-bilhao-abaixo-das-expectativas-do-mercado-bdap/",
+     "data": "2026-10-29"
+    },
+    {
+     "nome": "BPMoney",
+     "titulo": "Vale (VALE3) lucra US$ 1,25 bilhão no 3T26, queda anual de 53%",
+     "url": "https://bpmoney.com.br/mercado/vale-vale3-lucra-us-125-bilhao-no-3t26-queda-anual-de-53/",
+     "data": "2026-10-29"
+    },
     {
      "nome": "BPMoney",
      "titulo": "UBS BB corta preço-alvo da Vale (VALE3) pela 2ª vez em um mês; alvo cai a R$ 73",
@@ -465,7 +478,7 @@
      "data": "2026-05-22"
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-30"
   },
   {
    "ticker": "ITUB4",
@@ -2697,7 +2710,7 @@
      "sinais": []
     }
    },
-   "resumo": "No 2º trimestre de 2026 (divulgado em 30/07) a Ambev teve lucro de R$ 3,47 bilhões, acima do consenso da Bloomberg, mas receita e Ebitda abaixo do esperado, segundo InfoMoney e Money Times; o lucro foi ajudado por efeitos financeiros. JPMorgan e Bradesco BBI mantêm recomendação neutra. O BTG tem compra com preço-alvo de R$ 20, segundo página de research do banco com cotação de 16/10/2026. A empresa projeta alta de 4,5% a 7,5% no custo por hectolitro em 2026.",
+   "resumo": "No 2º trimestre de 2026 (divulgado em 30/07) a Ambev teve lucro de R$ 3,47 bilhões, acima do consenso da Bloomberg, mas receita e Ebitda abaixo do esperado, segundo InfoMoney e Money Times; o lucro foi ajudado por efeitos financeiros. JPMorgan e Bradesco BBI mantêm recomendação neutra. O BTG tem compra com preço-alvo de R$ 20, segundo página de research do banco com cotação de 16/10/2026. A empresa projeta alta de 4,5% a 7,5% no custo por hectolitro em 2026. O balanço do 3T26 estava previsto para 29/10; não foram achados relatos do resultado nas buscas.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 1,
@@ -3467,7 +3480,7 @@
      ]
     }
    },
-   "resumo": "Safra, BTG e J.P. Morgan aparecem com compra, com alvos de R$ 17,50, R$ 18 e R$ 18. O BTG citou vitória no leilão de capacidade (LRCAP) de 2026, e o J.P. Morgan vê dividend yield médio de 5% em 2026-2028. No 2T26 a empresa reportou Ebitda recorrente de R$ 1,61 bilhão e lucro recorrente de R$ 645 milhões, e aprovou R$ 706 milhões em JCP pagos em 30/09/2026. As datas das recomendações não constam nos trechos consultados.",
+   "resumo": "Safra, BTG e J.P. Morgan aparecem com compra, com alvos de R$ 17,50, R$ 18 e R$ 18. O BTG citou vitória no leilão de capacidade (LRCAP) de 2026, e o J.P. Morgan vê dividend yield médio de 5% em 2026-2028. No 2T26 a empresa reportou Ebitda recorrente de R$ 1,61 bilhão e lucro recorrente de R$ 645 milhões, e aprovou R$ 706 milhões em JCP pagos em 30/09/2026. A página de pesquisa do BTG, de 23/10/2026, mantém compra com alvo de R$ 18 (cotação de R$ 17,34). As datas das demais recomendações não constam nos trechos consultados.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 3,
@@ -3486,7 +3499,7 @@
       "nome": "BTG Pactual",
       "recomendacao": "compra",
       "preco_alvo": 18,
-      "data": null
+      "data": "2026-10-23"
      },
      {
       "nome": "J.P. Morgan",
@@ -3515,9 +3528,15 @@
      "titulo": "Copel (CPLE3) anuncia R$ 706 milhões em JCP",
      "url": "https://www.moneytimes.com.br/copel-cple3-anuncia-r-706-milhoes-em-jcp-veja-como-garantir-uma-parte-fets/",
      "data": null
+    },
+    {
+     "nome": "BTG Pactual",
+     "titulo": "CPLE3 - Cotação e análises (compra, alvo R$ 18, página de 23/10/2026)",
+     "url": "https://content.btgpactual.com/research/ativo/CPLE3",
+     "data": "2026-10-23"
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-30"
   },
   {
    "ticker": "EQTL3",
@@ -4556,20 +4575,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Gerdau reportou lucro líquido de cerca de R$ 1,52 bilhão no 3T26 e Ebitda ajustado de R$ 3,8 bilhões.",
-     "fonte": "Investidor10",
-     "data": "2026-10-26"
-    },
-    {
-     "tipo": "dividendos",
-     "descricao": "Dividendos de R$ 0,34 por ação (cerca de R$ 667 milhões), data-com 10/11/2026 e pagamento em 15/12/2026, segundo o Investidor10.",
-     "fonte": "Investidor10",
-     "data": "2026-10-26"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Money Times",
@@ -4768,13 +4774,13 @@
      "sinais": []
     }
    },
-   "resumo": "As fontes mostram opiniões majoritariamente de compra, mas com cautela por excesso de oferta global de celulose. O BTG manteve compra com alvo de R$ 72 e vê a Suzano como principal escolha do setor; o Itaú BBA manteve compra com alvo reduzido por causa de preços menores da celulose; o BofA rebaixou para neutra com alvo de R$ 57 (datas não confirmadas). A Rico mostra compra com alvo de R$ 66 em página de 09/07/2026.",
+   "resumo": "As fontes mostram maioria de compra, mas com preços-alvo reduzidos pela cautela com a celulose: Citi manteve compra e cortou o alvo de R$ 65 para R$ 52; Ágora tem R$ 59 (24/09/2026); BofA aparece com compra e alvo de R$ 66 (reportagem de 23/09/2026); Nomos R$ 68 (04/09/2026); XP compra com R$ 60; Morgan Stanley overweight com R$ 68; Rico compra com R$ 66. O Clube Acionista cita média de R$ 63,62 entre projeções de R$ 30 a R$ 90. Resultado do 3T26 não localizado; datas de Citi, XP e Morgan Stanley não confirmadas.",
    "sentimento": "neutro",
    "consenso": {
-    "compra": 1,
+    "compra": 7,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 66,
+    "preco_alvo_medio": 62.71,
     "moeda": "BRL",
     "casas": [
      {
@@ -4782,6 +4788,42 @@
       "recomendacao": "compra",
       "preco_alvo": 66,
       "data": "2026-07-09"
+     },
+     {
+      "nome": "Citi",
+      "recomendacao": "compra",
+      "preco_alvo": 52,
+      "data": null
+     },
+     {
+      "nome": "Ágora",
+      "recomendacao": "compra",
+      "preco_alvo": 59,
+      "data": "2026-09-24"
+     },
+     {
+      "nome": "BofA",
+      "recomendacao": "compra",
+      "preco_alvo": 66,
+      "data": "2026-09-23"
+     },
+     {
+      "nome": "Nomos",
+      "recomendacao": "compra",
+      "preco_alvo": 68,
+      "data": "2026-09-04"
+     },
+     {
+      "nome": "XP",
+      "recomendacao": "compra",
+      "preco_alvo": 60,
+      "data": null
+     },
+     {
+      "nome": "Morgan Stanley",
+      "recomendacao": "compra",
+      "preco_alvo": 68,
+      "data": null
      }
     ]
    },
@@ -4804,9 +4846,21 @@
      "titulo": "Bank of America corta Suzano (SUZB3) e vê fim do ciclo da celulose",
      "url": "https://www.suno.com.br/noticias/?p=647858",
      "data": null
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "SUZB3: recomendação de compra e preço-alvo reduzido",
+     "url": "https://acionista.com.br/suzb3-recomendacao-de-compra-e-preco-alvo-reduzido/",
+     "data": null
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "SUZB3: alerta de valorização de 30% com novo preço-alvo de R$ 68",
+     "url": "https://acionista.com.br/ticker/suzb3/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-30"
   },
   {
    "ticker": "RENT3",
@@ -5985,14 +6039,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Lucro recorrente de R$ 7,1 bi no 3T26 (+14,6% a/a), em linha com o consenso; ROAE de 16,1%; inadimplência acima de 90 dias em 4,6%; fontes citam programa de recompra de ações.",
-     "fonte": "Investidor10",
-     "data": "2026-10-22"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Investidor10",
@@ -7873,26 +7920,38 @@
      ]
     }
    },
-   "resumo": "As casas estão divididas: o Santander (29/07/2026) elevou o alvo de R$ 26 para R$ 28 mantendo outperform, enquanto a XP (15/07/2026) reduziu o alvo para R$ 20,50 com recomendação neutra, citando cenário mais difícil da National Beef nos EUA. O Itaú BBA é neutro com alvo de R$ 23. A ação acumulava queda de 15% no ano em julho.",
+   "resumo": "As casas seguem divididas, segundo as fontes. O Clube Acionista relata que o Santander reduziu o alvo de R$ 28 para R$ 25 (antes outperform), o JPMorgan cortou de R$ 24,50 para R$ 21,50 mantendo compra, a XP (15/07/2026) tem neutro com alvo de R$ 20,50 e o Bradesco BBI mantém neutro com alvo de R$ 22 (Eu Quero Investir); o Itaú BBA é neutro com alvo de R$ 23. As datas das revisões do Santander, JPMorgan e BBI não foram confirmadas. O lucro do 2T26 foi de R$ 69 milhões (BP Money); o 3T26 não apareceu nas buscas.",
    "sentimento": "neutro",
    "consenso": {
-    "compra": 1,
-    "neutro": 2,
+    "compra": 2,
+    "neutro": 3,
     "venda": 0,
-    "preco_alvo_medio": 23.83,
+    "preco_alvo_medio": 22.4,
     "moeda": "BRL",
     "casas": [
      {
       "nome": "Santander",
       "recomendacao": "compra",
-      "preco_alvo": 28,
-      "data": "2026-07-29"
+      "preco_alvo": 25,
+      "data": null
+     },
+     {
+      "nome": "JPMorgan",
+      "recomendacao": "compra",
+      "preco_alvo": 21.5,
+      "data": null
      },
      {
       "nome": "XP",
       "recomendacao": "neutro",
       "preco_alvo": 20.5,
       "data": "2026-07-15"
+     },
+     {
+      "nome": "Bradesco BBI",
+      "recomendacao": "neutro",
+      "preco_alvo": 22,
+      "data": null
      },
      {
       "nome": "Itaú BBA",
@@ -7915,9 +7974,27 @@
      "titulo": "MBRF (MBRF3): XP corta preço-alvo com risco-retorno menos atrativo",
      "url": "https://moneytimes.com.br/mbrf-mbrf3-xp-corta-preco-alvo-com-risco-retorno-menos-atrativo-veja-recomendacao-pads/",
      "data": "2026-07-15"
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "MBRF3 tem potencial? Santander vê espaço, veja por onde",
+     "url": "https://acionista.com.br/mbrf3-tem-potencial-santander-ve-espaco-veja-por-onde/",
+     "data": null
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "MBRF3 reduz preço-alvo para R$ 21,50 em 2026",
+     "url": "https://acionista.com.br/mbrf3-reduz-preco-alvo-para-r-2150-em-2026/",
+     "data": null
+    },
+    {
+     "nome": "Eu Quero Investir",
+     "titulo": "MBRF deve crescer 5% no Ebitda no segundo trimestre, diz BBI",
+     "url": "https://euqueroinvestir.com/acoes/mbrf-deve-crescer-5-no-ebitda-no-segundo-trimestre-diz-bbi",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-30"
   },
   {
    "ticker": "EGIE3",
@@ -9704,8 +9781,8 @@
      ]
     }
    },
-   "resumo": "No 2T26 o Santander Brasil teve lucro de cerca de R$ 3,3 bilhões, abaixo da média das projeções (R$ 3,465 bilhões), com pressão de provisões no varejo e no agronegócio. As recomendações encontradas (XP compra, alvo R$ 44, em 25/03/2026) são anteriores à janela de 6 meses, por isso o consenso está zerado. Não foram encontradas mudanças nos últimos 7 dias.",
-   "sentimento": "neutro",
+   "resumo": "O Money Times relata que o Santander Brasil teve lucro líquido recorrente de R$ 2,9 bilhões no 3T26, queda de 28% em um ano e abaixo do consenso de R$ 3,161 bilhões (Bloomberg), com ROAE de 11,9% e carteira ampliada de R$ 721 bilhões (+4,7%). Citam-se XP com compra (alvo R$ 44 para o fim de 2026), Citi e Itaú neutros e Ativa Investimentos com neutro e alvo de R$ 33 (retomada de cobertura, setembro de 2026); revisões pós-balanço não foram localizadas. Os dados de recomendação não têm data confirmada, por isso o consenso permanece zerado.",
+   "sentimento": "negativo",
    "consenso": {
     "compra": 0,
     "neutro": 0,
@@ -9714,8 +9791,21 @@
     "moeda": "BRL",
     "casas": []
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Santander Brasil divulgou lucro recorrente de R$ 2,9 bilhões no 3T26 (-28% a/a), abaixo do consenso de R$ 3,161 bilhões, segundo o Money Times.",
+     "fonte": "Money Times",
+     "data": "2026-10-30"
+    }
+   ],
    "fontes": [
+    {
+     "nome": "Money Times",
+     "titulo": "Santander (SANB11): lucro 3T26 acima ou abaixo do esperado, ROAE e MIQL",
+     "url": "https://www.moneytimes.com.br/santander-sanb11-lucro-3t26-acima-abaixo-do-esperado-roae-miql/",
+     "data": "2026-10-30"
+    },
     {
      "nome": "Suno Notícias",
      "titulo": "Santander (SANB11): XP reitera recomendação de compra e vê cenário positivo",
@@ -9729,7 +9819,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-30"
   },
   {
    "ticker": "TAEE11",
@@ -10092,10 +10182,10 @@
      "sinais": []
     }
    },
-   "resumo": "A Genial iniciou cobertura com compra e alvo de R$ 37 em junho, e o Itaú BBA mantém compra com R$ 36 para o fim de 2026. No 2T26 o lucro foi de R$ 427,4 mi (+61,7%), com margem Ebitda de 82,6%. A empresa anunciou cerca de R$ 139 mi em JCP (R$ 0,284 por ação) com data de corte em 30/09 e tem programa de recompra de até 10 milhões de ações.",
+   "resumo": "A Genial iniciou cobertura com compra e alvo de R$ 37 em junho, e o Itaú BBA mantém compra com R$ 36 para o fim de 2026. No 2T26 o lucro foi de R$ 427,4 mi (+61,7%), com margem Ebitda de 82,6%. A empresa anunciou cerca de R$ 139 mi em JCP (R$ 0,284 por ação) com data de corte em 30/09 e tem programa de recompra de até 10 milhões de ações. A página de pesquisa do BTG, de 22/10/2026, registra recomendação de compra (o valor de preço-alvo exibido na página não é consistente com a cotação, por isso não foi usado).",
    "sentimento": "positivo",
    "consenso": {
-    "compra": 2,
+    "compra": 3,
     "neutro": 0,
     "venda": 0,
     "preco_alvo_medio": 36.5,
@@ -10112,6 +10202,12 @@
       "recomendacao": "compra",
       "preco_alvo": 36,
       "data": null
+     },
+     {
+      "nome": "BTG Pactual",
+      "recomendacao": "compra",
+      "preco_alvo": null,
+      "data": "2026-10-22"
      }
     ]
    },
@@ -10140,9 +10236,15 @@
      "titulo": "Multiplan anuncia R$ 139 milhões em juros sobre capital próprio",
      "url": "https://euqueroinvestir.com/acoes/multiplan-anuncia-r-139-milhoes-em-juros-sobre-capital-proprio",
      "data": "2026-09-25"
+    },
+    {
+     "nome": "BTG Pactual",
+     "titulo": "MULT3 - Cotação e análises (página de 22/10/2026)",
+     "url": "https://content.btgpactual.com/research/ativo/MULT3",
+     "data": "2026-10-22"
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-30"
   },
   {
    "ticker": "PSSA3",
@@ -10481,14 +10583,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "fato_relevante",
-     "descricao": "Conselho da CPFL aprovou por unanimidade o Plano Estratégico 2027-2031, a atualização do Plano ESG 2030, aditivos de CUST/MUST e a renovação de limites de compra e venda de energia.",
-     "fonte": "BTG Pactual",
-     "data": "2026-10-23"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "BTG Pactual",
@@ -10807,7 +10902,7 @@
      "sinais": []
     }
    },
-   "resumo": "Santander manteve compra com alvo de R$ 29 (22/07), Safra elevou para compra com R$ 29,50 (12/06) e UBS BB também elevou para compra (03/06); o BTG segue neutro com R$ 26. O 1T26 trouxe lucro de R$ 346,8 mi, revertendo prejuízo. A Anvisa registrou dois produtos de semaglutida da empresa em 29/07, apontado pelas casas como possível catalisador. Não achei notas de outubro.",
+   "resumo": "Segundo o Clube Acionista e o Análise de Ações, a Hypera reportou lucro de R$ 527 milhões no 3T26 (+16% a/a), acima dos cerca de R$ 471 milhões esperados pela LSEG, com receita de R$ 2,44 bilhões e Ebitda de R$ 782 milhões (o BTG descreve o trimestre como praticamente em linha). A empresa aprovou recompra de até 5 milhões de ações (1,61% do free float), com início em 27/10/2026 e prazo de 18 meses. Santander (alvo R$ 29), Safra (R$ 29,50) e UBS BB aparecem com compra; o BTG segue neutro com R$ 26. Não foram achadas revisões de casas após o balanço.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 5,
@@ -10854,8 +10949,27 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Lucro de R$ 527 mi no 3T26 (+16% a/a), acima do consenso LSEG (~R$ 471 mi), e aprovação de recompra de até 5 milhões de ações; data exata da divulgação não confirmada nas páginas consultadas (recompra inicia em 27/10).",
+     "fonte": "Clube Acionista",
+     "data": "2026-10-27"
+    }
+   ],
    "fontes": [
+    {
+     "nome": "Clube Acionista",
+     "titulo": "HYPE3: lucro cresce 16,1% no 3T26, mas a recompra pode ser o destaque",
+     "url": "https://acionista.com.br/hype3-lucro-cresce-161-no-3t26-mas-a-recompra-pode-ser-o-destaque/",
+     "data": null
+    },
+    {
+     "nome": "Análise de Ações",
+     "titulo": "Lucro da Hypera (HYPE3) cresce 16% no 3º trimestre e empresa aprova recompra de ações",
+     "url": "https://www.analisedeacoes.com/noticias/lucro-da-hypera-hype3-cresce-16-no-3-trimestre-e-empresa-aprova-recompra-de-acoes/",
+     "data": null
+    },
     {
      "nome": "Money Times",
      "titulo": "Hypera (HYPE3): Santander vê ação como uma das principais convicções e fixa preço-alvo para 2027",
@@ -10887,7 +11001,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-10-30"
   },
   {
    "ticker": "CSAN3",
@@ -14872,13 +14986,13 @@
      "sinais": []
     }
    },
-   "resumo": "Casas citadas mantêm compra, mas com cortes de alvo ao longo de 2026: UBS BB de R$ 23 para R$ 20 (07/01), Citi de R$ 22 para R$ 18, Safra de R$ 22,50 para R$ 17,50 (março), Morgan Stanley elevou para overweight com alvo de R$ 19,50; XP e J.P. Morgan têm R$ 23 e R$ 22. No 2T26 o lucro ajustado foi de R$ 130,1 milhões (+4,3%) e as ações caíram em agosto; a XP vê 3T26 desafiador, com melhora esperada a partir de meados de setembro. Ação cotada perto de R$ 9 em agosto, bem abaixo dos alvos. Fontes também citam corte do alvo do Bradesco de R$ 24 para R$ 18 (data não informada).",
+   "resumo": "Casas citadas mantêm compra, mas com cortes de alvo ao longo de 2026: UBS BB de R$ 23 para R$ 20 (07/01), Citi de R$ 22 para R$ 18, Safra de R$ 22,50 para R$ 17,50 (março), Morgan Stanley elevou para overweight com alvo de R$ 19,50; XP e J.P. Morgan têm R$ 23 e R$ 22. No 2T26 o lucro ajustado foi de R$ 130,1 milhões (+4,3%) e as ações caíram em agosto; a XP vê 3T26 desafiador, com melhora esperada a partir de meados de setembro. Ação cotada perto de R$ 9 em agosto, bem abaixo dos alvos. Fontes também citam corte do alvo do Bradesco de R$ 24 para R$ 18 (data não informada). Segundo o Clube Acionista, o Citi mantém compra com alvo de R$ 16 (antes R$ 18), esperando um 3T26 mais fraco, e a administração relatou melhora nas vendas de setembro frente a julho e agosto.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 6,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 20,
+    "preco_alvo_medio": 19.67,
     "moeda": "BRL",
     "casas": [
      {
@@ -14890,7 +15004,7 @@
      {
       "nome": "Citi",
       "recomendacao": "compra",
-      "preco_alvo": 18,
+      "preco_alvo": 16,
       "data": null
      },
      {
@@ -14944,9 +15058,15 @@
      "titulo": "CEAB3 - C&A Modas ON",
      "url": "https://br.investing.com/equities/c-a-modas-sa",
      "data": null
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "CEAB3: 3T26 deve ser pressionado, mas Citi mantém visão construtiva",
+     "url": "https://acionista.com.br/ceab3-3t26-deve-ser-pressionado-mas-citi-mantem-visao-construtiva/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-10-26"
+   "atualizado_em": "2026-10-30"
   },
   {
    "ticker": "VAMO3",
@@ -16042,13 +16162,13 @@
      ]
     }
    },
-   "resumo": "A Bernstein elevou em 19/10/2026 o preço-alvo de US$ 660 para US$ 662 e manteve Outperform antes do balanço do 1º trimestre fiscal de 2027, previsto para 28/10 após o fechamento (lucro esperado de cerca de US$ 4,72 por ação e receita de cerca de US$ 90,4 bilhões, segundo a Fiscal AI). Dados de agosto do Investing.com mostram preço-alvo médio de US$ 569,45, com 52 analistas em compra e nenhum em venda; a Koyfin cita 53 de 56 em compra. A Wedbush aparece com Outperform e alvo de US$ 625 em texto de data incerta. Segundo o Stocktwits, Oppenheimer elevou o alvo de US$ 570 para US$ 625 (Outperform) e a Truist de US$ 575 para US$ 600 (Buy) antes do balanço; os resultados efetivos do trimestre não foram localizados.",
+   "resumo": "A Bernstein elevou em 19/10/2026 o alvo de US$ 660 para US$ 662 (Outperform) antes do balanço do 1º trimestre fiscal de 2027, previsto para 28/10 após o fechamento (lucro esperado de cerca de US$ 4,72 por ação). Segundo texto de estilo Benzinga, a UBS elevou o alvo de US$ 525 para US$ 675 (15/10), a BMO de US$ 515 para US$ 600 (20/10) e a Guggenheim manteve Buy com US$ 586 (21/10); Oppenheimer (US$ 625) e Truist (US$ 600) também elevaram antes do balanço, segundo o Stocktwits. O Investing.com mostra alvo médio de US$ 569,45 e a Koyfin cita 53 de 56 analistas em compra. Os resultados efetivos do trimestre e as reações pós-balanço não foram localizados.",
    "sentimento": "positivo",
    "consenso": {
-    "compra": 4,
+    "compra": 7,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 569.45,
+    "preco_alvo_medio": 624.71,
     "moeda": "USD",
     "casas": [
      {
@@ -16056,6 +16176,24 @@
       "recomendacao": "compra",
       "preco_alvo": 662,
       "data": "2026-10-19"
+     },
+     {
+      "nome": "UBS",
+      "recomendacao": "compra",
+      "preco_alvo": 675,
+      "data": "2026-10-15"
+     },
+     {
+      "nome": "BMO Capital",
+      "recomendacao": "compra",
+      "preco_alvo": 600,
+      "data": "2026-10-20"
+     },
+     {
+      "nome": "Guggenheim",
+      "recomendacao": "compra",
+      "preco_alvo": 586,
+      "data": "2026-10-21"
      },
      {
       "nome": "Wedbush",
@@ -16102,9 +16240,15 @@
      "titulo": "MSFT Stock Gets Wall Street's Attention Ahead Of Earnings: Truist, Oppenheimer Raise Targets On Azure Growth Outlook",
      "url": "https://stocktwits.com/news-articles/markets/equity/msft-stock-gets-wall-street-s-attention-ahead-of-earnings-truist-oppenheimer-raise-targets-on-azure-growth-outlook/cZU3d4BRByM",
      "data": null
+    },
+    {
+     "nome": "Benzinga",
+     "titulo": "Microsoft earnings preview: analyst ratings and price targets (UBS, BMO, Guggenheim)",
+     "url": "https://www.benzinga.com/node/62612074",
+     "data": "2026-10-28"
     }
    ],
-   "atualizado_em": "2026-10-29"
+   "atualizado_em": "2026-10-30"
   }
  ]
 }
