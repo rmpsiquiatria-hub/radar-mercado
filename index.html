@@ -911,7 +911,7 @@ function macroCards() {
       <div class="px num">${brl(sm.valor)}</div>
       <div class="ch num flat">${usd ? `≈ US$ ${nf(2).format(sm.valor / usd)}` : "&nbsp;"}</div>
       <div class="since">${usd ? "pelo dólar de agora" : ""}</div>
-      ${rd?.atual ? `<span class="idx-sub" data-open="MACRO:renda" data-max="1" title="Rendimento médio do trabalho, descontada a inflação, trimestre ${esc(rd.periodo || "")} (IBGE) · ver o histórico"><span>Renda média real · ${mesCurto(rd.mes)}</span><b class="num">${brl(rd.atual)}</b>${dr != null ? `<small class="num ${cls(dr)}">${pct(dr)} em 12m</small>` : ""}</span>` : ""}
+      ${rd?.atual ? `<span class="idx-sub" data-open="MACRO:renda" data-max="1" title="Rendimento médio do trabalho, descontada a inflação, trimestre ${esc(rd.periodo || "")} (IBGE) · ver o histórico"><span>Renda média real · ${mesCurto(rd.mes)}</span><b class="num">${brl(rd.atual)}</b><small class="num">(${nf(1).format(rd.atual / sm.valor)} salários mínimos)</small>${dr != null ? `<small class="num ${cls(dr)}">${pct(dr)} em 12m</small>` : ""}</span>` : ""}
     </button>`);
   }
   const ct = CARGA.anos.at(-1), ctp = CARGA.anos.at(-2), dct = ct[1] - ctp[1];
