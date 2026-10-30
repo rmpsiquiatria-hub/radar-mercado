@@ -858,6 +858,11 @@ const CARGA = {
     [2022, 31.2, 20.6, 8.5, 2.2], [2023, 30.3, 19.9, 8.1, 2.3], [2024, 32.22, 21.3, 8.5, 2.4], [2025, 32.40, 21.6, 8.4, 2.4]],
 };
 const cargaAno = y => CARGA.anos.find(a => a[0] === y);
+// Tax burden in reais (% × that year's GDP, IBGE) and per person (% × GDP per capita, the same basis as that card).
+function cargaReais(y) {
+  const c = cargaAno(y), pib = macro?.pib?.anuais?.find(a => a[0] === y)?.[1], pc = macro?.pibpc?.anos?.find(a => a[0] === y)?.[1];
+  return c ? { total: pib ? pib * c[1] / 100 : null, pc: pc ? pc * c[1] / 100 : null } : null;
+}
 // IDEB (0 to 10), every two years: [year, early primary (1º–5º), late primary (6º–9º), high school].
 // Brazil, all school networks. Typed in from INEP; the next edition (2027) comes out around August/2028.
 const IDEB = {
@@ -909,7 +914,7 @@ function macroCards() {
       <div class="ch num ${cls(pb.quatro_tri)}">${pct(pb.quatro_tri)} real em 12m</div>
       <div class="since" title="Soma do que o país produziu nos 4 trimestres terminados no ${esc(pb.periodo || "")}">4 trimestres até o ${triCurto(pb.mes)}</div>
       <div class="since" title="Último trimestre sobre o anterior, com ajuste sazonal">só o ${triCurto(pb.mes)}: ${pct(pb.trimestre)}</div>
-      ${pc ? `<span class="idx-sub" data-open="MACRO:pibpc" data-max="1" title="PIB dividido pela população · ver o histórico"><span>PIB per capita · anual · ${pc[0]}</span><b class="num">R$ ${nf(0).format(pc[1])}</b>${pc[3] != null ? `<small class="num ${cls(pc[3])}">${pct(pc[3])} real</small>` : ""}</span>` : ""}
+      ${pc ? `<span class="idx-sub" data-open="MACRO:pibpc" data-max="1" title="PIB do ano dividido por todos os habitantes · ver o histórico"><span>PIB per capita · anual · ${pc[0]}</span><b class="num">R$ ${nf(0).format(pc[1])}</b>${pc[3] != null ? `<small class="num ${cls(pc[3])}">${pct(pc[3])} real</small>` : ""}</span>` : ""}
     </button>`);
   }
   // Minimum wage card, with the real average income from work underneath (opens its own chart).
@@ -921,7 +926,7 @@ function macroCards() {
       <div class="px num">${brl(sm.valor)}</div>
       <div class="ch num flat">${usd ? `≈ US$ ${nf(2).format(sm.valor / usd)}` : "&nbsp;"}</div>
       <div class="since">${usd ? "pelo dólar de agora" : ""}</div>
-      ${rd?.atual ? `<span class="idx-sub" data-open="MACRO:renda" data-max="1" title="Rendimento médio do trabalho, descontada a inflação, trimestre ${esc(rd.periodo || "")} (IBGE) · ver o histórico"><span>Renda média real · ${mesCurto(rd.mes)}</span><b class="num">${brl(rd.atual)}</b><small class="num">(${nf(1).format(rd.atual / sm.valor)} salários mínimos)</small>${dr != null ? `<small class="num ${cls(dr)}">${pct(dr)} em 12m</small>` : ""}</span>` : ""}
+      ${rd?.atual ? `<span class="idx-sub" data-open="MACRO:renda" data-max="1" title="Rendimento médio do trabalho de quem tem 14 anos ou mais e está trabalhando (por pessoa, não por família), descontada a inflação, trimestre ${esc(rd.periodo || "")} (IBGE) · ver o histórico"><span>Renda média real · ${mesCurto(rd.mes)}</span><b class="num">${brl(rd.atual)}</b><small class="num">(${nf(1).format(rd.atual / sm.valor)} salários mínimos)</small>${dr != null ? `<small class="num ${cls(dr)}">${pct(dr)} em 12m</small>` : ""}</span>` : ""}
     </button>`);
   }
   const ct = CARGA.anos.at(-1), ctp = CARGA.anos.at(-2), dct = ct[1] - ctp[1];
@@ -930,6 +935,8 @@ function macroCards() {
       <div class="px num">${nf(1).format(ct[1])}% <span style="font-size:12px;font-weight:500">do PIB</span></div>
       <div class="ch num flat">${dct > 0 ? "+" : ""}${nf(2).format(dct)} p.p. em 1 ano</div>
       <div class="since">dado anual</div>
+      ${(() => { const r = cargaReais(ct[0]); return r?.total ? `<span class="idx-sub"><span>Em reais · ${ct[0]}</span><b class="num">R$ ${nf(2).format(r.total / 1e12)} tri</b></span>` : ""; })()}
+      ${(() => { const r = cargaReais(ct[0]); return r?.pc ? `<span class="idx-sub" title="Carga tributária × PIB per capita: impostos do ano divididos por todos os habitantes"><span>Per capita · anual · ${ct[0]}</span><b class="num">R$ ${nf(0).format(r.pc)}</b><small class="num">(R$ ${nf(0).format(r.pc / 12)} por mês)</small></span>` : ""; })()}
     </button>`);
   const ev = macro.expvida?.anos, ih = macro.idh?.anos, id = IDEB.anos.at(-1), idp = IDEB.anos.at(-2);
   if (ev?.length > 1) { const [y, v] = ev.at(-1), d = v - ev.at(-2)[1];
@@ -2303,7 +2310,7 @@ function eduItems() {
     { id: "pibpc", titulo: "PIB per capita", sub: "O PIB do ano dividido pela população · dado anual",
       valor: () => { const a = macro?.pibpc?.anos; if (!a?.length) return ""; const [y, r, u, g] = a.at(-1);
         return `<b class="num">R$ ${nf(0).format(r)} em ${y}</b>${u ? ` <span class="hint">≈ US$ ${nf(0).format(u)} pelo dólar médio do ano</span>` : ""}${g != null ? `<br><span class="hint">Crescimento real em ${y}: </span><b class="num ${cls(g)}">${pct(g)}</b>` : ""}`; },
-      oque: "É o PIB do ano dividido pelo número de habitantes: quanto o país produziu, em média, por pessoa. Não é o que cada um ganha: inclui os lucros das empresas, os impostos e tudo o que não vira salário.",
+      oque: "É o PIB do ano dividido pelo número de <b>todos os habitantes</b>, de bebês a idosos, trabalhem ou não: quanto o país produziu, em média, por pessoa. Não é o que cada um ganha: inclui os lucros das empresas, os impostos e tudo o que não vira salário.",
       porque: "Corrige o PIB pelo crescimento da população. Se o PIB cresce 1% e a população também, a média por pessoa fica parada. É a medida mais usada para comparar o padrão de vida entre países e entre épocas, embora não mostre como a riqueza é dividida.",
       horario: [["Divulgação", "anual"], ["Atualização aqui", "automática, quando o Banco Mundial publica (alguns meses depois do fim do ano)"]],
       nota: "Fonte: Banco Mundial (séries NY.GDP.PCAP), com dados do IBGE. O valor em reais é o do próprio ano, sem descontar a inflação; o crescimento real já desconta. A tabela do IBGE com o per capita oficial sai com cerca de 2 anos de atraso." },
@@ -2318,18 +2325,21 @@ function eduItems() {
     { id: "renda", titulo: "Renda média real", sub: "Quanto os trabalhadores ganham, já descontada a inflação",
       valor: () => { const r = macro?.renda; if (!r?.atual) return ""; const m = r.mensal, a12 = m.length > 12 ? m[m.length - 13][1] : null;
         return `<b class="num">${brl(r.atual)} por mês</b> <span class="hint">no trimestre ${esc(r.periodo || "")}</span>${a12 ? `<br><span class="hint">Em 12 meses: </span><b class="num ${cls(r.atual / a12 - 1)}">${pct((r.atual / a12 - 1) * 100)}</b>` : ""}${macro?.salmin?.valor ? ` <span class="hint">· ${nf(1).format(r.atual / macro.salmin.valor)} salários mínimos</span>` : ""}`; },
-      oque: "Medida pelo <b>IBGE</b> na PNAD Contínua, é o rendimento médio que as pessoas ocupadas (com carteira, sem carteira, por conta própria, servidores e empregadores) costumam receber por mês com o trabalho. É <b>real</b>: todos os valores da série estão em reais de hoje, corrigidos pela inflação, então dá para comparar épocas diretamente.",
+      oque: "Medida pelo <b>IBGE</b> na PNAD Contínua, é o rendimento médio que as pessoas de <b>14 anos ou mais que estão trabalhando</b> (com carteira, sem carteira, por conta própria, servidores e empregadores) costumam receber por mês com o trabalho. É a renda <b>de cada trabalhador</b>, não da família, e não inclui desempregados, crianças nem quem não trabalha. É <b>real</b>: todos os valores da série estão em reais de hoje, corrigidos pela inflação, então dá para comparar épocas diretamente.",
       porque: "Mostra se o poder de compra de quem trabalha está subindo. Renda real em alta sustenta o consumo, o que ajuda varejo e serviços, mas pode pressionar a inflação. Junto com o salário mínimo, mostra se o ganho chegou além do piso.",
       horario: [["Divulgação", "uma vez por mês, junto com o desemprego, no fim do mês, às 9h"], ["Defasagem", "cerca de 1 a 2 meses, por trimestre móvel"]],
       nota: "Fonte: IBGE (SIDRA, tabela 6390), desde 2012. É uma média: alguns salários muito altos puxam o número para cima, e a maioria das pessoas ganha menos do que ela. Não inclui aposentadorias, aluguéis nem programas sociais." },
     { id: "carga", titulo: "Carga tributária", sub: "Quanto do que o país produz vai para impostos",
       valor: () => { const [y, t, c, e, m] = CARGA.anos.at(-1), pv = CARGA.anos.at(-2);
+        const r = cargaReais(y);
         return `<b class="num">${nf(2).format(t)}% do PIB em ${y}</b> <span class="hint">· ${pv[0]}: ${nf(2).format(pv[1])}%</span>
+          ${r?.total ? `<br><b class="num">R$ ${nf(2).format(r.total / 1e12)} trilhões</b> <span class="hint">em impostos no ano</span>` : ""}
+          ${r?.pc ? `<br><b class="num">R$ ${nf(0).format(r.pc)} por pessoa no ano</b> <span class="hint">(R$ ${nf(0).format(r.pc / 12)} por mês), a mesma conta do PIB per capita: o total dividido por todos os habitantes</span>` : ""}
           <table class="edu-t" style="margin-top:8px"><tr><td>Governo federal</td><td><b class="num">${nf(1).format(c)}%</b></td></tr><tr><td>Estados</td><td><b class="num">${nf(1).format(e)}%</b></td></tr><tr><td>Municípios</td><td><b class="num">${nf(1).format(m)}%</b></td></tr></table>`; },
       oque: "É a soma de <b>todos os tributos</b> pagos no país (federais, estaduais e municipais: Imposto de Renda, INSS, PIS/Cofins, IPI, IOF, ICMS, ISS, IPTU, IPVA e outros) dividida pelo <b>PIB</b>, o total que o país produz no ano. Em 2025, de cada R$ 100 produzidos, cerca de R$ 32 foram para impostos. Os maiores pesos são os impostos sobre bens e serviços (cerca de 14% do PIB), sobre renda e lucros (9%) e as contribuições à Previdência (7%).",
       porque: "Mostra o peso do Estado na economia. Carga alta financia serviços públicos e reduz o déficit, mas encarece produtos e tira dinheiro de famílias e empresas. O Brasil cobra perto da média dos países ricos da OCDE (cerca de 34% do PIB) e bem acima da média da América Latina (cerca de 22%). A <b>reforma tributária</b>, em fase de teste desde 2026, vai trocar PIS, Cofins, IPI, ICMS e ISS por dois impostos sobre consumo (CBS e IBS) até 2033.",
       horario: [["Divulgação", "uma vez por ano, por volta de abril (Tesouro Nacional)"], ["Dado oficial", "a Receita Federal publica o seu cálculo mais tarde"]],
-      nota: "Fonte: Tesouro Nacional, série de 2010 a 2025. Em 2026 o Tesouro revisou a metodologia de toda a série (tirou, por exemplo, os recursos do Fundeb e subsídios de energia), por isso alguns números antigos publicados na imprensa são diferentes. Os dados de 2025 ainda são preliminares." },
+      nota: "Fonte: Tesouro Nacional, série de 2010 a 2025. O valor em reais é a porcentagem vezes o PIB do mesmo ano (IBGE); o valor por pessoa é a porcentagem vezes o PIB per capita (Banco Mundial), ou seja, divide os impostos por toda a população, inclusive crianças e quem não trabalha. Quem paga de fato varia muito: os impostos sobre consumo pesam mais, proporcionalmente, para quem ganha menos. Em 2026 o Tesouro revisou a metodologia de toda a série (tirou, por exemplo, os recursos do Fundeb e subsídios de energia), por isso alguns números antigos publicados na imprensa são diferentes. Os dados de 2025 ainda são preliminares." },
     { id: "expvida", titulo: "Expectativa de vida", sub: "Quantos anos, em média, vive quem nasce hoje",
       valor: () => { const a = macro?.expvida?.anos; if (!a?.length) return ""; const [y, v] = a.at(-1), y20 = a.find(x => x[0] === y - 20);
         return `<b class="num">${nf(1).format(v)} anos em ${y}</b>${y20 ? ` <span class="hint">· ${nf(1).format(y20[1])} anos em ${y20[0]}</span>` : ""}`; },

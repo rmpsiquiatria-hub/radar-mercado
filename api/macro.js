@@ -10,7 +10,7 @@
 //        the series already carries the months ahead of a value set for the year.
 // PIB: IBGE SIDRA table 5932 (Contas Nacionais Trimestrais) — real growth over 4 quarters (v6562) and
 //        quarter on previous quarter, seasonally adjusted (v6564); table 1846 (v585) for the value in
-//        reais, summed over the last 4 quarters.
+//        reais, summed over the last 4 quarters and over each complete year.
 // PIB per capita: World Bank NY.GDP.PCAP.CN (reais, current prices), .CD (US$) and .KD.ZG (real
 //        growth), yearly, from IBGE data; IBGE's own table 6784 stops two years further back.
 // Renda média real: IBGE SIDRA table 6390 (PNAD Contínua), v5933 — usual monthly income from work,
@@ -105,10 +105,14 @@ async function pib() {
   quatro.sort((a, b) => a[0].localeCompare(b[0])); tri.sort((a, b) => a[0].localeCompare(b[0]));
   if (!quatro.length) throw new Error("sem dados");
   const ult = valores.slice(-4), mes = quatro.at(-1)[0];
+  // Yearly GDP in reais: the sum of the 4 quarters of each complete year.
+  const porAno = new Map();
+  for (const [m, v] of valores) { const y = +m.slice(0, 4), a = porAno.get(y) || [0, 0]; porAno.set(y, [a[0] + v, a[1] + 1]); }
+  const anuais = [...porAno].filter(([, [, n]]) => n === 4).map(([y, [v]]) => [y, v * 1e6]);
   return {
     mes, periodo: nomes[mes] || null, quatro_tri: quatro.at(-1)[1], trimestre: tri.at(-1)?.[1] ?? null,
     valor_12m: ult.length === 4 && ult.at(-1)[0] === mes ? ult.reduce((a, x) => a + x[1], 0) * 1e6 : null,   // reais
-    quatro_tri_serie: quatro,
+    quatro_tri_serie: quatro, anuais,
   };
 }
 
