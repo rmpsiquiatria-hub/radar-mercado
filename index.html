@@ -857,7 +857,7 @@ const IDEB = {
 };
 const IDEB_ETAPAS = ["Anos iniciais (1º ao 5º)", "Anos finais (6º ao 9º)", "Ensino médio"];
 const serieAnual = k => k === "carga" ? CARGA.anos.map(a => [a[0], a[1]]) : macro?.[k]?.anos || null;
-const triCurto = m => `${+m.slice(5) / 3}º tri ${m.slice(0, 4)}`;   // "2026-06" → "2º tri 2026"
+const triCurto = m => `${+m.slice(5) / 3}º tri/${m.slice(2, 4)}`;   // "2026-06" → "2º tri/26"
 function macroCards() {
   if (!macro) return "";
   const out = [];
@@ -894,11 +894,12 @@ function macroCards() {
   const pb = macro.pib, pc = macro.pibpc?.anos?.at(-1);
   if (pb?.quatro_tri != null) {
     out.push(`<button class="card idx macro" data-open="MACRO:pib" data-max="1" title="Produto Interno Bruto, ${esc(pb.periodo || "")} (IBGE) · ver o histórico">
-      <div class="lbl">PIB<span class="mk">${triCurto(pb.mes)}</span></div>
-      <div class="px num">${pb.valor_12m ? `R$ ${nf(2).format(pb.valor_12m / 1e12)} tri <span style="font-size:12px;font-weight:500">12m</span>` : pct(pb.quatro_tri)}</div>
+      <div class="lbl">PIB<span class="mk">trimestral</span></div>
+      <div class="px num">${pb.valor_12m ? `R$ ${nf(2).format(pb.valor_12m / 1e12)} tri` : pct(pb.quatro_tri)}</div>
       <div class="ch num ${cls(pb.quatro_tri)}">${pct(pb.quatro_tri)} real em 12m</div>
-      <div class="since" title="Último trimestre sobre o anterior, com ajuste sazonal">último tri: ${pct(pb.trimestre)}</div>
-      ${pc ? `<span class="idx-sub" data-open="MACRO:pibpc" data-max="1" title="PIB dividido pela população · ver o histórico"><span>Per capita ${pc[0]}</span><b class="num">R$ ${nf(0).format(pc[1])}</b>${pc[3] != null ? `<small class="num ${cls(pc[3])}">${pct(pc[3])} real</small>` : ""}</span>` : ""}
+      <div class="since" title="Soma do que o país produziu nos 4 trimestres terminados no ${esc(pb.periodo || "")}">4 trimestres até o ${triCurto(pb.mes)}</div>
+      <div class="since" title="Último trimestre sobre o anterior, com ajuste sazonal">só o ${triCurto(pb.mes)}: ${pct(pb.trimestre)}</div>
+      ${pc ? `<span class="idx-sub" data-open="MACRO:pibpc" data-max="1" title="PIB dividido pela população · ver o histórico"><span>PIB per capita · anual · ${pc[0]}</span><b class="num">R$ ${nf(0).format(pc[1])}</b>${pc[3] != null ? `<small class="num ${cls(pc[3])}">${pct(pc[3])} real</small>` : ""}</span>` : ""}
     </button>`);
   }
   // Minimum wage card, with the real average income from work underneath (opens its own chart).
@@ -2284,11 +2285,11 @@ function eduItems() {
       valor: () => { const p = macro?.pib; if (p?.quatro_tri == null) return "";
         return `<b class="num">${pct(p.quatro_tri)} nos últimos 12 meses</b> <span class="hint">até o ${esc(p.periodo || "")}, já descontada a inflação</span>
           <table class="edu-t" style="margin-top:8px">${p.valor_12m ? `<tr><td>Valor dos últimos 4 trimestres</td><td><b class="num">R$ ${nf(2).format(p.valor_12m / 1e12)} trilhões</b></td></tr>` : ""}<tr><td>Último trimestre sobre o anterior</td><td><b class="num">${pct(p.trimestre)}</b></td></tr></table>`; },
-      oque: "É a soma de tudo o que o país produz em bens e serviços num período, por valor de venda ao consumidor final: da safra de soja ao corte de cabelo. O <b>IBGE</b> calcula o PIB a cada trimestre. O número mais citado é o <b>crescimento real</b>, já descontada a inflação: se o PIB cresceu 2%, o país produziu 2% a mais do que antes.",
+      oque: "É a soma de tudo o que o país produz em bens e serviços num período, por valor de venda ao consumidor final: da safra de soja ao corte de cabelo. O <b>IBGE</b> calcula o PIB <b>a cada trimestre</b> (3 meses). Como um trimestre sozinho é só um pedaço do ano, aqui o valor mostrado é a <b>soma dos últimos 4 trimestres</b>, ou seja, um ano inteiro de produção, atualizado a cada 3 meses. O número mais citado é o <b>crescimento real</b>, já descontada a inflação: se o PIB cresceu 2%, o país produziu 2% a mais do que antes.",
       porque: "É o principal termômetro da atividade econômica. Dois trimestres seguidos de queda costumam ser chamados de <b>recessão</b>. PIB forte costuma vir com mais emprego e lucros maiores, o que ajuda a bolsa, mas também pode pressionar a inflação e os juros. Sozinho, porém, ele não mostra se a vida das pessoas melhorou: para isso, veja também PIB per capita, renda média real, desemprego e inflação.",
       horario: [["Divulgação", "a cada trimestre, cerca de 2 meses depois do fim do trimestre, às 9h"], ["Revisões", "os números dos trimestres anteriores costumam ser revisados"]],
       nota: "Fonte: IBGE (SIDRA, tabelas 5932 e 1846). O crescimento \"em 12 meses\" compara os últimos 4 trimestres com os 4 anteriores. O \"trimestre sobre o anterior\" é feito com ajuste sazonal (desconta efeitos que se repetem todo ano, como a safra). No Brasil o agro pesa bastante: uma supersafra ou uma seca mexem no número do trimestre." },
-    { id: "pibpc", titulo: "PIB per capita", sub: "O PIB dividido pela população",
+    { id: "pibpc", titulo: "PIB per capita", sub: "O PIB do ano dividido pela população · dado anual",
       valor: () => { const a = macro?.pibpc?.anos; if (!a?.length) return ""; const [y, r, u, g] = a.at(-1);
         return `<b class="num">R$ ${nf(0).format(r)} em ${y}</b>${u ? ` <span class="hint">≈ US$ ${nf(0).format(u)} pelo dólar médio do ano</span>` : ""}${g != null ? `<br><span class="hint">Crescimento real em ${y}: </span><b class="num ${cls(g)}">${pct(g)}</b>` : ""}`; },
       oque: "É o PIB do ano dividido pelo número de habitantes: quanto o país produziu, em média, por pessoa. Não é o que cada um ganha: inclui os lucros das empresas, os impostos e tudo o que não vira salário.",
