@@ -1,4 +1,4 @@
-// GET /api/macro → Selic, IPCA, unemployment, the minimum wage, life expectancy and HDI, current value plus monthly history (for cards and correlations).
+// GET /api/macro → Selic, IPCA, unemployment, the minimum wage, GDP, GDP per capita, real average income, life expectancy and HDI, current value plus monthly history (for cards and correlations).
 // GET /api/macro?historico=1 → the longest history (Selic since 1996, IPCA since the Real in 1995,
 //        unemployment since 2012), for the charts opened from the top cards.
 // Selic: IPEA series BM366_TJOVER366 (daily, % a.a., mirrors the Central Bank's SGS, which
@@ -8,6 +8,13 @@
 //        3-month period stamped with its last month.
 // Salário mínimo: IPEA series MTE12_SALMIN12 (monthly, in reais since the Real, July 1994);
 //        the series already carries the months ahead of a value set for the year.
+// PIB: IBGE SIDRA table 5932 (Contas Nacionais Trimestrais) — real growth over 4 quarters (v6562) and
+//        quarter on previous quarter, seasonally adjusted (v6564); table 1846 (v585) for the value in
+//        reais, summed over the last 4 quarters.
+// PIB per capita: World Bank NY.GDP.PCAP.CN (reais, current prices), .CD (US$) and .KD.ZG (real
+//        growth), yearly, from IBGE data; IBGE's own table 6784 stops two years further back.
+// Renda média real: IBGE SIDRA table 6390 (PNAD Contínua), v5933 — usual monthly income from work,
+//        in reais of the latest month, rolling 3-month period stamped with its last month.
 // Expectativa de vida: World Bank SP.DYN.LE00.IN (UN estimates, yearly, includes the pandemic dip).
 // IDH: IPEA series IDHM, Brazil level (Atlas do Desenvolvimento Humano, PNUD/IPEA/FJP), yearly from
 //        2012 on PNAD data (the 1991/2000/2010 census values use another method, so they are left out).
@@ -82,6 +89,51 @@ async function salmin() {
   return { valor, desde: mensal[i][0], reajustes };
 }
 
+const trimestre = c => `${c.slice(0, 4)}-${String(+c.slice(4) * 3).padStart(2, "0")}`;   // 202602 → "2026-06", the quarter's last month
+async function pib() {
+  const [tx, vl] = await Promise.all([
+    getJson("https://apisidra.ibge.gov.br/values/t/5932/n1/all/v/6562,6564/p/all/c11255/90707"),
+    getJson("https://apisidra.ibge.gov.br/values/t/1846/n1/all/v/585/p/all/c11255/90707"),
+  ]);
+  const quatro = [], tri = [], nomes = {};
+  for (const r of tx.slice(1)) {
+    const v = Number(r.V); if (r.V === "..." || !Number.isFinite(v)) continue;
+    const m = trimestre(r.D3C); nomes[m] = r.D3N;
+    (r.D2C === "6562" ? quatro : tri).push([m, v]);
+  }
+  const valores = vl.slice(1).filter(r => Number.isFinite(Number(r.V))).map(r => [trimestre(r.D3C), Number(r.V)]).sort((a, b) => a[0].localeCompare(b[0]));
+  quatro.sort((a, b) => a[0].localeCompare(b[0])); tri.sort((a, b) => a[0].localeCompare(b[0]));
+  if (!quatro.length) throw new Error("sem dados");
+  const ult = valores.slice(-4), mes = quatro.at(-1)[0];
+  return {
+    mes, periodo: nomes[mes] || null, quatro_tri: quatro.at(-1)[1], trimestre: tri.at(-1)?.[1] ?? null,
+    valor_12m: ult.length === 4 && ult.at(-1)[0] === mes ? ult.reduce((a, x) => a + x[1], 0) * 1e6 : null,   // reais
+    quatro_tri_serie: quatro,
+  };
+}
+
+async function pibpc() {
+  const wb = id => getJson(`https://api.worldbank.org/v2/country/BRA/indicator/${id}?format=json&per_page=100`)
+    .then(rows => new Map((rows[1] || []).filter(r => r.value != null && +r.date >= 1996).map(r => [+r.date, r.value])));
+  const [reais, dolares, real] = await Promise.all([wb("NY.GDP.PCAP.CN"), wb("NY.GDP.PCAP.CD"), wb("NY.GDP.PCAP.KD.ZG")]);
+  const anos = [...reais.keys()].sort((a, b) => a - b).map(y => [y, Math.round(reais.get(y)), dolares.has(y) ? Math.round(dolares.get(y)) : null, real.has(y) ? Math.round(real.get(y) * 100) / 100 : null]);
+  if (!anos.length) throw new Error("sem dados");
+  return { fonte: "Banco Mundial (dados do IBGE)", anos };   // [year, R$, US$, real growth %]
+}
+
+async function renda() {
+  const rows = await getJson("https://apisidra.ibge.gov.br/values/t/6390/n1/all/v/5933/p/all");
+  const mensal = [];
+  let periodo = null;
+  for (const r of rows.slice(1)) {
+    const v = Number(r.V); if (!Number.isFinite(v)) continue;
+    mensal.push([`${r.D3C.slice(0, 4)}-${r.D3C.slice(4)}`, v]); periodo = r.D3N;
+  }
+  mensal.sort((a, b) => a[0].localeCompare(b[0]));
+  if (!mensal.length) throw new Error("sem dados");
+  return { mes: mensal.at(-1)[0], atual: mensal.at(-1)[1], periodo, mensal };
+}
+
 async function expvida() {
   const rows = await getJson("https://api.worldbank.org/v2/country/BRA/indicator/SP.DYN.LE00.IN?format=json&per_page=100");
   const anos = (rows[1] || []).filter(r => r.value != null && +r.date >= 1990).map(r => [+r.date, Math.round(r.value * 100) / 100]).sort((a, b) => a[0] - b[0]);
@@ -98,8 +150,8 @@ async function idh() {
 
 export async function GET(request) {
   const longo = new URL(request.url).searchParams.has("historico");
-  const [s, i, d, sm, ev, ih] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh()]);
+  const [s, i, d, sm, ev, ih, pb, pc, rd] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh(), pib(), pibpc(), renda()]);
   if ([s, i, d].every(x => x.status === "rejected")) return bad("fontes indisponíveis", 502);
   const val = x => x.status === "fulfilled" ? x.value : { erro: String(x.reason?.message || x.reason) };
-  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih) }, 21600);
+  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih), pib: val(pb), pibpc: val(pc), renda: val(rd) }, 21600);
 }

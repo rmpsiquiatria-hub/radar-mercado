@@ -498,6 +498,10 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .dir-seta { color: var(--muted); padding-bottom: 2px; }
 .stabs { margin: 0 0 10px; }
 .ideb3 { display: flex; gap: 10px; margin: 6px 0 2px; }
+.idx-sub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); font-size: 13px; }
+.idx-sub > span { width: 100%; font-size: 10.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.idx-sub small { font-size: 11.5px; }
+.idx-sub:hover > b { text-decoration: underline; }
 .ideb3 span { display: flex; flex-direction: column; }
 .ideb3 b { font-size: 20px; }
 .ideb3 small { font-size: 11px; color: var(--muted); }
@@ -853,6 +857,7 @@ const IDEB = {
 };
 const IDEB_ETAPAS = ["Anos iniciais (1º ao 5º)", "Anos finais (6º ao 9º)", "Ensino médio"];
 const serieAnual = k => k === "carga" ? CARGA.anos.map(a => [a[0], a[1]]) : macro?.[k]?.anos || null;
+const triCurto = m => `${+m.slice(5) / 3}º tri ${m.slice(0, 4)}`;   // "2026-06" → "2º tri 2026"
 function macroCards() {
   if (!macro) return "";
   const out = [];
@@ -885,13 +890,27 @@ function macroCards() {
       ${sparkline(m.slice(-24).map(([k, v], i) => [i, v]), null)}
     </button>`);
   }
-  const sm = macro.salmin, usd = quotes["USDBRL=X"]?.price;
+  // GDP card, with GDP per capita underneath (opens its own chart).
+  const pb = macro.pib, pc = macro.pibpc?.anos?.at(-1);
+  if (pb?.quatro_tri != null) {
+    out.push(`<button class="card idx macro" data-open="MACRO:pib" data-max="1" title="Produto Interno Bruto, ${esc(pb.periodo || "")} (IBGE) · ver o histórico">
+      <div class="lbl">PIB<span class="mk">${triCurto(pb.mes)}</span></div>
+      <div class="px num">${pb.valor_12m ? `R$ ${nf(2).format(pb.valor_12m / 1e12)} tri <span style="font-size:12px;font-weight:500">12m</span>` : pct(pb.quatro_tri)}</div>
+      <div class="ch num ${cls(pb.quatro_tri)}">${pct(pb.quatro_tri)} real em 12m</div>
+      <div class="since" title="Último trimestre sobre o anterior, com ajuste sazonal">último tri: ${pct(pb.trimestre)}</div>
+      ${pc ? `<span class="idx-sub" data-open="MACRO:pibpc" data-max="1" title="PIB dividido pela população · ver o histórico"><span>Per capita ${pc[0]}</span><b class="num">R$ ${nf(0).format(pc[1])}</b>${pc[3] != null ? `<small class="num ${cls(pc[3])}">${pct(pc[3])} real</small>` : ""}</span>` : ""}
+    </button>`);
+  }
+  // Minimum wage card, with the real average income from work underneath (opens its own chart).
+  const sm = macro.salmin, usd = quotes["USDBRL=X"]?.price, rd = macro.renda;
   if (sm?.valor) {
+    const m = rd?.mensal, ago = m?.length > 12 ? m[m.length - 13][1] : null, dr = ago ? (rd.atual / ago - 1) * 100 : null;
     out.push(`<button class="card idx macro" data-open="MACRO:salmin" data-max="1" title="Salário mínimo nacional · ver o histórico">
       <div class="lbl">Salário mínimo<span class="mk">desde ${mesCurto(sm.desde)}</span></div>
       <div class="px num">${brl(sm.valor)}</div>
       <div class="ch num flat">${usd ? `≈ US$ ${nf(2).format(sm.valor / usd)}` : "&nbsp;"}</div>
       <div class="since">${usd ? "pelo dólar de agora" : ""}</div>
+      ${rd?.atual ? `<span class="idx-sub" data-open="MACRO:renda" data-max="1" title="Rendimento médio do trabalho, descontada a inflação, trimestre ${esc(rd.periodo || "")} (IBGE) · ver o histórico"><span>Renda média real · ${mesCurto(rd.mes)}</span><b class="num">${brl(rd.atual)}</b>${dr != null ? `<small class="num ${cls(dr)}">${pct(dr)} em 12m</small>` : ""}</span>` : ""}
     </button>`);
   }
   const ct = CARGA.anos.at(-1), ctp = CARGA.anos.at(-2), dct = ct[1] - ctp[1];
@@ -1248,6 +1267,12 @@ function degraus(pts, ate) {
   return out;
 }
 Object.assign(MACRO_WIN, {
+  "MACRO:pib": { titulo: "PIB", sub: "Crescimento real dos últimos 4 trimestres sobre os 4 anteriores, em % · dado trimestral", edu: "pib", fonte: "IBGE, Contas Nacionais Trimestrais, desde 1996",
+    carregar: async () => { const q = macro?.pib?.quatro_tri_serie || (await loadMacroHist()).pib?.quatro_tri_serie; return degraus(q, q?.at(-1)?.[0]); }, fmt: v => pct(v), lagTxt: "em 12 meses" },
+  "MACRO:pibpc": { titulo: "PIB per capita", sub: "PIB dividido pela população, em reais de cada ano (sem descontar a inflação) · dado anual", edu: "pibpc", fonte: "Banco Mundial (dados do IBGE), desde 1996",
+    carregar: async () => anualMeses((macro?.pibpc?.anos || (await loadMacroHist()).pibpc?.anos)?.map(a => [a[0], a[1]])), variacao: "pct", fmt: v => "R$ " + nf(0).format(v), lagTxt: "em 1 ano, sem descontar a inflação" },
+  "MACRO:renda": { titulo: "Renda média real", sub: "Rendimento médio mensal do trabalho, em reais de hoje (já descontada a inflação) · trimestre móvel", edu: "renda", fonte: "IBGE, PNAD Contínua, desde 2012",
+    serie: m => m.renda?.mensal, variacao: "pct", fmt: v => brl(v) },
   "MACRO:expvida": { titulo: "Expectativa de vida", sub: "Anos que, em média, vive quem nasce em cada ano · dado anual", edu: "expvida", fonte: "Banco Mundial (estimativas da ONU), desde 1990",
     carregar: async () => anualMeses(macro?.expvida?.anos || (await loadMacroHist()).expvida?.anos), fmt: v => nf(1).format(v) + " anos", dfmt: d => (d > 0 ? "+" : "") + nf(2).format(d) + " ano", lagTxt: "em 1 ano" },
   "MACRO:idh": { titulo: "IDH (Brasil)", sub: "Índice de Desenvolvimento Humano: saúde, educação e renda (0 a 1) · dado anual", edu: "idh", fonte: "Atlas do Desenvolvimento Humano (PNUD, IPEA, FJP), desde 2012",
@@ -2255,6 +2280,21 @@ function eduItems() {
       porque: "Desemprego baixo indica economia aquecida: mais renda e mais consumo, o que ajuda varejo e bancos, mas pode pressionar a inflação e manter a Selic alta. Desemprego subindo costuma sinalizar desaceleração.",
       horario: [["Divulgação", "uma vez por mês, no fim do mês, às 9h"], ["Defasagem", "cerca de 2 meses: em outubro sai o trimestre jun-jul-ago"]],
       nota: "Fonte: IBGE (SIDRA, tabela 6381). Nas correlações entra a mudança mensal da taxa, em pontos percentuais." },
+    { id: "pib", titulo: "PIB (Produto Interno Bruto)", sub: "O tamanho da economia e quanto ela cresce",
+      valor: () => { const p = macro?.pib; if (p?.quatro_tri == null) return "";
+        return `<b class="num">${pct(p.quatro_tri)} nos últimos 12 meses</b> <span class="hint">até o ${esc(p.periodo || "")}, já descontada a inflação</span>
+          <table class="edu-t" style="margin-top:8px">${p.valor_12m ? `<tr><td>Valor dos últimos 4 trimestres</td><td><b class="num">R$ ${nf(2).format(p.valor_12m / 1e12)} trilhões</b></td></tr>` : ""}<tr><td>Último trimestre sobre o anterior</td><td><b class="num">${pct(p.trimestre)}</b></td></tr></table>`; },
+      oque: "É a soma de tudo o que o país produz em bens e serviços num período, por valor de venda ao consumidor final: da safra de soja ao corte de cabelo. O <b>IBGE</b> calcula o PIB a cada trimestre. O número mais citado é o <b>crescimento real</b>, já descontada a inflação: se o PIB cresceu 2%, o país produziu 2% a mais do que antes.",
+      porque: "É o principal termômetro da atividade econômica. Dois trimestres seguidos de queda costumam ser chamados de <b>recessão</b>. PIB forte costuma vir com mais emprego e lucros maiores, o que ajuda a bolsa, mas também pode pressionar a inflação e os juros. Sozinho, porém, ele não mostra se a vida das pessoas melhorou: para isso, veja também PIB per capita, renda média real, desemprego e inflação.",
+      horario: [["Divulgação", "a cada trimestre, cerca de 2 meses depois do fim do trimestre, às 9h"], ["Revisões", "os números dos trimestres anteriores costumam ser revisados"]],
+      nota: "Fonte: IBGE (SIDRA, tabelas 5932 e 1846). O crescimento \"em 12 meses\" compara os últimos 4 trimestres com os 4 anteriores. O \"trimestre sobre o anterior\" é feito com ajuste sazonal (desconta efeitos que se repetem todo ano, como a safra). No Brasil o agro pesa bastante: uma supersafra ou uma seca mexem no número do trimestre." },
+    { id: "pibpc", titulo: "PIB per capita", sub: "O PIB dividido pela população",
+      valor: () => { const a = macro?.pibpc?.anos; if (!a?.length) return ""; const [y, r, u, g] = a.at(-1);
+        return `<b class="num">R$ ${nf(0).format(r)} em ${y}</b>${u ? ` <span class="hint">≈ US$ ${nf(0).format(u)} pelo dólar médio do ano</span>` : ""}${g != null ? `<br><span class="hint">Crescimento real em ${y}: </span><b class="num ${cls(g)}">${pct(g)}</b>` : ""}`; },
+      oque: "É o PIB do ano dividido pelo número de habitantes: quanto o país produziu, em média, por pessoa. Não é o que cada um ganha: inclui os lucros das empresas, os impostos e tudo o que não vira salário.",
+      porque: "Corrige o PIB pelo crescimento da população. Se o PIB cresce 1% e a população também, a média por pessoa fica parada. É a medida mais usada para comparar o padrão de vida entre países e entre épocas, embora não mostre como a riqueza é dividida.",
+      horario: [["Divulgação", "anual"], ["Atualização aqui", "automática, quando o Banco Mundial publica (alguns meses depois do fim do ano)"]],
+      nota: "Fonte: Banco Mundial (séries NY.GDP.PCAP), com dados do IBGE. O valor em reais é o do próprio ano, sem descontar a inflação; o crescimento real já desconta. A tabela do IBGE com o per capita oficial sai com cerca de 2 anos de atraso." },
     { id: "salmin", titulo: "Salário mínimo", sub: "O menor salário que pode ser pago no Brasil",
       valor: () => { const sm = macro?.salmin, u = quotes["USDBRL=X"]?.price; if (!sm?.valor) return ""; const rj = sm.reajustes.slice(-5).reverse();
         return `<b class="num">${brl(sm.valor)}</b> <span class="hint">desde ${new Date(sm.desde + "-15T12:00").toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}</span>${u ? `<br><b class="num">≈ US$ ${nf(2).format(sm.valor / u)}</b> <span class="hint">pelo dólar de agora (R$ ${nf(2).format(u)})</span>` : ""}
@@ -2263,6 +2303,13 @@ function eduItems() {
       porque: "Mexe com a renda de milhões de pessoas e com as contas do governo (cada real a mais aumenta os gastos da Previdência). A conversão para dólares ajuda a comparar o poder de compra com o de outros países e mostra o efeito do câmbio: com o dólar alto, o salário em dólares encolhe.",
       horario: [["Reajuste", "uma vez por ano, em 1º de janeiro"], ["Regra atual", "inflação (INPC) do ano anterior + crescimento do PIB de dois anos antes, com ganho real limitado a 2,5% ao ano"]],
       nota: "Fonte: IPEA (série do Ministério do Trabalho). A conversão para dólares usa a cotação do momento, não a da data do reajuste." },
+    { id: "renda", titulo: "Renda média real", sub: "Quanto os trabalhadores ganham, já descontada a inflação",
+      valor: () => { const r = macro?.renda; if (!r?.atual) return ""; const m = r.mensal, a12 = m.length > 12 ? m[m.length - 13][1] : null;
+        return `<b class="num">${brl(r.atual)} por mês</b> <span class="hint">no trimestre ${esc(r.periodo || "")}</span>${a12 ? `<br><span class="hint">Em 12 meses: </span><b class="num ${cls(r.atual / a12 - 1)}">${pct((r.atual / a12 - 1) * 100)}</b>` : ""}${macro?.salmin?.valor ? ` <span class="hint">· ${nf(1).format(r.atual / macro.salmin.valor)} salários mínimos</span>` : ""}`; },
+      oque: "Medida pelo <b>IBGE</b> na PNAD Contínua, é o rendimento médio que as pessoas ocupadas (com carteira, sem carteira, por conta própria, servidores e empregadores) costumam receber por mês com o trabalho. É <b>real</b>: todos os valores da série estão em reais de hoje, corrigidos pela inflação, então dá para comparar épocas diretamente.",
+      porque: "Mostra se o poder de compra de quem trabalha está subindo. Renda real em alta sustenta o consumo, o que ajuda varejo e serviços, mas pode pressionar a inflação. Junto com o salário mínimo, mostra se o ganho chegou além do piso.",
+      horario: [["Divulgação", "uma vez por mês, junto com o desemprego, no fim do mês, às 9h"], ["Defasagem", "cerca de 1 a 2 meses, por trimestre móvel"]],
+      nota: "Fonte: IBGE (SIDRA, tabela 6390), desde 2012. É uma média: alguns salários muito altos puxam o número para cima, e a maioria das pessoas ganha menos do que ela. Não inclui aposentadorias, aluguéis nem programas sociais." },
     { id: "carga", titulo: "Carga tributária", sub: "Quanto do que o país produz vai para impostos",
       valor: () => { const [y, t, c, e, m] = CARGA.anos.at(-1), pv = CARGA.anos.at(-2);
         return `<b class="num">${nf(2).format(t)}% do PIB em ${y}</b> <span class="hint">· ${pv[0]}: ${nf(2).format(pv[1])}%</span>
