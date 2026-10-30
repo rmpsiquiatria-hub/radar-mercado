@@ -559,12 +559,11 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
 
   <!-- CARTEIRA -->
   <section data-panel="cart" hidden>
-    <div class="vhead"><h3>Minha carteira</h3><span class="row2" style="margin:0"><button class="btn" id="simNew" type="button">🧮 Simular compra e venda</button><button class="btn primary" id="vNew" type="button">＋ Criar carteira virtual</button></span></div>
+    <div class="vhead"><h3>Minha carteira</h3><span class="row2" style="margin:0"><button class="btn" id="simNew" type="button">🧮 Simular compra e venda</button><button class="btn primary" id="vNew" type="button">✨ Montar carteira automaticamente</button></span></div>
     <div class="totals" id="cartTotals"></div>
+    <div id="cartMix"></div>
     <div class="card scroll" id="cartList"></div>
-    <p class="note" style="margin-top:12px">Para incluir ou alterar uma posição, use o botão 🧮 Simular compra e venda: ele mostra custos e impostos e, no final, tem o botão para salvar a compra (ou registrar a venda) na carteira. Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do momento.</p>
-    <div class="vhead" style="margin-top:26px"><h3>Carteira virtual <span class="hint" style="font-weight:400">· simulação com dinheiro fictício</span></h3></div>
-    <div id="vList" class="vlist"></div>
+    <p class="note" style="margin-top:12px">Para incluir ou alterar uma posição, use o botão 🧮 Simular compra e venda: ele mostra custos e impostos e, no final, tem o botão para salvar a compra (ou registrar a venda) na carteira. Para começar do zero ou testar uma ideia, o botão ✨ Montar carteira automaticamente escolhe ativos por regras a partir do relatório diário, com o valor que você definir, e os coloca aqui. Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do momento.</p>
   </section>
 
   <!-- ALERTAS -->
@@ -693,6 +692,17 @@ function load() {
   return { favs: DEFAULT_FAVS.slice(), cart: [], alerts: [] };
 }
 let state = load();
+// Minha carteira and the virtual portfolio became one (oct/2026): the virtual assets move in once,
+// unless they were already copied, and its start date and Ibovespa level feed the comparisons.
+function migrarVirtuais() {
+  if (!state.virtuais?.length) return;
+  for (const v of state.virtuais) {
+    if (!v.naCarteira) vToCart(v);
+    if (v.criada && (!state.cartDesde || v.criada < state.cartDesde.data)) state.cartDesde = { data: v.criada, ibov0: v.ibov0 || null };
+  }
+  delete state.virtuais;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} renderCounts(); if (typeof tecSoon === "function") tecSoon(); }
 
 const quotes = {};  // symbol -> última cotação
@@ -769,7 +779,7 @@ async function api(path) {
 }
 function watched() {
   return [...new Set([...STRIP.map(x => x.s), "USDBRL=X", ...state.favs, ...state.cart.map(c => c.symbol), ...state.alerts.map(a => a.symbol),
-    ...(state.virtuais || []).flatMap(v => v.posicoes.map(p => p.symbol))])];
+])];
 }
 let lastOk = 0, failing = false;
 async function refresh() {
@@ -1184,7 +1194,7 @@ function renderCart() {
     const dB = q?.prevClose ? toBRL((q.price - q.prevClose) * p.qty, cur) : null;
     if (vB != null && cB != null) { inv += cB; now += vB; day += dB || 0; } else missing++;
     return `<tr data-open="${esc(p.symbol)}">
-      <td><b>${esc(short(p.symbol))}</b><div class="nm" style="color:var(--muted);font-size:12px">${esc(q?.name || "")}</div></td>
+      <td><span class="vdot" style="background:${VMKT.find(m => m.k === mercadoDe(p.symbol)).cor}"></span><b>${esc(short(p.symbol))}</b><div class="nm" style="color:var(--muted);font-size:12px">${esc(q?.name || "")}</div>${p.motivo ? `<div class="hint">✨ ${esc(p.motivo)}</div>` : ""}</td>
       <td class="num">${nf(p.qty % 1 ? 4 : 0).format(p.qty)}</td>
       <td class="num">${money(p.avg, cur)}</td>
       <td class="num">${q ? money(q.price, cur) : "…"}</td>
@@ -1196,7 +1206,8 @@ function renderCart() {
   });
   $("#cartList").innerHTML = state.cart.length
     ? `<table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Preço médio</th><th>Atual</th><th>Dia</th><th>Valor</th><th>Resultado</th><th></th></tr></thead><tbody>${rows.join("")}</tbody></table>`
-    : `<div class="empty">Nenhuma posição ainda. Use <b>🧮 Simular compra e venda</b> (acima) e, no final da simulação, salve a compra na carteira.</div>`;
+    : `<div class="empty">Nenhuma posição ainda. Use <b>🧮 Simular compra e venda</b> (acima) e, no final da simulação, salve a compra na carteira, ou <b>✨ Montar carteira automaticamente</b>.</div>`;
+  renderCartMix();
   const res = now - inv;
   $("#cartTotals").innerHTML = state.cart.length ? `
     <div class="card tot"><div class="lbl">Valor hoje</div><div class="v num">${brl(now)}</div></div>
@@ -1217,7 +1228,7 @@ function renderAlerts() {
 }
 function renderAll() {
   renderStrip(); renderFavs(); renderCart(); renderAlerts(); renderCounts(); renderStamp(); renderEdu();
-  renderWins(); renderConfig(); renderVirt();
+  renderWins(); renderConfig();
   for (const q of Object.values(quotes)) q._flash = "";
 }
 
@@ -1750,7 +1761,7 @@ function toggleFav(s) {
 document.addEventListener("click", e => {
   const t = e.target;
   const un = t.closest("[data-unfav]"); if (un) { e.stopPropagation(); toggleFav(un.dataset.unfav); return; }
-  const uc = t.closest("[data-uncart]"); if (uc) { e.stopPropagation(); if (confirm("Remover " + short(uc.dataset.uncart) + " da carteira?")) { state.cart = state.cart.filter(p => p.symbol !== uc.dataset.uncart); save(); renderCart(); } return; }
+  const uc = t.closest("[data-uncart]"); if (uc) { e.stopPropagation(); if (confirm("Remover " + short(uc.dataset.uncart) + " da carteira?")) { state.cart = state.cart.filter(p => p.symbol !== uc.dataset.uncart); if (!state.cart.length) delete state.cartDesde; save(); renderCart(); } return; }
   const ua = t.closest("[data-unalert]"); if (ua) { state.alerts = state.alerts.filter(a => a.id !== ua.dataset.unalert); save(); renderAlerts(); return; }
   const ra = t.closest("[data-rearm]"); if (ra) { const a = state.alerts.find(a => a.id === ra.dataset.rearm); if (a) a.fired = 0; save(); renderAlerts(); return; }
   const ed = t.closest("[data-edu]"); if (ed) {
@@ -3350,8 +3361,8 @@ $("#cfgBox").addEventListener("click", e => {
   }
 });
 
-/* ---------- carteiras virtuais ---------- */
-// Simulated portfolios with fictitious money. Assets are picked by transparent rules from the
+/* ---------- carteira automática ---------- */
+// Automatic portfolio builder. Assets are picked by transparent rules from the
 // daily report (source consensus + the user's criteria) or by following the indexes; nothing
 // here is a recommendation. Prices at creation are the live quotes; whole shares on the B3.
 const VMKT = [
@@ -3425,60 +3436,49 @@ function vValor(p) {
   if (p.symbol === "USDBRL=X") { const q = quotes["USDBRL=X"]; return q?.price ? p.qty * q.price : null; }
   const q = quotes[p.symbol]; return q?.price ? toBRL(q.price * p.qty, q.currency) : null;
 }
-function virtuais() { return state.virtuais || []; }
-const vClosed = new Set();   // portfolios whose asset list the user collapsed (open by default)
-
-function renderVirt() {
-  const box = $("#vList"); if (!box) return;
-  const list = virtuais();
-  // Only one virtual portfolio: the create button disappears while one exists.
-  $("#vNew").hidden = list.length > 0;
-  if (!list.length) { box.innerHTML = `<div class="card empty">Nenhuma carteira virtual ainda. Crie uma para simular com dinheiro fictício e acompanhar como ela se sai. Você pode ter uma carteira virtual por vez; para começar outra, exclua a atual.</div>`; return; }
-  const ibov = quotes["^BVSP"]?.price, selic = macro?.selic?.atual?.valor;
-  box.innerHTML = list.map(v => {
-    let total = v.caixa, missing = 0;
-    const byM = {};
-    const rows = v.posicoes.filter(p => !p.erro).map(p => {
-      const val = vValor(p); if (val == null) missing++; else { total += val; byM[p.mercado] = (byM[p.mercado] || 0) + val; }
-      const r = val != null && p.custo ? (val / p.custo - 1) * 100 : null;
-      const mk = VMKT.find(m => m.k === p.mercado);
-      return `<tr data-open="${esc(p.symbol)}"><td><span class="vdot" style="background:${mk.cor}"></span><b>${esc(short(p.symbol))}</b><div class="hint">${esc(p.motivo || "")}</div></td>
-        <td class="num">${nf(p.qty % 1 ? 4 : 0).format(p.qty)}</td><td class="num">${brl(p.custo)}</td><td class="num">${brl(val)}</td><td class="num ${cls(r)}">${pct(r)}</td>
-        <td class="vacts"><button class="simb" data-open="${esc(p.symbol)}" title="Ver o gráfico" aria-label="Ver o gráfico de ${esc(short(p.symbol))}">📈</button><button class="simb" data-sim="${esc(p.symbol)}" title="Simular compra e venda (impostos e taxas)" aria-label="Simular compra e venda de ${esc(short(p.symbol))}">🧮</button></td></tr>`;
-    }).join("");
-    const res = total - v.inicial, resPct = res / v.inicial * 100;
-    const ibovPct = ibov && v.ibov0 ? (ibov / v.ibov0 - 1) * 100 : null;
-    const dias = (Date.now() - new Date(v.criada).getTime()) / 864e5;
-    const cdiPct = selic != null ? (Math.pow(1 + selic / 100, dias / 365) - 1) * 100 : null;
-    const bar = VMKT.filter(m => byM[m.k]).map(m => `<i style="flex:${byM[m.k]};background:${m.cor}" title="${m.label}: ${nf(1).format(byM[m.k] / total * 100)}%"></i>`).join("") + (v.caixa > 0.5 ? `<i style="flex:${v.caixa};background:var(--faint)" title="Caixa: ${nf(1).format(v.caixa / total * 100)}%"></i>` : "");
-    return `<article class="card vcard">
-      <div class="vcard-h"><div><h3>${esc(v.nome)}</h3><div class="hint">criada em ${new Date(v.criada).toLocaleDateString("pt-BR")} · ${brl(v.inicial)} iniciais · ${esc(VMETODO[v.metodo]?.label || "")}</div></div>
-        <span class="row2" style="margin:0">${v.naCarteira ? "" : `<button class="btn small" type="button" data-vcopy="${v.id}" title="Adiciona os ativos desta carteira virtual à Minha carteira">➕ Levar para Minha carteira</button>`}<button class="del" data-vdel="${v.id}" title="Excluir carteira virtual" aria-label="Excluir ${esc(v.nome)}">×</button></span></div>
-      <div class="vnums">
-        <div><span>Valor hoje</span><b class="num">${brl(total)}</b></div>
-        <div><span>Resultado</span><b class="num ${cls(res)}">${(res > 0 ? "+" : "") + brl(res)} (${pct(resPct)})</b></div>
+// Market of an asset, for the composition bar.
+function mercadoDe(sym) {
+  const k = assetKind(sym), nome = quotes[sym]?.name || "";
+  if (sym === "XFIX11.SA" || /IFIX/i.test(nome)) return "fii";   // ETFs that follow other markets
+  if (sym === "IVVB11.SA" || /S&P ?500/i.test(nome)) return "eua";
+  return k === "fii" ? "fii" : k === "exterior" ? "eua" : k === "dolar" ? "dolar" : k === "cripto" ? "cripto" : "b3"; }
+// The first position marks the start of the portfolio, for the comparison with the Ibovespa and the CDI.
+function cartComeca() { if (!state.cart.length || !state.cartDesde) state.cartDesde = { data: new Date().toISOString(), ibov0: quotes["^BVSP"]?.price || null }; }
+function renderCartMix() {
+  const box = $("#cartMix"); if (!box) return;
+  if (!state.cart.length) { box.innerHTML = ""; return; }
+  const byM = {}; let total = 0, inv = 0;
+  for (const p of state.cart) {
+    const q = quotes[p.symbol]; if (q?.price == null) continue;
+    const cur = q.currency || (p.symbol.endsWith(".SA") ? "BRL" : "USD"), v = toBRL(q.price * p.qty, cur), c = toBRL(p.avg * p.qty, cur);
+    if (v == null || c == null) continue;
+    total += v; inv += c; byM[mercadoDe(p.symbol)] = (byM[mercadoDe(p.symbol)] || 0) + v;
+  }
+  if (!total) { box.innerHTML = ""; return; }
+  const d = state.cartDesde, ibov = quotes["^BVSP"]?.price, selic = macro?.selic?.atual?.valor;
+  const dias = d ? (Date.now() - new Date(d.data).getTime()) / 864e5 : null;
+  const ibovPct = d?.ibov0 && ibov ? (ibov / d.ibov0 - 1) * 100 : null, cdiPct = dias != null && selic != null ? (Math.pow(1 + selic / 100, dias / 365) - 1) * 100 : null;
+  box.innerHTML = `<div class="card vcard">
+      <div class="vbar">${VMKT.filter(m => byM[m.k]).map(m => `<i style="flex:${byM[m.k]};background:${m.cor}" title="${m.label}: ${nf(1).format(byM[m.k] / total * 100)}%"></i>`).join("")}</div>
+      <div class="vleg">${VMKT.filter(m => byM[m.k]).map(m => `<span><span class="vdot" style="background:${m.cor}"></span>${m.label} ${nf(0).format(byM[m.k] / total * 100)}%</span>`).join("")}</div>
+      ${d ? `<div class="vnums">
+        <div><span>Carteira desde ${new Date(d.data).toLocaleDateString("pt-BR")}</span><b class="num ${cls(total - inv)}">${pct(inv ? (total / inv - 1) * 100 : null)}</b></div>
         <div><span>Ibovespa no período</span><b class="num ${cls(ibovPct)}">${pct(ibovPct)}</b></div>
         <div><span>CDI aprox. no período</span><b class="num">${pct(cdiPct)}</b></div>
       </div>
-      <div class="vbar">${bar}</div>
-      <div class="vleg">${VMKT.filter(m => byM[m.k]).map(m => `<span><span class="vdot" style="background:${m.cor}"></span>${m.label} ${nf(0).format(byM[m.k] / total * 100)}%</span>`).join("")}${v.caixa > 0.5 ? `<span><span class="vdot" style="background:var(--faint)"></span>Caixa ${brl(v.caixa)}</span>` : ""}</div>
-      ${missing ? `<p class="hint">${missing} ativo(s) ainda sem cotação; o total está incompleto.</p>` : ""}
-      <details data-vdet="${v.id}" ${vClosed.has(v.id) ? "" : "open"}><summary>Os ${v.posicoes.length} ativos</summary><div class="scroll"><table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Investido</th><th>Valor hoje</th><th>Resultado</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></details>
-    </article>`;
-  }).join("");
+      <p class="hint" style="margin:0">Compara o resultado da carteira (preço de agora contra o preço médio) com o Ibovespa e o CDI desde a primeira posição. Compras feitas depois entram pelo preço que você pagou, então a comparação é aproximada.</p>` : ""}
+    </div>`;
 }
 
 /* creation dialog */
 let vDraft = null;
 function vOpenDialog() {
-  if (virtuais().length) { toast("Você já tem uma carteira virtual. Exclua a atual para criar outra."); return; }
-  vDraft = { nome: "Carteira virtual", inicial: 10000, metodo: "sinais", mercados: Object.fromEntries(VMKT.map(m => [m.k, m.k === "b3" ? 100 : 0])) };
+  vDraft = { nome: "Carteira automática", inicial: 10000, metodo: "sinais", mercados: Object.fromEntries(VMKT.map(m => [m.k, m.k === "b3" ? 100 : 0])) };
   $("#vDlgBody").innerHTML = `
-    <div class="vdlg-h"><h2>Nova carteira virtual</h2><button type="button" class="icon-btn" data-vd="cancel" aria-label="Fechar">✕</button></div>
-    <p class="hint">Simulação com <b>dinheiro fictício</b>, para acompanhar como uma carteira se sairia. Os ativos são escolhidos por regras automáticas e transparentes a partir do relatório diário. <b>Não é recomendação de investimento.</b></p>
+    <div class="vdlg-h"><h2>✨ Montar carteira automaticamente</h2><button type="button" class="icon-btn" data-vd="cancel" aria-label="Fechar">✕</button></div>
+    <p class="hint">Escolhe ativos por regras automáticas e transparentes a partir do relatório diário e os coloca em <b>Minha carteira</b>, pelo preço de agora. Serve para montar uma carteira para acompanhar ou testar uma ideia. <b>Não é recomendação de investimento.</b></p>
     <div class="vgrid">
-      <div class="field"><label for="vNome">Nome</label><input id="vNome" value="${esc(vDraft.nome)}" maxlength="40"></div>
-      <div class="field"><label for="vIni">Valor inicial (R$)</label><input id="vIni" inputmode="numeric" autocomplete="off" value="${nf(2).format(vDraft.inicial)}"></div>
+      <div class="field"><label for="vIni">Quanto investir (R$)</label><input id="vIni" inputmode="numeric" autocomplete="off" value="${nf(2).format(vDraft.inicial)}"></div>
     </div>
     <p class="hint" style="margin:4px 0 0">Digite só os números: os centavos se ajustam sozinhos. Mínimo de R$ 100,00.</p>
     <h4>Em quais mercados entrar? <span class="hint">(ajuste quanto vai para cada um)</span></h4>
@@ -3488,13 +3488,12 @@ function vOpenDialog() {
     <div class="vmet">${Object.entries(VMETODO).map(([k, m]) => `<label><input type="radio" name="vmet" value="${k}" ${vDraft.metodo === k ? "checked" : ""}> <b>${m.label}</b><div class="hint">${m.desc}</div></label>`).join("")}</div>
     <h4>Prévia</h4>
     <div id="vPrev" class="vprev"><div class="hint">Calculando…</div></div>
-    <div class="vdlg-f"><button type="button" class="btn" data-vd="cancel">Cancelar</button><button type="button" class="btn primary" data-vd="create" id="vCreate">Criar carteira</button></div>
-    <p class="hint" style="margin:8px 0 0;text-align:right">Os ativos comprados também entram em <b>Minha carteira</b>.</p>`;
+    <div class="vdlg-f"><button type="button" class="btn" data-vd="cancel">Cancelar</button><button type="button" class="btn primary" data-vd="create" id="vCreate">Colocar na carteira</button></div>
+    <p class="hint" style="margin:8px 0 0;text-align:right">Se você já tem algum destes ativos, a quantidade é somada e o preço médio é recalculado.</p>`;
   $("#vDlg").showModal();
   vPreview();
 }
 function vReadForm() {
-  vDraft.nome = $("#vNome").value.trim() || vDraft.nome;
   vDraft.inicial = Math.max(100, +$("#vIni").value.replace(/\D/g, "") / 100 || 0);
   vDraft.metodo = document.querySelector('[name="vmet"]:checked')?.value || "sinais";
   for (const m of VMKT) {
@@ -3535,8 +3534,7 @@ $("#vDlg").addEventListener("input", e => {
   if (e.target.matches("[data-vm]")) vEqualize();
   vPreview();
 });
-// The virtual portfolio's purchases also go into "Minha carteira", merged with what is already
-// there. Average price is in the asset's own currency, as in the rest of the portfolio (the dollar
+// Automatic picks go into "Minha carteira", merged with what is already there. Average price is in the asset's own currency, as in the rest of the portfolio (the dollar
 // position keeps the rate paid, in reais; B3 shares include the purchase cost).
 function vToCart(v) {
   for (const pz of v.posicoes || []) {
@@ -3544,7 +3542,7 @@ function vToCart(v) {
     const avg = pz.symbol === "USDBRL=X" ? pz.fx : pz.moeda === "BRL" && pz.custo ? pz.custo / pz.qty : pz.preco;
     const ex = state.cart.find(x => x.symbol === pz.symbol);
     if (ex) { ex.avg = (ex.qty * ex.avg + pz.qty * avg) / (ex.qty + pz.qty); ex.qty += pz.qty; }
-    else state.cart.push({ symbol: pz.symbol, qty: pz.qty, avg });
+    else state.cart.push({ symbol: pz.symbol, qty: pz.qty, avg, ...(pz.motivo ? { motivo: pz.motivo } : {}) });
   }
   v.naCarteira = true;
 }
@@ -3552,35 +3550,12 @@ $("#vDlg").addEventListener("click", e => {
   const a = e.target.closest("[data-vd]")?.dataset.vd;
   if (a === "cancel" || e.target === $("#vDlg")) return $("#vDlg").close();
   if (a === "create" && vDraft?.plan) {
-    const plan = vDraft.plan;
-    const nova = {
-      id: Math.random().toString(36).slice(2, 10), nome: vDraft.nome, criada: new Date().toISOString(), inicial: vDraft.inicial,
-      metodo: vDraft.metodo, mercados: { ...vDraft.mercados }, posicoes: plan.posicoes.filter(p => !p.erro), caixa: plan.caixa, ibov0: quotes["^BVSP"]?.price || null,
-    };
-    vToCart(nova);
-    state.virtuais = virtuais().concat(nova);
-    save(); $("#vDlg").close(); renderVirt(); renderCart(); toast(`"${vDraft.nome}" criada; os ativos entraram em Minha carteira`); refresh();
+    cartComeca();
+    vToCart({ posicoes: vDraft.plan.posicoes.filter(p => !p.erro) });
+    save(); $("#vDlg").close(); renderCart(); toast("Os ativos entraram em Minha carteira"); refresh();
   }
 });
 $("#vNew").addEventListener("click", vOpenDialog);
-$("#vList").addEventListener("toggle", e => {
-  const d = e.target.closest?.("[data-vdet]"); if (!d) return;
-  d.open ? vClosed.delete(d.dataset.vdet) : vClosed.add(d.dataset.vdet);
-}, true);
-$("#vList").addEventListener("click", e => {
-  const c = e.target.closest("[data-vcopy]");
-  if (c) {
-    e.preventDefault(); e.stopPropagation();
-    const v = virtuais().find(x => x.id === c.dataset.vcopy);
-    if (v && confirm(`Adicionar os ativos de "${v.nome}" à Minha carteira?`)) { vToCart(v); save(); renderVirt(); renderCart(); toast("Ativos adicionados à Minha carteira"); refresh(); }
-    return;
-  }
-  const d = e.target.closest("[data-vdel]"); if (!d) return;
-  e.stopPropagation();
-  const v = virtuais().find(x => x.id === d.dataset.vdel);
-  if (v && confirm(`Excluir a carteira virtual "${v.nome}"?`)) { state.virtuais = virtuais().filter(x => x !== v); save(); renderVirt(); }
-});
-
 /* ---------- simulador de compra e venda (impostos e taxas) ---------- */
 // Brazilian rules in force in 2026 (MP 1.303/2025 lapsed): stocks 15% swing with the R$ 20k/month
 // sales exemption, 20% day trade; ETFs 15/20% and FIIs 20% without exemption; US stocks 15% on the
@@ -3893,11 +3868,12 @@ function simSave(tipo) {
   if (tipo === "compra") {
     const avg = simAvg(p, sym);
     if (ex) { ex.avg = (ex.qty * ex.avg + p.qty * avg) / (ex.qty + p.qty); ex.qty += p.qty; }
-    else state.cart.push({ symbol: sym, qty: p.qty, avg });
+    else { cartComeca(); state.cart.push({ symbol: sym, qty: p.qty, avg }); }
     toast(`${short(sym)}: compra salva na carteira`);
   } else if (ex) {
     ex.qty -= p.qty;
     if (ex.qty <= 1e-9) state.cart = state.cart.filter(x => x !== ex);
+    if (!state.cart.length) delete state.cartDesde;
     toast(`${short(sym)}: venda registrada`);
   }
   save(); $("#simDlg").close(); showTab("cart"); renderCart(); refresh();
@@ -3964,7 +3940,8 @@ $("#importFile").addEventListener("change", async e => {
   try {
     const d = JSON.parse(await e.target.files[0].text());
     if (!Array.isArray(d.favs) || !Array.isArray(d.cart) || !Array.isArray(d.alerts)) throw 0;
-    state = { favs: d.favs.filter(s => typeof s === "string"), cart: d.cart, alerts: d.alerts, criterios: d.criterios, custos: d.custos, alertasTec: d.alertasTec, chart: d.chart, corr: d.corr, tempoGrafico: d.tempoGrafico, virtuais: Array.isArray(d.virtuais) ? d.virtuais : [] };
+    state = { favs: d.favs.filter(s => typeof s === "string"), cart: d.cart, alerts: d.alerts, criterios: d.criterios, custos: d.custos, alertasTec: d.alertasTec, chart: d.chart, corr: d.corr, tempoGrafico: d.tempoGrafico, virtuais: Array.isArray(d.virtuais) ? d.virtuais : [], cartDesde: d.cartDesde };
+    migrarVirtuais();
     save(); toast("Dados restaurados"); refresh();
   } catch { toast("Arquivo inválido"); }
   e.target.value = "";
@@ -3981,7 +3958,7 @@ $("#theme").addEventListener("click", () => {
 /* ---------- início ---------- */
 try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {}
 $("#cgal").innerHTML = Object.entries(CANDLE_EDU).map(([nome, i]) => `<details class="card cgal-i"><summary>${candleFigure(nome, 200, 92, true)}<div><b>${nome}</b><div class="hint ${i.sinal === "alta" ? "up" : i.sinal === "baixa" ? "down" : ""}">${i.sinal === "neutro" ? "indecisão" : "sinal de " + i.sinal}</div></div></summary>${candleSheet(nome)}</details>`).join("");
-renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 6000);
+migrarVirtuais(); renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 6000);
 </script>
 <script src="direito.js" defer></script>
 </body>
