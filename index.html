@@ -914,7 +914,7 @@ function macroCards() {
       <div class="ch num ${cls(pb.quatro_tri)}">${pct(pb.quatro_tri)} real em 12m</div>
       <div class="since" title="Soma do que o país produziu nos 4 trimestres terminados no ${esc(pb.periodo || "")}">4 trimestres até o ${triCurto(pb.mes)}</div>
       <div class="since" title="Último trimestre sobre o anterior, com ajuste sazonal">só o ${triCurto(pb.mes)}: ${pct(pb.trimestre)}</div>
-      ${pc ? `<span class="idx-sub" data-open="MACRO:pibpc" data-max="1" title="PIB do ano dividido por todos os habitantes · ver o histórico"><span>PIB per capita · anual · ${pc[0]}</span><b class="num">R$ ${nf(0).format(pc[1])}</b>${pc[3] != null ? `<small class="num ${cls(pc[3])}">${pct(pc[3])} real</small>` : ""}</span>` : ""}
+      ${pc ? `<span class="idx-sub" data-open="MACRO:pibpc" data-max="1" title="PIB do ano dividido por todos os habitantes · ver o histórico"><span>PIB per capita · anual · ${pc[0]}</span><b class="num">R$ ${nf(0).format(pc[1])}</b><small class="num">(R$ ${nf(0).format(pc[1] / 12)} por mês)</small>${pc[3] != null ? `<small class="num ${cls(pc[3])}">${pct(pc[3])} real</small>` : ""}</span>` : ""}
     </button>`);
   }
   // Minimum wage card, with the real average income from work underneath (opens its own chart).
@@ -2309,7 +2309,7 @@ function eduItems() {
       nota: "Fonte: IBGE (SIDRA, tabelas 5932 e 1846). O crescimento \"em 12 meses\" compara os últimos 4 trimestres com os 4 anteriores. O \"trimestre sobre o anterior\" é feito com ajuste sazonal (desconta efeitos que se repetem todo ano, como a safra). No Brasil o agro pesa bastante: uma supersafra ou uma seca mexem no número do trimestre." },
     { id: "pibpc", titulo: "PIB per capita", sub: "O PIB do ano dividido pela população · dado anual",
       valor: () => { const a = macro?.pibpc?.anos; if (!a?.length) return ""; const [y, r, u, g] = a.at(-1);
-        return `<b class="num">R$ ${nf(0).format(r)} em ${y}</b>${u ? ` <span class="hint">≈ US$ ${nf(0).format(u)} pelo dólar médio do ano</span>` : ""}${g != null ? `<br><span class="hint">Crescimento real em ${y}: </span><b class="num ${cls(g)}">${pct(g)}</b>` : ""}`; },
+        return `<b class="num">R$ ${nf(0).format(r)} em ${y}</b> <span class="hint">(R$ ${nf(0).format(r / 12)} por mês)</span>${u ? ` <span class="hint">≈ US$ ${nf(0).format(u)} pelo dólar médio do ano</span>` : ""}${g != null ? `<br><span class="hint">Crescimento real em ${y}: </span><b class="num ${cls(g)}">${pct(g)}</b>` : ""}`; },
       oque: "É o PIB do ano dividido pelo número de <b>todos os habitantes</b>, de bebês a idosos, trabalhem ou não: quanto o país produziu, em média, por pessoa. Não é o que cada um ganha: inclui os lucros das empresas, os impostos e tudo o que não vira salário.",
       porque: "Corrige o PIB pelo crescimento da população. Se o PIB cresce 1% e a população também, a média por pessoa fica parada. É a medida mais usada para comparar o padrão de vida entre países e entre épocas, embora não mostre como a riqueza é dividida.",
       horario: [["Divulgação", "anual"], ["Atualização aqui", "automática, quando o Banco Mundial publica (alguns meses depois do fim do ano)"]],
