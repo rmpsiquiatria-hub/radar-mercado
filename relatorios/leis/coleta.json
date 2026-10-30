@@ -1,17 +1,17 @@
 {
  "data": "2026-10-29",
- "coletado_em": "2026-10-29T20:15:21.584Z",
+ "coletado_em": "2026-10-30T03:34:58.128Z",
  "fontes": {
   "federal": {
    "ok": true,
-   "atos": 341,
+   "atos": 358,
    "lista": 3374
   },
   "estadual": {
    "ok": true,
-   "atos": 111,
-   "lista": 824,
-   "publicados": 982
+   "atos": 112,
+   "lista": 826,
+   "publicados": 985
   },
   "municipal": {
    "ok": true,
@@ -590,6 +590,22 @@
    "tamanho": 1533
   },
   {
+   "id": "dou-741176397",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Portaria",
+   "orgao": "Ministério da Saúde",
+   "unidade": "Ministério da Saúde / Gabinete do Ministro",
+   "titulo": "Portaria GM/MS Nº 12.315, DE 28 DE outubro DE 2026",
+   "ementa": "Inclui procedimentos secundários destinados ao registro da dispensação do Mesilato de Imatinibe, altera atributos de procedimentos relacionados ao tratamento sistêmico da Leucemia Mieloide Crônica (LMC) do adulto e do Tumor do Estroma Gastrointestinal (GIST) na Tabela de Procedimentos, Medicamentos, Órteses, Próteses e Materiais Especiais do Siste...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.315-de-28-de-outubro-de-2026-741176397",
+   "pagina": "76",
+   "cats": [
+    "saude"
+   ],
+   "tamanho": 20038
+  },
+  {
    "id": "dou-741102430",
    "esfera": "federal",
    "fonte": "DOU",
@@ -1078,20 +1094,86 @@
    "tamanho": 425
   },
   {
-   "id": "dou-741176397",
+   "id": "dou-741106783",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Ato Normativo",
+   "orgao": "Ministério da Fazenda",
+   "unidade": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "titulo": "DESPACHO Nº 51, DE 28 DE OUTUBRO DE 2026",
+   "ementa": "Publica Convênios ICMS aprovados na 433ª Reunião Extraordinária do CONFAZ, realizada no dia 27.10.2026. O Secretário-Executivo da Secretaria-Executiva do Conselho Nacional de Política Fazendária - CONFAZ, no uso das atribuições que lhe são conferidas pelo inciso IX, do art. 5º do Regimento desse Conselho, e em cumprimento ao disposto nos artigos 35, 39 e 40...",
+   "url": "https://www.in.gov.br/web/dou/-/despacho-n-51-de-28-de-outubro-de-2026-741106783",
+   "pagina": "24",
+   "cats": [
+    "fazenda",
+    "contratos"
+   ],
+   "tamanho": 32470
+  },
+  {
+   "id": "dou-741160217",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Resolução",
+   "orgao": "Ministério da Saúde",
+   "unidade": "Ministério da Saúde / Gerência-Geral de Medicamentos",
+   "titulo": "RESOLUÇÃO-RE nº 4.244, DE 28 DE OUTUBRO DE 2026",
+   "ementa": "O GERENTE-GERAL DE MEDICAMENTOS DA AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA, no uso das atribuições que lhe confere o art. 100, aliado ao art. 203, I, § 1º do Regimento Interno aprovado pela Resolução da Diretoria Colegiada - RDC nº 585, de 10 de dezembro de 2021, resolve: Art. 1º Deferir petições relacionadas à Gerência-Geral de Medicamentos, confor...",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-re-n-4.244-de-28-de-outubro-de-2026-741160217",
+   "pagina": "117",
+   "cats": [
+    "saude"
+   ],
+   "tamanho": 11045
+  },
+  {
+   "id": "dou-741159427",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Súmula",
+   "orgao": "Ministério da Educação",
+   "unidade": "Ministério da Educação / Secretaria Executiva",
+   "titulo": "SÚMULA DE PARECERES",
+   "ementa": "REUNIÃO ORDINÁRIA DOS DIAS 31 DE AGOSTO, 1º, 2, E 3 DO MÊS DE SETEMBRO DE 2026 (Complementar à Publicada no DOU de 19/10/2026, Seção 1, p. 96) CONSELHO PLENO e-MEC: 202403186. Parecer: CNE/CP 17/2026. Relatora: Ilona Maria Lustosa Becskeházy Ferrão de Sousa. Interessada: Rede Educa Orbis Ltda. - Formosa/GO. Assunto: Recurso contra a decisão exarada no Parecer CNE/CES nº 347, de...",
+   "url": "https://www.in.gov.br/web/dou/-/sumula-de-pareceres-741159427",
+   "pagina": "15",
+   "cats": [
+    "empresas"
+   ],
+   "tamanho": 3844
+  },
+  {
+   "id": "dou-741159105",
    "esfera": "federal",
    "fonte": "DOU",
    "tipo": "Portaria",
    "orgao": "Ministério da Saúde",
-   "unidade": "Ministério da Saúde / Gabinete do Ministro",
-   "titulo": "Portaria GM/MS Nº 12.315, DE 28 DE outubro DE 2026",
-   "ementa": "Inclui procedimentos secundários destinados ao registro da dispensação do Mesilato de Imatinibe, altera atributos de procedimentos relacionados ao tratamento sistêmico da Leucemia Mieloide Crônica (LMC) do adulto e do Tumor do Estroma Gastrointestinal (GIST) na Tabela de Procedimentos, Medicamentos, Órteses, Próteses e Materiais Especiais do Siste...",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.315-de-28-de-outubro-de-2026-741176397",
-   "pagina": "76",
+   "unidade": "Ministério da Saúde / Secretaria de Atenção Especializada à Saúde",
+   "titulo": "Portaria SAES/MS Nº 4.704, DE 14 DE agosto DE 2026",
+   "ementa": "Indefere a Concessão do CEBAS da Sociedade Médica Assistencial de Iguaí, com sede em Iguaí (BA). O SECRETÁRIO DE ATENÇÃO ESPECIALIZADA À SAÚDE, no uso das atribuições que lhe confere o Decreto nº 11.798, de 28 de novembro de 2023, resolve: Art. 1º Fica indeferida a Concessão do Certificado de Entidade Beneficente de Assistência Social (CEBAS) Soci...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-saes/ms-n-4.704-de-14-de-agosto-de-2026-741159105",
+   "pagina": "107",
+   "cats": [
+    "saude",
+    "empresas"
+   ],
+   "tamanho": 1094
+  },
+  {
+   "id": "dou-741158629",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Decisão",
+   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais",
+   "unidade": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Medicina",
+   "titulo": "DECISões de 23 de outubro de 2026",
+   "ementa": "O Conselho Federal de Medicina, no uso das atribuições conferidas pela Lei nº 3.268/57 e de acordo com art. 33 da resolução CFM nº 2.306/22, torna pública a decisão de INTERDIÇÃO CAUTELAR TOTAL do exercício profissional do médico DANIEL PEREIRA KOLLET, CRM-RS nº 22.391, proferida pelo Conselho Regional de Medicina do Estado do Rio Grande do Sul e referendada no Pl...",
+   "url": "https://www.in.gov.br/web/dou/-/decisoes-de-23-de-outubro-de-2026-741158629",
+   "pagina": "210",
    "cats": [
     "saude"
    ],
-   "tamanho": 20038
+   "tamanho": 1316
   },
   {
    "id": "dou-741083176",
@@ -1824,88 +1906,6 @@
     "empresas"
    ],
    "tamanho": 386
-  },
-  {
-   "id": "dou-741106783",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Ato Normativo",
-   "orgao": "Ministério da Fazenda",
-   "unidade": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
-   "titulo": "DESPACHO Nº 51, DE 28 DE OUTUBRO DE 2026",
-   "ementa": "Publica Convênios ICMS aprovados na 433ª Reunião Extraordinária do CONFAZ, realizada no dia 27.10.2026. O Secretário-Executivo da Secretaria-Executiva do Conselho Nacional de Política Fazendária - CONFAZ, no uso das atribuições que lhe são conferidas pelo inciso IX, do art. 5º do Regimento desse Conselho, e em cumprimento ao disposto nos artigos 35, 39 e 40...",
-   "url": "https://www.in.gov.br/web/dou/-/despacho-n-51-de-28-de-outubro-de-2026-741106783",
-   "pagina": "24",
-   "cats": [
-    "fazenda",
-    "contratos"
-   ],
-   "tamanho": 32470
-  },
-  {
-   "id": "dou-741160217",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Resolução",
-   "orgao": "Ministério da Saúde",
-   "unidade": "Ministério da Saúde / Gerência-Geral de Medicamentos",
-   "titulo": "RESOLUÇÃO-RE nº 4.244, DE 28 DE OUTUBRO DE 2026",
-   "ementa": "O GERENTE-GERAL DE MEDICAMENTOS DA AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA, no uso das atribuições que lhe confere o art. 100, aliado ao art. 203, I, § 1º do Regimento Interno aprovado pela Resolução da Diretoria Colegiada - RDC nº 585, de 10 de dezembro de 2021, resolve: Art. 1º Deferir petições relacionadas à Gerência-Geral de Medicamentos, confor...",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-re-n-4.244-de-28-de-outubro-de-2026-741160217",
-   "pagina": "117",
-   "cats": [
-    "saude"
-   ],
-   "tamanho": 11045
-  },
-  {
-   "id": "dou-741159427",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Súmula",
-   "orgao": "Ministério da Educação",
-   "unidade": "Ministério da Educação / Secretaria Executiva",
-   "titulo": "SÚMULA DE PARECERES",
-   "ementa": "REUNIÃO ORDINÁRIA DOS DIAS 31 DE AGOSTO, 1º, 2, E 3 DO MÊS DE SETEMBRO DE 2026 (Complementar à Publicada no DOU de 19/10/2026, Seção 1, p. 96) CONSELHO PLENO e-MEC: 202403186. Parecer: CNE/CP 17/2026. Relatora: Ilona Maria Lustosa Becskeházy Ferrão de Sousa. Interessada: Rede Educa Orbis Ltda. - Formosa/GO. Assunto: Recurso contra a decisão exarada no Parecer CNE/CES nº 347, de...",
-   "url": "https://www.in.gov.br/web/dou/-/sumula-de-pareceres-741159427",
-   "pagina": "15",
-   "cats": [
-    "empresas"
-   ],
-   "tamanho": 3844
-  },
-  {
-   "id": "dou-741159105",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Portaria",
-   "orgao": "Ministério da Saúde",
-   "unidade": "Ministério da Saúde / Secretaria de Atenção Especializada à Saúde",
-   "titulo": "Portaria SAES/MS Nº 4.704, DE 14 DE agosto DE 2026",
-   "ementa": "Indefere a Concessão do CEBAS da Sociedade Médica Assistencial de Iguaí, com sede em Iguaí (BA). O SECRETÁRIO DE ATENÇÃO ESPECIALIZADA À SAÚDE, no uso das atribuições que lhe confere o Decreto nº 11.798, de 28 de novembro de 2023, resolve: Art. 1º Fica indeferida a Concessão do Certificado de Entidade Beneficente de Assistência Social (CEBAS) Soci...",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-saes/ms-n-4.704-de-14-de-agosto-de-2026-741159105",
-   "pagina": "107",
-   "cats": [
-    "saude",
-    "empresas"
-   ],
-   "tamanho": 1094
-  },
-  {
-   "id": "dou-741158629",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Decisão",
-   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais",
-   "unidade": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Medicina",
-   "titulo": "DECISões de 23 de outubro de 2026",
-   "ementa": "O Conselho Federal de Medicina, no uso das atribuições conferidas pela Lei nº 3.268/57 e de acordo com art. 33 da resolução CFM nº 2.306/22, torna pública a decisão de INTERDIÇÃO CAUTELAR TOTAL do exercício profissional do médico DANIEL PEREIRA KOLLET, CRM-RS nº 22.391, proferida pelo Conselho Regional de Medicina do Estado do Rio Grande do Sul e referendada no Pl...",
-   "url": "https://www.in.gov.br/web/dou/-/decisoes-de-23-de-outubro-de-2026-741158629",
-   "pagina": "210",
-   "cats": [
-    "saude"
-   ],
-   "tamanho": 1316
   },
   {
    "id": "dou-741116272",
@@ -3853,87 +3853,6 @@
    "tamanho": 846
   },
   {
-   "id": "dou-741106618",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Portaria",
-   "orgao": "Ministério da Saúde",
-   "unidade": "Ministério da Saúde / Secretaria de Atenção Especializada à Saúde",
-   "titulo": "Portaria SAES/MS Nº 4.822, DE 1º DE setembro DE 2026",
-   "ementa": "Indefere a Concessão do CEBAS da Sociedade Espírita Caminho da Luz, com sede em Ribeirão Preto (SP). O SECRETÁRIO DE ATENÇÃO ESPECIALIZADA À SAÚDE, no uso das atribuições que lhe confere o Decreto nº 11.798, de 28 de novembro de 2023, resolve: Art. 1º Fica indeferida a Concessão do Certificado de Entidade Beneficente de Assistência Social (CEBAS...",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-saes/ms-n-4.822-de-1-de-setembro-de-2026-741106618",
-   "pagina": "109",
-   "cats": [
-    "saude",
-    "empresas"
-   ],
-   "tamanho": 1108
-  },
-  {
-   "id": "dou-741106331",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Resolução",
-   "orgao": "Ministério da Saúde",
-   "unidade": "Ministério da Saúde / Gerência-Geral de Portos, Aeroportos, Fronteiras e Recintos Alfandegados",
-   "titulo": "RESOLUÇÃO-RE Nº 4.240, DE 27 DE OUTUBRO DE 2026",
-   "ementa": "A GERENTE-GERAL DE PORTOS, AEROPORTOS, FRONTEIRAS E RECINTOS ALFANDEGADOS DA AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA, no uso das atribuições que lhe confere o art.160, aliado ao art.203, I, §1º do Regimento Interno aprovado pela Resolução da Diretoria Colegiada ¿RDC nº 585, de 10 de dezembro de 2021, resolve: Art. 1º Alterar a Autorização de Funcion...",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-re-n-4.240-de-27-de-outubro-de-2026-741106331",
-   "pagina": "124",
-   "cats": [
-    "saude"
-   ],
-   "tamanho": 1155
-  },
-  {
-   "id": "dou-741160930",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Despacho",
-   "orgao": "Ministério de Minas e Energia",
-   "unidade": "Ministério de Minas e Energia / Superintendência de Inovação e Transição Energética",
-   "titulo": "DESPACHO Nº 4.077, DE 22 DE OUTUBRO DE 2026",
-   "ementa": "Processos nº: 48500.031140/2026-62. Interessado: Enel Distribuição São Paulo, CNPJ: 61.695.227/0001-93, Decisão: (i) reconhecer o total de R$ 30.164.195,21 (trinta milhões, cento e sessenta e quatro mil, cento e noventa e cinco reais e vinte e um centavos), referente à realização dos Projetos de Eficiência Energética, PE-00390-1096/2020; PE-00390-1101/20...",
-   "url": "https://www.in.gov.br/web/dou/-/despacho-n-4.077-de-22-de-outubro-de-2026-741160930",
-   "pagina": "55",
-   "cats": [
-    "empresas"
-   ],
-   "tamanho": 959
-  },
-  {
-   "id": "dou-741166432",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Decisão",
-   "orgao": "Ministério dos Transportes",
-   "unidade": "Ministério dos Transportes / Superintendência de Infraestrutura Rodoviária",
-   "titulo": "DECISÃO SUROD Nº 1.780, DE 22 DE OUTUBRO DE 2026",
-   "ementa": "O Superintendente de Infraestrutura Rodoviária da Agência Nacional de Transportes Terrestres - ANTT, no uso de suas atribuições, conforme as Resoluções nº 5.950, de 20 de julho de 2021, nº 6.085, de 7 de abril de 2026, nº 6.000, de 1º de dezembro de 2022, e nº 6.032, de 21 de dezembro de 2023, e considerando o que consta do Processo nº 50500.013347/...",
-   "url": "https://www.in.gov.br/web/dou/-/decisao-surod-n-1.780-de-22-de-outubro-de-2026-741166432",
-   "pagina": "125",
-   "cats": [
-    "outros"
-   ],
-   "tamanho": 2717
-  },
-  {
-   "id": "dou-741165794",
-   "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Despacho",
-   "orgao": "Ministério de Minas e Energia",
-   "unidade": "Ministério de Minas e Energia / Gerência Regional da ANM no Estado de São Paulo",
-   "titulo": "Despacho",
-   "ementa": "Relação nº 130/2026 Fase de Concessão de Lavra, decide: A classificação da água, estabelecendo as informações para rotulagem - Resolução ANM 157/2024 (2786/) 921.287/2024-COMERCIAL DEL REY MULTI MINERACAO LTDA.- Decisão nº 729/2026 - FONTE DEL REY II. Processo ANM 48053.921287/2024-08. Concessionária: Comercial Del Rey Multi Mineração Ltda. CNPJ: 45.408.135/0001-29. Registro de Grupamento...",
-   "url": "https://www.in.gov.br/web/dou/-/despacho-741165794",
-   "pagina": "49",
-   "cats": [
-    "empresas"
-   ],
-   "tamanho": 2505
-  },
-  {
    "id": "dou-741100046",
    "esfera": "federal",
    "fonte": "DOU",
@@ -4111,6 +4030,87 @@
     "empresas"
    ],
    "tamanho": 665
+  },
+  {
+   "id": "dou-741106618",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Portaria",
+   "orgao": "Ministério da Saúde",
+   "unidade": "Ministério da Saúde / Secretaria de Atenção Especializada à Saúde",
+   "titulo": "Portaria SAES/MS Nº 4.822, DE 1º DE setembro DE 2026",
+   "ementa": "Indefere a Concessão do CEBAS da Sociedade Espírita Caminho da Luz, com sede em Ribeirão Preto (SP). O SECRETÁRIO DE ATENÇÃO ESPECIALIZADA À SAÚDE, no uso das atribuições que lhe confere o Decreto nº 11.798, de 28 de novembro de 2023, resolve: Art. 1º Fica indeferida a Concessão do Certificado de Entidade Beneficente de Assistência Social (CEBAS...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-saes/ms-n-4.822-de-1-de-setembro-de-2026-741106618",
+   "pagina": "109",
+   "cats": [
+    "saude",
+    "empresas"
+   ],
+   "tamanho": 1108
+  },
+  {
+   "id": "dou-741106331",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Resolução",
+   "orgao": "Ministério da Saúde",
+   "unidade": "Ministério da Saúde / Gerência-Geral de Portos, Aeroportos, Fronteiras e Recintos Alfandegados",
+   "titulo": "RESOLUÇÃO-RE Nº 4.240, DE 27 DE OUTUBRO DE 2026",
+   "ementa": "A GERENTE-GERAL DE PORTOS, AEROPORTOS, FRONTEIRAS E RECINTOS ALFANDEGADOS DA AGÊNCIA NACIONAL DE VIGILÂNCIA SANITÁRIA, no uso das atribuições que lhe confere o art.160, aliado ao art.203, I, §1º do Regimento Interno aprovado pela Resolução da Diretoria Colegiada ¿RDC nº 585, de 10 de dezembro de 2021, resolve: Art. 1º Alterar a Autorização de Funcion...",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-re-n-4.240-de-27-de-outubro-de-2026-741106331",
+   "pagina": "124",
+   "cats": [
+    "saude"
+   ],
+   "tamanho": 1155
+  },
+  {
+   "id": "dou-741160930",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Despacho",
+   "orgao": "Ministério de Minas e Energia",
+   "unidade": "Ministério de Minas e Energia / Superintendência de Inovação e Transição Energética",
+   "titulo": "DESPACHO Nº 4.077, DE 22 DE OUTUBRO DE 2026",
+   "ementa": "Processos nº: 48500.031140/2026-62. Interessado: Enel Distribuição São Paulo, CNPJ: 61.695.227/0001-93, Decisão: (i) reconhecer o total de R$ 30.164.195,21 (trinta milhões, cento e sessenta e quatro mil, cento e noventa e cinco reais e vinte e um centavos), referente à realização dos Projetos de Eficiência Energética, PE-00390-1096/2020; PE-00390-1101/20...",
+   "url": "https://www.in.gov.br/web/dou/-/despacho-n-4.077-de-22-de-outubro-de-2026-741160930",
+   "pagina": "55",
+   "cats": [
+    "empresas"
+   ],
+   "tamanho": 959
+  },
+  {
+   "id": "dou-741166432",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Decisão",
+   "orgao": "Ministério dos Transportes",
+   "unidade": "Ministério dos Transportes / Superintendência de Infraestrutura Rodoviária",
+   "titulo": "DECISÃO SUROD Nº 1.780, DE 22 DE OUTUBRO DE 2026",
+   "ementa": "O Superintendente de Infraestrutura Rodoviária da Agência Nacional de Transportes Terrestres - ANTT, no uso de suas atribuições, conforme as Resoluções nº 5.950, de 20 de julho de 2021, nº 6.085, de 7 de abril de 2026, nº 6.000, de 1º de dezembro de 2022, e nº 6.032, de 21 de dezembro de 2023, e considerando o que consta do Processo nº 50500.013347/...",
+   "url": "https://www.in.gov.br/web/dou/-/decisao-surod-n-1.780-de-22-de-outubro-de-2026-741166432",
+   "pagina": "125",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 2717
+  },
+  {
+   "id": "dou-741165794",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Despacho",
+   "orgao": "Ministério de Minas e Energia",
+   "unidade": "Ministério de Minas e Energia / Gerência Regional da ANM no Estado de São Paulo",
+   "titulo": "Despacho",
+   "ementa": "Relação nº 130/2026 Fase de Concessão de Lavra, decide: A classificação da água, estabelecendo as informações para rotulagem - Resolução ANM 157/2024 (2786/) 921.287/2024-COMERCIAL DEL REY MULTI MINERACAO LTDA.- Decisão nº 729/2026 - FONTE DEL REY II. Processo ANM 48053.921287/2024-08. Concessionária: Comercial Del Rey Multi Mineração Ltda. CNPJ: 45.408.135/0001-29. Registro de Grupamento...",
+   "url": "https://www.in.gov.br/web/dou/-/despacho-741165794",
+   "pagina": "49",
+   "cats": [
+    "empresas"
+   ],
+   "tamanho": 2505
   },
   {
    "id": "dou-741176058",
@@ -5494,6 +5494,22 @@
    "tamanho": 1067
   },
   {
+   "id": "dou-741176295",
+   "esfera": "federal",
+   "fonte": "DOU",
+   "tipo": "Despacho",
+   "orgao": "Ministério da Justiça e Segurança Pública",
+   "unidade": "Ministério da Justiça e Segurança Pública / Coordenação-Geral de Imigração Laboral",
+   "titulo": "DESPACHO de 28 de outubro de 2026",
+   "ementa": "A Coordenadora-Geral de Imigração Laboral, no uso de suas atribuições, deferiu os seguintes pedidos de autorização de residência prévia: Residência Prévia - RESOLUÇÃO NORMATIVA 02/2017 Processo: 08228.015185/2026-41 Requerente: CHICO PITBULL CONFECCOES LTDA Prazo: 2 Anos Imigrante: ROFIQUL ISLAM Data Nascimento: 21/10/1998 Passaporte: A06035932 País: BANGLADESH Mã...",
+   "url": "https://www.in.gov.br/web/dou/-/despacho-de-28-de-outubro-de-2026-741176295",
+   "pagina": "38",
+   "cats": [
+    "empresas"
+   ],
+   "tamanho": 137638
+  },
+  {
    "id": "dou-741114023",
    "esfera": "federal",
    "fonte": "DOU",
@@ -5510,20 +5526,275 @@
    "tamanho": 630223
   },
   {
-   "id": "dou-741176295",
+   "id": "dou-741177669",
    "esfera": "federal",
-   "fonte": "DOU",
-   "tipo": "Despacho",
-   "orgao": "Ministério da Justiça e Segurança Pública",
-   "unidade": "Ministério da Justiça e Segurança Pública / Coordenação-Geral de Imigração Laboral",
-   "titulo": "DESPACHO de 28 de outubro de 2026",
-   "ementa": "A Coordenadora-Geral de Imigração Laboral, no uso de suas atribuições, deferiu os seguintes pedidos de autorização de residência prévia: Residência Prévia - RESOLUÇÃO NORMATIVA 02/2017 Processo: 08228.015185/2026-41 Requerente: CHICO PITBULL CONFECCOES LTDA Prazo: 2 Anos Imigrante: ROFIQUL ISLAM Data Nascimento: 21/10/1998 Passaporte: A06035932 País: BANGLADESH Mã...",
-   "url": "https://www.in.gov.br/web/dou/-/despacho-de-28-de-outubro-de-2026-741176295",
-   "pagina": "38",
+   "fonte": "DOU (extra)",
+   "tipo": "Ato",
+   "orgao": "Ministério da Fazenda",
+   "unidade": "Ministério da Fazenda / Subsecretaria de Fiscalização",
+   "titulo": "ATO TÉCNICO CONJUNTO RFB/SUFIS/CGIBS/DIRETORIA-EXECUTIVA Nº 10, DE 28 DE OUTUBRO DE 2026",
+   "ementa": "Dispõe sobre a aprovação conjunta da Secretaria Especial da Receita Federal do Brasil (RFB) e do Comitê Gestor do Imposto sobre Bens e Serviços (CGIBS) da documentação técnica dos documentos fiscais que especifica. A SUBSECRETÁRIA DE FISCALIZAÇÃO DA SECRETARIA ESPECIAL DA RECEITA FEDERAL DO BRASIL - RFB, o COO...",
+   "url": "https://www.in.gov.br/web/dou/-/ato-tecnico-conjunto-rfb/sufis/cgibs/diretoria-executiva-n-10-de-28-de-outubro-de-2026-741177669",
+   "pagina": "6",
+   "cats": [
+    "fazenda"
+   ],
+   "tamanho": 4458
+  },
+  {
+   "id": "dou-741116986",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria",
+   "orgao": "Ministério da Previdência Social",
+   "unidade": "Ministério da Previdência Social / Diretoria de Licenciamento",
+   "titulo": "PORTARIA PREVIC Nº 820, DE 16 DE OUTUBRO DE 2026",
+   "ementa": "O DIRETOR DE LICENCIAMENTO, no uso das atribuições que lhe confere a alínea \"c\" do inciso I do art. 16 do Decreto nº 11.241, de 18 de outubro de 2022, e considerando as manifestações técnicas exaradas no Processo nº 44011.004204/2020-18, resolve: Art. 1º Aprovar as alterações propostas para o estatuto da entidade Postalis Instituto de Previdência Co...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-previc-n-820-de-16-de-outubro-de-2026-741116986",
+   "pagina": "17",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 686
+  },
+  {
+   "id": "dou-741177750",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria",
+   "orgao": "Ministério da Educação",
+   "unidade": "Ministério da Educação / Secretaria de Educação Profissional e Tecnológica",
+   "titulo": "PORTARIA Nº 58, DE 10 DE OUTUBRO DE 2026",
+   "ementa": "Regulamenta o início da vigência da trava digital para emissão do código autenticador no Sistema Nacional de Informações da Educação Profissional e Tecnológica - Sistec. O SECRETÁRIO DE EDUCAÇÃO PROFISSIONAL E TECNOLÓGICA DO MINISTÉRIO DA EDUCAÇÃO, no uso das atribuições que lhe confere o art. 23 do Anexo I do Decreto nº 12.769, de 5 de dezembro de 2025, e ...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-n-58-de-10-de-outubro-de-2026-741177750",
+   "pagina": "4",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 3184
+  },
+  {
+   "id": "dou-741116833",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Resolução",
+   "orgao": "Ministério das Cidades",
+   "unidade": "Ministério das Cidades / Conselho das Cidades",
+   "titulo": "RESOLUÇÃO CONCIDADES Nº 19, DE 1º DE SETEMBRO DE 2026",
+   "ementa": "Recomenda ações relacionadas à implementação do Programa de Democratização de Imóveis da União. O CONSELHO DAS CIDADES, no exercício das competências que lhe foram conferidas pelos arts. 3º, incisos II e IV, e 8º do Decreto nº 5.790, de 25 de maio de 2006, e tendo em vista a votação realizada na 55ª Reunião Ordinária, ocorrida nos dias 30 de ou...",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-concidades-n-19-de-1-de-setembro-de-2026-741116833",
+   "pagina": "3",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 1681
+  },
+  {
+   "id": "dou-741116696",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Mensagem",
+   "orgao": "Presidência da República",
+   "titulo": "DESPACHOS DO PRESIDENTE DA REPÚBLICA",
+   "ementa": "MENSAGEM Nº 818, de 29 de outubro de 2026. Encaminhamento ao Senado Federal, para apreciação, do nome do Senhor FERNANDO LUÍS LEMOS IGREJA, Ministro de Primeira Classe da Carreira de Diplomata do Ministério das Relações Exteriores, para exercer o cargo de Embaixador do Brasil na República Italiana e, cumulativamente, na República de Malta e na República de San ...",
+   "url": "https://www.in.gov.br/web/dou/-/despachos-do-presidente-da-republica-741116696",
+   "pagina": "1",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 830
+  },
+  {
+   "id": "dou-741177773",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Resolução",
+   "orgao": "Ministério de Minas e Energia",
+   "unidade": "Ministério de Minas e Energia / Agência Nacional do Petróleo, Gás Natural e Biocombustíveis",
+   "titulo": "RESOLUÇÃO ANP Nº 1.009, DE 6 DE OUTUBRO DE 2026",
+   "ementa": "Regulamenta as atividades de aquisição, processamento e reprocessamento de dados, elaboração de estudos e acesso aos dados técnicos de exploração, desenvolvimento e produção de petróleo e gás natural, de estocagem subterrânea de gás natural, de exploração e produção de hidrogênio natural e de captura e estocagem geológica de dióxido de carbono no ter...",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-anp-n-1.009-de-6-de-outubro-de-2026-741177773",
+   "pagina": "14",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 45323
+  },
+  {
+   "id": "dou-741177416",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Instrução Normativa",
+   "orgao": "Ministério da Fazenda",
+   "unidade": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "titulo": "INSTRUÇÃO NORMATIVA RFB Nº 2.346, DE 13 DE OUTUBRO DE 2026",
+   "ementa": "Dispõe sobre programa de autorregularização de débito tributário administrado pela Secretaria Especial da Receita Federal do Brasil, disponibilizado aos contribuintes detentores do Selo Confia e do Selo Sintonia. O SECRETÁRIO ESPECIAL DA RECEITA FEDERAL DO BRASIL, no uso da atribuição que lhe confere o art. 350, caput, inciso III, do Regim...",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-rfb-n-2.346-de-13-de-outubro-de-2026-741177416",
+   "pagina": "5",
+   "cats": [
+    "fazenda"
+   ],
+   "tamanho": 13107
+  },
+  {
+   "id": "dou-741177590",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Resolução",
+   "orgao": "Ministério das Cidades",
+   "unidade": "Ministério das Cidades / Conselho das Cidades",
+   "titulo": "RESOLUÇÃO CONCIDADES Nº 18, DE 1º DE SETEMBRO DE 2026",
+   "ementa": "Recomenda à Secretaria Nacional de Habitação que garanta a participação do Conselho das Cidades no processo de elaboração do Plano Nacional de Habitação 2024-2040. O CONSELHO DAS CIDADES, no exercício das competências que lhe foram conferidas pelos arts. 3º, incisos I, II e IV, e 8º do Decreto nº 5.790, de 25 de maio de 2006, e tendo em vista a...",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-concidades-n-18-de-1-de-setembro-de-2026-741177590",
+   "pagina": "3",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 1059
+  },
+  {
+   "id": "dou-741177021",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria Interministerial",
+   "orgao": "Ministério das Cidades",
+   "unidade": "Ministério das Cidades / Gabinete do Ministro",
+   "titulo": "PORTARIA INTERMINISTERIAL MCID/MF Nº 5, DE 3 DE AGOSTO DE 2026",
+   "ementa": "Altera a Portaria Interministerial MCID/MF nº 4, de 28 de março de 2024, que dispõe sobre a concessão de subvenções econômicas e remunerações do gestor operacional e agentes financeiros aplicáveis à linha de atendimento de provisão financiada de unidades habitacionais novas ou usadas em áreas urbanas do Programa Minha Casa, Minha Vida....",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-interministerial-mcid/mf-n-5-de-3-de-agosto-de-2026-741177021",
+   "pagina": "1",
    "cats": [
     "empresas"
    ],
-   "tamanho": 137638
+   "tamanho": 1805
+  },
+  {
+   "id": "dou-741177044",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Resolução",
+   "orgao": "Ministério das Cidades",
+   "unidade": "Ministério das Cidades / Conselho das Cidades",
+   "titulo": "RESOLUÇÃO CONCIDADES Nº 17, DE 1º DE SETEMBRO DE 2026",
+   "ementa": "Recomenda ao Ministério das Cidades que estabeleça um sistema nacional e informatizado de cadastro da demanda por habitação de interesse social nos municípios. O CONSELHO DAS CIDADES, no exercício das competências que lhe foram conferidas pelos arts. 3º, incisos I, II e IV, e 8º do Decreto nº 5.790, de 25 de maio de 2006, e tendo em vista a vot...",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-concidades-n-17-de-1-de-setembro-de-2026-741177044",
+   "pagina": "3",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 913
+  },
+  {
+   "id": "dou-741177258",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Resolução",
+   "orgao": "Ministério da Gestão e da Inovação em Serviços Públicos",
+   "unidade": "Ministério da Gestão e da Inovação em Serviços Públicos / Comissão Interministerial de Contratações Públicas para o Desenvolvimento Sustentável",
+   "titulo": "RESOLUÇÃO CICS/MGI Nº 10, DE 28 DE OUTUBRO DE 2026",
+   "ementa": "Altera a Resolução SEGES/CICS-MGI nº 4, de 18 de outubro de 2024, publicada no DOU de 22 de outubro de 2024, ampliando a aplicação de margem de preferência na aquisição de bens manufaturados nacionais e as possibilidades de documentos para comprovação de origem. A COMISSÃO INTERMINISTERIAL DE CONTRATAÇÕES PÚBLICAS PARA O DESENVOLVIMENTO SUSTENTÁVE...",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-cics/mgi-n-10-de-28-de-outubro-de-2026-741177258",
+   "pagina": "7",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 81304
+  },
+  {
+   "id": "dou-741117014",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria",
+   "orgao": "Ministério da Saúde",
+   "unidade": "Ministério da Saúde / Gabinete do Ministro",
+   "titulo": "Portaria GM/MS Nº 12.302, DE 28 DE outubro DE 2026",
+   "ementa": "Regulamenta o § 2º do art. 11-E da Portaria GM/MS nº 2.182, de 24 de dezembro de 2015, quanto aos critérios de acesso das instituições à autorização, pelo Ministério da Saúde, de utilização do Teto MAC como garantia nas operações de crédito da Modalidade III, de que trata a Portaria GM/MS nº 11.039, de 7 de maio de 2026. O MINISTRO DE ESTADO DA SA...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.302-de-28-de-outubro-de-2026-741117014",
+   "pagina": "17",
+   "cats": [
+    "saude"
+   ],
+   "tamanho": 26960
+  },
+  {
+   "id": "dou-741177337",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria",
+   "orgao": "Ministério das Cidades",
+   "unidade": "Ministério das Cidades / Gabinete do Ministro",
+   "titulo": "PORTARIA MCID Nº 1.455, DE 23 DE OUTUBRO DE 2026",
+   "ementa": "Dispõe sobre os critérios e as condições complementares para o enquadramento e os procedimentos de aprovação ministerial prévia e de acompanhamento de projetos de investimento prioritários no setor de requalificação urbana, para fins de emissão de valores mobiliários com benefícios fiscais, nos termos do disposto no art. 2º da Lei nº 12.431, de 24 d...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mcid-n-1.455-de-23-de-outubro-de-2026-741177337",
+   "pagina": "1",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 22650
+  },
+  {
+   "id": "dou-741116912",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria",
+   "orgao": "Ministério da Defesa",
+   "unidade": "Ministério da Defesa / Centro de Intendência da Marinha em Belém",
+   "titulo": "PORTARIA CPAOR/Com4°DN/ComOpNav/MB N° 75, DE 23 DE OUTUBRO DE 2026",
+   "ementa": "O CAPITÃO DOS PORTOS DA AMAZÔNIA ORIENTAL, no uso das atribuições que lhe são conferidas pelos arts. 3º e 4º, inciso I, alíneas b e i, da Lei nº 9.537, de 11 de dezembro de 1997, que dispõe sobre a segurança do tráfego aquaviário (LESTA), resolve: Art. 1º Estabelecer a obrigatoriedade de consulta, previamente ao início da singradur...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-cpaor/com4dn/comopnav/mb-n-75-de-23-de-outubro-de-2026-741116912",
+   "pagina": "3",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 10642
+  },
+  {
+   "id": "dou-741177179",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria",
+   "orgao": "Ministério da Fazenda",
+   "unidade": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "titulo": "PORTARIA RFB Nº 743, DE 28 DE OUTUBRO DE 2026",
+   "ementa": "Altera a Portaria RFB nº 200, de 18 de julho de 2022, que dispõe sobre a administração e a destinação de mercadorias apreendidas no âmbito da Secretaria Especial da Receita Federal do Brasil. O SECRETÁRIO ESPECIAL DA RECEITA FEDERAL DO BRASIL, no uso da atribuição que lhe confere o art. 350, caput, inciso III, do Regimento Interno da Secretaria Especia...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-rfb-n-743-de-28-de-outubro-de-2026-741177179",
+   "pagina": "5",
+   "cats": [
+    "fazenda"
+   ],
+   "tamanho": 12447
+  },
+  {
+   "id": "dou-741177497",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Instrução Normativa",
+   "orgao": "Ministério das Cidades",
+   "unidade": "Ministério das Cidades / Gabinete do Ministro",
+   "titulo": "Instrução Normativa MCID Nº 25, de 23 de OUTUBRO de 2026",
+   "ementa": "Altera o Anexo II da Instrução Normativa MCID nº 46, de 26 de dezembro de 2025, que dispõe sobre o orçamento operacional do Fundo de Garantia do Tempo de Serviço - FGTS, referente à área de Saneamento Básico, para o exercício 2026. O MINISTRO DE ESTADO DAS CIDADES, no uso das atribuições que lhe confere o art. 87, parágrafo único, incisos I ...",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-mcid-n-25-de-23-de-outubro-de-2026-741177497",
+   "pagina": "2",
+   "cats": [
+    "fazenda"
+   ],
+   "tamanho": 1543
+  },
+  {
+   "id": "dou-741176940",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria",
+   "orgao": "Ministério da Justiça e Segurança Pública",
+   "unidade": "Ministério da Justiça e Segurança Pública / Gabinete do Ministro",
+   "titulo": "PORTARIA MJSP Nº 1.327, DE 28 DE OUTUBRO DE 2026",
+   "ementa": "Altera as Portarias MJSP nº 736 e nº 737, de 23 de agosto de 2024, para prorrogar os prazos de execução dos recursos do Fundo Nacional de Segurança Pública transferidos na modalidade fundo a fundo. O MINISTRO DE ESTADO DA JUSTIÇA E SEGURANÇA PÚBLICA, no uso das atribuições que lhe confere o art. 87, parágrafo único, incisos I e II, da Constituição, ...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mjsp-n-1.327-de-28-de-outubro-de-2026-741176940",
+   "pagina": "14",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 2407
   },
   {
    "id": "dou-741176599",
@@ -5543,22 +5814,6 @@
    "tamanho": 3043
   },
   {
-   "id": "dou-741176520",
-   "esfera": "federal",
-   "fonte": "DOU (extra)",
-   "tipo": "Portaria",
-   "orgao": "Ministério do Planejamento e Orçamento",
-   "unidade": "Ministério do Planejamento e Orçamento / Gabinete do Ministro",
-   "titulo": "PORTARIA GM/MPO Nº 487, DE 29 OUTUBRO DE 2026",
-   "ementa": "Antecipa os limites de movimentação e empenho constantes do Anexo I do Decreto nº 12.846, de 12 de fevereiro de 2026, e alterações posteriores, no que concerne a diversos órgãos do Poder Executivo federal. O MINISTRO DE ESTADO DO PLANEJAMENTO E ORÇAMENTO, tendo em vista o disposto no art. 11, inciso I, alínea \"b\", do Decreto nº 12.846, de 12 de feverei...",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/mpo-n-487-de-29-outubro-de-2026-741176520",
-   "pagina": "3",
-   "cats": [
-    "fazenda"
-   ],
-   "tamanho": 1631
-  },
-  {
    "id": "dou-741116457",
    "esfera": "federal",
    "fonte": "DOU (extra)",
@@ -5573,6 +5828,22 @@
     "fazenda"
    ],
    "tamanho": 9194
+  },
+  {
+   "id": "dou-741176520",
+   "esfera": "federal",
+   "fonte": "DOU (extra)",
+   "tipo": "Portaria",
+   "orgao": "Ministério do Planejamento e Orçamento",
+   "unidade": "Ministério do Planejamento e Orçamento / Gabinete do Ministro",
+   "titulo": "PORTARIA GM/MPO Nº 487, DE 29 OUTUBRO DE 2026",
+   "ementa": "Antecipa os limites de movimentação e empenho constantes do Anexo I do Decreto nº 12.846, de 12 de fevereiro de 2026, e alterações posteriores, no que concerne a diversos órgãos do Poder Executivo federal. O MINISTRO DE ESTADO DO PLANEJAMENTO E ORÇAMENTO, tendo em vista o disposto no art. 11, inciso I, alínea \"b\", do Decreto nº 12.846, de 12 de feverei...",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/mpo-n-487-de-29-outubro-de-2026-741176520",
+   "pagina": "3",
+   "cats": [
+    "fazenda"
+   ],
+   "tamanho": 1631
   },
   {
    "id": "dou-740913525",
@@ -41519,6 +41790,260 @@
    ]
   },
   {
+   "id": "dou-741123879",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Licitação",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / Prefeitura Municipal de Mãe do Rio",
+   "titulo": "AVISOS DE LICITAÇÃO",
+   "ementa": "PREGÕES ELETRÔNICOS PREGÃO ELETRÔNICO - SRP Nº 9.2026-00033. O Município de Mãe do Rio, por intermédio do Fundo Municipal de Saúde de Mãe do Rio, torna público que às 10h do dia 17 de novembro de 2026 realizará licitação na modalidade Pregão, tipo me",
+   "url": "https://www.in.gov.br/web/dou/-/avisos-de-licitacao-741123879",
+   "pagina": "218",
+   "cats": [
+    "saude",
+    "contratos"
+   ]
+  },
+  {
+   "id": "dou-741124519",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Termo Aditivo",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE CARBONITA",
+   "titulo": "EXTRATO DE TERMOS ADITIVOS",
+   "ementa": "Descrição do Termo/Contrato: Contrato Nº 105/2024 Fornecedor do Termo/Contrato: Jb Engenharia E Comercio Ltda Assinatura do Aditivo: 18/03/2026 Objeto do Termo/Contrato: contratação de serviços de engenharia para a pavimentação asfáltica em tsd (trat",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termos-aditivos-741124519",
+   "pagina": "204",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741124839",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Licitação-Concorrência",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / Prefeitura Municipal de Amarante do Maranhão",
+   "titulo": "AVISO DE LICITAÇÃO",
+   "ementa": "CONCORRÊNCIA ELETRÔNICA Nº 10/2026 PORTAL DE COMPRAS PUBLICAS A Prefeitura Municipal de Amarante do Maranhão/MA, com sede na Av. Deputado La Rocque, 1229, Centro - Amarante do Maranhão/MA, através do seu Agente de Contratação, instituído pela Portari",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741124839",
+   "pagina": "197",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
+   "id": "dou-741123802",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Registro de Preços",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE SÃO CAETANO DE ODIVELAS",
+   "titulo": "EXTRATOS DE REGISTROS DE PREÇOS",
+   "ementa": "Ata de Registro de Preços n° 015.2026, oriunda do Pregão Eletrônico Nº 9.2026-006 - PROC. ADMINISTRATIVO Nº 01902002/26, cujo objeto é o Registro de Preços para a Futura e Eventual contratação de empresa para aquisição de material de consumo para man",
+   "url": "https://www.in.gov.br/web/dou/-/extratos-de-registros-de-precos-741123802",
+   "pagina": "222",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741125155",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / Prefeitura Municipal de Sobral",
+   "titulo": "RESULTADO DE JULGAMENTO",
+   "ementa": "Aviso de Resultado Final de Licitação - CP26008-SMS. Processo Nº P452435/2026. A Central de Licitações da Prefeitura Municipal de Sobral, por intermédio da Comissão de Contratação designada por ato do Prefeito do Município de Sobral, comunica o resul",
+   "url": "https://www.in.gov.br/web/dou/-/resultado-de-julgamento-741125155",
+   "pagina": "190",
+   "cats": [
+    "nomeacoes",
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741123482",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Edital",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / Prefeitura Municipal de Poção",
+   "titulo": "AVISO DE LICITAÇÃO",
+   "ementa": "Pregão Eletrônico nº 15/2026 Processo Nº 21/2026/FMS OBJETO: Contratação de empresa para fornecimento, parcelado, de insumos farmacêuticos e materiais médico-hospitalares, destinados ao atendimento das necessidades do Fundo Municipal de Saúde, com re",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741123482",
+   "pagina": "234",
+   "cats": [
+    "saude",
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741142968",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Licitação",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE SÃO GOTARDO",
+   "titulo": "AVISO DE LICITAÇÃO",
+   "ementa": "CONCORRÊNCIA Nº 5/2026 A Prefeitura Municipal de São Gotardo torna público - aviso de licitação: processo licitatório nº. pmsg/cpl/331/2026. concorrência nº. 005/2026. objeto: Pavimentação asfáltica em CBUQ em diversas ruas no município de São Gotard",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741142968",
+   "pagina": "212",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
+   "id": "dou-741143049",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / Prefeitura Municipal de Itanhandu",
+   "titulo": "AVISO DE RETIFICAÇÃO",
+   "ementa": "CONCORRÊNCIA ELETRÔNICA Nº 3/2026 Processo Licitatório nº 091/2026. Objeto: contratação semi-integrada de empresa especializada para executar a obra de construção da usina de minigeração fotovoltaica de 1.250 kW. O Município de Itanhandu/MG, torna pú",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-retificacao-741143049",
+   "pagina": "207",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741143444",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE BARREIRAS",
+   "titulo": "EXTRATO DE TERMO ADITIVO",
+   "ementa": "TERCEIRO TERMO ADITIVO AO CONTRATO Nº 296/2023 Proc. Adm. Nº 15211/2026 - Pregão Presencial nº 028/2022. Contratante: MUNICÍPIO DE BARREIRAS, e a empresa: MOVTERRA CONSTRUTORA LTDA, inscrito no CNPJ Nº 07.665.220/0001-83, como contratada. OBJETO: PRO",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-741143444",
+   "pagina": "178",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741144159",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Contrato",
+   "orgao": "Ineditoriais",
+   "unidade": "Ineditoriais / Instituto Alcides D'Andrade Lima",
+   "titulo": "Extrato de Contrato",
+   "ementa": "Modalidade: Cotação Eletrônica nº. 001/2025 Objeto: Aquisição Equipamentos e Material Permanente. Fonte de Recursos: Convênio nº. 961269/2024 CONTRATO Nº 008/2025 Contratante: Instituto Alcides d' Andrade Lima-IAAL. Contratada: NORDESTE MEDICAL, REPR",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-contrato-741144159",
+   "pagina": "165",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741150390",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Resultado de Chamamento Público",
+   "orgao": "Ministério da Defesa",
+   "unidade": "Ministério da Defesa / Base Aérea de Natal",
+   "titulo": "RESULTADO DE JULGAMENTO",
+   "ementa": "CHAMADA PÚBLICA A Base Aérea de Natal (BANT) torna pública a classificação inicial dos leiloeiros credenciados, nos termos do Termo de Referência nº 50/2026, observados os critérios de pontuação previstos no item 9.1.2.1, após resposta da autoridade ",
+   "url": "https://www.in.gov.br/web/dou/-/resultado-de-julgamento-741150390",
+   "pagina": "15",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741151504",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Edital",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE XEXÉU",
+   "titulo": "AVISO DE LICITAÇÃO",
+   "ementa": "Concorrência Eletrônica Nº 13/2026 Processo Licitatório Nº 33/2026 OBJETO: Contratação de empresa de engenharia especializada para reforma da Praça da Alegria, no Centro de Xexéu-PE, incluindo pavimentação, mobiliário urbano, iluminação, paisagismo, ",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741151504",
+   "pagina": "236",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741150625",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Cessão",
+   "orgao": "Ministério da Agricultura e Pecuária",
+   "unidade": "Ministério da Agricultura e Pecuária / Embrapa Clima Temperado",
+   "titulo": "EXTRATO DE CESSÃO DE DIREITOS AUTORAIS",
+   "ementa": "Espécie: Termo de cessão de direitos autorais. Partes: Empresa Brasileira de Pesquisa Agropecuária - Embrapa - CNPJ: 00.348.003/0001-10 e Claudete Clarice Mistura de CPF ***263.240-**. Objeto: O Cedente cede à Embrapa, de forma total e definitiva, em",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-cessao-de-direitos-autorais-741150625",
+   "pagina": "6",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741150228",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Retificação",
+   "orgao": "Ministério da Defesa",
+   "unidade": "Ministério da Defesa / Base Aérea de Anápolis",
+   "titulo": "RETIFICAÇÃO",
+   "ementa": "NO EXTRATO DE CONTRATO Nº 13/2025 - UASG 120624 referente ao NUP 67281.016816/2024-01 - publicado no DOU Nº 227, de 2025-11-28, Seção 3. Onde se lê: \"Valor Total: R$ 64.206,00\", leia-se: \"Valor Total: R$ 57.404,00\".",
+   "url": "https://www.in.gov.br/web/dou/-/retificacao-741150228",
+   "pagina": "15",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
+   "id": "dou-741158550",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Contrato",
+   "orgao": "Ministério da Agricultura e Pecuária",
+   "unidade": "Ministério da Agricultura e Pecuária / Embrapa Soja",
+   "titulo": "Extrato de Contrato",
+   "ementa": "Espécie: Extrato de Contrato Embrapa SAIC 20900.26/0191-6; Partes: Empresa Brasileira de Pesquisa Agropecuária - Embrapa e CÉSAR DE OLIVEIRA HIRAGI INFORMÁTICA ME (HTI); (Cnpj 10.793.077/0001-10); Objeto: Prestação de serviços de licenciamento de uso",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-contrato-741158550",
+   "pagina": "8",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
    "id": "dou-741090519",
    "esfera": "federal",
    "fonte": "DOU Seção 3",
@@ -43523,260 +44048,6 @@
    "pagina": "108",
    "cats": [
     "saude",
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741123879",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Licitação",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / Prefeitura Municipal de Mãe do Rio",
-   "titulo": "AVISOS DE LICITAÇÃO",
-   "ementa": "PREGÕES ELETRÔNICOS PREGÃO ELETRÔNICO - SRP Nº 9.2026-00033. O Município de Mãe do Rio, por intermédio do Fundo Municipal de Saúde de Mãe do Rio, torna público que às 10h do dia 17 de novembro de 2026 realizará licitação na modalidade Pregão, tipo me",
-   "url": "https://www.in.gov.br/web/dou/-/avisos-de-licitacao-741123879",
-   "pagina": "218",
-   "cats": [
-    "saude",
-    "contratos"
-   ]
-  },
-  {
-   "id": "dou-741124519",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Termo Aditivo",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE CARBONITA",
-   "titulo": "EXTRATO DE TERMOS ADITIVOS",
-   "ementa": "Descrição do Termo/Contrato: Contrato Nº 105/2024 Fornecedor do Termo/Contrato: Jb Engenharia E Comercio Ltda Assinatura do Aditivo: 18/03/2026 Objeto do Termo/Contrato: contratação de serviços de engenharia para a pavimentação asfáltica em tsd (trat",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termos-aditivos-741124519",
-   "pagina": "204",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741124839",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Licitação-Concorrência",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / Prefeitura Municipal de Amarante do Maranhão",
-   "titulo": "AVISO DE LICITAÇÃO",
-   "ementa": "CONCORRÊNCIA ELETRÔNICA Nº 10/2026 PORTAL DE COMPRAS PUBLICAS A Prefeitura Municipal de Amarante do Maranhão/MA, com sede na Av. Deputado La Rocque, 1229, Centro - Amarante do Maranhão/MA, através do seu Agente de Contratação, instituído pela Portari",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741124839",
-   "pagina": "197",
-   "cats": [
-    "contratos"
-   ]
-  },
-  {
-   "id": "dou-741123802",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Registro de Preços",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE SÃO CAETANO DE ODIVELAS",
-   "titulo": "EXTRATOS DE REGISTROS DE PREÇOS",
-   "ementa": "Ata de Registro de Preços n° 015.2026, oriunda do Pregão Eletrônico Nº 9.2026-006 - PROC. ADMINISTRATIVO Nº 01902002/26, cujo objeto é o Registro de Preços para a Futura e Eventual contratação de empresa para aquisição de material de consumo para man",
-   "url": "https://www.in.gov.br/web/dou/-/extratos-de-registros-de-precos-741123802",
-   "pagina": "222",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741125155",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / Prefeitura Municipal de Sobral",
-   "titulo": "RESULTADO DE JULGAMENTO",
-   "ementa": "Aviso de Resultado Final de Licitação - CP26008-SMS. Processo Nº P452435/2026. A Central de Licitações da Prefeitura Municipal de Sobral, por intermédio da Comissão de Contratação designada por ato do Prefeito do Município de Sobral, comunica o resul",
-   "url": "https://www.in.gov.br/web/dou/-/resultado-de-julgamento-741125155",
-   "pagina": "190",
-   "cats": [
-    "nomeacoes",
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741123482",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Edital",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / Prefeitura Municipal de Poção",
-   "titulo": "AVISO DE LICITAÇÃO",
-   "ementa": "Pregão Eletrônico nº 15/2026 Processo Nº 21/2026/FMS OBJETO: Contratação de empresa para fornecimento, parcelado, de insumos farmacêuticos e materiais médico-hospitalares, destinados ao atendimento das necessidades do Fundo Municipal de Saúde, com re",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741123482",
-   "pagina": "234",
-   "cats": [
-    "saude",
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741142968",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Licitação",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE SÃO GOTARDO",
-   "titulo": "AVISO DE LICITAÇÃO",
-   "ementa": "CONCORRÊNCIA Nº 5/2026 A Prefeitura Municipal de São Gotardo torna público - aviso de licitação: processo licitatório nº. pmsg/cpl/331/2026. concorrência nº. 005/2026. objeto: Pavimentação asfáltica em CBUQ em diversas ruas no município de São Gotard",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741142968",
-   "pagina": "212",
-   "cats": [
-    "contratos"
-   ]
-  },
-  {
-   "id": "dou-741143049",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / Prefeitura Municipal de Itanhandu",
-   "titulo": "AVISO DE RETIFICAÇÃO",
-   "ementa": "CONCORRÊNCIA ELETRÔNICA Nº 3/2026 Processo Licitatório nº 091/2026. Objeto: contratação semi-integrada de empresa especializada para executar a obra de construção da usina de minigeração fotovoltaica de 1.250 kW. O Município de Itanhandu/MG, torna pú",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-retificacao-741143049",
-   "pagina": "207",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741143444",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE BARREIRAS",
-   "titulo": "EXTRATO DE TERMO ADITIVO",
-   "ementa": "TERCEIRO TERMO ADITIVO AO CONTRATO Nº 296/2023 Proc. Adm. Nº 15211/2026 - Pregão Presencial nº 028/2022. Contratante: MUNICÍPIO DE BARREIRAS, e a empresa: MOVTERRA CONSTRUTORA LTDA, inscrito no CNPJ Nº 07.665.220/0001-83, como contratada. OBJETO: PRO",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-741143444",
-   "pagina": "178",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741144159",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Contrato",
-   "orgao": "Ineditoriais",
-   "unidade": "Ineditoriais / Instituto Alcides D'Andrade Lima",
-   "titulo": "Extrato de Contrato",
-   "ementa": "Modalidade: Cotação Eletrônica nº. 001/2025 Objeto: Aquisição Equipamentos e Material Permanente. Fonte de Recursos: Convênio nº. 961269/2024 CONTRATO Nº 008/2025 Contratante: Instituto Alcides d' Andrade Lima-IAAL. Contratada: NORDESTE MEDICAL, REPR",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-contrato-741144159",
-   "pagina": "165",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741150390",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Resultado de Chamamento Público",
-   "orgao": "Ministério da Defesa",
-   "unidade": "Ministério da Defesa / Base Aérea de Natal",
-   "titulo": "RESULTADO DE JULGAMENTO",
-   "ementa": "CHAMADA PÚBLICA A Base Aérea de Natal (BANT) torna pública a classificação inicial dos leiloeiros credenciados, nos termos do Termo de Referência nº 50/2026, observados os critérios de pontuação previstos no item 9.1.2.1, após resposta da autoridade ",
-   "url": "https://www.in.gov.br/web/dou/-/resultado-de-julgamento-741150390",
-   "pagina": "15",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741151504",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Edital",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE XEXÉU",
-   "titulo": "AVISO DE LICITAÇÃO",
-   "ementa": "Concorrência Eletrônica Nº 13/2026 Processo Licitatório Nº 33/2026 OBJETO: Contratação de empresa de engenharia especializada para reforma da Praça da Alegria, no Centro de Xexéu-PE, incluindo pavimentação, mobiliário urbano, iluminação, paisagismo, ",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741151504",
-   "pagina": "236",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741150625",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Cessão",
-   "orgao": "Ministério da Agricultura e Pecuária",
-   "unidade": "Ministério da Agricultura e Pecuária / Embrapa Clima Temperado",
-   "titulo": "EXTRATO DE CESSÃO DE DIREITOS AUTORAIS",
-   "ementa": "Espécie: Termo de cessão de direitos autorais. Partes: Empresa Brasileira de Pesquisa Agropecuária - Embrapa - CNPJ: 00.348.003/0001-10 e Claudete Clarice Mistura de CPF ***263.240-**. Objeto: O Cedente cede à Embrapa, de forma total e definitiva, em",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-cessao-de-direitos-autorais-741150625",
-   "pagina": "6",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741150228",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Retificação",
-   "orgao": "Ministério da Defesa",
-   "unidade": "Ministério da Defesa / Base Aérea de Anápolis",
-   "titulo": "RETIFICAÇÃO",
-   "ementa": "NO EXTRATO DE CONTRATO Nº 13/2025 - UASG 120624 referente ao NUP 67281.016816/2024-01 - publicado no DOU Nº 227, de 2025-11-28, Seção 3. Onde se lê: \"Valor Total: R$ 64.206,00\", leia-se: \"Valor Total: R$ 57.404,00\".",
-   "url": "https://www.in.gov.br/web/dou/-/retificacao-741150228",
-   "pagina": "15",
-   "cats": [
-    "contratos"
-   ]
-  },
-  {
-   "id": "dou-741158550",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Contrato",
-   "orgao": "Ministério da Agricultura e Pecuária",
-   "unidade": "Ministério da Agricultura e Pecuária / Embrapa Soja",
-   "titulo": "Extrato de Contrato",
-   "ementa": "Espécie: Extrato de Contrato Embrapa SAIC 20900.26/0191-6; Partes: Empresa Brasileira de Pesquisa Agropecuária - Embrapa e CÉSAR DE OLIVEIRA HIRAGI INFORMÁTICA ME (HTI); (Cnpj 10.793.077/0001-10); Objeto: Prestação de serviços de licenciamento de uso",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-contrato-741158550",
-   "pagina": "8",
-   "cats": [
     "contratos",
     "empresas"
    ]
@@ -51629,6 +51900,395 @@
    ]
   },
   {
+   "id": "dou-741073029",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Sorteio",
+   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais",
+   "unidade": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Regional de Medicina do Estado do Maranhão",
+   "titulo": "AVISO",
+   "ementa": "CREDENCIAMENTO Nº 3/2026 AVISO DE SORTEIO - PROCESSO ADMINISTRATIVO Nº 25.10.000002776-9 EDITAL DE CHAMAMENTO PÚBLICO Nº 32/2026 - CREDENCIAMENTO Nº 003/2026 O Conselho Regional de Medicina do Maranhão - CRM-MA, por meio da sua Comissão de Contrataçã",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-741073029",
+   "pagina": "154",
+   "cats": [
+    "saude",
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741069834",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Credenciamento",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / Prefeitura Municipal Riacho de Santana",
+   "titulo": "AVISO DE CREDENCIAMENTO DE Nº 3/2026",
+   "ementa": "REURB A PREFEITURA MUNICIPAL DE RIACHO DE SANTANA-BA, inscrito no CNPJ sob o nº 14.105.191/0001-60, com endereço à Praça Monsenhor Tobias, 231, Centro, Riacho de Santana, CEP 46.480-000, por intermédio da Comissão Especial de Credenciamento, designad",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-credenciamento-de-n-3/2026-741069834",
+   "pagina": "184",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741077369",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Resultado de Concurso Público",
+   "orgao": "Ministério da Educação",
+   "unidade": "Ministério da Educação / Pró-Reitoria de Gestão de Pessoas",
+   "titulo": "aviso de HOMOLOGAÇÃO PROGEP Nº 81/2026",
+   "ementa": "HOMOLOGAÇÃO DE RESULTADO DO EDITAL PROGEP Nº 144/2026 DE PROCESSO SELETIVO SIMPLIFICADO O PRÓ-REITOR DE GESTÃO DE PESSOAS DA UNIVERSIDADE FEDERAL DE UBERLÂNDIA, no uso de suas atribuições e considerando a delegação de competência que lhe foi outorgad",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-homologacao-progep-n-81/2026-741077369",
+   "pagina": "66",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
+   "id": "dou-741077762",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Licitação-Pregão",
+   "orgao": "Ministério da Educação",
+   "unidade": "Ministério da Educação / Filial Hospital Universitário de Brasília",
+   "titulo": "AVISO DE LICITAÇÃO",
+   "ementa": "Modalidade: Pregão 50/2026 / Número do processo: 23522.013573/2026-57 / Objeto: Aquisição de produtos para saúde - Órteses, Próteses e Materiais Especiais (OPMEs), destinados à realização de procedimentos de Implante Transcateter de Valva Aórtica (TA",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741077762",
+   "pagina": "57",
+   "cats": [
+    "saude",
+    "contratos"
+   ]
+  },
+  {
+   "id": "dou-741076828",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Doação",
+   "orgao": "Ministério da Integração e do Desenvolvimento Regional",
+   "unidade": "Ministério da Integração e do Desenvolvimento Regional / MG",
+   "titulo": "EXTRATO DE DOAÇÃO",
+   "ementa": "Processo nº 59510.001953/2026-25 ESPÉCIE: Termo de Doação nº 01.0891.00/2026, celebrado entre a CODEVASF, CNPJ nº 00.399.857/0001-26, e o(a) município de CHAPADA DO NORTE/MG, CNPJ nº 16.886.608/0001-03. OBJETO: DOAÇÃO DE UM ARADO SUBSOLADOR E UMA GRA",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-doacao-741076828",
+   "pagina": "82",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741077136",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Contrato",
+   "orgao": "Ministério da Fazenda",
+   "unidade": "Ministério da Fazenda / Centralizadora Nacional Contratações Inovadoras Concorrenciais",
+   "titulo": "EXTRATO DE CONTRATO",
+   "ementa": "Contrato nº 10090/2026. Processo: 99.7081.0157/2026. Tipo: Patrocínio. Objeto: Patrocínio ao projeto XV Maratona Internacional Mauricio de Nassau. Contratada: GS PRODUCOES E PROMOCOES DE EVENTOS LTDA. CNPJ: 22.840.928/0001-17. Valor Global: R$ 180.00",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-contrato-741077136",
+   "pagina": "78",
+   "cats": [
+    "fazenda",
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741101365",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Ato",
+   "orgao": "Ministério de Minas e Energia",
+   "unidade": "Ministério de Minas e Energia / Petrobras Transporte S.A.",
+   "titulo": "AVISO",
+   "ementa": "DELIBERAÇÃO DE RECURSO: PAR-TP 77/042021/2022 ATA DA 89ª REUNIÃO DO COMITÊ DE INTEGRIDADE TRANSPETRO, DE 01/10/2026. O COMITÊ DE INTEGRIDADE DA TRANSPETRO, no exercício das atribuições conferidas pelo art. 8º, §1º da Lei nº 12.846/13, e delegação DOU",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-741101365",
+   "pagina": "101",
+   "cats": [
+    "outros"
+   ]
+  },
+  {
+   "id": "dou-741101307",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Convênio",
+   "orgao": "Ministério das Mulheres",
+   "unidade": "Ministério das Mulheres / Coordenação-Geral de Gestão e Administração",
+   "titulo": "EXTRATO DE TERMO DE FOMENTO",
+   "ementa": "Espécie: Termo de Fomento Código 7AAGYU, Nº Processo: 21260002904202626, Concedente: MINISTÉRIO DAS MULHERES, Convenente: INSTITUTO PARA O DESENVOLVIMENTO SUSTENTAVEL - INDES CNPJ nº 07581967000153, Objeto: Realizar atendimento sociofamiliar aos fami",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-de-fomento-741101307",
+   "pagina": "101",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741110180",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE UNIFLOR",
+   "titulo": "AVISO DE LICITAÇÃO",
+   "ementa": "Pregão EletrônicO Nº 34/2026 Processo Nº. 81/2026 Tipo: Menor Preço Por Item. Exclusiva ME/EPP e Equiparadas Âmbito Local - Situadas No Município de Uniflor-PR. Registro de Preços A PREFEITURA MUNICIPAL DE UNIFLOR, ESTADO DO PARANÁ, por meio do Prefe",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741110180",
+   "pagina": "232",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741111132",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Licitação",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / Prefeitura Municipal de Serra do Salitre",
+   "titulo": "AVISO DE LICITAÇÃO",
+   "ementa": "CONCORRÊNCIA Nº 5/2026 PROCESSO LICITATÓRIO Nº 99/2026 Objeto: Contratação empresa especializada em obras de engenharia p/ execução de construção de Quadra Poliesportiva Coberta, c/ edificação complementar de 2º pavimento destinado a três salas multi",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741111132",
+   "pagina": "213",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741121339",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Aviso de Licitação-Pregão",
+   "orgao": "Ministério da Cultura",
+   "unidade": "Ministério da Cultura / Fundação Biblioteca Nacional",
+   "titulo": "AVISO DE LICITAÇÃO",
+   "ementa": "Modalidade: Pregão 452/2026 / Número do processo: 01430.000142/2026-17 / Objeto: Contratação de empresa especializada para o fornecimento de 5 (cinco) licenças do pacote Autodesk AEC Collection e 16 (dezesseis) licenças do Adobe Acrobat Pro, com vigê",
+   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741121339",
+   "pagina": "14",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741120869",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Termo Aditivo",
+   "orgao": "Ministério da Defesa",
+   "unidade": "Ministério da Defesa / Academia Militar das Agulhas Negras",
+   "titulo": "EXTRATO DE TERMO ADITIVO Nº 10/2026 - UASG 160249",
+   "ementa": "Número do Contrato: 50/2022. Nº Processo: 64000.053933/2021-15. Regime Diferenciado de Contratações. Nº 1/2021. Contratante: ACADEMIA MILITAR DAS AGULHAS NEGRAS. Contratado: 03.509.843/0001-06 - VENTO SUL ENGENHARIA LTDA. Objeto: Supressão quantitati",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-n-10/2026-uasg-160249-741120869",
+   "pagina": "28",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741120561",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Apostilamento",
+   "orgao": "Ministério da Educação",
+   "unidade": "Ministério da Educação / Campus Jaguari",
+   "titulo": "EXTRATO DE APOSTILAMENTO Nº 3/2026 - UASG 154628",
+   "ementa": "Número do Contrato: 2/2026. Nº Processo: 23874.000341/2026-49. Contratante: INST.FEDERAL FARROUPILHA CAMPUS JAGUARI. Contratado: 02.453.554/0001-70 - MERCOSERVICE PRESTACAO DE SERVICOS LTDA. Objeto: 3ª apostila - reajuste de vale transporte e insumos",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-apostilamento-n-3/2026-uasg-154628-741120561",
+   "pagina": "38",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741120020",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Termo Aditivo",
+   "orgao": "Ministério da Educação",
+   "unidade": "Ministério da Educação / Universidade Federal do Espírito Santo",
+   "titulo": "EXTRATO DE TERMO ADITIVO Nº 1/2026 - UASG 153046",
+   "ementa": "Número do Contrato: 1002/2026. Nº Processo: 23068.031953/2025-05. Dispensa. Nº 89/2026. Contratante: UNIVERSIDADE FEDERAL DO ESPIRITO SANTO. Contratado: 02.980.103/0001-90 - FUNDACAO ESPIRITO SANTENSE DE TECNOLOGIA - FEST. Objeto: Inserir planilha de",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-n-1/2026-uasg-153046-741120020",
+   "pagina": "47",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
+   "id": "dou-741127772",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Termo Aditivo",
+   "orgao": "Ministério da Educação",
+   "unidade": "Ministério da Educação / Pró-Reitoria de Planejamento",
+   "titulo": "Extrato de Termo ADITIVO",
+   "ementa": "Espécie: Processo 23072.223276/2024-00 - Aditivo Administrativo ao Contrato ICJ 0050.0126334.24.9 que entre si celebram a Petróleo Brasileiro S.A. - PETROBRAS, CNPJ nº 33.000.167/0001-01, a Universidade de São Paulo - USP, CNPJ nº 63.025.530/0001-04,",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-741127772",
+   "pagina": "49",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741129521",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Termo Aditivo",
+   "orgao": "Prefeituras",
+   "unidade": "Prefeituras / DEPARTAMENTO DE ÁGUA E ESGOTOS",
+   "titulo": "EXTRATO DE TERMO ADITIVO",
+   "ementa": "TERMO ADITIVO IV AO CONTRATO Nº 15/2024 O DEPARTAMENTO ÁGUA E ESGOTOS DE SANTANA DO LIVRAMENTO - RS, Autarquia Municipal com sede à rua Moisés Vianna nº 322, nesta cidade, torna pública a assinatura do TERMO ADITIVO IV AO CONTRATO Nº 15/2024, como s",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-741129521",
+   "pagina": "242",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741128781",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato",
+   "orgao": "Ministério das Comunicações",
+   "unidade": "Ministério das Comunicações / Coordenação-Geral de Assuntos Jurídicos de Radiodifusão Pública, Comunitária e Estatal",
+   "titulo": "EXTRATO DE TERMO DE ADESÃO AO PROGRAMA BRASIL DIGITAL Nº 124/2026",
+   "ementa": "Processo nº: 53115.021912/2024-70 Partes: União e Fundação Paraense de Radiodifusão - FUNTELPA Espécie: Termo de Adesão ao Programa Brasil Digital, instituído pela Portaria MCOM nº 13.345, de 27 de maio de 2024, publicada no DOU de 28 de maio de 2024",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-de-adesao-ao-programa-brasil-digital-n-124/2026-741128781",
+   "pagina": "12",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
+   "id": "dou-741128704",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Convênio",
+   "orgao": "Ministério da Cultura",
+   "unidade": "Ministério da Cultura / Secretaria de Cidadania e Diversidade Cultural",
+   "titulo": "EXTRATO DE TERMO DE FOMENTO",
+   "ementa": "Espécie: Termo de Fomento Código 996427, Nº Processo: 01400007648202612, Concedente: MINISTERIO DA CULTURA, Convenente: ORGANIZACAO CAMINHOS DA CULTURA CNPJ nº 07343493000101, Objeto: Realizar oficinas de formação em Cultura Popular Brasileira e Gaúc",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-de-fomento-741128704",
+   "pagina": "13",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741128396",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Resultado de Julgamento",
+   "orgao": "Ministério da Defesa",
+   "unidade": "Ministério da Defesa / Fábrica de Itajubá",
+   "titulo": "RESULTADO DE JULGAMENTO",
+   "ementa": "PREGÃO Nº 231/2026/IMBEL-FI PREGÃO ELETRÔNICO Nº 231/2026 (SRP). Objeto: Aquisição de BATERIA TRACIONÁRIA. Fornecedor vencedor: HELP BATERIAS LTDA; CNPJ: 45.454.950/0001-24; Valor total: R$ 11.200,00. ROBERTS DA COSTA PEREIRA Ordenador de Despesas",
+   "url": "https://www.in.gov.br/web/dou/-/resultado-de-julgamento-741128396",
+   "pagina": "29",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741137042",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Edital",
+   "orgao": "Ministério do Meio Ambiente e Mudança do Clima",
+   "unidade": "Ministério do Meio Ambiente e Mudança do Clima / Instituto Brasileiro do Meio Ambiente e dos Recursos Naturais Renováveis",
+   "titulo": "EDITAL DE NOTIFICAÇÃO Nº 63/2026 - Dipro/Cenpsa/CGS/SNRC",
+   "ementa": "Processo nº 02001.030749/2026-44 O Coordenador-Geral da Coordenação-Geral do Processo Sancionador Ambiental (Cenpsa) do Instituto Brasileiro do Meio Ambiente e dos Recursos Naturais Renováveis (Ibama), no uso de suas atribuições, NOTIFICA, por meio d",
+   "url": "https://www.in.gov.br/web/dou/-/edital-de-notificacao-n-63/2026-dipro/cenpsa/cgs/snrc-741137042",
+   "pagina": "89",
+   "cats": [
+    "outros"
+   ]
+  },
+  {
+   "id": "dou-741137922",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Termo Aditivo",
+   "orgao": "Ministério do Meio Ambiente e Mudança do Clima",
+   "unidade": "Ministério do Meio Ambiente e Mudança do Clima / Secretaria Nacional de Meio Ambiente Urbano, Recursos Hídricos e Qualidade Ambiental",
+   "titulo": "EXTRATO DE TERMO ADITIVO Nº 1/2026",
+   "ementa": "PRIMEIRO TERMO ADITIVO do Termo de Fomento registrado no Portal Transferegov.br sob o nº 984939/2025, que entre si celebram o Ministério do Meio Ambiente e Mudança do Clima-MMA, CNPJ: 37.115.375/0001-07, e a ASSOCIAÇÃO MATA CILIAR, CNPJ: 61.056.933/0",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-n-1/2026-741137922",
+   "pagina": "89",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741138003",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Contrato",
+   "orgao": "Ministério da Justiça e Segurança Pública",
+   "unidade": "Ministério da Justiça e Segurança Pública / Coordenação-Geral de Administração",
+   "titulo": "EXTRATO DE CONTRATO Nº 54/2026 - UASG 200109",
+   "ementa": "Nº Processo: 08650.047155/2024-42. Pregão Nº 90021/2025. Contratante: POLICIA RODOVIARIA FEDERAL. Contratado: 04.730.121/0001-40 - ARBJI COMERCIO DE ELETRONICOS E COMPONENTES LTDA. Objeto: Aquisição de equipamentos de proteção individual e coletiva p",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-contrato-n-54/2026-uasg-200109-741138003",
+   "pagina": "87",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "dou-741137302",
+   "esfera": "federal",
+   "fonte": "DOU Seção 3",
+   "lista": true,
+   "tipo": "Extrato de Termo Aditivo",
+   "orgao": "Ministério da Saúde",
+   "unidade": "Ministério da Saúde / Instituto Nacional de Câncer",
+   "titulo": "EXTRATO DE TERMO ADITIVO Nº 86/2026 - UASG 250052",
+   "ementa": "Número do Contrato: 67/2021. Nº Processo: 25410.004362/2020-21. Pregão. Nº 66/2021. Contratante: INSTITUTO NACIONAL DO CANCER - RJ. Contratado: 07.432.517/0001-07 - SIMPRESS COMERCIO LOCACAO E SERVICOS LTDA. Objeto: Prorrogar, em caráter excepcional,",
+   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-n-86/2026-uasg-250052-741137302",
+   "pagina": "109",
+   "cats": [
+    "saude",
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
    "id": "dou-741073783",
    "esfera": "federal",
    "fonte": "DOU Seção 3",
@@ -52111,395 +52771,6 @@
    "cats": [
     "saude",
     "contratos"
-   ]
-  },
-  {
-   "id": "dou-741073029",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Sorteio",
-   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais",
-   "unidade": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Regional de Medicina do Estado do Maranhão",
-   "titulo": "AVISO",
-   "ementa": "CREDENCIAMENTO Nº 3/2026 AVISO DE SORTEIO - PROCESSO ADMINISTRATIVO Nº 25.10.000002776-9 EDITAL DE CHAMAMENTO PÚBLICO Nº 32/2026 - CREDENCIAMENTO Nº 003/2026 O Conselho Regional de Medicina do Maranhão - CRM-MA, por meio da sua Comissão de Contrataçã",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-741073029",
-   "pagina": "154",
-   "cats": [
-    "saude",
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741069834",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Credenciamento",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / Prefeitura Municipal Riacho de Santana",
-   "titulo": "AVISO DE CREDENCIAMENTO DE Nº 3/2026",
-   "ementa": "REURB A PREFEITURA MUNICIPAL DE RIACHO DE SANTANA-BA, inscrito no CNPJ sob o nº 14.105.191/0001-60, com endereço à Praça Monsenhor Tobias, 231, Centro, Riacho de Santana, CEP 46.480-000, por intermédio da Comissão Especial de Credenciamento, designad",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-credenciamento-de-n-3/2026-741069834",
-   "pagina": "184",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741077369",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Resultado de Concurso Público",
-   "orgao": "Ministério da Educação",
-   "unidade": "Ministério da Educação / Pró-Reitoria de Gestão de Pessoas",
-   "titulo": "aviso de HOMOLOGAÇÃO PROGEP Nº 81/2026",
-   "ementa": "HOMOLOGAÇÃO DE RESULTADO DO EDITAL PROGEP Nº 144/2026 DE PROCESSO SELETIVO SIMPLIFICADO O PRÓ-REITOR DE GESTÃO DE PESSOAS DA UNIVERSIDADE FEDERAL DE UBERLÂNDIA, no uso de suas atribuições e considerando a delegação de competência que lhe foi outorgad",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-homologacao-progep-n-81/2026-741077369",
-   "pagina": "66",
-   "cats": [
-    "contratos"
-   ]
-  },
-  {
-   "id": "dou-741077762",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Licitação-Pregão",
-   "orgao": "Ministério da Educação",
-   "unidade": "Ministério da Educação / Filial Hospital Universitário de Brasília",
-   "titulo": "AVISO DE LICITAÇÃO",
-   "ementa": "Modalidade: Pregão 50/2026 / Número do processo: 23522.013573/2026-57 / Objeto: Aquisição de produtos para saúde - Órteses, Próteses e Materiais Especiais (OPMEs), destinados à realização de procedimentos de Implante Transcateter de Valva Aórtica (TA",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741077762",
-   "pagina": "57",
-   "cats": [
-    "saude",
-    "contratos"
-   ]
-  },
-  {
-   "id": "dou-741076828",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Doação",
-   "orgao": "Ministério da Integração e do Desenvolvimento Regional",
-   "unidade": "Ministério da Integração e do Desenvolvimento Regional / MG",
-   "titulo": "EXTRATO DE DOAÇÃO",
-   "ementa": "Processo nº 59510.001953/2026-25 ESPÉCIE: Termo de Doação nº 01.0891.00/2026, celebrado entre a CODEVASF, CNPJ nº 00.399.857/0001-26, e o(a) município de CHAPADA DO NORTE/MG, CNPJ nº 16.886.608/0001-03. OBJETO: DOAÇÃO DE UM ARADO SUBSOLADOR E UMA GRA",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-doacao-741076828",
-   "pagina": "82",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741077136",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Contrato",
-   "orgao": "Ministério da Fazenda",
-   "unidade": "Ministério da Fazenda / Centralizadora Nacional Contratações Inovadoras Concorrenciais",
-   "titulo": "EXTRATO DE CONTRATO",
-   "ementa": "Contrato nº 10090/2026. Processo: 99.7081.0157/2026. Tipo: Patrocínio. Objeto: Patrocínio ao projeto XV Maratona Internacional Mauricio de Nassau. Contratada: GS PRODUCOES E PROMOCOES DE EVENTOS LTDA. CNPJ: 22.840.928/0001-17. Valor Global: R$ 180.00",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-contrato-741077136",
-   "pagina": "78",
-   "cats": [
-    "fazenda",
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741101365",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Ato",
-   "orgao": "Ministério de Minas e Energia",
-   "unidade": "Ministério de Minas e Energia / Petrobras Transporte S.A.",
-   "titulo": "AVISO",
-   "ementa": "DELIBERAÇÃO DE RECURSO: PAR-TP 77/042021/2022 ATA DA 89ª REUNIÃO DO COMITÊ DE INTEGRIDADE TRANSPETRO, DE 01/10/2026. O COMITÊ DE INTEGRIDADE DA TRANSPETRO, no exercício das atribuições conferidas pelo art. 8º, §1º da Lei nº 12.846/13, e delegação DOU",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-741101365",
-   "pagina": "101",
-   "cats": [
-    "outros"
-   ]
-  },
-  {
-   "id": "dou-741101307",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Convênio",
-   "orgao": "Ministério das Mulheres",
-   "unidade": "Ministério das Mulheres / Coordenação-Geral de Gestão e Administração",
-   "titulo": "EXTRATO DE TERMO DE FOMENTO",
-   "ementa": "Espécie: Termo de Fomento Código 7AAGYU, Nº Processo: 21260002904202626, Concedente: MINISTÉRIO DAS MULHERES, Convenente: INSTITUTO PARA O DESENVOLVIMENTO SUSTENTAVEL - INDES CNPJ nº 07581967000153, Objeto: Realizar atendimento sociofamiliar aos fami",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-de-fomento-741101307",
-   "pagina": "101",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741110180",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / PREFEITURA MUNICIPAL DE UNIFLOR",
-   "titulo": "AVISO DE LICITAÇÃO",
-   "ementa": "Pregão EletrônicO Nº 34/2026 Processo Nº. 81/2026 Tipo: Menor Preço Por Item. Exclusiva ME/EPP e Equiparadas Âmbito Local - Situadas No Município de Uniflor-PR. Registro de Preços A PREFEITURA MUNICIPAL DE UNIFLOR, ESTADO DO PARANÁ, por meio do Prefe",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741110180",
-   "pagina": "232",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741111132",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Licitação",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / Prefeitura Municipal de Serra do Salitre",
-   "titulo": "AVISO DE LICITAÇÃO",
-   "ementa": "CONCORRÊNCIA Nº 5/2026 PROCESSO LICITATÓRIO Nº 99/2026 Objeto: Contratação empresa especializada em obras de engenharia p/ execução de construção de Quadra Poliesportiva Coberta, c/ edificação complementar de 2º pavimento destinado a três salas multi",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741111132",
-   "pagina": "213",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741121339",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Aviso de Licitação-Pregão",
-   "orgao": "Ministério da Cultura",
-   "unidade": "Ministério da Cultura / Fundação Biblioteca Nacional",
-   "titulo": "AVISO DE LICITAÇÃO",
-   "ementa": "Modalidade: Pregão 452/2026 / Número do processo: 01430.000142/2026-17 / Objeto: Contratação de empresa especializada para o fornecimento de 5 (cinco) licenças do pacote Autodesk AEC Collection e 16 (dezesseis) licenças do Adobe Acrobat Pro, com vigê",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-licitacao-741121339",
-   "pagina": "14",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741120869",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Termo Aditivo",
-   "orgao": "Ministério da Defesa",
-   "unidade": "Ministério da Defesa / Academia Militar das Agulhas Negras",
-   "titulo": "EXTRATO DE TERMO ADITIVO Nº 10/2026 - UASG 160249",
-   "ementa": "Número do Contrato: 50/2022. Nº Processo: 64000.053933/2021-15. Regime Diferenciado de Contratações. Nº 1/2021. Contratante: ACADEMIA MILITAR DAS AGULHAS NEGRAS. Contratado: 03.509.843/0001-06 - VENTO SUL ENGENHARIA LTDA. Objeto: Supressão quantitati",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-n-10/2026-uasg-160249-741120869",
-   "pagina": "28",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741120561",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Apostilamento",
-   "orgao": "Ministério da Educação",
-   "unidade": "Ministério da Educação / Campus Jaguari",
-   "titulo": "EXTRATO DE APOSTILAMENTO Nº 3/2026 - UASG 154628",
-   "ementa": "Número do Contrato: 2/2026. Nº Processo: 23874.000341/2026-49. Contratante: INST.FEDERAL FARROUPILHA CAMPUS JAGUARI. Contratado: 02.453.554/0001-70 - MERCOSERVICE PRESTACAO DE SERVICOS LTDA. Objeto: 3ª apostila - reajuste de vale transporte e insumos",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-apostilamento-n-3/2026-uasg-154628-741120561",
-   "pagina": "38",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741120020",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Termo Aditivo",
-   "orgao": "Ministério da Educação",
-   "unidade": "Ministério da Educação / Universidade Federal do Espírito Santo",
-   "titulo": "EXTRATO DE TERMO ADITIVO Nº 1/2026 - UASG 153046",
-   "ementa": "Número do Contrato: 1002/2026. Nº Processo: 23068.031953/2025-05. Dispensa. Nº 89/2026. Contratante: UNIVERSIDADE FEDERAL DO ESPIRITO SANTO. Contratado: 02.980.103/0001-90 - FUNDACAO ESPIRITO SANTENSE DE TECNOLOGIA - FEST. Objeto: Inserir planilha de",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-n-1/2026-uasg-153046-741120020",
-   "pagina": "47",
-   "cats": [
-    "contratos"
-   ]
-  },
-  {
-   "id": "dou-741127772",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Termo Aditivo",
-   "orgao": "Ministério da Educação",
-   "unidade": "Ministério da Educação / Pró-Reitoria de Planejamento",
-   "titulo": "Extrato de Termo ADITIVO",
-   "ementa": "Espécie: Processo 23072.223276/2024-00 - Aditivo Administrativo ao Contrato ICJ 0050.0126334.24.9 que entre si celebram a Petróleo Brasileiro S.A. - PETROBRAS, CNPJ nº 33.000.167/0001-01, a Universidade de São Paulo - USP, CNPJ nº 63.025.530/0001-04,",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-741127772",
-   "pagina": "49",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741129521",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Termo Aditivo",
-   "orgao": "Prefeituras",
-   "unidade": "Prefeituras / DEPARTAMENTO DE ÁGUA E ESGOTOS",
-   "titulo": "EXTRATO DE TERMO ADITIVO",
-   "ementa": "TERMO ADITIVO IV AO CONTRATO Nº 15/2024 O DEPARTAMENTO ÁGUA E ESGOTOS DE SANTANA DO LIVRAMENTO - RS, Autarquia Municipal com sede à rua Moisés Vianna nº 322, nesta cidade, torna pública a assinatura do TERMO ADITIVO IV AO CONTRATO Nº 15/2024, como s",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-741129521",
-   "pagina": "242",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741128781",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato",
-   "orgao": "Ministério das Comunicações",
-   "unidade": "Ministério das Comunicações / Coordenação-Geral de Assuntos Jurídicos de Radiodifusão Pública, Comunitária e Estatal",
-   "titulo": "EXTRATO DE TERMO DE ADESÃO AO PROGRAMA BRASIL DIGITAL Nº 124/2026",
-   "ementa": "Processo nº: 53115.021912/2024-70 Partes: União e Fundação Paraense de Radiodifusão - FUNTELPA Espécie: Termo de Adesão ao Programa Brasil Digital, instituído pela Portaria MCOM nº 13.345, de 27 de maio de 2024, publicada no DOU de 28 de maio de 2024",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-de-adesao-ao-programa-brasil-digital-n-124/2026-741128781",
-   "pagina": "12",
-   "cats": [
-    "contratos"
-   ]
-  },
-  {
-   "id": "dou-741128704",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Convênio",
-   "orgao": "Ministério da Cultura",
-   "unidade": "Ministério da Cultura / Secretaria de Cidadania e Diversidade Cultural",
-   "titulo": "EXTRATO DE TERMO DE FOMENTO",
-   "ementa": "Espécie: Termo de Fomento Código 996427, Nº Processo: 01400007648202612, Concedente: MINISTERIO DA CULTURA, Convenente: ORGANIZACAO CAMINHOS DA CULTURA CNPJ nº 07343493000101, Objeto: Realizar oficinas de formação em Cultura Popular Brasileira e Gaúc",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-de-fomento-741128704",
-   "pagina": "13",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741128396",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Resultado de Julgamento",
-   "orgao": "Ministério da Defesa",
-   "unidade": "Ministério da Defesa / Fábrica de Itajubá",
-   "titulo": "RESULTADO DE JULGAMENTO",
-   "ementa": "PREGÃO Nº 231/2026/IMBEL-FI PREGÃO ELETRÔNICO Nº 231/2026 (SRP). Objeto: Aquisição de BATERIA TRACIONÁRIA. Fornecedor vencedor: HELP BATERIAS LTDA; CNPJ: 45.454.950/0001-24; Valor total: R$ 11.200,00. ROBERTS DA COSTA PEREIRA Ordenador de Despesas",
-   "url": "https://www.in.gov.br/web/dou/-/resultado-de-julgamento-741128396",
-   "pagina": "29",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741137042",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Edital",
-   "orgao": "Ministério do Meio Ambiente e Mudança do Clima",
-   "unidade": "Ministério do Meio Ambiente e Mudança do Clima / Instituto Brasileiro do Meio Ambiente e dos Recursos Naturais Renováveis",
-   "titulo": "EDITAL DE NOTIFICAÇÃO Nº 63/2026 - Dipro/Cenpsa/CGS/SNRC",
-   "ementa": "Processo nº 02001.030749/2026-44 O Coordenador-Geral da Coordenação-Geral do Processo Sancionador Ambiental (Cenpsa) do Instituto Brasileiro do Meio Ambiente e dos Recursos Naturais Renováveis (Ibama), no uso de suas atribuições, NOTIFICA, por meio d",
-   "url": "https://www.in.gov.br/web/dou/-/edital-de-notificacao-n-63/2026-dipro/cenpsa/cgs/snrc-741137042",
-   "pagina": "89",
-   "cats": [
-    "outros"
-   ]
-  },
-  {
-   "id": "dou-741137922",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Termo Aditivo",
-   "orgao": "Ministério do Meio Ambiente e Mudança do Clima",
-   "unidade": "Ministério do Meio Ambiente e Mudança do Clima / Secretaria Nacional de Meio Ambiente Urbano, Recursos Hídricos e Qualidade Ambiental",
-   "titulo": "EXTRATO DE TERMO ADITIVO Nº 1/2026",
-   "ementa": "PRIMEIRO TERMO ADITIVO do Termo de Fomento registrado no Portal Transferegov.br sob o nº 984939/2025, que entre si celebram o Ministério do Meio Ambiente e Mudança do Clima-MMA, CNPJ: 37.115.375/0001-07, e a ASSOCIAÇÃO MATA CILIAR, CNPJ: 61.056.933/0",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-n-1/2026-741137922",
-   "pagina": "89",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741138003",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Contrato",
-   "orgao": "Ministério da Justiça e Segurança Pública",
-   "unidade": "Ministério da Justiça e Segurança Pública / Coordenação-Geral de Administração",
-   "titulo": "EXTRATO DE CONTRATO Nº 54/2026 - UASG 200109",
-   "ementa": "Nº Processo: 08650.047155/2024-42. Pregão Nº 90021/2025. Contratante: POLICIA RODOVIARIA FEDERAL. Contratado: 04.730.121/0001-40 - ARBJI COMERCIO DE ELETRONICOS E COMPONENTES LTDA. Objeto: Aquisição de equipamentos de proteção individual e coletiva p",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-contrato-n-54/2026-uasg-200109-741138003",
-   "pagina": "87",
-   "cats": [
-    "contratos",
-    "empresas"
-   ]
-  },
-  {
-   "id": "dou-741137302",
-   "esfera": "federal",
-   "fonte": "DOU Seção 3",
-   "lista": true,
-   "tipo": "Extrato de Termo Aditivo",
-   "orgao": "Ministério da Saúde",
-   "unidade": "Ministério da Saúde / Instituto Nacional de Câncer",
-   "titulo": "EXTRATO DE TERMO ADITIVO Nº 86/2026 - UASG 250052",
-   "ementa": "Número do Contrato: 67/2021. Nº Processo: 25410.004362/2020-21. Pregão. Nº 66/2021. Contratante: INSTITUTO NACIONAL DO CANCER - RJ. Contratado: 07.432.517/0001-07 - SIMPRESS COMERCIO LOCACAO E SERVICOS LTDA. Objeto: Prorrogar, em caráter excepcional,",
-   "url": "https://www.in.gov.br/web/dou/-/extrato-de-termo-aditivo-n-86/2026-uasg-250052-741137302",
-   "pagina": "109",
-   "cats": [
-    "saude",
-    "contratos",
-    "empresas"
    ]
   },
   {
@@ -61543,6 +61814,21 @@
    ]
   },
   {
+   "id": "rs-1500392",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Atos Administrativos",
+   "orgao": "Secretaria de Desenvolvimento Rural",
+   "unidade": "Gabinete do Secretário",
+   "titulo": "EDITAL SDR Nº 11/2026",
+   "ementa": "Programa Turismo Rural da Agricultura Familiar Gaúcha O Secretário de Estado do Desenvolvimento Rural, Presidente do Conselho de Administração do FEAPER, no uso de suas atribuições legais e em conformidade com a Lei Federal nº 11.326, de 24 de julho de 2006, com a Lei Estadual nº 8.511, de 06 de janeiro de 1988, com a regulamentação aplicável ao Fundo Estadual de Apoio ao Desenvolvimento dos Peque",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1500392",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 53354
+  },
+  {
    "id": "rs-1498804",
    "esfera": "estadual",
    "fonte": "DOE-RS",
@@ -65865,6 +66151,20 @@
    ]
   },
   {
+   "id": "rs-1500384",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Editais",
+   "orgao": "",
+   "titulo": "PROA nº 26/1207-0001763-4",
+   "ementa": "SECRETARIA DA SEGURANÇA PÚBLICA CORPO DE BOMBEIROS MILITAR PROCESSO SELETIVO PARA GUARDA-VIDAS CIVIS TEMPORÁRIOS DO CORPO DE BOMBEIROS MILITAR – METADE SUL EDITAL MS/SRS/DRH/DA nº GVCT 14 – 2026/2027 O Diretor do Departamento Administrativo do Corpo ",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1500384",
+   "cats": [
+    "outros"
+   ]
+  },
+  {
    "id": "rs-1499129",
    "esfera": "estadual",
    "fonte": "DOE-RS",
@@ -65950,6 +66250,20 @@
    "cats": [
     "nomeacoes",
     "contratos"
+   ]
+  },
+  {
+   "id": "rs-1499865",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Editais",
+   "orgao": "",
+   "titulo": "PROA nº 26/1207-0001763-4",
+   "ementa": "SECRETARIA DA SEGURANÇA PÚBLICA CORPO DE BOMBEIROS MILITAR PROCESSO SELETIVO PARA GUARDA-VIDAS CIVIS TEMPORÁRIOS DO CORPO DE BOMBEIROS MILITAR – METADE NORTE EDITAL MN/SRS/DRH/DA nº GVCT 15 – 2026/2027 O Diretor do Departamento Administrativo do Corp",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499865",
+   "cats": [
+    "outros"
    ]
   },
   {
