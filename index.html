@@ -146,6 +146,15 @@ table.grid th { text-align: right; font-size: 12px; text-transform: uppercase; l
 table.grid td { text-align: right; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 table.grid th:first-child, table.grid td:first-child { text-align: left; }
 table.grid tr:last-child td { border-bottom: 0; }
+/* Portfolio: paired values stacked in one cell, so every row fits without sideways scrolling */
+table.cart-t { table-layout: fixed; }
+table.cart-t th, table.cart-t td { padding: 8px 8px; }
+table.cart-t th, table.cart-t td { white-space: normal; overflow-wrap: anywhere; }
+table.cart-t td small { display: block; font-size: 12px; color: var(--muted); }
+table.cart-t td small.up, table.cart-t td small.down { color: inherit; }
+table.cart-t .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+table.cart-t col.c-act { width: 30%; } table.cart-t col.c-bt { width: 92px; }
+@media (max-width: 640px) { table.cart-t { font-size: 12.5px; } table.cart-t th { font-size: 10.5px; } table.cart-t th, table.cart-t td { padding: 7px 4px; } table.cart-t col.c-act { width: 20%; } table.cart-t .nm { display: none; } table.cart-t col.c-bt { width: 40px; } table.cart-t .bt-sim { display: none; } }
 table.grid tbody tr { cursor: pointer; } table.grid tbody tr:hover { background: var(--panel-2); }
 .scroll { overflow-x: auto; }
 .totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 14px; }
@@ -1201,18 +1210,16 @@ function renderCart() {
     const dB = q?.prevClose ? toBRL((q.price - q.prevClose) * p.qty, cur) : null;
     if (vB != null && cB != null) { inv += cB; now += vB; day += dB || 0; } else missing++;
     return `<tr data-open="${esc(p.symbol)}">
-      <td><span class="vdot" style="background:${VMKT.find(m => m.k === mercadoDe(p.symbol)).cor}"></span><b>${esc(short(p.symbol))}</b><div class="nm" style="color:var(--muted);font-size:12px">${esc(q?.name || "")}</div>${p.motivo ? `<div class="hint">✨ ${esc(p.motivo)}</div>` : ""}</td>
-      <td class="num">${nf(p.qty % 1 ? 4 : 0).format(p.qty)}</td>
-      <td class="num">${money(p.avg, cur)}</td>
-      <td class="num">${q ? money(q.price, cur) : "…"}</td>
-      <td class="num ${cls(change(q))}">${pct(change(q))}${since(q)}</td>
+      <td><span class="vdot" style="background:${VMKT.find(m => m.k === mercadoDe(p.symbol)).cor}"></span><b>${esc(short(p.symbol))}</b><div class="nm" style="color:var(--muted);font-size:12px" title="${esc(q?.name || "")}">${esc(q?.name || "")}</div></td>
+      <td class="num">${nf(p.qty % 1 ? 4 : 0).format(p.qty)}<small>${money(p.avg, cur)}</small></td>
+      <td class="num">${q ? money(q.price, cur) : "…"}<small class="${cls(change(q))}">${pct(change(q))}</small></td>
       <td class="num">${money(value, cur)}</td>
-      <td class="num ${cls(res)}">${res == null ? "—" : (res > 0 ? "+" : "") + money(res, cur)}<div style="font-size:12px">${pct(resPct)}</div></td>
-      <td style="white-space:nowrap"><button class="btn small" data-sim="${esc(p.symbol)}" title="Simular a venda com impostos e taxas">🧮</button> <button class="del" data-uncart="${esc(p.symbol)}" title="Remover da carteira" aria-label="Remover ${esc(short(p.symbol))}">×</button></td>
+      <td class="num ${cls(res)}">${res == null ? "—" : (res > 0 ? "+" : "") + money(res, cur)}<small class="${cls(res)}">${pct(resPct)}</small></td>
+      <td style="white-space:nowrap"><button class="btn small bt-sim" data-sim="${esc(p.symbol)}" title="Simular a venda com impostos e taxas">🧮</button> <button class="del" data-uncart="${esc(p.symbol)}" title="Remover da carteira" aria-label="Remover ${esc(short(p.symbol))}">×</button></td>
     </tr>`;
   });
   $("#cartList").innerHTML = state.cart.length
-    ? `<table class="grid"><thead><tr><th>Ativo</th><th>Qtd.</th><th>Preço médio</th><th>Atual</th><th>Dia</th><th>Valor</th><th>Resultado</th><th></th></tr></thead><tbody>${rows.join("")}</tbody></table>`
+    ? `<table class="grid cart-t"><colgroup><col class="c-act"><col><col><col><col><col class="c-bt"></colgroup><thead><tr><th>Ativo</th><th title="Quantidade e preço médio pago">Qtd. · Preço médio</th><th title="Preço de agora e variação do dia">Atual · Dia</th><th>Valor</th><th>Resultado</th><th></th></tr></thead><tbody>${rows.join("")}</tbody></table>`
     : `<div class="empty">Nenhuma posição ainda. Use <b>🧮 Simular compra e venda</b> (acima) e, no final da simulação, salve a compra na carteira, ou <b>✨ Montar carteira automaticamente</b>.</div>`;
   renderCartMix();
   const res = now - inv;
