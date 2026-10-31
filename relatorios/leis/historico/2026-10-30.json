@@ -1,0 +1,152 @@
+{
+ "data": "2026-10-30",
+ "gerado_em": "2026-10-31T05:15:00-03:00",
+ "resumo": {
+  "federal": "O Diário Oficial da União trouxe poucos atos normativos. O principal: o Ministério da Fazenda prorrogou por 36 meses a exploração da loteria instantânea Lotex (as 'raspadinhas') pela Caixa. Houve também portaria de anistia política, de caso individual.",
+  "estadual": "No Rio Grande do Sul, a Receita Estadual atualizou a lista de distribuidores hospitalares, usada em regras do ICMS. A Secretaria do Meio Ambiente definiu como os municípios devem usar e prestar contas do dinheiro do fundo de proteção animal, a Secretaria de Desenvolvimento Rural criou o selo 'Sabor Gaúcho Orgânico', a Educação corrigiu o calendário escolar de 2027 e a Defesa Civil mudou o período dos desastres que recebem R$ 20 milhões para estradas rurais.",
+  "municipal": "Não houve publicação em Lajeado neste dia."
+ },
+ "destaques": [
+  {
+   "id": "dou-741178484",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "loterias",
+    "economia"
+   ],
+   "o_que_muda": "A Caixa continua explorando a Lotex (loteria instantânea, de bilhete raspável) por mais 36 meses a partir de 1º/11/2026. O revendedor de bilhete físico pode cobrar do apostador até 25% a mais sobre o preço do bilhete. Times de futebol só entram nos bilhetes se assinarem termo de adesão com a Caixa. Revoga a Portaria MF 1.646/2023.",
+   "quem_afeta": "Apostadores da Lotex, lotéricas e revendedores, clubes de futebol e a Caixa.",
+   "vigencia": "Na publicação; prorrogação vale a partir de 1º/11/2026.",
+   "esfera": "federal",
+   "titulo": "PORTARIA MF Nº 3.213, DE 29 DE OUTUBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mf-n-3.213-de-29-de-outubro-de-2026-741178484",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "rs-1500396",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS",
+    "saúde"
+   ],
+   "o_que_muda": "Dá nova redação à lista de distribuidores hospitalares (Apêndice XXXV) da norma de ICMS do RS. Quem consta na lista recebe o tratamento tributário previsto para esse tipo de empresa. A norma não muda alíquota.",
+   "quem_afeta": "Distribuidores de medicamentos e produtos hospitalares no RS, hospitais e clínicas que compram deles.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA RE Nº 089/26",
+   "orgao": "Receita Estadual",
+   "tipo": "Instruções Normativas",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1500396",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499760",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "meio ambiente",
+    "animais",
+    "municípios"
+   ],
+   "o_que_muda": "Fixa regras para os municípios usarem o dinheiro do Fundo Estadual de Proteção e Bem-Estar de Animais Domésticos: conta bancária própria do fundo municipal, veterinário habilitado, pedido de prorrogação com 60 dias de antecedência e prestação de contas em até 60 dias. Quem não prestar contas pode ir para o CADIN/RS.",
+   "quem_afeta": "Prefeituras e fundos municipais de proteção animal; protetores e ONGs que dependem desses recursos.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA SEMA Nº 08, de 13 de outubro de 2026.",
+   "orgao": "Gabinete",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499760",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499244",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "educação"
+   ],
+   "o_que_muda": "Corrige o calendário escolar de 2027 da rede estadual (aulas de 15/02 a 17/12/2027). Ajusta datas de jornada pedagógica, recesso, conselhos de classe e dias letivos.",
+   "quem_afeta": "Alunos, famílias e professores da rede pública estadual.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SEDUC/RS Nº 1450/2026",
+   "orgao": "Gabinete da Secretária",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499244",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499571",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "agricultura",
+    "alimentos",
+    "consumidor"
+   ],
+   "o_que_muda": "Cria o selo 'Sabor Gaúcho Orgânico' para produtos de agroindústrias familiares com certificação orgânica válida (renovada a cada ano). Revoga a IN SDR 01/2023.",
+   "quem_afeta": "Agroindústrias familiares orgânicas do RS e quem compra seus produtos.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA SDR Nº 02/2026",
+   "orgao": "Gabinete do Secretário",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499571",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499862",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "defesa civil",
+    "municípios",
+    "estradas"
+   ],
+   "o_que_muda": "Muda o período dos desastres cobertos pelos até R$ 20 milhões do Fundo de Defesa Civil para recuperar estradas rurais e vias dos municípios: agora de 28/06 a 20/08/2026.",
+   "quem_afeta": "Prefeituras atingidas por desastres e produtores rurais que usam essas estradas.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "RESOLUÇÃO N.º 015/FUNDEC, de 29 de outubro de 2026.",
+   "orgao": "Gabinete",
+   "tipo": "Resoluções",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499862",
+   "fonte": "DOE-RS"
+  }
+ ],
+ "demais": {
+  "federal": "Portarias de anistia política do Ministério dos Direitos Humanos, que tratam de casos individuais.",
+  "estadual": "Cerca de 90 atos sem regra nova: aposentadorias e pensões, designações de servidores e fiscais, súmulas de contratos, termos de opção da Receita e decisões individuais. Mais de 1.100 itens de pessoal e licitações entraram só na lista do site.",
+  "municipal": ""
+ },
+ "fontes": {
+  "federal": {
+   "ok": true,
+   "atos": 2,
+   "lista": 0
+  },
+  "estadual": {
+   "ok": true,
+   "atos": 101,
+   "lista": 1162,
+   "publicados": 1287
+  },
+  "municipal": {
+   "ok": true,
+   "atos": 0,
+   "lista": 0,
+   "edicoes": []
+  }
+ },
+ "coletado_em": "2026-10-31T03:19:24.666Z",
+ "totais": {
+  "federal": 2,
+  "estadual": 1263,
+  "municipal": 0
+ }
+}
