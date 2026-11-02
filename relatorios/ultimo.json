@@ -1,33 +1,27 @@
 {
- "data": "2026-10-30",
- "gerado_em": "2026-10-30T15:09:55.585Z",
- "pesquisa_data": "2026-10-30",
+ "data": "2026-11-02",
+ "gerado_em": "2026-11-02T09:16:14.631Z",
+ "pesquisa_data": "2026-11-02",
  "indicadores_data": "2026-10-30",
- "resumo_mercado": "Segundo as fontes, o Ibovespa caiu 1,06% em 29/10, a 169.186 pontos, a quarta queda seguida, com Vale (-2,17%) e Petrobras PN (-0,59%) em baixa. O dólar comercial subiu a cerca de R$ 5,387, com atenção ao fiscal. Em Nova York, os índices fecharam em queda, com Nasdaq pressionado pela Alphabet (balanço abaixo do esperado) e inflação acima da prevista. As fontes consultadas não detalham a agenda de 30/10.",
+ "resumo_mercado": "Segundo o Bora Investir (B3) e outros veículos, o Ibovespa fechou a sexta (30/10) em queda de 0,75%, a 167.921,80 pontos, no quinto pregão seguido de baixa, com perda de 9,88% em outubro; o dólar subiu cerca de 1%, a R$ 5,44. As fontes ligam o movimento ao exterior e à saída de capital estrangeiro. Em 2/11 (Finados), a B3 não deve operar, segundo o AmdJus; não localizei agenda para o dia.",
  "fontes_mercado": [
   {
-   "nome": "InfoMoney",
-   "titulo": "Ibovespa tem quarta queda seguida, com exterior, balanços e fiscal; dólar dispara",
-   "url": "https://www.infomoney.com.br/mercados/ibovespa-hoje-bolsa-de-valores-ao-vivo-29102026/",
-   "data": "2026-10-29"
+   "nome": "Bora Investir (B3)",
+   "titulo": "Ibovespa B3 recua, puxado por exterior e fecha outubro com -9%; dólar vai a R$ 5,44",
+   "url": "https://borainvestir.b3.com.br/noticias/mercado/ibovespa-b3-recua-puxado-por-exterior-e-fecha-outubro-com-9-dolar-vai-a-r-544/",
+   "data": "2026-10-30"
   },
   {
-   "nome": "Metrópoles",
-   "titulo": "Ibovespa cai pela 4ª vez seguida, e dólar fecha a R$ 5,38 nesta 5ª (29/10)",
-   "url": "https://www.metropoles.com/brasil/ibovespa-cai-pela-4a-vez-seguida-e-dolar-fecha-a-r-538",
-   "data": "2026-10-29"
+   "nome": "Alô Alô Bahia",
+   "titulo": "Dólar sobe mais de 1% e Bolsa fecha em queda nesta sexta-feira (30); veja cotações",
+   "url": "https://aloalobahia.com/noticias/2026/10/30/dolar-sobe-mais-de-1-e-bolsa-fecha-em-queda-nesta-sexta-feira-30-veja-cotacoes/",
+   "data": "2026-10-30"
   },
   {
-   "nome": "Campo Grande News",
-   "titulo": "Dólar sobe 0,89% a R$ 5,3874 e Ibovespa cai 1,06% em 29/10",
-   "url": "https://www.campograndenews.com.br/economia/dolar-sobe-a-r-5-39-em-meio-a-pressao-sobre-o-mercado-financeiro",
-   "data": "2026-10-29"
-  },
-  {
-   "nome": "Yahoo Finance",
-   "titulo": "Stock market today: Dow, S&P 500, Nasdaq slip as Alphabet stock sinks 12% and AI jitters return",
-   "url": "https://finance.yahoo.com/markets/live/stock-market-today-thursday-october-29-dow-sp-500-nasdaq-alphabet-microsoft-earnings-130305714.html",
-   "data": "2026-10-29"
+   "nome": "AmdJus",
+   "titulo": "Finados 2026: bancos, Receita e B3 fecham; veja o que funciona",
+   "url": "https://amdjus.com.br/finados-2026-bancos-receita-e-b3-fecham-veja-o-que-funciona/",
+   "data": null
   }
  ],
  "tecnica_data": "2026-10-30",
@@ -2730,11 +2724,11 @@
      "sinais": []
     }
    },
-   "resumo": "No 2º trimestre de 2026 (divulgado em 30/07) a Ambev teve lucro de R$ 3,47 bilhões, acima do consenso da Bloomberg, mas receita e Ebitda abaixo do esperado, segundo InfoMoney e Money Times; o lucro foi ajudado por efeitos financeiros. JPMorgan e Bradesco BBI mantêm recomendação neutra. O BTG tem compra com preço-alvo de R$ 20, segundo página de research do banco com cotação de 16/10/2026. A empresa projeta alta de 4,5% a 7,5% no custo por hectolitro em 2026. O balanço do 3T26 estava previsto para 29/10; não foram achados relatos do resultado nas buscas.",
+   "resumo": "Segundo Investidor10 e outras fontes, a Ambev divulgou o 3T26 em 29/10/2026: lucro reportado de cerca de R$ 4,37 bilhões (queda de 10,2% a/a), lucro ajustado de R$ 4,39 bilhões (+14,3%), acima da média de R$ 3,9 bilhões das estimativas (IBES). Receita líquida orgânica subiu 7,6% a R$ 21,6 bilhões e o Ebitda orgânico ajustado somou R$ 7,27 bilhões. O conselho aprovou recompra de até 190 milhões de ações ordinárias. O JPMorgan viu leitura mista (lucro acima, Ebitda abaixo, com volumes de cerveja fracos no Brasil) e a Ágora manteve recomendação neutra. O BTG tem compra com alvo de R$ 20 (cotação de 16/10); JPMorgan e Bradesco BBI neutros.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 1,
-    "neutro": 2,
+    "neutro": 3,
     "venda": 0,
     "preco_alvo_medio": 18.5,
     "moeda": "BRL",
@@ -2756,11 +2750,42 @@
       "recomendacao": "neutro",
       "preco_alvo": null,
       "data": "2026-07-30"
+     },
+     {
+      "nome": "Ágora",
+      "recomendacao": "neutro",
+      "preco_alvo": null,
+      "data": "2026-10-29"
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Ambev divulgou o 3T26: lucro ajustado de R$ 4,39 bi (+14,3%), acima das estimativas; Ebitda abaixo do esperado segundo o JPMorgan; conselho aprovou recompra de até 190 milhões de ações.",
+     "fonte": "Investidor10",
+     "data": "2026-10-29"
+    },
+    {
+     "tipo": "outro",
+     "descricao": "Ágora Investimentos manteve recomendação neutra após o 3T26, citando incertezas sobre a sustentabilidade do crescimento diante da pressão de custos.",
+     "fonte": "Suno Notícias",
+     "data": "2026-10-29"
+    }
+   ],
    "fontes": [
+    {
+     "nome": "Investidor10",
+     "titulo": "Ambev (ABEV3) lucra R$ 4,4 bi no 3T26 e anuncia recompra de ações",
+     "url": "https://investidor10.com.br/noticias/ambev-abev3-lucra-r-4-4-bi-no-3t26-e-anuncia-recompra-de-acoes-123585/",
+     "data": "2026-10-29"
+    },
+    {
+     "nome": "Suno Notícias",
+     "titulo": "Ambev (ABEV3) lucro 3T26 supera consenso",
+     "url": "https://www.suno.com.br/noticias/ambev-abev3-lucro3t26-supera-go/",
+     "data": "2026-10-29"
+    },
     {
      "nome": "BTG Pactual Research",
      "titulo": "ABEV3 - research BTG Pactual",
@@ -2780,7 +2805,7 @@
      "data": "2026-07-30"
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-02"
   },
   {
    "ticker": "PRIO3",
@@ -7242,13 +7267,13 @@
      ]
     }
    },
-   "resumo": "A maioria das casas citadas recomenda compra: Santander (alvo R$ 22,50), Bradesco BBI (R$ 19), J.P. Morgan (R$ 18), BB-BI (R$ 17,50) e Citi (R$ 15,60). Goldman Sachs e Genial aparecem neutros. Ações subiram mais de 4% após o balanço do 2T26 (30/07/2026). A empresa anunciou a venda da CPC (20 aeroportos) à Asur por R$ 11,5 bilhões, e os acionistas Soares Penido, Votorantim e Itaúsa sinalizaram renovar o acordo de acionistas. Há divergência entre fontes sobre alvo e recomendação do Goldman.",
+   "resumo": "A maioria das casas citadas recomenda compra: Santander (alvo R$ 22,50), Bradesco BBI (R$ 19), J.P. Morgan (R$ 18), BB-BI (R$ 17,50) e Citi (R$ 15,60). Goldman Sachs e Genial aparecem neutros. Ações subiram mais de 4% após o balanço do 2T26 (30/07/2026). A empresa anunciou a venda da CPC (20 aeroportos) à Asur por R$ 11,5 bilhões, e os acionistas Soares Penido, Votorantim e Itaúsa sinalizaram renovar o acordo de acionistas. Há divergência entre fontes sobre alvo e recomendação do Goldman. Atualização: segundo o BPMoney, a Motiva reportou lucro líquido ajustado de R$ 750 milhões no 3T26 (+9,8% a/a), com redução de alavancagem; o Citi voltou a recomendar compra, com preço-alvo de R$ 17,40 (antes R$ 20,40), após queda de quase 30% das ações.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 5,
     "neutro": 2,
     "venda": 0,
-    "preco_alvo_medio": 18.04,
+    "preco_alvo_medio": 18.3,
     "moeda": "BRL",
     "casas": [
      {
@@ -7278,8 +7303,8 @@
      {
       "nome": "Citi",
       "recomendacao": "compra",
-      "preco_alvo": 15.6,
-      "data": null
+      "preco_alvo": 17.4,
+      "data": "2026-11-02"
      },
      {
       "nome": "Goldman Sachs",
@@ -7295,7 +7320,20 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Motiva reporta lucro líquido ajustado de R$ 750 milhões no 3T26, alta de 9,8% a/a (segundo o BPMoney); data exata da divulgação não confirmada, data indicada é a da coleta.",
+     "fonte": "BPMoney",
+     "data": "2026-11-02"
+    },
+    {
+     "tipo": "elevacao",
+     "descricao": "Citi volta a recomendar compra para Motiva, com preço-alvo de R$ 17,40 (antes R$ 20,40), segundo o Seu Dinheiro e o BPMoney.",
+     "fonte": "Seu Dinheiro",
+     "data": "2026-11-02"
+    }
+   ],
    "fontes": [
     {
      "nome": "InfoMoney",
@@ -7320,9 +7358,21 @@
      "titulo": "MOTV3: Soares Penido, Votorantim e Itaúsa querem renovar acordo de acionistas da Motiva",
      "url": "https://renovainvest.com.br/blog/acordo-de-acionistas-motiva-motv3/",
      "data": null
+    },
+    {
+     "nome": "Seu Dinheiro",
+     "titulo": "Lucro cresce, caixa surpreende e Citi volta a recomendar compra para Motiva (MOTV3), mas com preço-alvo mais baixo",
+     "url": "https://www.seudinheiro.com/2026/economia/lucro-cresce-caixa-surpreende-citi-volta-recomendar-compra-para-motiva-motv3-mlem/",
+     "data": null
+    },
+    {
+     "nome": "BPMoney",
+     "titulo": "Motiva (MOTV3) lucro 750 milhões terceiro trimestre",
+     "url": "https://bpmoney.com.br/negocios/empresas-na-bolsa/motiva-motv3-lucro-750-milhoes-terceiro-trimestre/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-02"
   },
   {
    "ticker": "KLBN11",
@@ -8968,7 +9018,7 @@
      ]
     }
    },
-   "resumo": "Pouca cobertura específica da holding. O Bank of America teria passado de neutro para compra e elevado o alvo de R$ 10,50 para R$ 13 (data não clara), e o Rico mostra alvo de R$ 11,90 com compra em 31/07/2026. A Gerdau (controlada) teve lucro ajustado de cerca de R$ 1 bilhão no 1T26, alta de 33,8%, com Brasil pressionado por aço importado. A holding pagou R$ 0,08 por ação em junho/2026 e mantém recompra de até 10 milhões de preferenciais até outubro de 2027.",
+   "resumo": "Pouca cobertura específica da holding. O Bank of America teria passado de neutro para compra e elevado o alvo de R$ 10,50 para R$ 13 (data não clara), e o Rico mostra alvo de R$ 11,90 com compra em 31/07/2026. A Gerdau (controlada) teve lucro ajustado de cerca de R$ 1 bilhão no 1T26, alta de 33,8%, com Brasil pressionado por aço importado. A holding pagou R$ 0,08 por ação em junho/2026 e mantém recompra de até 10 milhões de preferenciais até outubro de 2027. Atualização: segundo o Investidor10 e o Acionista, a Gerdau (GGBR4) reportou lucro ajustado de cerca de R$ 1,5 bilhão no 3T26 (+39,7% a/a), EBITDA ajustado de R$ 3,8 bilhões e dívida líquida de R$ 7,7 bilhões, com os EUA compensando o Brasil mais fraco; Gerdau e Metalúrgica Gerdau anunciaram proventos (cerca de R$ 0,16 por ação na GOAU4).",
    "sentimento": "neutro",
    "consenso": {
     "compra": 2,
@@ -8991,7 +9041,20 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Gerdau (controlada) reporta lucro ajustado de ~R$ 1,5 bi no 3T26 (+39,7% a/a) e EBITDA ajustado de R$ 3,8 bi.",
+     "fonte": "Acionista",
+     "data": "2026-10-26"
+    },
+    {
+     "tipo": "dividendos",
+     "descricao": "Metalúrgica Gerdau anuncia proventos de cerca de R$ 0,16 por ação (Gerdau: ~R$ 0,34), segundo o Investidor10.",
+     "fonte": "Investidor10",
+     "data": "2026-10-26"
+    }
+   ],
    "fontes": [
     {
      "nome": "Rico",
@@ -9016,9 +9079,21 @@
      "titulo": "Gerdau (GGBR4) registra lucro 34% maior no 1º trimestre de 2026 e anuncia dividendos",
      "url": "https://www.analisedeacoes.com/noticias/gerdau-ggbr4-registra-lucro-34-maior-no-1-trimestre-de-2026-e-anuncia-dividendos/",
      "data": null
+    },
+    {
+     "nome": "Investidor10",
+     "titulo": "GGBR4 e GOAU4 pagam dividendos ainda em 2026 e Gerdau mostra resultados do 3T26",
+     "url": "https://investidor10.com.br/noticias/ggbr4-e-goau4-pagam-dividendos-ainda-em-2026-e-gerdau-mostra-resultados-do-3t26-123529/",
+     "data": "2026-10-26"
+    },
+    {
+     "nome": "Acionista",
+     "titulo": "Gerdau (GGBR4) divulga resultados do 3T26 com crescimento no EBITDA e dividendos",
+     "url": "https://acionista.com.br/gerdau-ggbr4-divulga-resultados-do-3t26-com-crescimento-no-ebitda-e-dividendos/",
+     "data": "2026-10-26"
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-02"
   },
   {
    "ticker": "FLRY3",
@@ -9567,7 +9642,7 @@
      ]
     }
    },
-   "resumo": "O Money Times relata que o Santander Brasil teve lucro líquido recorrente de R$ 2,9 bilhões no 3T26, queda de 28% em um ano e abaixo do consenso de R$ 3,161 bilhões (Bloomberg), com ROAE de 11,9% e carteira ampliada de R$ 721 bilhões (+4,7%). Citam-se XP com compra (alvo R$ 44 para o fim de 2026), Citi e Itaú neutros e Ativa Investimentos com neutro e alvo de R$ 33 (retomada de cobertura, setembro de 2026); revisões pós-balanço não foram localizadas. Os dados de recomendação não têm data confirmada, por isso o consenso permanece zerado.",
+   "resumo": "O Money Times relata que o Santander Brasil teve lucro líquido recorrente de R$ 2,9 bilhões no 3T26, queda de 28% em um ano e abaixo do consenso de R$ 3,161 bilhões (Bloomberg), com ROAE de 11,9% e carteira ampliada de R$ 721 bilhões (+4,7%). Citam-se XP com compra (alvo R$ 44 para o fim de 2026), Citi e Itaú neutros e Ativa Investimentos com neutro e alvo de R$ 33 (retomada de cobertura, setembro de 2026); revisões pós-balanço não foram localizadas. Os dados de recomendação não têm data confirmada, por isso o consenso permanece zerado. O Seu Dinheiro acrescenta que a inadimplência acima de 90 dias foi a 3,4% (Clube Acionista) e que as units chegaram a cair cerca de 4,4% no dia da divulgação.",
    "sentimento": "negativo",
    "consenso": {
     "compra": 0,
@@ -9603,6 +9678,12 @@
      "titulo": "Santander (SANB11) deve enfrentar trimestre difícil, aponta análise",
      "url": "https://acionista.com.br/santander-sanb11-deve-enfrentar-trimestre-dificil-aponta-analise/",
      "data": null
+    },
+    {
+     "nome": "Seu Dinheiro",
+     "titulo": "Santander Brasil (SANB11) frustra no 3T26: lucro tomba 28% e ROE cai a 11,9%; veja os destaques do balanço",
+     "url": "https://www.seudinheiro.com/2026/empresas/santander-sanb11-lucro-roe-rentabilidade-3t26-veja-os-destaques-do-balanco-miql/",
+     "data": "2026-10-30"
     }
    ],
    "atualizado_em": "2026-10-30"
@@ -13097,31 +13178,92 @@
      ]
     }
    },
-   "resumo": "Em maio de 2026 o Citi elevou para compra (alvo de R$ 10 para dezembro) e o Bradesco BBI elevou o alvo de R$ 6 para R$ 10 mantendo neutro, citando alta de 53% no ano e demanda doméstica fraca. A XP mantém neutro com alvo de R$ 9,50 (julho, sem dia confirmado) e o Safra aparece com compra e alvo de R$ 9,70, em matéria sem data clara. Riscos citados: demanda industrial e automotiva fraca e custos de matérias-primas.",
+   "resumo": "A Usiminas reverteu o prejuízo e teve lucro líquido de cerca de R$ 243 milhões no 3T26 (divulgado em 30/10), mas o balanço ficou abaixo do esperado: o BTG cita EBITDA ajustado de R$ 558 milhões, cerca de 10% abaixo da estimativa do banco, e a ação chegou a cair cerca de 4% no dia, para R$ 5,25, segundo o Seu Dinheiro. Após o resultado, BTG (alvo R$ 10), Safra (R$ 8,30), Bradesco BBI (R$ 8,50), Itaú BBA (R$ 8) e Morgan Stanley (R$ 8,80) aparecem neutros, enquanto o JPMorgan tem compra com alvo de R$ 10,50. O Citi havia cortado o alvo de R$ 10 para R$ 9 mantendo compra, em data não confirmada. Riscos citados anteriormente: demanda industrial e automotiva fraca e custos de matérias-primas.",
    "sentimento": "neutro",
    "consenso": {
-    "compra": 1,
-    "neutro": 1,
+    "compra": 2,
+    "neutro": 6,
     "venda": 0,
-    "preco_alvo_medio": 10,
+    "preco_alvo_medio": 9.08,
     "moeda": "BRL",
     "casas": [
      {
+      "nome": "JPMorgan",
+      "recomendacao": "compra",
+      "preco_alvo": 10.5,
+      "data": "2026-10-30"
+     },
+     {
       "nome": "Citi",
       "recomendacao": "compra",
+      "preco_alvo": 9,
+      "data": null
+     },
+     {
+      "nome": "BTG Pactual",
+      "recomendacao": "neutro",
       "preco_alvo": 10,
-      "data": "2026-05-06"
+      "data": "2026-10-30"
+     },
+     {
+      "nome": "Safra",
+      "recomendacao": "neutro",
+      "preco_alvo": 8.3,
+      "data": "2026-10-30"
      },
      {
       "nome": "Bradesco BBI",
       "recomendacao": "neutro",
-      "preco_alvo": 10,
-      "data": "2026-05-14"
+      "preco_alvo": 8.5,
+      "data": "2026-10-30"
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "neutro",
+      "preco_alvo": 8,
+      "data": "2026-10-30"
+     },
+     {
+      "nome": "Morgan Stanley",
+      "recomendacao": "neutro",
+      "preco_alvo": 8.8,
+      "data": "2026-10-30"
+     },
+     {
+      "nome": "XP",
+      "recomendacao": "neutro",
+      "preco_alvo": 9.5,
+      "data": null
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Usiminas reverteu prejuízo e lucrou R$ 243 milhões no 3T26, mas o balanço ficou abaixo do esperado; ações chegaram a cair cerca de 4%.",
+     "fonte": "Seu Dinheiro",
+     "data": "2026-10-30"
+    }
+   ],
    "fontes": [
+    {
+     "nome": "Seu Dinheiro",
+     "titulo": "Usiminas (USIM5) tem uma das maiores baixas do Ibovespa com balanço aquém do esperado; o que pesou nos números do 3T26?",
+     "url": "https://www.seudinheiro.com/2026/bolsa-dolar/acoes-a-usiminas-caem-3-com-balanco-aquem-do-esperado-o-que-pesou-nos-numeros-do-3t26-lmrs/",
+     "data": "2026-10-30"
+    },
+    {
+     "nome": "Investidor10",
+     "titulo": "Usiminas (USIM5) reverte prejuízo e lucra R$ 243 milhões no 3T26",
+     "url": "https://investidor10.com.br/noticias/usiminas-usim5-reverte-prejuizo-e-lucra-r-243-milhoes-no-3t26-123612/",
+     "data": "2026-10-30"
+    },
+    {
+     "nome": "BTG Pactual",
+     "titulo": "Usiminas (USIM5) - Resultados do 3T26",
+     "url": "https://content.btgpactual.com/research/files/file/pt-BR/2026-10-30T093235.605_Usiminas__USIM5____Resultados_do_3T26.pdf",
+     "data": "2026-10-30"
+    },
     {
      "nome": "Money Times",
      "titulo": "Para Citi, Usiminas (USIM5) é compra; banco vê salto de até 15% nas ações",
@@ -13141,7 +13283,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-02"
   },
   {
    "ticker": "POMO4",
@@ -16161,7 +16303,7 @@
      ]
     }
    },
-   "resumo": "A Bernstein elevou em 19/10/2026 o alvo de US$ 660 para US$ 662 (Outperform) antes do balanço do 1º trimestre fiscal de 2027, previsto para 28/10 após o fechamento (lucro esperado de cerca de US$ 4,72 por ação). Segundo texto de estilo Benzinga, a UBS elevou o alvo de US$ 525 para US$ 675 (15/10), a BMO de US$ 515 para US$ 600 (20/10) e a Guggenheim manteve Buy com US$ 586 (21/10); Oppenheimer (US$ 625) e Truist (US$ 600) também elevaram antes do balanço, segundo o Stocktwits. O Investing.com mostra alvo médio de US$ 569,45 e a Koyfin cita 53 de 56 analistas em compra. Os resultados efetivos do trimestre e as reações pós-balanço não foram localizados.",
+   "resumo": "A Microsoft reportou em 28/10/2026 o 1º trimestre fiscal de 2027: receita de US$ 92,3 bilhões (+19%), Microsoft Cloud de US$ 63,9 bilhões (+30%) e Azure com alta de cerca de 48%, acima dos 44% a 45% projetados, segundo veículos como SiliconANGLE e Stocktwits. A empresa projeta receita de US$ 96 bilhões a US$ 97,1 bilhões no 2º trimestre fiscal e crescimento do Azure de ao menos 49%. As ações subiram cerca de 4% a 5% no after-hours; o fluxo de caixa livre caiu para cerca de US$ 18,6 bilhões (de US$ 25,7 bilhões), por causa dos gastos com infraestrutura de IA. Antes do balanço, Bernstein (US$ 662, Outperform), UBS (US$ 675), BMO (US$ 600) e Guggenheim (US$ 586) tinham alvos acima de US$ 580, segundo textos de estilo Benzinga; o consenso atualizado pós-balanço não foi localizado.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 7,
@@ -16214,7 +16356,14 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Resultado do 1º tri fiscal de 2027 acima do esperado: receita de US$ 92,3 bi (+19%) e Azure +48%; ações subiram no after-hours.",
+     "fonte": "SiliconANGLE / Stocktwits",
+     "data": "2026-10-28"
+    }
+   ],
    "fontes": [
     {
      "nome": "Stocktwits",
@@ -16245,9 +16394,21 @@
      "titulo": "Microsoft earnings preview: analyst ratings and price targets (UBS, BMO, Guggenheim)",
      "url": "https://www.benzinga.com/node/62612074",
      "data": "2026-10-28"
+    },
+    {
+     "nome": "SiliconANGLE",
+     "titulo": "Microsoft Q1 FY27 results (Azure +48%)",
+     "url": "https://siliconangle.com/?p=852356",
+     "data": "2026-10-28"
+    },
+    {
+     "nome": "Stocktwits",
+     "titulo": "MSFT Stock Posts Best Quarter Since 1998 As Azure Growth Revives AI Optimism",
+     "url": "https://stocktwits.com/news-articles/markets/equity/msft-stock-posts-best-quarter-since-1998-as-azure-growth-revives-ai-optimism/cZDj3IIRBKG",
+     "data": "2026-10-29"
     }
    ],
-   "atualizado_em": "2026-10-30"
+   "atualizado_em": "2026-11-02"
   }
  ]
 }
