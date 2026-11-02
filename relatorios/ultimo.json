@@ -1,6 +1,6 @@
 {
  "data": "2026-11-02",
- "gerado_em": "2026-11-02T10:00:06.395Z",
+ "gerado_em": "2026-11-02T18:38:46.379Z",
  "pesquisa_data": "2026-11-02",
  "indicadores_data": "2026-11-02",
  "resumo_mercado": "Segundo o Bora Investir (B3) e outros veículos, o Ibovespa fechou a sexta (30/10) em queda de 0,75%, a 167.921,80 pontos, no quinto pregão seguido de baixa, com perda de 9,88% em outubro; o dólar subiu cerca de 1%, a R$ 5,44. As fontes ligam o movimento ao exterior e à saída de capital estrangeiro. Em 2/11 (Finados), a B3 não deve operar, segundo o AmdJus; não localizei agenda para o dia.",
@@ -15655,22 +15655,22 @@
      ]
     },
     "mensal": {
-     "data_ultimo_candle": "2026-10-30",
+     "data_ultimo_candle": "2026-10-01",
      "fechamento": 344.63,
      "tendencia": "alta",
      "vies": "neutro",
      "pontuacao": 1,
      "medias": {
-      "mme9": 313.73,
-      "mms21": 269.25,
-      "mms50": 223.55,
-      "mms200": 93.8517
+      "mme9": 306.01,
+      "mms21": 264.36,
+      "mms50": 219.42,
+      "mms200": 92.1705
      },
      "ifr14": 72.4,
      "macd": {
-      "macd": 32.9121,
-      "sinal": 26.7257,
-      "histograma": 6.1864
+      "macd": 31.3941,
+      "sinal": 25.1791,
+      "histograma": 6.2149
      },
      "suporte": 169.21,
      "resistencia": 351.73,
@@ -15832,26 +15832,32 @@
      ]
     },
     "mensal": {
-     "data_ultimo_candle": "2026-10-30",
+     "data_ultimo_candle": "2026-10-01",
      "fechamento": 204.64,
      "tendencia": "alta",
      "vies": "neutro",
-     "pontuacao": 1,
+     "pontuacao": 0,
      "medias": {
-      "mme9": 203.82,
-      "mms21": 182.27,
-      "mms50": 117.73,
-      "mms200": 33.1844
+      "mme9": 203.61,
+      "mms21": 178.48,
+      "mms50": 113.88,
+      "mms200": 32.1633
      },
      "ifr14": 61.8,
      "macd": {
-      "macd": 26.7171,
-      "sinal": 28.5064,
-      "histograma": -1.7894
+      "macd": 28.2709,
+      "sinal": 28.9538,
+      "histograma": -0.6828
      },
      "suporte": 86.62,
      "resistencia": 243.37,
-     "candles": [],
+     "candles": [
+      {
+       "nome": "Engolfo de baixa",
+       "sinal": "baixa",
+       "descricao": "Candle de baixa engoliu o corpo do candle de alta anterior, depois de alta."
+      }
+     ],
      "cruzamentos": [
       {
        "nome": "MACD × linha de sinal",
@@ -15866,6 +15872,10 @@
       },
       {
        "texto": "MACD × linha de sinal para baixa em 01/10/2026",
+       "sinal": "baixa"
+      },
+      {
+       "texto": "Candle: Engolfo de baixa — Candle de baixa engoliu o corpo do candle de alta anterior, depois de alta.",
        "sinal": "baixa"
       }
      ]
@@ -16014,41 +16024,60 @@
      ]
     },
     "mensal": {
-     "data_ultimo_candle": "2026-10-30",
+     "data_ultimo_candle": "2026-10-01",
      "fechamento": 521.91,
      "tendencia": "alta",
-     "vies": "neutro",
-     "pontuacao": 1,
+     "vies": "alta",
+     "pontuacao": 4,
      "medias": {
-      "mme9": 482.49,
-      "mms21": 463.47,
-      "mms50": 402.14,
-      "mms200": 175.08
+      "mme9": 472.64,
+      "mms21": 457.53,
+      "mms50": 396.36,
+      "mms200": 172.62
      },
      "ifr14": 60,
      "macd": {
-      "macd": 24.9017,
-      "sinal": 19.9066,
-      "histograma": 4.9952
+      "macd": 22.1057,
+      "sinal": 18.6578,
+      "histograma": 3.448
      },
      "suporte": 344.79,
      "resistencia": 555.45,
      "candles": [
       {
-       "nome": "Enforcado",
-       "sinal": "baixa",
-       "descricao": "Sombra inferior longa depois de alta: sinal de cansaço dos compradores."
+       "nome": "Doji",
+       "sinal": "neutro",
+       "descricao": "Indecisão (abertura ≈ fechamento) depois de alta: pode anteceder reversão."
       }
      ],
-     "cruzamentos": [],
+     "cruzamentos": [
+      {
+       "nome": "MME 9 × MMS 21 (curto prazo)",
+       "sinal": "alta",
+       "data": "2026-09-01"
+      },
+      {
+       "nome": "MACD × linha de sinal",
+       "sinal": "alta",
+       "data": "2026-09-01"
+      }
+     ],
      "sinais": [
       {
        "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
        "sinal": "alta"
       },
       {
-       "texto": "Candle: Enforcado — Sombra inferior longa depois de alta: sinal de cansaço dos compradores.",
-       "sinal": "baixa"
+       "texto": "MME 9 × MMS 21 (curto prazo) para alta em 01/09/2026",
+       "sinal": "alta"
+      },
+      {
+       "texto": "MACD × linha de sinal para alta em 01/09/2026",
+       "sinal": "alta"
+      },
+      {
+       "texto": "Candle: Doji — Indecisão (abertura ≈ fechamento) depois de alta: pode anteceder reversão.",
+       "sinal": "neutro"
       }
      ]
     }
