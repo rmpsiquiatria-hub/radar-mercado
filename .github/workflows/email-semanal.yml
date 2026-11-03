@@ -1,0 +1,32 @@
+# Sends the Saturday e-mail at 08:00 (Brasília): technical analysis of the week that closed on
+# Friday, on the weekly chart. Prices and technicals are refreshed first, keeping the research
+# of the last weekday report. "Run workflow" by hand sends immediately (useful to test).
+name: E-mail semanal
+
+on:
+  schedule:
+    - cron: "0 11 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Atualizar preços e análise técnica
+        run: |
+          node scripts/indicadores.mjs && node scripts/tecnica.mjs && node scripts/montar-relatorio.mjs - && node scripts/validar-relatorio.mjs \
+            || { echo "Atualização falhou; envia com os dados existentes."; git checkout -- relatorios/; }
+      - name: Enviar
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: node scripts/email.mjs --semanal

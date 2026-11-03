@@ -1,6 +1,7 @@
 // Turns relatorios/ultimo.json into the daily e-mail and sends it through Gmail.
 //   node scripts/email.mjs --preview saida.html   → only writes the HTML (nothing is sent)
 //   node scripts/email.mjs                        → sends; needs GMAIL_USER, GMAIL_APP_PASSWORD, EMAIL_TO
+//   --semanal (with or without --preview)         → the Saturday e-mail: technical analysis of the week only
 // Settings (timeframes, criteria) come from relatorios/config.json.
 // The buy/attention rules mirror signal() in index.html — keep both in step.
 
@@ -11,8 +12,11 @@ const rel = new URL("../relatorios/", import.meta.url);
 const rep = JSON.parse(await readFile(new URL("ultimo.json", rel), "utf8"));
 const cfg = JSON.parse(await readFile(new URL("config.json", rel), "utf8"));
 const C = cfg.criterios;
-// One timeframe for the technical part (the one chosen in the site's Settings, mirrored in config.json).
-const TF = cfg.tempo_grafico || (cfg.tempos_graficos || ["diario"])[0];
+const args = process.argv.slice(2);
+// Weekday e-mail: technical analysis on the daily chart. Saturday e-mail: the weekly chart (the week
+// that closed on Friday).
+const WEEKLY = args.includes("--semanal");
+const TF = WEEKLY ? "semanal" : "diario";
 
 /* ---------- formatting ---------- */
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -85,11 +89,12 @@ const techPeriod = !lastCandle ? "último candle fechado"
   : TF === "diario" ? `pregão de ${ddmm(lastCandle)}`
   : TF === "semanal" ? (() => { const f = new Date(lastCandle + "T12:00:00"); f.setDate(f.getDate() + 4); return `semana de ${ddmm(lastCandle)} a ${ddmm(f.toLocaleDateString("sv-SE"))}`; })()
   : `mês de ${dateBR(lastCandle, { month: "long", year: "numeric" })}`;
+const techDa = (TF === "semanal" ? "da " : "do ") + techPeriod;   // "do pregão de 03/11", "da semana de …"
 const researchDay = dateBR(rep.pesquisa_data || rep.data, { day: "2-digit", month: "2-digit" });
 const datesBox = `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;margin:10px 0 0;background:#f4f6f8;border-radius:8px">
     <tr><td colspan="2" style="padding:10px 14px 4px"><b>📅 Que período cada análise usa</b></td></tr>
     <tr><td style="padding:3px 14px;vertical-align:top;width:42%;color:#0f766e"><b>Fundamentalista</b></td><td style="padding:3px 14px 3px 0">recomendações das casas como estavam em <b>${researchDay}</b> (cada casa pode ter publicado a sua antes) · indicadores da empresa de <b>${researchDay}</b> · mudanças de recomendação dos <b>últimos 7 dias</b></td></tr>
-    <tr><td style="padding:3px 14px 10px;vertical-align:top;color:#6d28d9"><b>Técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()})</b></td><td style="padding:3px 14px 10px 0">fotografia do gráfico no fim da <b>${techPeriod}</b>, o último candle já fechado. A tendência compara o preço com as médias de 50 e 200 ${{ diario: "pregões", semanal: "semanas", mensal: "meses" }[TF]}; cruzamentos contam se aconteceram ${{ diario: "nos últimos 5 pregões", semanal: "nas últimas 3 semanas", mensal: "nos últimos 2 meses" }[TF]}.</td></tr>
+    <tr><td style="padding:3px 14px 10px;vertical-align:top;color:#6d28d9"><b>Técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()})</b></td><td style="padding:3px 14px 10px 0">fotografia do gráfico no fim <b>${techDa}</b>, o último candle já fechado. A tendência compara o preço com as médias de 50 e 200 ${{ diario: "pregões", semanal: "semanas", mensal: "meses" }[TF]}; cruzamentos contam se aconteceram ${{ diario: "nos últimos 5 pregões", semanal: "nas últimas 3 semanas", mensal: "nos últimos 2 meses" }[TF]}.</td></tr>
   </table>`;
 const h2 = t => `<h2 style="font-size:17px;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid ${LINE}">${t}</h2>`;
 const hint = t => `<p style="margin:0 0 8px;color:${MUTED};font-size:13px">${t}</p>`;
@@ -217,11 +222,11 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   ${changesSection()}
 
   <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#6d28d9;color:#ffffff;font-weight:700;font-size:16px">📈 PARTE 2 · ANÁLISE TÉCNICA · gráfico ${FRAME_LABEL[TF].toLowerCase()} · ${techPeriod}</div>
-  ${hint(`Calculada por programa a partir dos preços, sem IA. Sinais considerados: cruzamento das médias curtas (MME 9 × MMS 21), golden/death cross (MMS 50 × MMS 200) e candles de reversão. Cada candle deste gráfico representa ${{ diario: "um dia de negociação", semanal: "uma semana de negociação", mensal: "um mês de negociação" }[TF]}. O gráfico é o escolhido em Configurações no site.`)}
+  ${hint(`Calculada por programa a partir dos preços, sem IA. Sinais considerados: cruzamento das médias curtas (MME 9 × MMS 21), golden/death cross (MMS 50 × MMS 200) e candles de reversão. Cada candle deste gráfico representa um dia de negociação. Aos sábados chega outro e-mail, com a análise técnica da semana no gráfico semanal.`)}
   ${techSection(TF)}
 
   <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#b45309;color:#ffffff;font-weight:700;font-size:16px">🎯 PARTE 3 · ONDE AS DUAS ANÁLISES CONCORDAM</div>
-  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa. Cruza a fundamentalista de <b>${researchDay}</b> com o gráfico ${FRAME_LABEL[TF].toLowerCase()} da <b>${techPeriod}</b>.`)}
+  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa. Cruza a fundamentalista de <b>${researchDay}</b> com o gráfico ${FRAME_LABEL[TF].toLowerCase()} <b>${techDa}</b>.`)}
   ${h2(`▲ Para o lado da compra (${convBuy.length})`)}
   ${convRows(convBuy)}
   ${h2(`▼ Para o lado da venda (${convSell.length})`)}
@@ -235,6 +240,35 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   <p style="font-size:12px;color:#8c99a3;margin-top:24px">Resumo automático do que fontes publicadas dizem, feito por IA (pode conter erros — confira os links no site). Indicadores: Fundamentus. Cotações e candles: Yahoo Finance. Análise técnica calculada por programa, sem IA. Não é recomendação de investimento.</p>
 </div></body></html>`;
 
+/* ---------- Saturday e-mail: the week on the weekly chart ---------- */
+const weekRows = lado => emps.filter(e => e.tecnica?.semanal?.vies === lado).sort((a, b) => Math.abs(b.tecnica.semanal.pontuacao) - Math.abs(a.tecnica.semanal.pontuacao));
+const weekList = lado => { const l = weekRows(lado); return l.length ? `<p style="margin:0 0 8px;font-size:14px">${l.map(e => `${link(e)}${e.origem?.includes("lista pessoal") ? " ★" : ""}`).join(" · ")}</p>` : hint("Nenhuma."); };
+const weekSubject = `Radar do Mercado · análise técnica da ${techPeriod}`;
+const weekHtml = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(weekSubject)}</title></head>
+<body style="margin:0;background:#f4f6f8"><div style="max-width:680px;margin:0 auto;padding:20px 16px;font-family:Arial,Helvetica,sans-serif;color:#0f1b24;line-height:1.5;background:#ffffff">
+  <div style="font-size:12px;color:${MUTED};text-transform:uppercase;letter-spacing:.06em;font-weight:700">Radar do Mercado · resumo da semana</div>
+  <h1 style="font-size:22px;margin:4px 0 2px">Análise técnica da ${techPeriod}</h1>
+  ${hint(`${emps.length} empresas · Ibovespa + sua lista · gráfico semanal: cada candle é uma semana de negociação, de segunda a sexta`)}
+  <p style="background:#ede9fe;border-left:4px solid #6d28d9;border-radius:8px;padding:12px 14px;font-size:14px;margin:14px 0">
+    Os e-mails de segunda a sexta olham o <b>gráfico diário</b>, que reage rápido e muda de um dia para o outro.
+    Este olha o <b>gráfico semanal</b>: o que a semana inteira deixou no preço. Sinais aqui demoram mais para aparecer, mas costumam ser mais firmes.
+    A tendência compara o preço com as médias de 50 e 200 semanas; cruzamentos contam se aconteceram nas últimas 3 semanas.
+  </p>
+  ${h2("📈 Sinais técnicos da semana")}
+  ${hint("Calculada por programa a partir dos preços, sem IA. Sinais considerados: cruzamento das médias curtas (MME 9 × MMS 21), golden/death cross (MMS 50 × MMS 200) e candles de reversão.")}
+  ${techSection("semanal")}
+  ${h2("🧭 Tendência de cada empresa no gráfico semanal")}
+  ${hint("Ordenadas da mais forte para a mais fraca, somando todos os sinais (tendência, cruzamentos, IFR e candles). ★ sua lista.")}
+  <div style="font-size:14px;font-weight:700;color:${GREEN};margin:10px 0 2px">▲ Viés de alta (${weekRows("alta").length})</div>${weekList("alta")}
+  <div style="font-size:14px;font-weight:700;color:${RED};margin:10px 0 2px">▼ Viés de baixa (${weekRows("baixa").length})</div>${weekList("baixa")}
+  ${hint(`As outras ${emps.length - weekRows("alta").length - weekRows("baixa").length} estão neutras.`)}
+  <p style="margin:28px 0 8px"><a href="${esc(cfg.site)}" style="display:inline-block;background:#0f766e;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700">Abrir o painel completo</a></p>
+  <p style="font-size:12px;color:#8c99a3;margin-top:24px">Cotações e candles: Yahoo Finance. Análise técnica calculada por programa, sem IA. Não é recomendação de investimento.</p>
+</div></body></html>`;
+const weekText = [`Radar do Mercado — análise técnica da ${techPeriod} (gráfico semanal)`, "",
+  `Viés de alta: ${weekRows("alta").map(e => e.ticker).join(", ") || "nenhuma"}`, `Viés de baixa: ${weekRows("baixa").map(e => e.ticker).join(", ") || "nenhuma"}`, "",
+  `Painel completo: ${cfg.site}`].join("\n");
+
 const text = [
   `Radar do Mercado — relatório de ${dayLong}`, "", rep.resumo_mercado, "",
   `Sinais de compra (${buys.length}): ${buys.map(([e]) => e.ticker).join(", ") || "nenhum"}`,
@@ -244,13 +278,15 @@ const text = [
 ].join("\n");
 
 /* ---------- output ---------- */
-const args = process.argv.slice(2);
-if (args[0] === "--preview") {
-  await writeFile(args[1] || "email-preview.html", html);
-  console.log(`Prévia gravada em ${args[1] || "email-preview.html"} — assunto: ${subject}`);
+const out = WEEKLY ? { subject: weekSubject, html: weekHtml, text: weekText } : { subject, html, text };
+const pv = args.indexOf("--preview");
+if (pv >= 0) {
+  const file = args[pv + 1] && !args[pv + 1].startsWith("--") ? args[pv + 1] : "email-preview.html";
+  await writeFile(file, out.html);
+  console.log(`Prévia gravada em ${file} — assunto: ${out.subject}`);
 } else {
   const { GMAIL_USER, GMAIL_APP_PASSWORD, EMAIL_TO } = process.env;
   if (!GMAIL_USER || !GMAIL_APP_PASSWORD || !EMAIL_TO) { console.error("Faltam GMAIL_USER, GMAIL_APP_PASSWORD ou EMAIL_TO."); process.exit(1); }
-  await sendGmail({ user: GMAIL_USER, pass: GMAIL_APP_PASSWORD.replace(/\s/g, ""), to: EMAIL_TO, subject, html, text });
-  console.log(`E-mail enviado — ${subject}`);
+  await sendGmail({ user: GMAIL_USER, pass: GMAIL_APP_PASSWORD.replace(/\s/g, ""), to: EMAIL_TO, ...out });
+  console.log(`E-mail enviado — ${out.subject}`);
 }
