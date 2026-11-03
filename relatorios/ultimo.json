@@ -1,27 +1,39 @@
 {
- "data": "2026-11-02",
- "gerado_em": "2026-11-02T18:38:46.379Z",
- "pesquisa_data": "2026-11-02",
+ "data": "2026-11-03",
+ "gerado_em": "2026-11-03T09:10:42.205Z",
+ "pesquisa_data": "2026-11-03",
  "indicadores_data": "2026-11-02",
- "resumo_mercado": "Segundo o Bora Investir (B3) e outros veículos, o Ibovespa fechou a sexta (30/10) em queda de 0,75%, a 167.921,80 pontos, no quinto pregão seguido de baixa, com perda de 9,88% em outubro; o dólar subiu cerca de 1%, a R$ 5,44. As fontes ligam o movimento ao exterior e à saída de capital estrangeiro. Em 2/11 (Finados), a B3 não deve operar, segundo o AmdJus; não localizei agenda para o dia.",
+ "resumo_mercado": "Sem pregão na B3 em 2/11 (Finados), o último fechamento é o de 30/10: Ibovespa em queda no quinto pregão seguido, a 167.921,80 pontos, e dólar a cerca de R$ 5,44, segundo InfoMoney e outros veículos. Em Nova York (2/11), o Dow subiu 0,41%, o S&P 500 recuou 0,51% (7.541,40) e o Nasdaq caiu 1,07%, pressionado por tecnologia e IA, segundo TradingKey. Para hoje, o Money Times cita o Focus, o Copom na quarta e as eleições de meio de mandato nos EUA.",
  "fontes_mercado": [
   {
-   "nome": "Bora Investir (B3)",
-   "titulo": "Ibovespa B3 recua, puxado por exterior e fecha outubro com -9%; dólar vai a R$ 5,44",
-   "url": "https://borainvestir.b3.com.br/noticias/mercado/ibovespa-b3-recua-puxado-por-exterior-e-fecha-outubro-com-9-dolar-vai-a-r-544/",
+   "nome": "InfoMoney",
+   "titulo": "Ibovespa emenda 5ª baixa e tem pior semana desde 2020; outubro é o pior mês do ano",
+   "url": "https://www.infomoney.com.br/mercados/ibovespa-hoje-bolsa-de-valores-ao-vivo-30102026/",
    "data": "2026-10-30"
   },
   {
-   "nome": "Alô Alô Bahia",
-   "titulo": "Dólar sobe mais de 1% e Bolsa fecha em queda nesta sexta-feira (30); veja cotações",
-   "url": "https://aloalobahia.com/noticias/2026/10/30/dolar-sobe-mais-de-1-e-bolsa-fecha-em-queda-nesta-sexta-feira-30-veja-cotacoes/",
-   "data": "2026-10-30"
+   "nome": "Money Times",
+   "titulo": "Tempo real: Ibovespa acompanha Focus pós-reeleição de Lula na véspera de Copom; eleições de meio de mandato nos EUA ficam no radar",
+   "url": "https://www.moneytimes.com.br/tempo-real-3-11-26-lils-davs/",
+   "data": "2026-11-03"
   },
   {
-   "nome": "AmdJus",
-   "titulo": "Finados 2026: bancos, Receita e B3 fecham; veja o que funciona",
-   "url": "https://amdjus.com.br/finados-2026-bancos-receita-e-b3-fecham-veja-o-que-funciona/",
-   "data": null
+   "nome": "TradingKey",
+   "titulo": "Nasdaq cai 1,07%, SOX recua mais de 3%; ações ligadas à IA ampliam perdas, Marvell cai mais de 12%, Oracle recua mais de 8%",
+   "url": "https://tradingkey.com/pt/analysis/stocks/us-stocks/262265010-us-stock-close-nasdaq-falls-dow-rises-marvell-oracle-tradingkey",
+   "data": "2026-11-02"
+  },
+  {
+   "nome": "CNBC",
+   "titulo": "Nasdaq starts November with 1% loss as tech melts down again",
+   "url": "https://www.cnbc.com/2026/11/01/stock-market-today-live-updates.html",
+   "data": "2026-11-02"
+  },
+  {
+   "nome": "Times Brasil",
+   "titulo": "Dólar e bolsa: possível encontro de Lula e Lara Resende pode movimentar mercado nesta terça-feira",
+   "url": "https://timesbrasil.com.br/investimentos/dolar-e-bolsa-possivel-encontro-de-lula-e-lara-resende-pode-movimentar-mercado-nesta-terca-feira",
+   "data": "2026-11-03"
   }
  ],
  "tecnica_data": "2026-11-02",
@@ -7401,7 +7413,7 @@
      ]
     }
    },
-   "resumo": "O consenso do Investing.com é de 9 compras, 7 manter e nenhuma venda, com alvo médio de R$ 22,58. Após o 2T26 (lucro de R$ 387 mi), Itaú BBA e Citi avaliaram o balanço acima do esperado, enquanto a Genial manteve 'manter' e reduziu o alvo de R$ 21 para R$ 20. O Itaú BBA está neutro (R$ 23), Citi e Safra com compra (R$ 26 e R$ 21,10). O 3T26 ainda não foi divulgado. A prévia do 3T26 da Genial (16/10) manteve recomendação de manter com alvo de R$ 20, estimando Ebitda ajustado de R$ 2,0 bi (3,4% acima da mediana do consenso) e lucro líquido de R$ 255 mi, abaixo da menor estimativa do consenso.",
+   "resumo": "Segundo as fontes, a Klabin divulgou em 28/10 o 3T26 com lucro líquido de R$ 393 milhões (-18% ano a ano) e Ebitda ajustado de R$ 1,856 bilhão (-12%), margem de 33%. As fontes citam despesas com medidas contra o El Niño, custos de insumos e fretes e o real valorizado; a dívida líquida foi de R$ 23,98 bilhões, com alavancagem de 3,3x. A ação caiu cerca de 6,8% no dia, a R$ 17,41. O BB mantém compra com alvo de R$ 23 para 2027; Itaú BBA, JPMorgan e Goldman aparecem como neutros, segundo a bpmoney. O consenso do Investing.com citado anteriormente é de 9 compras, 7 manter e nenhuma venda, com alvo médio de R$ 22,58.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 9,
@@ -7433,10 +7445,23 @@
       "recomendacao": "compra",
       "preco_alvo": 21.1,
       "data": null
+     },
+     {
+      "nome": "BB Investimentos",
+      "recomendacao": "compra",
+      "preco_alvo": 23,
+      "data": "2026-10-28"
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Klabin reportou lucro de R$ 393 milhões no 3T26 (-18% a/a) e Ebitda ajustado de R$ 1,856 bi (-12%); ação caiu cerca de 6,8% no dia. BB manteve compra (alvo R$ 23).",
+     "fonte": "Money Times / BB Investalk",
+     "data": "2026-10-28"
+    }
+   ],
    "fontes": [
     {
      "nome": "Genial Investimentos",
@@ -7467,9 +7492,27 @@
      "titulo": "Vale comprar Klabin (KLBN11)? Citi e Itaú BBA avaliam balanço e revelam preços-alvo",
      "url": "https://moneytimes.com.br/vale-comprar-klabin-klbn11-citi-e-itau-bba-avaliam-balanco-e-revelam-precos-alvo-ceci/",
      "data": null
+    },
+    {
+     "nome": "Money Times",
+     "titulo": "Lucro da Klabin (KLBN11) cai 18% no 3º trimestre para R$ 393 milhões",
+     "url": "https://moneytimes.com.br/lucro-da-klabin-klbn11-cai-18-no-3o-trimestre-para-r-393-milhoes-lmrs/",
+     "data": "2026-10-28"
+    },
+    {
+     "nome": "BB Investimentos (Investalk)",
+     "titulo": "KLBN11: BB analisa o resultado do 3T26",
+     "url": "https://investalk.bb.com.br/noticias/mercado/KLBN11-bb-analisa-o-resultado-do-3T26",
+     "data": "2026-10-28"
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "KLBN11: receita sobe, mas dólar e despesas pressionam o resultado do 3T26",
+     "url": "https://acionista.com.br/klbn11-receita-sobe-mas-dolar-e-despesas-pressionam-o-resultado-do-3t26/",
+     "data": "2026-10-28"
     }
    ],
-   "atualizado_em": "2026-10-27"
+   "atualizado_em": "2026-11-03"
   },
   {
    "ticker": "CXSE3",
@@ -8902,20 +8945,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Gerdau (controlada) reporta lucro ajustado de ~R$ 1,5 bi no 3T26 (+39,7% a/a) e EBITDA ajustado de R$ 3,8 bi.",
-     "fonte": "Acionista",
-     "data": "2026-10-26"
-    },
-    {
-     "tipo": "dividendos",
-     "descricao": "Metalúrgica Gerdau anuncia proventos de cerca de R$ 0,16 por ação (Gerdau: ~R$ 0,34), segundo o Investidor10.",
-     "fonte": "Investidor10",
-     "data": "2026-10-26"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Rico",
@@ -10071,7 +10101,7 @@
      ]
     }
    },
-   "resumo": "A Genial iniciou cobertura com compra e alvo de R$ 37 em junho, e o Itaú BBA mantém compra com R$ 36 para o fim de 2026. No 2T26 o lucro foi de R$ 427,4 mi (+61,7%), com margem Ebitda de 82,6%. A empresa anunciou cerca de R$ 139 mi em JCP (R$ 0,284 por ação) com data de corte em 30/09 e tem programa de recompra de até 10 milhões de ações. A página de pesquisa do BTG, de 22/10/2026, registra recomendação de compra (o valor de preço-alvo exibido na página não é consistente com a cotação, por isso não foi usado).",
+   "resumo": "No 3T26, divulgado em 29/10, a Multiplan reportou lucro líquido de R$ 383,2 mi (+73,3% em um ano), com Ebitda de R$ 598,2 mi (+37,3%) e NOI 2,2% acima do 3T25; segundo o Eu Quero Investir e a Empiricus, parte do lucro veio da venda de 9,33% do Park Shopping Barigui por R$ 250 mi. A Empiricus considera o trimestre operacionalmente saudável. A empresa também registrou JCP de R$ 139 mi e recompra de R$ 49,9 mi. Segundo as fontes, Genial (alvo R$ 37) e Itaú BBA (alvo R$ 36, top pick do setor) mantêm compra, e a página de pesquisa do BTG, de 22/10/2026, registra compra.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 3,
@@ -10100,7 +10130,14 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Multiplan divulgou 3T26 com lucro líquido de R$ 383,2 mi (+73,3%), incluindo ganho com venda de 9,33% do Park Shopping Barigui por R$ 250 mi; Ebitda de R$ 598,2 mi (+37,3%).",
+     "fonte": "Eu Quero Investir",
+     "data": "2026-10-29"
+    }
+   ],
    "fontes": [
     {
      "nome": "Finance News",
@@ -10131,9 +10168,21 @@
      "titulo": "MULT3 - Cotação e análises (página de 22/10/2026)",
      "url": "https://content.btgpactual.com/research/ativo/MULT3",
      "data": "2026-10-22"
+    },
+    {
+     "nome": "Eu Quero Investir",
+     "titulo": "Multiplan (MULT3) lucro 3T26 resultados",
+     "url": "https://euqueroinvestir.com/acoes/multiplan-mult3-lucro-3t26-resultados",
+     "data": "2026-10-29"
+    },
+    {
+     "nome": "Empiricus",
+     "titulo": "Multiplan (MULT3): operação segue resiliente no 3T26",
+     "url": "https://www.empiricus.com.br/artigos/investimentos/multiplan-mult3-operacao-segue-resiliente-no-3t26-acoes-valem-a-pena-jdnm/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-10-30"
+   "atualizado_em": "2026-11-03"
   },
   {
    "ticker": "PSSA3",
