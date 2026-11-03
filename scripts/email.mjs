@@ -72,6 +72,25 @@ const buys = sig.filter(([, s]) => s?.kind === "compra"), warns = sig.filter(([,
 const convBuy = buys.filter(([e]) => e.tecnica?.[TF]?.vies === "alta");
 const convSell = warns.filter(([e]) => e.tecnica?.[TF]?.vies === "baixa");
 const staleResearch = rep.pesquisa_data && rep.pesquisa_data !== rep.data;
+
+// Which period each analysis looks at, written out so the reader does not have to guess.
+// The technical candle is the most common last closed candle among the companies; weekly
+// candles are stamped on the Monday and close on Friday.
+const lastCandle = (() => {
+  const n = {}; for (const e of emps) { const d = e.tecnica?.[TF]?.data_ultimo_candle; if (d) n[d] = (n[d] || 0) + 1; }
+  return Object.entries(n).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+})();
+const ddmm = d => d.split("-").reverse().slice(0, 2).join("/");
+const techPeriod = !lastCandle ? "último candle fechado"
+  : TF === "diario" ? `pregão de ${ddmm(lastCandle)}`
+  : TF === "semanal" ? (() => { const f = new Date(lastCandle + "T12:00:00"); f.setDate(f.getDate() + 4); return `semana de ${ddmm(lastCandle)} a ${ddmm(f.toLocaleDateString("sv-SE"))}`; })()
+  : `mês de ${dateBR(lastCandle, { month: "long", year: "numeric" })}`;
+const researchDay = dateBR(rep.pesquisa_data || rep.data, { day: "2-digit", month: "2-digit" });
+const datesBox = `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;margin:10px 0 0;background:#f4f6f8;border-radius:8px">
+    <tr><td colspan="2" style="padding:10px 14px 4px"><b>📅 Que período cada análise usa</b></td></tr>
+    <tr><td style="padding:3px 14px;vertical-align:top;width:42%;color:#0f766e"><b>Fundamentalista</b></td><td style="padding:3px 14px 3px 0">recomendações das casas como estavam em <b>${researchDay}</b> (cada casa pode ter publicado a sua antes) · indicadores da empresa de <b>${researchDay}</b> · mudanças de recomendação dos <b>últimos 7 dias</b></td></tr>
+    <tr><td style="padding:3px 14px 10px;vertical-align:top;color:#6d28d9"><b>Técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()})</b></td><td style="padding:3px 14px 10px 0">fotografia do gráfico no fim da <b>${techPeriod}</b>, o último candle já fechado. A tendência compara o preço com as médias de 50 e 200 ${{ diario: "pregões", semanal: "semanas", mensal: "meses" }[TF]}; cruzamentos contam se aconteceram ${{ diario: "nos últimos 5 pregões", semanal: "nas últimas 3 semanas", mensal: "nos últimos 2 meses" }[TF]}.</td></tr>
+  </table>`;
 const h2 = t => `<h2 style="font-size:17px;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid ${LINE}">${t}</h2>`;
 const hint = t => `<p style="margin:0 0 8px;color:${MUTED};font-size:13px">${t}</p>`;
 const link = (e) => `<a href="${esc(cfg.site)}" style="color:#0f766e;text-decoration:none;font-weight:700">${esc(e.ticker)}</a>`;
@@ -179,6 +198,7 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
       Olha só para o <b>gráfico de preços</b>: tendência, médias móveis, candles, suporte e resistência. Não diz se a empresa é boa —
       diz <i>"como o preço está se comportando agora?"</i> e ajuda a escolher o <b>momento</b> de entrar ou sair. Pensa em <b>dias a semanas</b>${TF === "semanal" ? " (no gráfico semanal, semanas a meses)" : TF === "mensal" ? " (no gráfico mensal, meses)" : ""}.
     </td></tr>
+    <tr><td>${datesBox}</td></tr>
     <tr><td style="font-size:13px;color:${MUTED};padding:0 4px">As duas se complementam: uma empresa pode ser boa (fundamentalista positiva) e o preço ainda estar caindo (técnica negativa), ou o contrário. A <b>Parte 3</b> mostra só os ativos em que as duas apontam para o mesmo lado.</td></tr>
   </table>
 
@@ -196,12 +216,12 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   ${h2("📰 Mudanças recentes nas recomendações (7 dias)")}
   ${changesSection()}
 
-  <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#6d28d9;color:#ffffff;font-weight:700;font-size:16px">📈 PARTE 2 · ANÁLISE TÉCNICA · gráfico ${FRAME_LABEL[TF].toLowerCase()}</div>
+  <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#6d28d9;color:#ffffff;font-weight:700;font-size:16px">📈 PARTE 2 · ANÁLISE TÉCNICA · gráfico ${FRAME_LABEL[TF].toLowerCase()} · ${techPeriod}</div>
   ${hint(`Calculada por programa a partir dos preços, sem IA. Sinais considerados: cruzamento das médias curtas (MME 9 × MMS 21), golden/death cross (MMS 50 × MMS 200) e candles de reversão. Cada candle deste gráfico representa ${{ diario: "um dia de negociação", semanal: "uma semana de negociação", mensal: "um mês de negociação" }[TF]}. O gráfico é o escolhido em Configurações no site.`)}
   ${techSection(TF)}
 
   <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#b45309;color:#ffffff;font-weight:700;font-size:16px">🎯 PARTE 3 · ONDE AS DUAS ANÁLISES CONCORDAM</div>
-  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa.`)}
+  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa. Cruza a fundamentalista de <b>${researchDay}</b> com o gráfico ${FRAME_LABEL[TF].toLowerCase()} da <b>${techPeriod}</b>.`)}
   ${h2(`▲ Para o lado da compra (${convBuy.length})`)}
   ${convRows(convBuy)}
   ${h2(`▼ Para o lado da venda (${convSell.length})`)}
