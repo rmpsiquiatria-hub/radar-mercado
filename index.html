@@ -90,6 +90,23 @@ header { display: flex; align-items: center; gap: 12px; padding: 18px 0 14px; fl
 .corr-matrix td { text-align: center; padding: 7px 4px; border-radius: 5px; font-family: var(--mono); min-width: 52px; }
 .corr-matrix td.diag { color: var(--faint); background: var(--panel-2); }
 .corr .hint { margin: 10px 0 0; }
+.cchip .r2 { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.cm { margin-top: 12px; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--panel-2); }
+.cm-vars { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.cm-vars button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 10px; font: inherit; font-size: 12.5px; cursor: pointer; }
+.cm-vars button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cm-vars button:disabled { opacity: .45; cursor: default; }
+.cm-opts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 13px; color: var(--muted); }
+.cm-opts label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.cm-res { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: baseline; margin: 12px 0 6px; }
+.cm-res .big { font-size: 26px; font-weight: 700; font-family: var(--mono); }
+.cm-res span { font-size: 12px; color: var(--muted); }
+.cm table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+.cm th { text-align: right; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; padding: 5px 6px; border-bottom: 1px solid var(--line); }
+.cm td { text-align: right; padding: 6px; border-bottom: 1px solid var(--line); font-family: var(--mono); }
+.cm th:first-child, .cm td:first-child { text-align: left; font-family: inherit; }
+.cm .shbar { display: inline-block; height: 8px; border-radius: 4px; background: var(--accent); vertical-align: middle; margin-right: 6px; }
+.cm tr.ns td { color: var(--faint); }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
 .idx { padding: 12px 12px 8px; cursor: pointer; text-align: left; border: 1px solid var(--line); min-width: 0; }
 .idx:hover { border-color: var(--accent); }
@@ -1068,8 +1085,8 @@ function spearman(ka, kb, months) {
   for (const [m, v] of A) if (m >= from && B.has(m)) { xs.push(v); ys.push(B.get(m)); }
   const n = xs.length; if (n < 8) return { r: null, n };
   const r = pearson(ranks(xs), ranks(ys)); if (r == null) return { r: null, n, semVariacao: true };
-  const t = Math.abs(r) < 1 ? Math.abs(r) * Math.sqrt((n - 2) / (1 - r * r)) : Infinity;
-  return { r, n, sig: t > 1.96 + 2.4 / (n - 2) };   // ≈ t crítico bicaudal 5%
+  const t = Math.abs(r) < 1 ? Math.abs(r) * Math.sqrt((n - 2) / (1 - r * r)) : Infinity, rp = pearson(xs, ys);
+  return { r, n, sig: t > 1.96 + 2.4 / (n - 2), r2: rp == null ? null : rp * rp };   // ≈ t crítico bicaudal 5%
 }
 // The minimum wage and the tax burden change once a year, so any pair with one of them uses yearly
 // changes over all the history available (the window buttons don't apply): price series Dec→Dec in %,
@@ -1114,13 +1131,121 @@ function spearmanAnual(ka, kb) {
   for (const [y, v] of A) if (B.has(y)) { xs.push(v); ys.push(B.get(y)); anos.push(y); }
   const n = xs.length; if (n < 8) return { r: null, n, anual: true };
   const r = pearson(ranks(xs), ranks(ys)); if (r == null) return { r: null, n, anual: true, semVariacao: true };
-  const t = Math.abs(r) < 1 ? Math.abs(r) * Math.sqrt((n - 2) / (1 - r * r)) : Infinity;
-  return { r, n, sig: t > 1.96 + 2.4 / (n - 2), anual: true, xs, ys, de: Math.min(...anos), ate: Math.max(...anos) };
+  const t = Math.abs(r) < 1 ? Math.abs(r) * Math.sqrt((n - 2) / (1 - r * r)) : Infinity, rp = pearson(xs, ys);
+  return { r, n, sig: t > 1.96 + 2.4 / (n - 2), r2: rp == null ? null : rp * rp, anual: true, xs, ys, de: Math.min(...anos), ate: Math.max(...anos) };
 }
 const corrPair = (ka, kb, months) => ANUAIS.has(ka) || ANUAIS.has(kb) ? spearmanAnual(ka, kb) : spearman(ka, kb, months);
 const corrN = x => x.anual ? `${x.n} anos${x.de ? ` (${x.de}–${x.ate})` : ""}, variações anuais` : `${x.n} meses`;
 const forca = r => { const a = Math.abs(r); return a < 0.2 ? "muito fraca" : a < 0.4 ? "fraca" : a < 0.6 ? "moderada" : a < 0.8 ? "forte" : "muito forte"; };
 const corrStyle = r => r == null ? "" : `background: color-mix(in srgb, var(${r >= 0 ? "--pos" : "--neg"}) ${Math.round(Math.abs(r) * 55)}%, var(--panel));${Math.abs(r) > 0.6 ? "color:#fff;" : ""}`;
+/* ---------- R² of a multiple linear regression on the monthly changes ---------- */
+// p-values: regularized incomplete beta (Numerical Recipes, Lanczos log-gamma).
+function lgamma(z) {
+  const g = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5];
+  let y = z, tmp = z + 5.5, ser = 1.000000000190015; tmp -= (z + 0.5) * Math.log(tmp);
+  for (const c of g) ser += c / ++y;
+  return -tmp + Math.log(2.5066282746310005 * ser / z);
+}
+function betacf(a, b, x) {
+  const T = 1e-300, fix = v => Math.abs(v) < T ? T : v;
+  let c = 1, d = 1 / fix(1 - (a + b) * x / (a + 1)), h = d;
+  for (let m = 1; m <= 300; m++) {
+    const m2 = 2 * m;
+    let aa = m * (b - m) * x / ((a - 1 + m2) * (a + m2)); d = 1 / fix(1 + aa * d); c = fix(1 + aa / c); h *= d * c;
+    aa = -(a + m) * (a + b + m) * x / ((a + m2) * (a + 1 + m2)); d = 1 / fix(1 + aa * d); c = fix(1 + aa / c);
+    const del = d * c; h *= del; if (Math.abs(del - 1) < 3e-12) break;
+  }
+  return h;
+}
+function betai(a, b, x) {
+  if (x <= 0) return 0; if (x >= 1) return 1;
+  const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+  return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+}
+const pT = (t, df) => betai(df / 2, 0.5, df / (df + t * t));            // two-sided
+const pF = (F, d1, d2) => betai(d2 / 2, d1 / 2, d2 / (d2 + d1 * F));
+const pTxt = p => p < 0.001 ? "< 0,001" : nf(3).format(p);
+// OLS on standardized columns (no intercept needed): coefficients are the standardized betas.
+function ols(y, cols) {
+  const n = y.length, k = cols.length;
+  if (!k) return { r2: 0 };
+  const A = cols.map((a, i) => [...cols.map(b => a.reduce((s, v, t) => s + v * b[t], 0)), ...cols.map((_, j) => +(i === j))]);
+  for (let i = 0; i < k; i++) {   // Gauss-Jordan → inverse of X'X
+    let piv = i; for (let r = i + 1; r < k; r++) if (Math.abs(A[r][i]) > Math.abs(A[piv][i])) piv = r;
+    if (Math.abs(A[piv][i]) < 1e-9) return null;   // a variable repeats another one
+    [A[i], A[piv]] = [A[piv], A[i]];
+    const d = A[i][i]; for (let j = 0; j < 2 * k; j++) A[i][j] /= d;
+    for (let r = 0; r < k; r++) if (r !== i) { const f = A[r][i]; for (let j = 0; j < 2 * k; j++) A[r][j] -= f * A[i][j]; }
+  }
+  const inv = A.map(r => r.slice(k)), xy = cols.map(a => a.reduce((s, v, t) => s + v * y[t], 0));
+  const beta = inv.map(r => r.reduce((s, v, j) => s + v * xy[j], 0));
+  let sse = 0, sst = 0; for (let t = 0; t < n; t++) { const e = y[t] - cols.reduce((s, c, j) => s + c[t] * beta[j], 0); sse += e * e; sst += y[t] * y[t]; }
+  const df = n - k - 1, s2 = sse / df;
+  return { r2: 1 - sse / sst, beta, se: inv.map((r, j) => Math.sqrt(s2 * r[j])), df };
+}
+const zscore = v => { const m = v.reduce((a, b) => a + b, 0) / v.length, sd = Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / (v.length - 1)); return sd ? v.map(x => (x - m) / sd) : null; };
+const ymShift = (ym, d) => { const t = +ym.slice(0, 4) * 12 + +ym.slice(5) - 1 - d; return `${Math.floor(t / 12)}-${String(t % 12 + 1).padStart(2, "0")}`; };
+const CM_MAX = 8;
+function cmCfg(c) {
+  const saved = c.modelo?.[c.base];
+  if (saved) return { lag: 0, inercia: false, ...saved };
+  // first time for this base: the 4 monthly series that correlate most with it
+  const vars = CORR.filter(o => o.k !== c.base && !ANUAIS.has(o.k) && monthly?.[o.k]?.size).map(o => [o.k, Math.abs(spearman(c.base, o.k, c.janela)?.r ?? 0)])
+    .sort((a, b) => b[1] - a[1]).slice(0, 4).map(x => x[0]);
+  return { vars, lag: 0, inercia: false };
+}
+function cmModel(c, m) {
+  const Y = monthly?.[c.base]; if (!Y) return null;
+  const lbl = k => CORR.find(x => x.k === k)?.label || k;
+  const cols = [...m.vars.filter(k => monthly[k]?.size).map(k => ({ k, label: lbl(k), get: ym => monthly[k].get(ymShift(ym, m.lag)) })),
+    ...(m.inercia ? [{ k: "_in", label: `${lbl(c.base)} do mês anterior`, get: ym => Y.get(ymShift(ym, 1)) }] : [])];
+  if (!cols.length) return { erro: "Escolha ao menos uma variável." };
+  const last = [...Y.keys()].sort().at(-1), from = ymShift(last, c.janela - 1);
+  const y = [], X = cols.map(() => []);
+  for (const ym of [...Y.keys()].sort()) {
+    if (ym < from) continue;
+    const xs = cols.map(col => col.get(ym)); if (xs.some(v => v == null)) continue;
+    y.push(Y.get(ym)); xs.forEach((v, j) => X[j].push(v));
+  }
+  const n = y.length, k = cols.length;
+  if (n < k + 8) return { erro: `Poucos meses com todos os dados (${n}) para ${k} variáve${k > 1 ? "is" : "l"}. Escolha uma janela maior ou menos variáveis.` };
+  const yz = zscore(y), Xz = X.map(zscore);
+  if (!yz || Xz.some(v => !v)) return { erro: "Alguma série não variou no período." };
+  const full = ols(yz, Xz); if (!full) return { erro: "Duas variáveis escolhidas andam idênticas; tire uma delas." };
+  // Shapley/LMG: each variable's average gain in R² over every order of entry.
+  const r2 = new Map([[0, 0]]);
+  for (let mask = 1; mask < 1 << k; mask++) r2.set(mask, ols(yz, Xz.filter((_, j) => mask & 1 << j))?.r2 ?? NaN);
+  const fact = x => x <= 1 ? 1 : x * fact(x - 1), bits = x => x.toString(2).replace(/0/g, "").length;
+  const shap = cols.map((_, j) => { let s = 0; for (let mask = 0; mask < 1 << k; mask++) { if (mask & 1 << j) continue; const sz = bits(mask); s += fact(sz) * fact(k - sz - 1) / fact(k) * (r2.get(mask | 1 << j) - r2.get(mask)); } return s; });
+  const F = full.r2 / k / ((1 - full.r2) / full.df);
+  return { n, k, de: from, ate: last, r2: full.r2, adj: 1 - (1 - full.r2) * (n - 1) / full.df, pF: pF(F, k, full.df),
+    linhas: cols.map((col, j) => ({ label: col.label, beta: full.beta[j], p: pT(full.beta[j] / full.se[j], full.df), shap: shap[j] })) };
+}
+function cmHTML(c) {
+  const lbl = k => CORR.find(x => x.k === k)?.label || k;
+  if (ANUAIS.has(c.base)) return `<div class="cm"><b>📐 Quanto outras variáveis explicam o ${lbl(c.base)}</b><p class="hint">Este indicador muda uma vez por ano e tem poucos pontos para uma regressão com várias variáveis. Escolha um indicador mensal no "de" acima.</p></div>`;
+  const m = cmCfg(c), res = cmModel(c, m), opts = CORR.filter(o => o.k !== c.base && !ANUAIS.has(o.k) && monthly?.[o.k]?.size);
+  const pctf = v => nf(0).format(v * 100) + "%";
+  const lagTxt = { 0: "mesmo mês", 1: "1 mês antes", 3: "3 meses antes", 6: "6 meses antes" };
+  return `<div class="cm">
+    <b>📐 Quanto estas variáveis explicam o ${lbl(c.base)}</b>
+    <div class="cm-vars" role="group" aria-label="Variáveis do modelo">${opts.map(o => { const on = m.vars.includes(o.k); return `<button type="button" data-cm-var="${esc(o.k)}" aria-pressed="${on}" ${!on && m.vars.length >= CM_MAX ? "disabled" : ""}>${o.label}</button>`; }).join("")}</div>
+    <div class="cm-opts"><span>Variáveis medidas no <span class="seg" role="group" aria-label="Defasagem">${[0, 1, 3, 6].map(l => `<button data-cm-lag="${l}" aria-pressed="${m.lag === l}">${lagTxt[l]}</button>`).join("")}</span></span>
+      <label><input type="checkbox" data-cm-in ${m.inercia ? "checked" : ""}> incluir o próprio ${lbl(c.base)} do mês anterior (inércia)</label></div>
+    ${res?.erro ? `<p class="note" style="margin:10px 0 0">${res.erro}</p>` : !res ? "" : `
+    <div class="cm-res">
+      <div><span>R²</span><br><b class="big">${pctf(res.r2)}</b></div>
+      <div><span>R² ajustado</span><br><b class="big">${pctf(Math.max(0, res.adj))}</b></div>
+      <div><span>Modelo como um todo</span><br><b>${res.pF < 0.05 ? "significativo" : "não significativo"}</b> <span>(teste F, p ${pTxt(res.pF)})</span></div>
+      <div><span>Dados</span><br><b>${res.n} meses</b> <span>(${mesCurto(res.de)} a ${mesCurto(res.ate)})</span></div>
+    </div>
+    <table><thead><tr><th>Variável</th><th title="Quanto da explicação total vem desta variável (decomposição de Shapley/LMG)">Parte do R²</th><th title="Coeficiente padronizado: quantos desvios-padrão o ${esc(lbl(c.base))} muda quando esta variável muda 1 desvio-padrão, com as outras fixas">Peso (beta)</th><th>p-valor</th></tr></thead>
+    <tbody>${res.linhas.slice().sort((a, b) => b.shap - a.shap).map(l => `<tr class="${l.p < 0.05 ? "" : "ns"}"><td>${l.label}</td>
+      <td><span class="shbar" style="width:${Math.max(2, Math.round(l.shap / Math.max(res.r2, 1e-9) * 60))}px"></span>${pctf(Math.max(0, l.shap))}</td>
+      <td class="${l.beta >= 0 ? "pos" : "neg"}">${(l.beta > 0 ? "+" : "") + nf(2).format(l.beta)}</td><td>${pTxt(l.p)}${l.p < 0.05 ? " *" : ""}</td></tr>`).join("")}</tbody></table>
+    <p class="hint">Regressão linear múltipla sobre as <b>variações mensais</b> da janela escolhida acima (até ${CM_MAX} variáveis). <b>R²</b>: quanto da variação do ${lbl(c.base)} o modelo explica. <b>R² ajustado</b>: o mesmo, descontando o ganho que qualquer variável a mais dá por acaso; é o melhor para comparar modelos. <b>Parte do R²</b>: divide o R² entre as variáveis (Shapley/LMG), mesmo quando elas andam juntas. <b>Peso (beta)</b>: efeito de cada uma com as outras fixas, em desvios-padrão. Linhas apagadas: sem significância (p ≥ 0,05). Em séries mensais os erros costumam se repetir de um mês para o outro, o que deixa os p-valores um pouco otimistas. Explicar não é prever nem provar causa.</p>`}
+  </div>`;
+}
 function corrCfg() { return { base: "^BVSP", janela: 36, matriz: false, fechado: false, ...(state.corr || {}) }; }
 const corrFold = c => `<button class="corr-fold" id="corrFold" aria-expanded="${!c.fechado}" title="${c.fechado ? "Mostrar" : "Recolher"} as correlações"><i>▾</i><b>Correlações</b></button>`;
 function renderCorr() {
@@ -1133,12 +1258,12 @@ function renderCorr() {
     const x = corrPair(c.base, o.k, c.janela);
     const r = x?.r;
     const bar = r == null ? "" : `<div class="cbar2"><i style="${r >= 0 ? "left:50%" : "right:50%"};width:${Math.abs(r) * 50}%;background:var(${r >= 0 ? "--pos" : "--neg"})"></i></div>`;
-    const tip = r == null ? (x?.semVariacao ? "sem variação no período" : "dados insuficientes") : `ρ = ${nf(2).format(r)} · correlação ${forca(r)} ${r >= 0 ? "positiva" : "negativa"} · ${corrN(x)}${x.sig ? " · estatisticamente significativa (p < 0,05)" : " · não significativa"}`;
+    const tip = r == null ? (x?.semVariacao ? "sem variação no período" : "dados insuficientes") : `ρ = ${nf(2).format(r)} · correlação ${forca(r)} ${r >= 0 ? "positiva" : "negativa"} · ${corrN(x)}${x.sig ? " · estatisticamente significativa (p < 0,05)" : " · não significativa"}${x.r2 != null ? ` · R² = ${nf(0).format(x.r2 * 100)}%: o ${o.label} sozinho explica ${nf(0).format(x.r2 * 100)}% da variação do ${lbl(c.base)}` : ""}`;
     // |ρ| of 0,3 or more gets a tinted background (blue = move together, orange = opposite)
     const dest = r != null && Math.abs(+r.toFixed(2)) >= 0.3 ? ` style="background:color-mix(in srgb, var(${r >= 0 ? "--pos" : "--neg"}) ${Math.round(8 + Math.abs(r) * 22)}%, var(--panel));border-color:var(${r >= 0 ? "--pos" : "--neg"})"` : "";
     return `<div class="cchip" title="${esc(tip)}"${dest}><div class="n"><span>${o.label}</span>${x?.sig ? "<span>*</span>" : ""}</div>
       <div class="v num ${r == null ? "" : r >= 0 ? "pos" : "neg"}">${r == null ? "—" : (r > 0 ? "+" : "") + nf(2).format(r)}</div>
-      <div class="w">${r == null ? (x?.semVariacao ? "sem variação" : "poucos dados") : forca(r)}${x?.anual ? " · anual" : ""}</div>${bar}</div>`;
+      <div class="w">${r == null ? (x?.semVariacao ? "sem variação" : "poucos dados") : forca(r)}${x?.anual ? " · anual" : ""}</div>${bar}${x?.r2 != null ? `<div class="r2">R² ${nf(0).format(x.r2 * 100)}%</div>` : ""}</div>`;
   }).join("");
   const matrix = !c.matriz ? "" : `<div class="corr-matrix"><table><tr><th></th>${CORR.map(o => `<th>${o.label}</th>`).join("")}</tr>
     ${CORR.map(a => `<tr><th style="text-align:right">${a.label}</th>${CORR.map(b => {
@@ -1149,14 +1274,20 @@ function renderCorr() {
   box.innerHTML = `<div class="corr-head">${corrFold(c)}
       <span>de <select id="corrBase" aria-label="Índice base">${CORR.map(o => `<option value="${esc(o.k)}" ${o.k === c.base ? "selected" : ""}>${o.label}</option>`).join("")}</select> com os demais</span>
       <span class="seg" role="group" aria-label="Janela">${[[12, "1 ano"], [24, "2 anos"], [36, "3 anos"], [48, "4 anos"], [60, "5 anos"]].map(([n, l]) => `<button data-cj="${n}" aria-pressed="${c.janela === n}">${l}</button>`).join("")}</span>
-      <button class="link" id="corrToggle">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
-    <div class="corr-row">${chips}</div>${matrix}
-    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). Fundo colorido = correlação de 0,3 ou mais (para mais ou para menos). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Agro Brasil é uma cesta de futuros agrícolas montada pelo site. Salário mínimo e carga tributária mudam uma vez por ano: nas relações com eles entram as <b>variações anuais</b> de todo o histórico disponível (a carga tributária desde 2010), e os botões de janela não se aplicam. Correlação não é causa e muda com o tempo.</p>`;
+      <button class="link" id="cmToggle" style="margin-left:auto">${c.modeloAberto ? "esconder R² do modelo ▴" : "📐 R² com várias variáveis ▾"}</button>
+      <button class="link" id="corrToggle" style="margin-left:0">${c.matriz ? "esconder matriz ▴" : "ver matriz completa ▾"}</button></div>
+    <div class="corr-row">${chips}</div>${c.modeloAberto ? cmHTML(c) : ""}${matrix}
+    <p class="hint">Correlação de Spearman (ρ) entre as <b>variações mensais</b>: retorno do mês para os índices, moedas e Bitcoin; mudança da Selic e do desemprego em pontos percentuais; IPCA do mês. Vai de −1 a +1: <span class="pos">positivo</span> = costumam subir juntos, <span class="neg">negativo</span> = um sobe quando o outro cai, perto de 0 = sem relação. * = estatisticamente significativa (p &lt; 0,05). <b>R²</b> = quanto da variação de um o outro explica sozinho (regressão linear simples). Fundo colorido = correlação de 0,3 ou mais (para mais ou para menos). IFIX via ETF XFIX11; Indústria e Consumo pelos fechamentos da B3; Agro Brasil é uma cesta de futuros agrícolas montada pelo site. Salário mínimo e carga tributária mudam uma vez por ano: nas relações com eles entram as <b>variações anuais</b> de todo o histórico disponível (a carga tributária desde 2010), e os botões de janela não se aplicam. Correlação não é causa e muda com o tempo.</p>`;
 }
 $("#corr").addEventListener("click", e => {
   const j = e.target.closest("[data-cj]"); if (j) { state.corr = { ...corrCfg(), janela: +j.dataset.cj }; save(); return renderCorr(); }
   if (e.target.closest("#corrFold")) { state.corr = { ...corrCfg(), fechado: !corrCfg().fechado }; save(); return renderCorr(); }
   if (e.target.closest("#corrToggle")) { state.corr = { ...corrCfg(), matriz: !corrCfg().matriz }; save(); renderCorr(); }
+  if (e.target.closest("#cmToggle")) { state.corr = { ...corrCfg(), modeloAberto: !corrCfg().modeloAberto }; save(); return renderCorr(); }
+  const setM = ch => { const c = corrCfg(), m = { ...cmCfg(c), ...ch(cmCfg(c)) }; state.corr = { ...c, modelo: { ...(c.modelo || {}), [c.base]: m } }; save(); renderCorr(); };
+  const v = e.target.closest("[data-cm-var]"); if (v) return setM(m => ({ vars: m.vars.includes(v.dataset.cmVar) ? m.vars.filter(k => k !== v.dataset.cmVar) : [...m.vars, v.dataset.cmVar].slice(0, CM_MAX) }));
+  const l = e.target.closest("[data-cm-lag]"); if (l) return setM(() => ({ lag: +l.dataset.cmLag }));
+  const i = e.target.closest("[data-cm-in]"); if (i) return setM(() => ({ inercia: i.checked }));
 });
 $("#corr").addEventListener("change", e => {
   if (e.target.id === "corrBase") { state.corr = { ...corrCfg(), base: e.target.value }; save(); renderCorr(); }
@@ -2373,6 +2504,11 @@ function eduItems() {
       porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
       horario: [["Dados", "variações mensais (meses já fechados)"], ["Janelas", "1 a 5 anos"], ["Salário mínimo e carga tributária", "variações anuais, todo o histórico disponível"], ["Asterisco *", "relação estatisticamente significativa (p < 0,05)"]],
       nota: "Correlação não é causa, e ela muda com o tempo. Com poucos meses (janela de 1 ano), os números oscilam bastante. Salário mínimo e carga tributária só mudam uma vez por ano, então entram com variações anuais: são poucos pontos (a carga tributária tem só 15 anos de série), e por isso as relações com eles quase nunca chegam a ser significativas." },
+    { id: "r2", titulo: "R² (coeficiente de determinação)", sub: "Quanto um modelo explica de um indicador",
+      oque: "Mostra, de 0% a 100%, quanto da variação de um indicador é explicada por outras variáveis. Um R² de 40% para o IPCA quer dizer que 40% do sobe-e-desce da inflação mês a mês acompanha as variáveis escolhidas; os outros 60% vêm de coisas fora do modelo. Na linha de correlações, cada quadradinho mostra o R² de uma variável sozinha. Em <b>📐 R² com várias variáveis</b>, você escolhe até 8 variáveis e vê o R² delas juntas, o <b>R² ajustado</b> e quanto do R² cabe a cada uma.",
+      porque: "Ajuda a responder perguntas como \"o quanto o dólar e o petróleo explicam a inflação?\". O <b>R² ajustado</b> é o mais honesto para comparar modelos: o R² comum sempre sobe quando se põe mais uma variável, mesmo inútil, e o ajustado desconta isso. A <b>parte do R²</b> de cada variável (método de Shapley, também chamado LMG) divide a explicação de forma justa mesmo quando as variáveis andam juntas, como o dólar e o euro.",
+      horario: [["Dados", "variações mensais, na janela de 1 a 5 anos escolhida"], ["Defasagem", "mede as variáveis no mesmo mês ou 1, 3 ou 6 meses antes (o câmbio chega aos preços com atraso)"], ["Inércia", "opção de incluir o próprio indicador do mês anterior"], ["Asterisco *", "variável estatisticamente significativa (p < 0,05)"]],
+      nota: "Cuidados: com poucos meses e muitas variáveis o R² sai alto por acaso (veja o ajustado). Incluir a inércia costuma inflar muito o R² da inflação, porque ela se repete de um mês para o outro; compare o modelo com e sem ela para ver quanto as outras variáveis acrescentam. Em séries mensais os erros se repetem no tempo, o que deixa os p-valores um pouco otimistas. Em retornos de ações, R² baixos (poucos %) são normais. Explicar o passado não é prever o futuro, e não prova causa." },
     { s: "USDBRL=X", titulo: "Dólar", sub: "Quantos reais custa 1 dólar americano",
       oque: "O valor mostrado é o <b>dólar comercial</b>, usado por bancos e empresas em grandes operações. O dólar turismo, de casa de câmbio e cartão, sai mais caro.",
       porque: "Mexe com o preço de combustíveis, importados, viagens e com o lucro de exportadoras (Vale, Suzano, Embraer). Costuma subir quando há medo ou quando estrangeiros tiram dinheiro do Brasil.",
