@@ -135,7 +135,7 @@
     const itens = k === "daytrade" ? `
       <li><b>Ativos:</b> as ${res.modos.daytrade?.ativos?.b3 ?? g.dt_b3_top} ações de maior peso no Ibovespa${g.mercados.includes("eua") ? ", as ações dos EUA da sua lista" : ""}${g.mercados.includes("cripto") ? " e as criptomoedas" : ""}, em candles de 5 minutos.</li>
       <li><b>Ações — compra</b> quando a MME 9 cruza acima da MME 21${g.dt_vwap ? " com o preço acima da VWAP (preço médio do dia)" : ""}, depois dos primeiros ${g.dt_inicio_min} minutos e até ${g.dt_ultima_min} minutos antes do fechamento.</li>
-      <li><b>Ações — vende</b> no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%), quando a MME 9 cruza abaixo da MME 21, ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
+      <li><b>Ações — vende</b> no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%)${g.dt_sair_cruzamento ? ", quando a MME 9 cruza abaixo da MME 21" : ""} ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
       <li><b>Cripto — compra</b> depois de um candle de alta com corpo ${num(g.dtc_mult)}× maior que a média dos ${g.dtc_media} anteriores. <b>Vende</b> no stop (mínima desse candle), no alvo (${num(g.dtc_rr)}× o risco), depois de ${g.dtc_max_candles} candles, ou às 21h (fim do dia em UTC).</li>
       <li><b>Tamanho:</b> até ${g.dt_max_posicoes} posições ao mesmo tempo, cada uma com cerca de 1/${g.dt_max_posicoes} do patrimônio. Se o stop e o alvo forem tocados no mesmo candle, conta o stop (a hipótese mais cautelosa).</li>`
       : `

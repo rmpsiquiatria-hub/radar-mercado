@@ -270,7 +270,7 @@ async function daytrade() {
           const resta = (a.bars[a.fim[d]].t - b.t) / 60;      // minutes from this bar to the day's last bar
           if (i === a.fim[d] || (!cripto && resta < R.dt_zerar_min)) sell(b.c, cripto ? "Zerado no fim do dia (21h)" : "Zerado antes do fechamento");
           else if (cripto && p.barras >= R.dtc_max_candles) sell(b.c, `Tempo máximo (${R.dtc_max_candles} candles de 5 min)`);
-          else if (!cripto && a.e9[i - 1] >= a.e21[i - 1] && a.e9[i] < a.e21[i]) pend.set(a.ticker, { lado: "venda", motivo: "MME 9 cruzou abaixo da MME 21 (5 min)" });
+          else if (!cripto && R.dt_sair_cruzamento && a.e9[i - 1] >= a.e21[i - 1] && a.e9[i] < a.e21[i]) pend.set(a.ticker, { lado: "venda", motivo: "MME 9 cruzou abaixo da MME 21 (5 min)" });
         }
       }
       // 3. at the close of the bar: a new entry for the next bar?
