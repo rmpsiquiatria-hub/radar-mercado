@@ -51,12 +51,20 @@
       <button class="btn small" type="button" id="botPadrao">Voltar tudo ao padrão</button>
     </details>`;
   }
+  // which markets: its own block above the modes, since it applies to all of them
+  function mercadosForm(f) {
+    if (!SPEC) return "";
+    const x = SPEC.REGRAS.find(r => r.k === "mercados"), v = f.regras.mercados || [];
+    const det = { b3: "as ações do Ibovespa", eua: "as ações dos EUA da sua lista", cripto: "BTC, ETH, SOL, XRP e BNB" };
+    return `<fieldset class="bot-g bot-merc"><legend>${x.label}</legend><span class="bot-chk">${x.opcoes.map(([o, l]) => `<label><input type="checkbox" data-regra="mercados" value="${o}" ${v.includes(o) ? "checked" : ""}> <b>${l}</b> <small>${det[o]}</small></label>`).join("")}</span><small class="hint">${x.ajuda}</small></fieldset>`;
+  }
   function setup() {
     const f = form(), modos = cfg?.modos || [];
     const opt = (k, t, d) => `<label class="bot-opt"><input type="radio" name="botModo" value="${k}" ${f.escolha === k ? "checked" : ""}><span><b>${t}</b><small>${d}</small></span></label>`;
-    return `<details class="card bot-setup" ${(aberto?.setup ?? !cfg) ? "open" : ""} data-bot-fold="setup"><summary><b>⚙ ${cfg ? "Configuração do bot" : "Configurar o bot"}</b>${cfg ? `<span class="hint"> · ${brl(cfg.valor_inicial)} · ${modos.map(m => NOMES[m]).join(", ")} · simulação desde ${dt(cfg.ativado_em)}</span>` : ""}</summary>
-      <p class="hint">O bot usa <b>só a análise técnica</b> e dinheiro imaginário. Escolha com quanto ele começa, em que gráfico opera e, se quiser, as regras. Opera ações da B3, ações dos EUA e criptomoedas.</p>
+    return `<details class="card bot-setup" ${(aberto?.setup ?? !cfg) ? "open" : ""} data-bot-fold="setup"><summary><b>⚙ ${cfg ? "Configuração do bot" : "Configurar o bot"}</b>${cfg ? `<span class="hint"> · ${brl(cfg.valor_inicial)} · ${modos.map(m => NOMES[m]).join(", ")}${SPEC ? " · " + SPEC.normalizar(cfg.regras).mercados.map(m => ({ b3: "B3", eua: "EUA", cripto: "Cripto" })[m]).join(", ") : ""} · simulação desde ${dt(cfg.ativado_em)}</span>` : ""}</summary>
+      <p class="hint">O bot usa <b>só a análise técnica</b> e dinheiro imaginário. Escolha com quanto ele começa, em quais mercados, em que gráfico opera e, se quiser, as regras.</p>
       <label class="bot-v">Valor inicial (R$)<input id="botValor" type="number" min="100" step="100" inputmode="decimal" value="${esc(f.valor)}" placeholder="ex.: 10000"></label>
+      ${mercadosForm(f)}
       <div class="bot-opts">
         ${opt("diario", "Só gráfico diário", "decide no fechamento de cada dia e opera na abertura do dia seguinte")}
         ${opt("semanal", "Só gráfico semanal", "decide no fechamento de sexta e opera na abertura de segunda")}
