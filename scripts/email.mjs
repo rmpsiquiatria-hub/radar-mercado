@@ -91,9 +91,12 @@ const techPeriod = !lastCandle ? "último candle fechado"
   : `mês de ${dateBR(lastCandle, { month: "long", year: "numeric" })}`;
 const techDa = (TF === "semanal" ? "da " : "do ") + techPeriod;   // "do pregão de 03/11", "da semana de …"
 const researchDay = dateBR(rep.pesquisa_data || rep.data, { day: "2-digit", month: "2-digit" });
+// The research runs before the market opens, so in practice the whole e-mail reflects the previous session.
+const closeDay = TF === "diario" && lastCandle ? ddmm(lastCandle) : null;
 const datesBox = `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;margin:10px 0 0;background:#f4f6f8;border-radius:8px">
     <tr><td colspan="2" style="padding:10px 14px 4px"><b>📅 Que período cada análise usa</b></td></tr>
-    <tr><td style="padding:3px 14px;vertical-align:top;width:42%;color:#0f766e"><b>Fundamentalista</b></td><td style="padding:3px 14px 3px 0">recomendações das casas como estavam em <b>${researchDay}</b> (cada casa pode ter publicado a sua antes) · indicadores da empresa de <b>${researchDay}</b> · mudanças de recomendação dos <b>últimos 7 dias</b></td></tr>
+    ${closeDay ? `<tr><td colspan="2" style="padding:0 14px 6px">Em resumo: este e-mail mostra o mercado <b>como ele fechou em ${closeDay}</b>. Ele é montado entre 6h e 7h, antes da abertura da bolsa, então nada do pregão de hoje entra aqui.</td></tr>` : ""}
+    <tr><td style="padding:3px 14px;vertical-align:top;width:42%;color:#0f766e"><b>Fundamentalista</b></td><td style="padding:3px 14px 3px 0">a <b>última recomendação que cada casa publicou</b> até as 6h de ${researchDay} (a maioria é de dias ou semanas antes; poucas publicam algo novo antes das 6h) · indicadores (P/L, dividendos etc.) calculados com o <b>preço de fechamento${closeDay ? ` de ${closeDay}` : " do pregão anterior"}</b> e o <b>último balanço trimestral</b> de cada empresa · mudanças de recomendação dos <b>últimos 7 dias</b></td></tr>
     <tr><td style="padding:3px 14px 10px;vertical-align:top;color:#6d28d9"><b>Técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()})</b></td><td style="padding:3px 14px 10px 0">fotografia do gráfico no fim <b>${techDa}</b>, o último candle já fechado. A tendência compara o preço com as médias de 50 e 200 ${{ diario: "pregões", semanal: "semanas", mensal: "meses" }[TF]}; cruzamentos contam se aconteceram ${{ diario: "nos últimos 5 pregões", semanal: "nas últimas 3 semanas", mensal: "nos últimos 2 meses" }[TF]}.</td></tr>
   </table>`;
 const h2 = t => `<h2 style="font-size:17px;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid ${LINE}">${t}</h2>`;
@@ -226,7 +229,7 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   ${techSection(TF)}
 
   <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#b45309;color:#ffffff;font-weight:700;font-size:16px">🎯 PARTE 3 · ONDE AS DUAS ANÁLISES CONCORDAM</div>
-  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa. Cruza a fundamentalista de <b>${researchDay}</b> com o gráfico ${FRAME_LABEL[TF].toLowerCase()} <b>${techDa}</b>.`)}
+  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa. Cruza a fundamentalista (pesquisa das 6h de <b>${researchDay}</b>${closeDay ? `, preços de ${closeDay}` : ""}) com o gráfico ${FRAME_LABEL[TF].toLowerCase()} <b>${techDa}</b>.`)}
   ${h2(`▲ Para o lado da compra (${convBuy.length})`)}
   ${convRows(convBuy)}
   ${h2(`▼ Para o lado da venda (${convSell.length})`)}
