@@ -73,8 +73,11 @@ const sig = emps.map(e => [e, signal(e)]);
 const buys = sig.filter(([, s]) => s?.kind === "compra"), warns = sig.filter(([, s]) => s?.kind === "atencao");
 // Both analyses on the same side (mirrors convergence() in index.html): buy signal + technical
 // bias "alta" on TF, or attention + technical bias "baixa".
-const convBuy = buys.filter(([e]) => e.tecnica?.[TF]?.vies === "alta");
-const convSell = warns.filter(([e]) => e.tecnica?.[TF]?.vies === "baixa");
+// A company whose recent technical signals point both ways (a buy and a sell alert on the same chart)
+// is left out of every technical list: the signals cancel each other.
+const conflito = (e, f) => { const x = techEvents(e, f); return x.some(t => t.sinal === "alta") && x.some(t => t.sinal === "baixa"); };
+const convBuy = buys.filter(([e]) => e.tecnica?.[TF]?.vies === "alta" && !conflito(e, TF));
+const convSell = warns.filter(([e]) => e.tecnica?.[TF]?.vies === "baixa" && !conflito(e, TF));
 const staleResearch = rep.pesquisa_data && rep.pesquisa_data !== rep.data;
 
 // Which period each analysis looks at, written out so the reader does not have to guess.
@@ -152,9 +155,11 @@ function signalTable(list, kind) {
 // averages); buy alerts are listed first, then sell alerts, then the few that point both ways.
 const techLado = x => { const n = x.reduce((a, t) => a + (t.sinal === "alta" ? 1 : t.sinal === "baixa" ? -1 : 0) * (t.peso + 1), 0); return n > 0 ? "alta" : n < 0 ? "baixa" : "misto"; };
 function techSection(f) {
-  const ev = emps.map(e => [e, techEvents(e, f)]).filter(([, x]) => x.length).sort((a, b) => b[1][0].peso - a[1][0].peso);
-  const grupos = [["alta", "▲ Alerta de compra", GREEN], ["baixa", "▼ Alerta de venda", RED], ["misto", "◆ Sinais nos dois sentidos", MUTED]]
-    .map(([lado, titulo, cor]) => ({ titulo, cor, lista: ev.filter(([, x]) => techLado(x) === lado).map(([e, x]) => [e, x.slice().sort((a, b) => (b.sinal === lado) - (a.sinal === lado) || b.peso - a.peso)]) }))
+  const todos = emps.map(e => [e, techEvents(e, f)]).filter(([, x]) => x.length);
+  const fora = todos.filter(([e]) => conflito(e, f)).map(([e]) => e);
+  const ev = todos.filter(([e]) => !conflito(e, f)).sort((a, b) => b[1][0].peso - a[1][0].peso);
+  const grupos = [["alta", "▲ Alerta de compra", GREEN], ["baixa", "▼ Alerta de venda", RED]]
+    .map(([lado, titulo, cor]) => ({ titulo, cor, lista: ev.filter(([, x]) => techLado(x) === lado).map(([e, x]) => [e, x.slice().sort((a, b) => b.peso - a.peso)]) }))
     .filter(g => g.lista.length);
   const tabela = lista => `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px">${lista.slice(0, 20).map(([e, x]) => `
       <tr><td style="padding:5px 0;border-bottom:1px solid ${LINE};width:70px;vertical-align:top">${link(e)}</td>
@@ -170,7 +175,8 @@ function techSection(f) {
   };
   return `<h3 style="font-size:15px;margin:16px 0 4px">Empresas com sinais técnicos no gráfico ${FRAME_LABEL[f].toLowerCase()} (${ev.length}) <span style="font-weight:400;color:${MUTED};font-size:13px">· ${when}</span></h3>
     ${hint(`Tendência geral das ${emps.length} empresas acompanhadas neste gráfico: ${biasTxt(emps)}.`)}
-    ${porMercado(emps, e => e, mercado)}`;
+    ${porMercado(emps, e => e, mercado)}
+    ${fora.length ? hint(`<b>Fora das listas por terem alerta de compra e de venda ao mesmo tempo (${fora.length}):</b> ${fora.map(e => esc(e.ticker)).join(", ")}. Os sinais se anulam, então não indicam um lado.`) : ""}`;
 }
 
 function convRows(list, kind) {
