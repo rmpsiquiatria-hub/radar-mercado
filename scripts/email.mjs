@@ -103,6 +103,20 @@ const h2 = t => `<h2 style="font-size:17px;margin:26px 0 8px;padding-bottom:6px;
 const hint = t => `<p style="margin:0 0 8px;color:${MUTED};font-size:13px">${t}</p>`;
 const link = (e) => `<a href="${esc(cfg.site)}" style="color:#0f766e;text-decoration:none;font-weight:700">${esc(e.ticker)}</a>`;
 
+// Every list is split by market (B3 stocks, US stocks, crypto…), in this order.
+const MERCADOS = [
+  ["b3", "🇧🇷 Ações do Brasil (B3)", e => e.bolsa === "B3"],
+  ["eua", "🇺🇸 Ações dos EUA", e => e.bolsa === "EUA"],
+  ["cripto", "🪙 Criptomoedas", e => e.bolsa === "Cripto" || /-(USD|BRL)$/.test(e.ticker)],
+  ["outros", "Outros mercados", () => true],
+];
+const mercadoDe = e => MERCADOS.find(([, , t]) => t(e));
+// items: anything; empOf(item) gives its company; render(sublist) draws one market's part.
+function porMercado(items, empOf, render) {
+  return MERCADOS.map(m => [m, items.filter(i => mercadoDe(empOf(i)) === m)]).filter(([, l]) => l.length)
+    .map(([[, label], l]) => `<div style="font-size:12px;font-weight:700;color:#33414b;background:#f4f6f8;border-radius:6px;padding:5px 10px;margin:12px 0 2px;text-transform:uppercase;letter-spacing:.04em">${label} (${l.length})</div>${render(l)}`).join("");
+}
+
 // A short "why" for each signal, built only from the report's own data: which houses said what
 // (with their targets), how the company fares on the user's criteria, and the first sentence of
 // the AI summary of the news.
@@ -123,6 +137,9 @@ function justify(e, kind) {
 }
 function signalRows(list, kind) {
   if (!list.length) return hint("Nenhum papel hoje.");
+  return porMercado(list, ([e]) => e, l => signalTable(l, kind));
+}
+function signalTable(list, kind) {
   return `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px">${list.map(([e, s]) => `
     <tr><td style="padding:8px 0;border-bottom:1px solid ${LINE};vertical-align:top;width:70px">${link(e)}</td>
       <td style="padding:8px 0 8px 8px;border-bottom:1px solid ${LINE}"><b>${esc(e.nome)}</b>
@@ -143,16 +160,24 @@ function techSection(f) {
       <tr><td style="padding:5px 0;border-bottom:1px solid ${LINE};width:70px;vertical-align:top">${link(e)}</td>
         <td style="padding:5px 0 5px 8px;border-bottom:1px solid ${LINE}">${x.map(t => `<span style="color:${color(t.sinal)}">${arrow(t.sinal)} ${esc(t.texto)}</span>`).join("<br>")}</td></tr>`).join("")}</table>
       ${lista.length > 20 ? hint(`…e mais ${lista.length - 20} no site.`) : ""}`;
-  const bias = { alta: 0, baixa: 0, neutro: 0 };
-  emps.forEach(e => { const v = e.tecnica?.[f]?.vies; if (v) bias[v]++; });
+  const biasTxt = list => { const b = { alta: 0, baixa: 0, neutro: 0 }; list.forEach(e => { const v = e.tecnica?.[f]?.vies; if (v) b[v]++; });
+    return `<b style="color:${GREEN}">${b.alta} de alta</b>, <b style="color:${RED}">${b.baixa} de baixa</b>, ${b.neutro} neutras`; };
   const when = { diario: "último pregão", semanal: "última semana fechada", mensal: "último mês fechado" }[f];
+  const mercado = list => {
+    const gs = grupos.map(g => ({ ...g, lista: g.lista.filter(([e]) => list.includes(e)) })).filter(g => g.lista.length);
+    return hint(`Tendência das ${list.length} acompanhadas: ${biasTxt(list)}.`)
+      + (gs.length ? gs.map(g => `<div style="font-size:14px;font-weight:700;color:${g.cor};margin:8px 0 2px">${g.titulo} (${g.lista.length})</div>${tabela(g.lista)}`).join("") : hint("Nenhuma com cruzamento de médias ou candle de reversão recente neste gráfico."));
+  };
   return `<h3 style="font-size:15px;margin:16px 0 4px">Empresas com sinais técnicos no gráfico ${FRAME_LABEL[f].toLowerCase()} (${ev.length}) <span style="font-weight:400;color:${MUTED};font-size:13px">· ${when}</span></h3>
-    ${hint(`Tendência geral das ${emps.length} empresas acompanhadas neste gráfico: <b style="color:${GREEN}">${bias.alta} de alta</b>, <b style="color:${RED}">${bias.baixa} de baixa</b>, ${bias.neutro} neutras.`)}
-    ${ev.length ? grupos.map(g => `<div style="font-size:14px;font-weight:700;color:${g.cor};margin:12px 0 2px">${g.titulo} (${g.lista.length})</div>${tabela(g.lista)}`).join("") : hint("Nenhuma empresa com cruzamento de médias ou candle de reversão recente neste gráfico.")}`;
+    ${hint(`Tendência geral das ${emps.length} empresas acompanhadas neste gráfico: ${biasTxt(emps)}.`)}
+    ${porMercado(emps, e => e, mercado)}`;
 }
 
 function convRows(list, kind) {
   if (!list.length) return hint("Nenhum ativo hoje.");
+  return porMercado(list, ([e]) => e, convTable);
+}
+function convTable(list) {
   return `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px">${list.map(([e, s]) => { const t = e.tecnica[TF], ev = techEvents(e, TF); return `
     <tr><td style="padding:8px 0;border-bottom:1px solid ${LINE};vertical-align:top;width:70px">${link(e)}</td>
       <td style="padding:8px 0 8px 8px;border-bottom:1px solid ${LINE}"><b>${esc(e.nome)}</b> · ${money(price(e), cur(e))}
@@ -162,7 +187,7 @@ function convRows(list, kind) {
 function changesSection() {
   const all = emps.flatMap(e => (e.mudancas || []).map(m => [e, m])).sort((a, b) => b[1].data.localeCompare(a[1].data));
   if (!all.length) return hint("Nenhuma mudança relevante noticiada nos últimos 7 dias.");
-  return `<ul style="margin:0;padding-left:18px;font-size:14px">${all.map(([e, m]) => `<li style="margin:4px 0">${link(e)} — ${esc(m.descricao)} <span style="color:${MUTED}">(${esc(m.fonte)}, ${dateBR(m.data, { day: "2-digit", month: "2-digit" })})</span></li>`).join("")}</ul>`;
+  return porMercado(all, ([e]) => e, all => `<ul style="margin:0;padding-left:18px;font-size:14px">${all.map(([e, m]) => `<li style="margin:4px 0">${link(e)} — ${esc(m.descricao)} <span style="color:${MUTED}">(${esc(m.fonte)}, ${dateBR(m.data, { day: "2-digit", month: "2-digit" })})</span></li>`).join("")}</ul>`);
 }
 
 function overviewTable() {
@@ -175,8 +200,8 @@ function overviewTable() {
   return `<div style="overflow-x:auto"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:12px;width:100%">
     <tr><th></th><th></th><th colspan="4" style="font-size:10px;padding:4px 3px;background:#e0f2ef;color:#0f766e;text-transform:uppercase;letter-spacing:.04em">📊 Fundamentalista</th><th style="font-size:10px;padding:4px 3px;background:#ede9fe;color:#6d28d9;text-transform:uppercase;letter-spacing:.04em">📈 Técnica</th></tr>
     <tr><th style="text-align:left;padding:6px 4px;font-size:11px;color:${MUTED};border-bottom:2px solid ${LINE}">Ativo</th>${th("Preço")}${th("C·N·V")}${th("Pot.")}${th("P/L")}${th("Div.")}${th(FRAME_LABEL[TF])}</tr>
-    ${rows.map(e => { const k = e.consenso || {}; return `<tr><td style="padding:6px 4px;border-bottom:1px solid ${LINE}">${link(e)}${e.origem?.includes("lista pessoal") ? " ★" : ""}</td>
-      ${td(money(price(e), cur(e)))}${td(`${k.compra || 0}·${k.neutro || 0}·${k.venda || 0}`)}${td(pct(upside(e)), `color:${upside(e) >= 0 ? GREEN : RED}`)}${td(num(e.indicadores?.pl))}${td(e.indicadores?.dy != null ? num(e.indicadores.dy) + "%" : "—")}${td(tech(e))}</tr>`; }).join("")}
+    ${MERCADOS.flatMap(m => { const l = rows.filter(e => mercadoDe(e) === m); return l.length ? [`<tr><td colspan="7" style="padding:8px 4px 3px;font-size:11px;font-weight:700;color:#33414b;background:#f4f6f8;text-transform:uppercase">${m[1]}</td></tr>`, ...l.map(e => { const k = e.consenso || {}; return `<tr><td style="padding:6px 4px;border-bottom:1px solid ${LINE}">${link(e)}${e.origem?.includes("lista pessoal") ? " ★" : ""}</td>
+      ${td(money(price(e), cur(e)))}${td(`${k.compra || 0}·${k.neutro || 0}·${k.venda || 0}`)}${td(pct(upside(e)), `color:${upside(e) >= 0 ? GREEN : RED}`)}${td(num(e.indicadores?.pl))}${td(e.indicadores?.dy != null ? num(e.indicadores.dy) + "%" : "—")}${td(tech(e))}</tr>`; })] : []; }).join("")}
   </table></div>${hint(`★ sua lista · <b>Fundamentalista</b>: C·N·V = quantas casas recomendam compra, neutro e venda; Pot. = potencial até o preço-alvo médio; P/L e dividendos. <b>Técnica</b>: tendência no gráfico ${FRAME_LABEL[TF].toLowerCase()} (▲ alta, ▼ baixa, ■ neutro).`)}`;
 }
 
@@ -245,7 +270,7 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
 
 /* ---------- Saturday e-mail: the week on the weekly chart ---------- */
 const weekRows = lado => emps.filter(e => e.tecnica?.semanal?.vies === lado).sort((a, b) => Math.abs(b.tecnica.semanal.pontuacao) - Math.abs(a.tecnica.semanal.pontuacao));
-const weekList = lado => { const l = weekRows(lado); return l.length ? `<p style="margin:0 0 8px;font-size:14px">${l.map(e => `${link(e)}${e.origem?.includes("lista pessoal") ? " ★" : ""}`).join(" · ")}</p>` : hint("Nenhuma."); };
+const weekList = lado => { const l = weekRows(lado); return l.length ? porMercado(l, e => e, l => `<p style="margin:0 0 8px;font-size:14px">${l.map(e => `${link(e)}${e.origem?.includes("lista pessoal") ? " ★" : ""}`).join(" · ")}</p>`) : hint("Nenhuma."); };
 const weekSubject = `Radar do Mercado · análise técnica da ${techPeriod}`;
 const weekHtml = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(weekSubject)}</title></head>
 <body style="margin:0;background:#f4f6f8"><div style="max-width:680px;margin:0 auto;padding:20px 16px;font-family:Arial,Helvetica,sans-serif;color:#0f1b24;line-height:1.5;background:#ffffff">
