@@ -535,6 +535,31 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .stabs button .hint { font-weight: 400; font-size: 12px; margin-left: 4px; }
 @media (max-width: 640px) { .stabs button { flex: 1; } .stabs button .hint { display: none; } }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
+/* Tab levels, so nested tabs read as a hierarchy:
+   1. main tabs (nav.tabs): underlined text;
+   2. section tabs (.etabs, .cfgtabs, .stabs): a segmented bar, the chosen one raised;
+   3. tabs inside a section (plain .ftabs): small underlined tabs over a line;
+   4. filters inside those (.dir-f): round pills. */
+.ftabs { gap: 0 18px; border-bottom: 1px solid var(--line); margin: 4px 0 14px; }
+.ftabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: 8px 2px; margin-bottom: -1px; font-size: 14px; color: var(--muted); }
+.ftabs button:hover { color: var(--text); }
+.ftabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); background: none; }
+.etabs, .cfgtabs, .stabs { gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-2); margin: 0 0 16px; }
+.etabs button, .cfgtabs button, .stabs button { border: 0; border-radius: 9px; padding: 8px 14px; margin: 0; background: none; color: var(--muted); }
+.etabs button:hover, .cfgtabs button:hover, .stabs button:hover { color: var(--text); background: color-mix(in srgb, var(--panel) 60%, transparent); }
+.etabs button[aria-selected="true"], .cfgtabs button[aria-selected="true"], .stabs button[aria-selected="true"] { background: var(--panel); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.12), inset 0 -2px 0 var(--accent); }
+.dir-f { gap: 6px; border: 0; margin: 6px 0 12px; }
+.dir-f button { border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; margin: 0; font-size: 13px; }
+.dir-f button[aria-selected="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+@media (max-width: 640px) {
+  /* section bars scroll sideways instead of stacking into many rows */
+  .etabs, .cfgtabs, .ftabs:not(.stabs) { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .etabs::-webkit-scrollbar, .cfgtabs::-webkit-scrollbar, .ftabs::-webkit-scrollbar { display: none; }
+  .etabs button, .cfgtabs button, .ftabs button { flex: 0 0 auto; white-space: nowrap; }
+  .stabs button { flex: 1; }
+  /* a fade on the right edge shows the bar has more tabs to the side */
+  .etabs, .cfgtabs { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+}
 
 @media (max-width: 560px) {
   .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2719,7 +2744,17 @@ $("#simBox").addEventListener("click", e => {
   document.querySelectorAll(".sim-v.tip-on").forEach(x => x.classList.remove("tip-on"));
   if (on) v.classList.add("tip-on");
 });
+// On phones the tab bars scroll sideways: keep the chosen tab of each bar in view.
+function revealSelectedTabs() {
+  document.querySelectorAll('[role="tablist"]').forEach(bar => {
+    const b = bar.querySelector('[aria-selected="true"]'); if (!b || bar.scrollWidth <= bar.clientWidth) return;
+    const l = b.getBoundingClientRect().left - bar.getBoundingClientRect().left;
+    if (l < 0 || l + b.offsetWidth > bar.clientWidth * 0.85) bar.scrollLeft += l - 12;
+  });
+}
+document.addEventListener("click", e => { if (e.target.closest('[role="tab"]')) setTimeout(revealSelectedTabs, 30); });
 function showEduSec(name) {
+  setTimeout(revealSelectedTabs, 30);
   if (name === "simulacao") setTimeout(renderSim);
   if (name === "direito") setTimeout(() => window.renderDireito?.());
   document.querySelectorAll("[data-esec]").forEach(b => b.setAttribute("aria-selected", b.dataset.esec === name));
