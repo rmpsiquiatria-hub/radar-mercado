@@ -1,16 +1,19 @@
 // POST /api/preferencias {"tempo_grafico": "diario" | "semanal" | "mensal"}
 //                     or {"leis": {"destaques": ["fazenda", ...], "lista": ["nomeacoes", ...]}}
-//                     or {"bot": {"valor_inicial": 10000, "modos": ["diario", "semanal"], "reiniciar": false}}
+//                     or {"bot": {"valor_inicial": 10000, "modos": ["diario", "semanal", "daytrade"], "regras": {...}, "reiniciar": false}}
+//                        (rules: see lib/bot-regras.js; missing or out-of-range values become the defaults / limits)
 // Saves what was chosen in the site's Settings into relatorios/config.json on GitHub, which the
 // e-mails read (07:00 market report; Radar de leis). Needs a GITHUB_TOKEN environment variable in
 // Vercel (fine-grained token, this repository only, Contents: read and write).
 // GET returns what the e-mails currently use and whether syncing is configured.
 
+import { normalizar } from "../lib/bot-regras.js";
+
 const REPO = "rmpsiquiatria-hub/radar-mercado";
 const FILE = "relatorios/config.json";
 const ALLOWED = new Set(["diario", "semanal", "mensal"]);
 const AREAS = ["fazenda", "saude", "outros"];
-const MODOS = ["diario", "semanal"];
+const MODOS = ["diario", "semanal", "daytrade"];
 const CATS = ["fazenda", "saude", "nomeacoes", "comissoes", "contratos", "empresas", "servidores", "outros"];
 const reply = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
 
@@ -57,10 +60,11 @@ export async function POST(request) {
     if (tf !== undefined) cfg.tempo_grafico = tf;
     if (novoLeis) cfg.leis = novoLeis;
     if (bot !== undefined) {
-      // A new value (or "start over") starts a new simulation from today; changing only the modes keeps it.
+      // A new value (or "start over") starts a new simulation from today; changing only the modes or
+      // the rules keeps the date (the daily and weekly history is replayed with the new rules).
       const v = Math.round(Number(bot.valor_inicial) * 100) / 100, hoje = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
       const novo = !cfg.bot || cfg.bot.valor_inicial !== v || bot.reiniciar === true;
-      cfg.bot = { valor_inicial: v, modos: pick(bot.modos, MODOS), ativado_em: novo ? hoje : cfg.bot.ativado_em };
+      cfg.bot = { valor_inicial: v, modos: pick(bot.modos, MODOS), ativado_em: novo ? hoje : cfg.bot.ativado_em, regras: normalizar(bot.regras ?? cfg.bot?.regras) };
     }
     const res = { ok: true, tempo_grafico: cfg.tempo_grafico, leis: cfg.leis || null, bot: cfg.bot || null };
     if (JSON.stringify(cfg) === antes) return reply({ ...res, mudou: false });

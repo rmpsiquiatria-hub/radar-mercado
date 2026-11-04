@@ -1,14 +1,15 @@
-# Simulated trading bot (scripts/bot.mjs): every day at 19:30 (Brasília), after the B3 and US
-# close, replays the closed candles and publishes relatorios/bot/resultado.json. It also runs
+# Simulated trading bot (scripts/bot.mjs): every day at 21:30 (Brasília), after the B3 and US close
+# and after crypto's day (UTC) ends at 21:00, replays the closed candles and publishes
+# relatorios/bot/ (resultado.json and the day trade history). It also runs
 # right after the value or the modes are chosen on the site (that saves relatorios/config.json).
 name: Bot (simulação)
 
 on:
   schedule:
-    - cron: "30 22 * * *"
+    - cron: "30 0 * * *"
   push:
     branches: [main]
-    paths: ["relatorios/config.json", "scripts/bot.mjs", "scripts/tecnica-lib.mjs"]
+    paths: ["relatorios/config.json", "scripts/bot.mjs", "scripts/tecnica-lib.mjs", "lib/bot-regras.js"]
   workflow_dispatch:
 
 permissions:
