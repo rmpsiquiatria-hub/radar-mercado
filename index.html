@@ -535,6 +535,26 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .stabs button .hint { font-weight: 400; font-size: 12px; margin-left: 4px; }
 @media (max-width: 640px) { .stabs button { flex: 1; } .stabs button .hint { display: none; } }
 nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none; }
+/* Carteira → Bot (simulação) */
+.bot-setup { padding: 12px 16px; margin-bottom: 14px; }
+.bot-setup summary { cursor: pointer; }
+.bot-v { display: grid; gap: 4px; font-size: 13px; font-weight: 600; max-width: 260px; margin: 10px 0; }
+.bot-v input { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-size: 16px; }
+.bot-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; margin: 8px 0; }
+.bot-opt { display: flex; gap: 8px; align-items: flex-start; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; background: var(--panel); }
+.bot-opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.bot-opt span { display: grid; gap: 2px; } .bot-opt small { color: var(--muted); font-size: 12px; }
+.bot-opt.dis { opacity: .55; cursor: default; }
+.bot-chart { margin: 8px 0 14px; } .bot-chart svg { width: 100%; height: 190px; display: block; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.bot-leg { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; margin-bottom: 6px; }
+.bot-leg span[style]::before { content: ""; display: inline-block; width: 14px; height: 3px; background: var(--c); vertical-align: middle; margin-right: 5px; border-radius: 2px; }
+.bot-ax { display: flex; justify-content: space-between; font-size: 12px; margin-top: 3px; }
+table.bot-t td { vertical-align: top; } table.bot-t th:nth-child(-n+3), table.bot-t td:nth-child(-n+3) { text-align: left; }
+.bot-m { font-size: 10.5px; font-weight: 700; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; margin-left: 2px; }
+.bot-sep { width: 1px; background: var(--line); margin: 2px 4px; align-self: stretch; } table.bot-t tbody tr { cursor: default; } table.bot-t tr.teste td { opacity: .75; }
+.bot-mot { display: inline-block; white-space: normal; max-width: 340px; line-height: 1.35; }
+.bot-pend { margin: 0 0 8px; padding-left: 18px; font-size: 14px; } .bot-pend li { margin: 3px 0; }
+.bot-regras { padding: 10px 16px; margin-top: 14px; } .bot-regras summary { cursor: pointer; } .bot-regras ul { margin: 8px 0 0; padding-left: 18px; font-size: 14px; } .bot-regras li { margin: 4px 0; }
 /* Tab levels, so nested tabs read as a hierarchy:
    1. main tabs (nav.tabs): underlined text;
    2. section tabs (.etabs, .cfgtabs, .stabs): a segmented bar, the chosen one raised;
@@ -579,7 +599,6 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
     <div class="status"><span class="dot" id="dot"></span><span id="stamp">Conectando…</span></div>
     <button class="icon-btn hdr-tab" data-tab="alerts" title="Alertas" aria-label="Alertas">🔔<span class="hdr-badge" id="nAlerts" hidden>0</span></button>
     <button class="icon-btn hdr-tab" data-tab="config" title="Configurações" aria-label="Configurações">⚙</button>
-    <button class="icon-btn" id="theme" title="Mudar tema claro/escuro" aria-label="Mudar tema">◐</button>
   </header>
 
   <div class="ftabs stabs" role="tablist" aria-label="Grupos de indicadores">
@@ -609,11 +628,18 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
 
   <!-- CARTEIRA -->
   <section data-panel="cart" hidden>
+    <div class="ftabs csubs" role="tablist" aria-label="Seções da carteira">
+      <button role="tab" data-csub="minha" aria-selected="true">💼 Minha carteira</button>
+      <button role="tab" data-csub="bot" aria-selected="false">🤖 Bot (simulação)</button>
+    </div>
+    <div data-csub-panel="minha">
     <div class="vhead"><h3>Minha carteira</h3><span class="row2" style="margin:0"><button class="btn" id="simNew" type="button">🧮 Simular compra e venda</button><button class="btn primary" id="vNew" type="button">✨ Montar carteira automaticamente</button></span></div>
     <div class="totals" id="cartTotals"></div>
     <div id="cartMix"></div>
     <div class="card scroll" id="cartList"></div>
     <p class="note" style="margin-top:12px">Para incluir ou alterar uma posição, use o botão 🧮 Simular compra e venda: ele mostra custos e impostos e, no final, tem o botão para salvar a compra (ou registrar a venda) na carteira. Para começar do zero ou testar uma ideia, o botão ✨ Montar carteira automaticamente escolhe ativos por regras a partir do relatório diário, com o valor que você definir, e os coloca aqui. Ativos em dólar (ações dos EUA, cripto) são convertidos para reais pela cotação do momento.</p>
+  </div>
+    <div data-csub-panel="bot" hidden id="botBox"></div>
   </section>
 
   <!-- ALERTAS -->
@@ -1961,6 +1987,7 @@ function showTab(name) {
   try { localStorage.setItem(KEY + ".tab", name); } catch {}
   if (name === "report" || name === "empresas") loadReport();
   if (name === "edu") renderEdu();
+  if (name === "cart") window.showCartSub?.();
   if (name === "config") renderConfig();
   if (name === "alerts") { renderAlerts(); setTimeout(() => { const f = tecCfg().feed; if (f.some(x => !x.lido)) setTec({ feed: f.map(x => ({ ...x, lido: true })) }); }, 5000); }
 }
@@ -3497,6 +3524,7 @@ function renderConfig() {
     aparencia: `
     <section class="card">
       <h3>Aparência</h3>
+      <p class="hint">Tema do site. <b>Automático</b> segue o modo claro ou escuro do seu computador ou celular.</p>
       <div class="row2"><span class="seg">${[["auto", "Automático"], ["light", "Claro"], ["dark", "Escuro"]].map(([k, l]) => `<button data-theme-set="${k}" aria-pressed="${th === k}">${l}</button>`).join("")}</span></div>
     </section>`,
     dados: `
@@ -4127,10 +4155,6 @@ $("#importFile").addEventListener("change", async e => {
 /* ---------- tema ---------- */
 function applyTheme(t) { if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme; }
 try { applyTheme(localStorage.getItem(KEY + ".theme")); } catch {}
-$("#theme").addEventListener("click", () => {
-  const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  const t = dark ? "light" : "dark"; applyTheme(t); try { localStorage.setItem(KEY + ".theme", t); } catch {}
-});
 
 /* ---------- início ---------- */
 try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {}
@@ -4138,5 +4162,6 @@ $("#cgal").innerHTML = Object.entries(CANDLE_EDU).map(([nome, i]) => `<details c
 migrarVirtuais(); renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 6000);
 </script>
 <script src="direito.js" defer></script>
+<script src="bot.js" defer></script>
 </body>
 </html>
