@@ -562,7 +562,6 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
     <button role="tab" data-stab="economia">🏛️ Economia e sociedade <span class="hint">juros, inflação, emprego, impostos, saúde e educação</span></button>
   </div>
   <section class="strip" id="strip" aria-label="Principais indicadores"></section>
-  <section class="card corr" id="corr" aria-label="Correlações entre os indicadores"></section>
 
   <nav class="tabs" role="tablist">
     <button role="tab" data-tab="favs" aria-selected="true">Favoritos <span class="badge" id="nFavs">0</span></button>
@@ -623,6 +622,7 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <button role="tab" data-esec="mercados">📈 Mercados e horários</button>
       <button role="tab" data-esec="economia">🏦 Juros, inflação e emprego</button>
       <button role="tab" data-esec="governo">🏛️ Governo</button>
+      <button role="tab" data-esec="estatisticas">📐 Estatísticas</button>
       <button role="tab" data-esec="simulacao">🎚️ Simulação</button>
       <button role="tab" data-esec="fundamentos">📊 Análise fundamentalista</button>
       <button role="tab" data-esec="candles">🕯️ Candlesticks</button>
@@ -633,12 +633,17 @@ nav.tabs { scrollbar-width: none; } nav.tabs::-webkit-scrollbar { display: none;
       <div class="edu-grid" id="eduList"></div>
     </div>
     <div data-esec-panel="economia" hidden>
-      <p class="note">Os indicadores da economia brasileira que aparecem no topo da tela e como ler a linha de correlações.</p>
+      <p class="note">Os indicadores da economia brasileira que aparecem no topo da tela. As correlações e o R² ficam em 📐 Estatísticas.</p>
       <div class="edu-grid" id="eduEco"></div>
     </div>
     <div data-esec-panel="governo" hidden id="edu-governo">
       <p class="hint">Como cada indicador do painel se comportou nos governos desde o Plano Real: presidente, partido e período. Os mercados dependem muito de fatores de fora do país (crises mundiais, juros nos EUA, preço das commodities) e de decisões que não são só do governo, como a Selic, definida pelo Banco Central. Os mandatos têm durações diferentes e começaram em situações diferentes. Os números mostram <b>o que aconteceu</b> em cada período, não provam que o governo foi a causa. Os textos foram escritos por IA (Claude) com base nos dados do painel e em fatos amplamente documentados, e podem conter imprecisões; a tabela é calculada ao vivo.</p>
       <div id="govBox"></div>
+    </div>
+    <div data-esec-panel="estatisticas" hidden>
+      <p class="note">Como os indicadores do topo da tela se movem juntos: a <b>correlação</b> de cada par e o <b>R²</b>, que diz quanto um indicador explica do outro. Em "📐 R² com várias variáveis" dá para montar um modelo com até 8 indicadores e ver quanto, juntos, explicam o escolhido.</p>
+      <section class="card corr" id="corr" aria-label="Correlações entre os indicadores"></section>
+      <div class="edu-grid" id="eduStat" style="margin-top:14px"></div>
     </div>
     <div data-esec-panel="fundamentos" hidden>
       <p class="hint">A análise fundamentalista olha para a <b>empresa</b>: quanto ela lucra, quanto deve, quanto paga de dividendos e se o preço da ação está caro ou barato perto disso. (A análise técnica, dos gráficos e candles, olha só para o comportamento do preço.) Estes são os indicadores que aparecem no Relatório e no e-mail. Toque em um para ver a explicação. Os exemplos usam os números da <b>empresa com mais peso no Ibovespa</b> no último relatório.</p>
@@ -1247,11 +1252,10 @@ function cmHTML(c) {
   </div>`;
 }
 function corrCfg() { return { base: "^BVSP", janela: 36, matriz: false, fechado: false, ...(state.corr || {}) }; }
-const corrFold = c => `<button class="corr-fold" id="corrFold" aria-expanded="${!c.fechado}" title="${c.fechado ? "Mostrar" : "Recolher"} as correlações"><i>▾</i><b>Correlações</b></button>`;
+const corrFold = () => `<b>Correlações</b>`;
 function renderCorr() {
   const box = $("#corr"); if (!box) return;
   const c = corrCfg(), lbl = k => CORR.find(x => x.k === k)?.label || k;
-  if (c.fechado) { box.innerHTML = `<div class="corr-head">${corrFold(c)}<span>Spearman entre índices, moedas, Selic, IPCA e desemprego</span></div>`; return; }
   if (!monthly) { box.innerHTML = `<div class="corr-head">${corrFold(c)} carregando histórico mensal…</div>`; return; }
   const others = CORR.filter(x => x.k !== c.base);
   const chips = others.map(o => {
@@ -2499,7 +2503,7 @@ function eduItems() {
       porque: "É o principal termômetro da qualidade da educação pública no país. O ensino médio é historicamente o ponto mais fraco: ficou quase parado entre 2005 e 2017 e só começou a subir depois.",
       horario: [["Divulgação", "a cada 2 anos, cerca de 9 meses depois da prova (o de 2025 saiu em agosto de 2026)"], ["Próxima edição", "2027, com resultado previsto para 2028"]],
       nota: "Fonte: INEP/MEC, nota do Brasil somando todas as redes (públicas e privadas). Na rede pública as notas são um pouco menores." },
-    { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler a linha de correlações",
+    { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler o quadro de correlações",
       oque: "Mede se dois indicadores costumam se mover <b>na mesma direção</b>. Vai de <b>−1</b> a <b>+1</b>: +1 significa que, quando um tem um mês melhor, o outro também tem; −1, que um sobe quando o outro cai; 0, que não há relação. Diferente da correlação comum (Pearson), a de Spearman compara a <i>ordem</i> dos meses, do pior ao melhor, e por isso é menos afetada por meses extremos.",
       porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
       horario: [["Dados", "variações mensais (meses já fechados)"], ["Janelas", "1 a 5 anos"], ["Salário mínimo e carga tributária", "variações anuais, todo o histórico disponível"], ["Asterisco *", "relação estatisticamente significativa (p < 0,05)"]],
@@ -2577,7 +2581,9 @@ function renderEdu() {
   };
   const items = eduItems();
   box.innerHTML = items.filter(it => it.s).map(card).join("");
-  $("#eduEco").innerHTML = items.filter(it => !it.s).sort((a, b) => (a.id === "spearman") - (b.id === "spearman")).map(card).join("");
+  const ESTAT = ["spearman", "r2"];
+  $("#eduEco").innerHTML = items.filter(it => !it.s && !ESTAT.includes(it.id)).map(card).join("");
+  $("#eduStat").innerHTML = ESTAT.map(id => items.find(it => it.id === id)).filter(Boolean).map(card).join("");
 }
 const eduOpen = new Set();   // "Saiba mais" boxes the user opened (the cards re-render with the quotes)
 document.addEventListener("toggle", e => { const d = e.target; if (d.matches?.("details[data-emore]")) d.open ? eduOpen.add(d.dataset.emore) : eduOpen.delete(d.dataset.emore); }, true);
