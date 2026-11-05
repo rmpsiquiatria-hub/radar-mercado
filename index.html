@@ -2014,10 +2014,28 @@ $("#favList").addEventListener("click", e => {
 });
 /* ---------- alertas ---------- */
 let audio;
+// Cash register "ka-ching": a short mechanical click, then two bright bell strikes with overtones.
 function beep() {
   try {
     audio ||= new AudioContext();
-    [0, .25].forEach(t => { const o = audio.createOscillator(), g = audio.createGain(); o.frequency.value = 880; g.gain.setValueAtTime(.15, audio.currentTime + t); g.gain.exponentialRampToValueAtTime(.001, audio.currentTime + t + .2); o.connect(g).connect(audio.destination); o.start(audio.currentTime + t); o.stop(audio.currentTime + t + .2); });
+    if (audio.state === "suspended") audio.resume();
+    const t0 = audio.currentTime + .02, out = audio.createGain();
+    out.gain.value = .5; out.connect(audio.destination);
+    // "ka": a burst of filtered noise, like the drawer latch
+    const n = audio.createBuffer(1, audio.sampleRate * .06, audio.sampleRate), d = n.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length) ** 3;
+    const ns = audio.createBufferSource(), bp = audio.createBiquadFilter(), ng = audio.createGain();
+    ns.buffer = n; bp.type = "bandpass"; bp.frequency.value = 3000; bp.Q.value = 1.2; ng.gain.value = .6;
+    ns.connect(bp).connect(ng).connect(out); ns.start(t0);
+    // "ching": two bell strikes, each a fundamental plus inharmonic overtones that ring out
+    const sino = (t, f, vol) => [[1, 1], [2.76, .5], [5.4, .25], [8.9, .12]].forEach(([m, a]) => {
+      const o = audio.createOscillator(), g = audio.createGain(), dur = 1.1 / Math.sqrt(m);
+      o.type = "sine"; o.frequency.value = f * m;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol * a, t + .004); g.gain.exponentialRampToValueAtTime(.0005, t + dur);
+      o.connect(g).connect(out); o.start(t); o.stop(t + dur + .05);
+    });
+    sino(t0 + .07, 1568, .22);
+    sino(t0 + .17, 2093, .28);
   } catch {}
 }
 // Position in Minha carteira, if any; flagged on alerts so the user knows the signal touches what they own.
