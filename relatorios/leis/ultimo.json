@@ -1,402 +1,444 @@
 {
- "data": "2026-11-03",
- "gerado_em": "2026-11-04T05:20:00-03:00",
+ "data": "2026-11-04",
+ "gerado_em": "2026-11-05T05:30:00-03:00",
+ "coletado_em": "2026-11-05T04:17:30.045Z",
  "resumo": {
-  "federal": "Dia sem lei nova de grande alcance. A Anvisa prorrogou até março de 2027 o prazo para a numeração do SNCR nas receitas eletrônicas de controle especial e definiu as cepas das vacinas de gripe de 2027. O Ministério da Saúde criou procedimentos de tratamento de canal e de diagnóstico de câncer de boca no SUS. O Presidente enviou ao Congresso projeto de benefícios tributários para a Copa do Mundo Feminina de 2027.",
-  "estadual": "Publicação do Rio Grande do Sul quase toda de rotina: portarias de habitação, aposentadorias, termos de acordo da Receita Estadual e editais. A única regra com efeito geral é a prorrogação de prazo de obras da assistência social.",
-  "municipal": "Lajeado publicou 4 atos: ajuste em decreto de crédito suplementar, uma multa a empresa contratada e duas aposentadorias de servidores."
+  "federal": "O governo publicou a Medida Provisória 1.399, que fixa as regras e alíquotas do Imposto Seletivo (o 'imposto do pecado') para 2027, e enviou ao Congresso uma PEC sobre a transição desse imposto. Também saiu decreto com critérios para definir minerais críticos e estratégicos. A ANEEL ampliou regras da abertura do mercado livre de energia, e o Ministério da Saúde instituiu o programa de medicinas indígenas e ajustou o repasse do piso da enfermagem.",
+  "estadual": "O Governo do RS homologou situação de emergência em vários municípios, abriu R$ 620,9 milhões em créditos suplementares, declarou de utilidade pública áreas para duplicação da RSC-287 em Venâncio Aires e a Secretaria de Desenvolvimento Urbano regulou a transição das atividades da Metroplan, extinta em 1º/11.",
+  "municipal": "Lajeado publicou apenas um edital de processo seletivo (notas de títulos para professor de Matemática), sem mudança de regras."
  },
  "destaques": [
   {
-   "id": "dou-741186261",
+   "id": "dou-741754451",
    "relevancia": "alta",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "receitas",
-    "medicamentos controlados"
-   ],
-   "o_que_muda": "A Anvisa permite que receitas eletrônicas de controle especial e de retenção sejam emitidas sem a numeração do SNCR até 3 de março de 2027. A partir de 4 de março de 2027 a numeração passa a ser obrigatória.",
-   "quem_afeta": "Médicos, dentistas e veterinários que prescrevem eletronicamente, farmácias e sistemas de prescrição.",
-   "vigencia": "Na publicação; numeração obrigatória a partir de 4/03/2027.",
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO DA DIRETORIA COLEGIADA ANVISA Nº 1.046, DE 29 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Saúde / Diretoria Colegiada",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-da-diretoria-colegiada-anvisa-n-1.046-de-29-de-outubro-de-2026-741186261",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741188885",
-   "relevancia": "alta",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "vacinas"
-   ],
-   "o_que_muda": "A Anvisa fixou as cepas obrigatórias das vacinas de gripe para 2027 (hemisfério sul) e revogou a norma anterior. Os frascos devem trazer a frase 'CEPAS 2027 HEMISFÉRIO SUL'.",
-   "quem_afeta": "Fabricantes e importadores de vacina influenza, serviços de vacinação e profissionais de saúde.",
-   "vigencia": "Na publicação; composição vale a partir de 1º/02/2027.",
-   "esfera": "federal",
-   "titulo": "INSTRUÇÃO NORMATIVA ANVISA N° 475, DE 29 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Saúde / Diretoria Colegiada",
-   "tipo": "Instrução Normativa",
-   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-anvisa-n-475-de-29-de-outubro-de-2026-741188885",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741224665",
-   "relevancia": "alta",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "SUS",
-    "saúde bucal"
-   ],
-   "o_que_muda": "O SUS passa a ter pacotes de cuidado integrado para tratamento de canal (endodontia) e para detecção e manejo do câncer de boca. O registro fica restrito aos Centros de Especialidades Odontológicas habilitados.",
-   "quem_afeta": "Dentistas e gestores do SUS, CEOs e pacientes encaminhados da atenção básica.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "Portaria SAES/MS Nº 5.173, DE 15 DE outubro DE 2026",
-   "orgao": "Ministério da Saúde / Secretaria de Atenção Especializada à Saúde",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-saes/ms-n-5.173-de-15-de-outubro-de-2026-741224665",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741184668",
-   "relevancia": "media",
    "area": "fazenda",
    "temas": [
     "tributos",
-    "esporte"
+    "reforma tributária"
    ],
-   "o_que_muda": "O Presidente encaminhou ao Congresso projeto de lei com medidas tributárias e aduaneiras para a Copa do Mundo Feminina FIFA 2027 no Brasil. Ainda é só proposta, sem valores definidos no ato.",
-   "quem_afeta": "Organizadores, patrocinadores e importadores ligados ao evento.",
-   "vigencia": "Depende de aprovação pelo Congresso.",
+   "o_que_muda": "Define como o Imposto Seletivo, novo imposto sobre itens como cigarros, bebidas alcoólicas e açucaradas, carros, aviões e barcos, será cobrado em 2027. Cigarros e cigarrilhas partem da carga do IPI atual; bebidas alcoólicas e fumígenos ficam sem alíquota específica no ano; apostas e loterias pagam 0,5%; caminhões ficam fora; carros sustentáveis, táxis e veículos de pessoas com deficiência têm alíquota zero. É um imposto novo, ou seja, aumenta a carga sobre esses produtos.",
+   "quem_afeta": "Fabricantes e importadores de cigarros, bebidas, veículos, aeronaves e embarcações; casas de apostas e loterias; consumidores desses produtos.",
+   "vigencia": "Ano-calendário de 2027; medida provisória vale desde a publicação, mas precisa ser aprovada pelo Congresso.",
+   "imposto": {
+    "tributo": "Imposto Seletivo (IS)",
+    "antes": "não existia (imposto novo, começa em 2027); só IPI para cigarros, veículos etc.",
+    "depois": "concursos de prognósticos (apostas): 0,5%; demais alíquotas dependem de anexos e de fatores de conversão",
+    "obs": "Antes: o IS foi criado pela LC 214/2025 e só passa a ser cobrado em 2027 (fonte: reportagens consultadas na busca, ex. reformatributaria.com). Os anexos com as alíquotas completas não vieram no texto coletado, por isso não há variação percentual calculada."
+   },
    "esfera": "federal",
-   "titulo": "DESPACHOS DO PRESIDENTE DA REPÚBLICA",
-   "orgao": "Presidência da República",
-   "tipo": "Mensagem",
-   "url": "https://www.in.gov.br/web/dou/-/despachos-do-presidente-da-republica-741184668",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741197764",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "crédito",
-    "setor público"
-   ],
-   "o_que_muda": "O Conselho Monetário Nacional mudou a tabela de limites anuais de crédito que bancos podem conceder a órgãos públicos. Para 2026, o limite total consta como até R$ 30,6 bilhões.",
-   "quem_afeta": "Bancos, estados, municípios e estatais que contratam crédito.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO CMN Nº 5.344, DE 29 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Conselho Monetário Nacional",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-cmn-n-5.344-de-29-de-outubro-de-2026-741197764",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741209624",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "aeroportos",
-    "concessões"
-   ],
-   "o_que_muda": "13 aeroportos regionais (BA, PE, PI, MT, MA, TO, RO, CE) foram incluídos no programa de desestatização para concessão à iniciativa privada. Nenhum fica no Rio Grande do Sul.",
-   "quem_afeta": "Empresas interessadas nas concessões e usuários dessas cidades.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "DECRETO Nº 13.142, DE 29 DE OUTUBRO DE 2026",
+   "titulo": "MEDIDA PROVISÓRIA Nº 1.399, DE 4 DE NOVEMBRO DE 2026",
    "orgao": "Atos do Poder Executivo",
-   "tipo": "Decreto numerado",
-   "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.142-de-29-de-outubro-de-2026-741209624",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741227647",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "tributos",
-    "ICMS",
-    "petroquímica"
-   ],
-   "o_que_muda": "A COTEPE/ICMS divulgou a lista de centrais petroquímicas que podem usar o regime de cobrança do ICMS em uma só fase para derivados de petróleo (exceto gasolina e diesel). O ato também define requisitos, como mais de 80% da produção petroquímica e regularidade fiscal.",
-   "quem_afeta": "Indústrias petroquímicas e fiscos estaduais.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "ATO COTEPE ICMS Nº 116, DE 29 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
-   "tipo": "Ato Normativo",
-   "url": "https://www.in.gov.br/web/dou/-/ato-cotepe-icms-n-116-de-29-de-outubro-de-2026-741227647",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741192019",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "obrigações acessórias",
-    "bancos"
-   ],
-   "o_que_muda": "A Receita aprovou a versão 2.1.3 do manual de preenchimento da e-Financeira, declaração enviada por instituições financeiras. As mudanças entram em produção em 16/11/2026.",
-   "quem_afeta": "Bancos, corretoras, seguradoras e contadores dessas instituições.",
-   "vigencia": "16/11/2026.",
-   "esfera": "federal",
-   "titulo": "ATO DECLARATÓRIO EXECUTIVO COFIS Nº 17, DE 29 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Coordenação-Geral de Fiscalização",
-   "tipo": "Ato Declaratório",
-   "url": "https://www.in.gov.br/web/dou/-/ato-declaratorio-executivo-cofis-n-17-de-29-de-outubro-de-2026-741192019",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741445066",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "loterias"
-   ],
-   "o_que_muda": "A Secretaria de Prêmios e Apostas definiu que, na Lotex, a arrecadação conta a partir do recebimento dos valores da venda de bilhetes pelo agente operador (do revendedor, no meio físico, e do apostador, no meio virtual).",
-   "quem_afeta": "Operadores e revendedores de loteria Lotex.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "Portaria SPA/MF Nº 3.208, DE 29 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Secretaria de Prêmios e Apostas",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-spa/mf-n-3.208-de-29-de-outubro-de-2026-741445066",
+   "tipo": "Medida Provisória",
+   "url": "https://www.in.gov.br/web/dou/-/medida-provisoria-n-1.399-de-4-de-novembro-de-2026-741754451",
    "fonte": "DOU (extra)"
   },
   {
-   "id": "dou-741226194",
+   "id": "dou-741839342",
+   "relevancia": "alta",
+   "area": "outros",
+   "temas": [
+    "previdência",
+    "assistência social"
+   ],
+   "o_que_muda": "Quem pede ou recebe o BPC e teve o cadastro familiar barrado no Cadastro Único precisa inscrever ou atualizar a família até 31/12/2027. Sem isso, o benefício pode ser negado ou cessado.",
+   "quem_afeta": "Requerentes e beneficiários do BPC e suas famílias.",
+   "vigencia": "Na publicação; prazo até 31/12/2027.",
+   "esfera": "federal",
+   "titulo": "INSTRUÇÃO NORMATIVA CONJUNTA SAGICAD/SNBA Nº 2, DE 3 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome / Secretaria de Avaliação, Gestão da Informação e Cadastro Único",
+   "tipo": "Instrução Normativa Conjunta",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-conjunta-sagicad/snba-n-2-de-3-de-novembro-de-2026-741839342",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-741754670",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "povos indígenas"
+   ],
+   "o_que_muda": "O Ministério da Saúde cria o Programa Nacional das Medicinas Indígenas (PRONAMI) dentro da atenção à saúde indígena.",
+   "quem_afeta": "Povos indígenas, equipes do Subsistema de Atenção à Saúde Indígena e profissionais de saúde.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "Portaria GM/MS Nº 12.453, DE 3 DE novembro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.453-de-3-de-novembro-de-2026-741754670",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-741839088",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "enfermagem",
+    "salário"
+   ],
+   "o_que_muda": "Se o saldo em conta de estado ou município do piso da enfermagem exceder o valor homologado, o excedente será descontado dos repasses seguintes da União.",
+   "quem_afeta": "Estados, municípios e hospitais que recebem a assistência financeira do piso da enfermagem.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "Portaria GM/ms Nº 12.456, DE 3 DE novembro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.456-de-3-de-novembro-de-2026-741839088",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-741547344",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "medicina"
+   ],
+   "o_que_muda": "O CREMERJ exige diretor técnico médico em unidades privadas de saúde do RJ e permite suspender ou cancelar o registro de empresas médicas que atrasem mais de 5 dias salários ou honorários de médicos, sem aceitar como desculpa atraso de planos de saúde.",
+   "quem_afeta": "Médicos e empresas e clínicas médicas registradas no CREMERJ (Rio de Janeiro).",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO CREMERJ Nº 373, DE 19 DE OUTUBRO DE 2026",
+   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Regional de Medicina do Estado do Rio de Janeiro",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-cremerj-n-373-de-19-de-outubro-de-2026-741547344",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741839984",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "FGTS",
+    "trabalho"
+   ],
+   "o_que_muda": "Aprova o orçamento do FGTS para 2027 e 2028-2030, incluindo R$ 13 bilhões em descontos para financiamentos de pessoas físicas em 2027.",
+   "quem_afeta": "Trabalhadores com FGTS e quem financia imóvel com recursos do fundo.",
+   "vigencia": "Na publicação; orçamento de 2027.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO CCFGTS Nº 1.163, DE 29 DE OUTUBRO DE 2026",
+   "orgao": "Ministério do Trabalho e Emprego",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-ccfgts-n-1.163-de-29-de-outubro-de-2026-741839984",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-741754399",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "FGTS",
+    "trabalho"
+   ],
+   "o_que_muda": "Até 31/03/2027, quem faz antecipação do saque-aniversário pode ceder no máximo os próximos 5 saques anuais, com uma contratação por competência e só após quitar a antecipação vigente.",
+   "quem_afeta": "Trabalhadores no saque-aniversário do FGTS.",
+   "vigencia": "Na publicação; até 31/03/2027.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO CCFGTS Nº 1.165, DE 29 DE OUTUBRO DE 2026",
+   "orgao": "Ministério do Trabalho e Emprego / Conselho Curador do Fundo de Garantia do Tempo de Serviço",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-ccfgts-n-1.165-de-29-de-outubro-de-2026-741754399",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-741542957",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "energia",
+    "consumidor"
+   ],
+   "o_que_muda": "A ANEEL muda regras da abertura do mercado livre para consumidores do Grupo A (alta tensão): prazos para migrar, cobrança por migração antecipada e prazo de 5 dias úteis para a distribuidora checar requisitos.",
+   "quem_afeta": "Empresas e consumidores de alta tensão que querem migrar para o mercado livre; distribuidoras de energia.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO NORMATIVA Nº 1.174, DE 27 DE OUTUBRO DE 2026",
+   "orgao": "Ministério de Minas e Energia / Diretoria Colegiada",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-normativa-n-1.174-de-27-de-outubro-de-2026-741542957",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741535150",
    "relevancia": "media",
    "area": "saude",
    "temas": [
     "saúde",
-    "vigilância sanitária",
-    "estética"
-   ],
-   "o_que_muda": "A Anvisa criou um grupo de trabalho de 180 dias para discutir os serviços de estética. O objetivo é preparar futuras regras de boas práticas. O grupo é só consultivo e não cria obrigações agora.",
-   "quem_afeta": "Clínicas de estética, médicos e profissionais que atuam em procedimentos estéticos.",
-   "vigencia": "Na publicação; 180 dias.",
-   "esfera": "federal",
-   "titulo": "PORTARIA N° 1.183, DE 15 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Saúde / Agência Nacional de Vigilância Sanitária",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-n-1.183-de-15-de-outubro-de-2026-741226194",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741196354",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde suplementar",
     "planos de saúde"
    ],
-   "o_que_muda": "A ANS suspendeu parcialmente, por decisão judicial, a ordem de venda da carteira da operadora Integra Assistência Médica. Continua proibida a venda de novos planos até a audiência.",
-   "quem_afeta": "Clientes e prestadores da Integra Assistência Médica.",
-   "vigencia": "Na publicação.",
+   "o_que_muda": "A ANS abre consulta pública de 6 a 25/11 sobre recomendação de não incluir no rol dos planos o lenvatinibe com pembrolizumabe e o ivosidenibe.",
+   "quem_afeta": "Pacientes oncológicos, médicos, operadoras de planos de saúde.",
+   "vigencia": "Consulta de 06/11 a 25/11/2026.",
    "esfera": "federal",
-   "titulo": "RESOLUÇÃO OPERACIONAL ANS Nº 3.180, DE 29 DE OUTUBRO DE 2026",
+   "titulo": "CONSULTA PÚBLICA ANS Nº 180, DE 3 DE NOVEMBRO DE 2026",
    "orgao": "Ministério da Saúde / Agência Nacional de Saúde Suplementar",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-operacional-ans-n-3.180-de-29-de-outubro-de-2026-741196354",
+   "tipo": "Aviso de Consulta Pública",
+   "url": "https://www.in.gov.br/web/dou/-/consulta-publica-ans-n-180-de-3-de-novembro-de-2026-741535150",
    "fonte": "DOU"
   },
   {
-   "id": "dou-741117654",
+   "id": "dou-741552407",
    "relevancia": "media",
-   "area": "fazenda",
+   "area": "saude",
    "temas": [
-    "conselhos profissionais",
-    "dívidas"
+    "saúde",
+    "alimentos"
    ],
-   "o_que_muda": "O Conselho Federal de Medicina Veterinária abriu um Refis. Quem aderir de 3 a 30/11/2026 paga dívidas de 2012 a 2024 com perdão de 100% dos juros e da multa de mora, mantido o IPCA e honorários de 10% quando houver cobrança judicial.",
-   "quem_afeta": "Veterinários e empresas com anuidades em atraso nos CRMVs.",
-   "vigencia": "Adesão de 3 a 30/11/2026.",
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO Nº 1.721, DE 21 DE OUTUBRO DE 2026",
-   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Medicina Veterinária",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-n-1.721-de-21-de-outubro-de-2026-741117654",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741215503",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "aduana"
-   ],
-   "o_que_muda": "A Receita em Aracaju (SE) passou a exigir curso básico de conhecimentos aduaneiros para credenciar pessoas que entram em recintos alfandegados de Sergipe.",
-   "quem_afeta": "Despachantes, motoristas e trabalhadores de portos e aeroportos de Sergipe.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "PORTARIA DRF/ARACAJU-SE Nº 66, DE 29 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Delegacia da Receita Federal do Brasil em Aracaju",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-drf/aracaju-se-n-66-de-29-de-outubro-de-2026-741215503",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-741517865",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "trabalho",
-    "seguro-desemprego"
-   ],
-   "o_que_muda": "O Codefat deu prazo extra para pescadores artesanais pedirem o Seguro-Desemprego do Defeso. Vale para defesos iniciados desde 1º/07/2026 cujo prazo de requerimento já tinha acabado.",
-   "quem_afeta": "Pescadores artesanais que perderam o prazo.",
+   "o_que_muda": "A Anvisa autoriza novos aditivos em alimentos (como fosfatos em concentrado proteico de soro de leite e poliaspartato de potássio em vinhos) e fixa limites de uso.",
+   "quem_afeta": "Indústria de alimentos e bebidas.",
    "vigencia": "Na publicação.",
    "esfera": "federal",
-   "titulo": "RESOLUÇÃO CODEFAT/MTE Nº 1.046, DE 29 DE OUTUBRO DE 2026",
-   "orgao": "Ministério do Trabalho e Emprego / Conselho Deliberativo do Fundo de Amparo ao Trabalhador",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-codefat/mte-n-1.046-de-29-de-outubro-de-2026-741517865",
-   "fonte": "DOU (extra)"
+   "titulo": "INSTRUÇÃO NORMATIVA ANVISA N° 476, DE 3 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Saúde / Diretoria Colegiada",
+   "tipo": "Instrução Normativa",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-anvisa-n-476-de-3-de-novembro-de-2026-741552407",
+   "fonte": "DOU"
   },
   {
-   "id": "dou-741193743",
+   "id": "dou-741530118",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "vigilância sanitária"
+   ],
+   "o_que_muda": "A Anvisa cria um grupo de trabalho para propor regras para produtos de uso tradicional para a saúde, com duração de 360 dias.",
+   "quem_afeta": "Fabricantes de produtos tradicionais e fitoterápicos.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "PORTARIA Nº 1.257, DE 3 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Saúde / Agência Nacional de Vigilância Sanitária",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-n-1.257-de-3-de-novembro-de-2026-741530118",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741532547",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "orçamento",
+    "saúde"
+   ],
+   "o_que_muda": "O Ministério do Planejamento reduz limites de movimentação e empenho do Ministério da Saúde e do Desenvolvimento Agrário (contenção de gastos).",
+   "quem_afeta": "Órgãos federais e serviços que dependem desses orçamentos.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "PORTARIA GM/MPO Nº 482, DE 29 DE OUTUBRO DE 2026",
+   "orgao": "Ministério do Planejamento e Orçamento / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/mpo-n-482-de-29-de-outubro-de-2026-741532547",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-741754165",
    "relevancia": "media",
    "area": "outros",
    "temas": [
     "agricultura",
-    "pragas"
+    "preços"
    ],
-   "o_que_muda": "O Ministério da Agricultura prorrogou por mais um ano a emergência fitossanitária contra a mosca-da-carambola no Amapá, Amazonas, Pará e Roraima.",
-   "quem_afeta": "Produtores rurais e transportadores de frutas nesses estados.",
-   "vigencia": "Na publicação; por 1 ano.",
+   "o_que_muda": "Publica os preços mínimos dos produtos extrativos da safra 2027, definidos pelo CMN, a favor dos produtores.",
+   "quem_afeta": "Produtores extrativistas.",
+   "vigencia": "1º/01/2027.",
    "esfera": "federal",
-   "titulo": "PORTARIA MAPA Nº 964, DE 29 DE OUTUBRO DE 2026",
+   "titulo": "PORTARIA MAPA Nº 965, DE 3 DE NOVEMBRO DE 2026",
    "orgao": "Ministério da Agricultura e Pecuária / Gabinete do Ministro",
    "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-mapa-n-964-de-29-de-outubro-de-2026-741193743",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mapa-n-965-de-3-de-novembro-de-2026-741754165",
    "fonte": "DOU"
   },
   {
-   "id": "rs-1500844",
+   "id": "dou-741839252",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "assistência social"
+    "mineração",
+    "economia"
    ],
-   "o_que_muda": "A Secretaria de Desenvolvimento Social do RS prorrogou o prazo de execução de obras e compras financiadas pelo Piso Gaúcho Especial - Avançar Mais SUAS I 2025.",
-   "quem_afeta": "Municípios e entidades que recebem esse cofinanciamento.",
-   "vigencia": "",
-   "esfera": "estadual",
-   "titulo": "PORTARIA Nº 440 DE NOVEMBRO DE 2026",
-   "orgao": "Assessoria Técnica",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1500844",
-   "fonte": "DOE-RS"
+   "o_que_muda": "Decreto fixa critérios econômicos, socioambientais e climáticos para listar minerais críticos e estratégicos e permite classificá-los em 3 classes de prioridade.",
+   "quem_afeta": "Empresas de mineração e governo.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "DECRETO Nº 13.146, DE 4 DE NOVEMBRO DE 2026",
+   "orgao": "Atos do Poder Executivo",
+   "tipo": "Decreto numerado",
+   "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.146-de-4-de-novembro-de-2026-741839252",
+   "fonte": "DOU (extra)"
   },
   {
-   "id": "laj-2679-1",
+   "id": "dou-741839169",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "reforma tributária"
+   ],
+   "o_que_muda": "O presidente enviou ao Congresso uma PEC sobre a transição para a cobrança do Imposto Seletivo e a MP 1.399.",
+   "quem_afeta": "Contribuintes dos setores sujeitos ao Imposto Seletivo.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "DESPACHOS DO PRESIDENTE DA REPÚBLICA",
+   "orgao": "Atos do Poder Executivo",
+   "tipo": "Mensagem",
+   "url": "https://www.in.gov.br/web/dou/-/despachos-do-presidente-da-republica-741839169",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "rs-1501091",
    "relevancia": "media",
    "area": "fazenda",
    "temas": [
     "orçamento"
    ],
-   "o_que_muda": "O decreto altera o Decreto 14.438/2026, que abriu crédito suplementar no orçamento do município.",
-   "quem_afeta": "Prefeitura de Lajeado e secretarias beneficiadas.",
+   "o_que_muda": "O Estado abre créditos suplementares de R$ 620,9 milhões no orçamento, a maior parte em Meio Ambiente e Infraestrutura.",
+   "quem_afeta": "Órgãos estaduais.",
    "vigencia": "Na publicação.",
-   "esfera": "municipal",
-   "titulo": "DECRETO Nº 14.454, DE 29 DE OUTUBRO DE 2026.",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "DECRETO",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2679"
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.037, DE 3 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1501091",
+   "fonte": "DOE-RS"
   },
   {
-   "id": "laj-2679-2",
+   "id": "rs-1500883",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "contratos públicos"
+    "serviço público",
+    "urbanismo"
    ],
-   "o_que_muda": "A prefeitura aplicou penalidades a uma empresa por inexecução total do Contrato 157-04/2024. Inclui multa de 20% do valor do contrato e multa administrativa de R$ 2.500.",
-   "quem_afeta": "A empresa contratada.",
+   "o_que_muda": "A SEDUR define como assume as atividades da Metroplan, que encerrou em 1º/11/2026.",
+   "quem_afeta": "Municípios metropolitanos e quem tem processos na Metroplan.",
+   "vigencia": "1º/11/2026.",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA SEDUR Nº 01/2026",
+   "orgao": "Gabinete do Secretário",
+   "tipo": "Diversos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1500883",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1499248",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "meio ambiente",
+    "licenciamento"
+   ],
+   "o_que_muda": "Quando alegada intervenção em curso d'água efêmero, a FEPAM deve pedir manifestação técnica do Departamento de Recursos Hídricos da SEMA antes de decidir.",
+   "quem_afeta": "Empreendedores e proprietários rurais em licenciamento ou fiscalização ambiental.",
    "vigencia": "",
-   "esfera": "municipal",
-   "titulo": "Decreto Municipal n.° 13.939/2025, referente a 20% (vinte) sobre o valor do contrato, por inexecução total",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "Decreto Municipal n.° 13.939/2025, referente a 20% (vinte) sobre o valor do contrato, por inexecução total",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2679"
+   "esfera": "estadual",
+   "titulo": "ORDEM DE SERVIÇO SEMA Nº 04, DE 20 DE OUTUBRO DE 2026.",
+   "orgao": "Gabinete",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1499248",
+   "fonte": "DOE-RS"
   },
   {
-   "id": "laj-2679-3",
+   "id": "rs-1501094",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "servidores",
-    "previdência"
+    "emergência"
    ],
-   "o_que_muda": "Concede aposentadoria por tempo de contribuição a uma professora municipal de anos finais, a partir de 03/11/2026.",
-   "quem_afeta": "A servidora e a rede municipal de ensino.",
-   "vigencia": "03/11/2026",
-   "esfera": "municipal",
-   "titulo": "Portaria nº 36648/2026",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "Portaria nº 36648/2026",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2679"
+   "o_que_muda": "Homologa situação de emergência em Sapucaia do Sul, Uruguaiana, Giruá e Arroio do Tigre; decretos 59.039 e 59.038 fazem o mesmo para outros municípios.",
+   "quem_afeta": "População e prefeituras desses municípios.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.040, DE 3 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1501094",
+   "fonte": "DOE-RS"
   },
   {
-   "id": "laj-2679-4",
+   "id": "rs-1501095",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "servidores",
-    "previdência"
+    "infraestrutura",
+    "rodovias"
    ],
-   "o_que_muda": "Concede aposentadoria por tempo de contribuição a um auditor fiscal municipal, a partir de 03/11/2026.",
-   "quem_afeta": "O servidor e a Secretaria da Fazenda.",
-   "vigencia": "03/11/2026",
+   "o_que_muda": "Declara de utilidade pública áreas para a duplicação da RSC-287 em Venâncio Aires, permitindo desapropriação.",
+   "quem_afeta": "Proprietários das áreas em Venâncio Aires.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.041, DE 3 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1501095",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1500866",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "A SES aprova repasse de recursos aos municípios para a Operação Verão Total 2026/2027.",
+   "quem_afeta": "Municípios do litoral e usuários do SUS.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES N° 839/2026",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1500866",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "laj-2680",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "concurso",
+    "trabalho"
+   ],
+   "o_que_muda": "Edital 412-02/2026 divulga notas dos títulos do processo seletivo para professor de Matemática (anos finais) e abre recurso em 5 e 6 de novembro.",
+   "quem_afeta": "Candidatos ao processo seletivo da prefeitura.",
+   "vigencia": "Recurso em 5 e 6/11/2026.",
    "esfera": "municipal",
-   "titulo": "Portaria nº 36649/2026",
+   "titulo": "Edição 2680",
    "orgao": "Prefeitura de Lajeado",
-   "tipo": "Portaria nº 36649/2026",
+   "tipo": "Edição",
    "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2679"
+   "fonte": "DOM Lajeado"
   }
  ],
  "demais": {
-  "federal": "Cerca de 570 outros atos: mais de 60 resoluções individuais da Anvisa (registros, cancelamentos e certificações), muitas portarias de pessoal, transferências de recursos do SUS e da Defesa Civil, outorgas de rádio e TV, acórdãos, despachos e decisões individuais. Também saiu a liquidação extrajudicial da MW Instituição de Pagamento pelo Banco Central.",
-  "estadual": "Portarias de retificação da Secretaria de Habitação, atos de aposentadoria, súmulas de termo de acordo da Receita Estadual, termos de doação, editais e contratos do TCE.",
+  "federal": "Cerca de 470 outros atos: portarias de pessoal, despachos de mineração, decisões da Anvisa sobre empresas, indeferimentos de CEBAS, suspensões de pesca, pautas e resoluções individuais.",
+  "estadual": "Cerca de 90 outros atos: portarias de pessoal e comissões, extratos de contratos, delegações, atos previdenciários e notificações individuais.",
   "municipal": ""
  },
  "fontes": {
   "federal": {
    "ok": true,
-   "atos": 587,
-   "lista": 3623
+   "atos": 497,
+   "lista": 3558
   },
   "estadual": {
    "ok": true,
-   "atos": 29,
-   "lista": 40,
-   "publicados": 80
+   "atos": 114,
+   "lista": 588,
+   "publicados": 733
   },
   "municipal": {
    "ok": true,
-   "atos": 4,
+   "atos": 1,
    "lista": 0,
    "edicoes": [
-    "2679 (Normal)"
+    "2680 (Normal)"
    ]
   }
  },
- "coletado_em": "2026-11-04T03:57:19.408Z",
  "totais": {
-  "federal": 4210,
-  "estadual": 69,
-  "municipal": 4
+  "federal": 4055,
+  "estadual": 702,
+  "municipal": 1
  }
 }
