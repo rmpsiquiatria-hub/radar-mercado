@@ -31,8 +31,8 @@
       "trailing_atr": 3,
       "espera_diario": 5,
       "espera_semanal": 2,
-      "vender_vies": true,
-      "vender_tendencia": true,
+      "vender_vies": false,
+      "vender_tendencia": false,
       "evitar_conflito": true,
       "mercados": [
         "b3",
