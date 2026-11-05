@@ -8,7 +8,7 @@
   const MODOS = ["diario", "semanal", "daytrade"];
   const MERC = { b3: "B3", eua: "EUA", cripto: "Cripto" };
   const box = $("#botBox");
-  let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, msg = "", verMais = 50;
+  let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, msg = "", verMais = 50, anteriores = [];
   let SPEC = null, rascunho = null, aberto = null;     // the form being edited survives re-renders
   const ui = () => ({ modo: null, merc: "todos", lado: "todos", ...(state.botUi || {}) });
   const setUi = o => { state.botUi = { ...ui(), ...o }; save(); render(); };
@@ -20,12 +20,32 @@
   const dt = d => d ? d.split("-").reverse().join("/") : "—";
   const num = v => (+v).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
 
+  // Both legs of each trade. A leg with a result closes the position; any other leg opens it, so a
+  // position opened by a sale (short) is handled too. Receives the trades in chronological order;
+  // "antes" holds older trades, for a closing leg whose opening fell outside the published list.
+  function parear(ops, antes = []) {
+    const abertas = new Map(), pares = new Map();
+    for (const o of ops) {
+      const k = o.mercado + o.ticker;
+      if (o.resultado_pct == null) { const p = { vendida: o.lado === "venda", abre: o, fecha: null }; abertas.set(k, p); pares.set(o, p); continue; }
+      const quando = x => `${x.data} ${x.hora || ""}`;
+      const p = abertas.get(k) || { vendida: o.lado === "compra", abre: antes.findLast(x => x.mercado === o.mercado && x.ticker === o.ticker && x.lado !== o.lado && x.qtd === o.qtd && x.resultado_pct == null && quando(x) <= quando(o)) || null };
+      abertas.delete(k); p.fecha = o; pares.set(o, p);
+    }
+    return pares;
+  }
+  const saida = m => /^Alvo/.test(m) ? "Alvo atingido" : /^Stop/.test(m) ? "Stop" : /^Zerado/.test(m) ? "Zerada" : /^Tempo/.test(m) ? "Tempo máximo" : "Sinal de saída";
+  const pernas = p => ({ compra: (p.vendida ? p.fecha : p.abre)?.preco ?? null, venda: (p.vendida ? p.abre : p.fecha)?.preco ?? null, motivo: p.fecha ? saida(p.fecha.motivo) : null });
+
   async function carregar() {
     const [p, r, s] = await Promise.all([
       fetch("/api/preferencias", { cache: "no-store" }).then(r => r.json()).catch(() => ({})),
       fetch("/relatorios/bot/resultado.json?" + Date.now(), { cache: "no-store" }).then(r => r.ok ? r.json() : null).catch(() => null),
       SPEC ? SPEC : import("/lib/bot-regras.js").catch(() => null),
     ]);
+    // the page only gets the latest trades: the oldest sales may have been bought just before them
+    const dtr = r?.modos?.daytrade, velha = dtr?.total_operacoes > dtr?.operacoes.length ? dtr.operacoes.at(-1)?.data.slice(0, 7) : null;
+    anteriores = velha ? await fetch(`/relatorios/bot/daytrade/ops-${velha}.json`).then(x => x.ok ? x.json() : []).catch(() => []) : [];
     SPEC = s; cfgOk = !!p.configurado && !p.erro; cfg = p.bot || (cfgOk ? null : r?.config) || null; res = r; carregado = true;
     if (aguardando && res && res.gerado_em > aguardando) { aguardando = null; msg = "✅ Simulação atualizada."; }
     render();
@@ -94,6 +114,7 @@
   function modoHTML(k, m) {
     const p = m.placar, u = ui(), dtr = k === "daytrade";
     const ops = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado));
+    const pares = parear([...m.operacoes].reverse(), anteriores);
     const tot = (l, v, s = "") => `<div class="card tot"><div class="lbl">${l}</div><div class="v num">${v}</div>${s ? `<div class="hint">${s}</div>` : ""}</div>`;
     const quando = dtr
       ? `O day trade usa candles de 5 minutos, que o Yahoo guarda por cerca de 60 dias: o teste no passado começa em ${dt(m.inicio)}. A partir de ${dt(m.ativado_em)} cada dia é simulado ao vivo às 21h30 e fica guardado.`
@@ -119,10 +140,11 @@
       <div class="vhead" style="margin-top:16px"><h4 class="sec-t" style="margin:0">📜 Histórico de operações (${m.total_operacoes > m.operacoes.length ? `${m.total_operacoes}; aqui as ${m.operacoes.length} mais recentes` : ops.length})</h4><button class="btn small" type="button" data-bot-csv="${k}">⬇ Baixar tudo (CSV)</button></div>
       <div class="ftabs dir-f">${[["todos", "Todos"], ...Object.entries(MERC)].map(([v, l]) => `<button role="tab" data-bot-merc="${v}" aria-selected="${u.merc === v}">${l}</button>`).join("")}<span class="bot-sep"></span>
         ${[["todos", "Compras e vendas"], ["compra", "Compras"], ["venda", "Vendas"]].map(([v, l]) => `<button role="tab" data-bot-lado="${v}" aria-selected="${u.lado === v}">${l}</button>`).join("")}</div>
-      <div class="card scroll"><table class="grid bot-t"><thead><tr><th>Data</th><th>Ativo</th><th>Operação</th><th>Qtd. · Preço</th><th>Valor</th><th>Resultado</th></tr></thead><tbody>
-        ${ops.slice(0, verMais).map(o => `<tr class="${o.teste ? "teste" : ""}"><td>${dt(o.data)}${o.hora ? ` ${o.hora}` : ""}${o.teste ? `<br><small class="hint">teste</small>` : ""}</td><td><b>${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small></td>
+      <div class="card scroll"><table class="grid bot-t"><thead><tr><th>Data</th><th>Ativo</th><th>Operação</th><th>Status</th><th>Qtd.</th><th>Compra</th><th>Venda</th><th>Valor</th><th>Resultado</th></tr></thead><tbody>
+        ${ops.slice(0, verMais).map(o => { const p = pares.get(o), l = pernas(p), preco = (v, lado) => v == null ? "—" : o.lado === lado ? `<b>${px(v, o.mercado)}</b>` : px(v, o.mercado); return `<tr class="${o.teste ? "teste" : ""}"><td>${dt(o.data)}${o.hora ? ` ${o.hora}` : ""}${o.teste ? `<br><small class="hint">teste</small>` : ""}</td><td><b>${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small></td>
           <td><b class="${o.lado === "compra" ? "pos" : "neg"}">${o.lado === "compra" ? "Compra" : "Venda"}</b><br><small class="hint bot-mot">${esc(o.motivo)}</small></td>
-          <td>${qtd(o.qtd, o.mercado)} · ${px(o.preco, o.mercado)}</td><td>${brl(o.valor_brl)}</td><td>${o.lado === "venda" ? `${pc(o.resultado_pct)}<br><small>${brl(o.resultado_brl)}</small>` : ""}</td></tr>`).join("") || `<tr><td colspan="6" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
+          <td>${p.fecha ? `Encerrada<br><small class="hint">${l.motivo}</small>` : `<span class="tag on">Aberta</span>`}${p.vendida ? ` <small class="bot-m">vendida</small>` : ""}</td>
+          <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra")}</td><td>${preco(l.venda, "venda")}</td><td>${brl(o.valor_brl)}</td><td>${o.lado === "venda" ? `${pc(o.resultado_pct)}<br><small>${brl(o.resultado_brl)}</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
       </tbody></table></div>
       ${ops.length > verMais ? `<button class="btn" type="button" id="botMais" style="margin-top:8px">Ver mais ${Math.min(50, ops.length - verMais)}</button>` : ""}`;
   }
@@ -193,8 +215,9 @@
     let ops = [...m.operacoes].reverse();
     // day trade: the whole history is kept in one file per month
     if (m.meses?.length) ops = (await Promise.all(m.meses.map(x => fetch(`/relatorios/bot/daytrade/ops-${x}.json`).then(r => r.ok ? r.json() : []).catch(() => [])))).flat();
-    const linhas = [["data", "hora", "ativo", "mercado", "operacao", "quantidade", "preco", "valor_brl", "custos_brl", "resultado_brl", "resultado_pct", "teste", "motivo"].join(";"),
-      ...ops.map(o => [o.data, o.hora || "", o.ticker, o.mercado, o.lado, o.qtd, o.preco, o.valor_brl, o.custos_brl, o.resultado_brl ?? "", o.resultado_pct ?? "", o.teste ? "sim" : "não", q(o.motivo)].join(";").replace(/(\d)\.(\d)/g, "$1,$2"))];
+    const pares = parear(ops);
+    const linhas = [["data", "hora", "ativo", "mercado", "operacao", "status", "motivo_saida", "posicao", "quantidade", "preco", "preco_compra", "preco_venda", "valor_brl", "custos_brl", "resultado_brl", "resultado_pct", "teste", "motivo"].join(";"),
+      ...ops.map(o => { const p = pares.get(o), l = pernas(p); return [o.data, o.hora || "", o.ticker, o.mercado, o.lado, p.fecha ? "encerrada" : "aberta", l.motivo || "", p.vendida ? "vendida" : "comprada", o.qtd, o.preco, l.compra ?? "", l.venda ?? "", o.valor_brl, o.custos_brl, o.resultado_brl ?? "", o.resultado_pct ?? "", o.teste ? "sim" : "não", q(o.motivo)].join(";").replace(/(\d)\.(\d)/g, "$1,$2"); })];
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob(["﻿" + linhas.join("\n")], { type: "text/csv;charset=utf-8" }));
     a.download = `bot-${k}-historico.csv`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
