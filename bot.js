@@ -354,7 +354,7 @@
   }, 60000);
 
   // Carteira sub-tabs
-  const cartSub = () => { try { return localStorage.getItem(KEY + ".csub") === "bot" ? "bot" : "minha"; } catch { return "minha"; } };
+  const cartSub = () => { try { const s = localStorage.getItem(KEY + ".csub"); return ["favs", "minha", "bot"].includes(s) ? s : "favs"; } catch { return "favs"; } };
   window.showCartSub = (name = cartSub()) => {
     document.querySelectorAll("[data-csub]").forEach(b => b.setAttribute("aria-selected", b.dataset.csub === name));
     document.querySelectorAll("[data-csub-panel]").forEach(p => p.hidden = p.dataset.csubPanel !== name);

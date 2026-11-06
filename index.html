@@ -630,15 +630,20 @@ table.bot-t td { vertical-align: top; } table.bot-t th:nth-child(-n+4), table.bo
   <section class="strip" id="strip" aria-label="Principais indicadores"></section>
 
   <nav class="tabs" role="tablist">
-    <button role="tab" data-tab="favs" aria-selected="true">Favoritos <span class="badge" id="nFavs">0</span></button>
-    <button role="tab" data-tab="cart">Carteira <span class="badge" id="nCart">0</span></button>
+    <button role="tab" data-tab="cart" aria-selected="true">Carteira <span class="badge" id="nCart">0</span></button>
     <button role="tab" data-tab="report">Relatório diário</button>
     <button role="tab" data-tab="empresas">Empresas</button>
     <button role="tab" data-tab="edu">Educação</button>
   </nav>
 
-  <!-- FAVORITOS -->
-  <section data-panel="favs">
+  <!-- CARTEIRA: favoritos, minha carteira e o bot -->
+  <section data-panel="cart">
+    <div class="ftabs csubs" role="tablist" aria-label="Seções da carteira">
+      <button role="tab" data-csub="favs" aria-selected="true">⭐ Favoritos <span class="badge" id="nFavs">0</span></button>
+      <button role="tab" data-csub="minha" aria-selected="false">💼 Minha carteira</button>
+      <button role="tab" data-csub="bot" aria-selected="false">🤖 Bot (simulação)</button>
+    </div>
+    <div data-csub-panel="favs">
     <div class="toolbar">
       <div class="search">
         <input id="q" type="search" placeholder="Adicionar ativo: digite um nome ou código (ex.: Petrobras, WEGE3, Apple, Bitcoin, euro)" autocomplete="off" aria-label="Buscar ativo">
@@ -646,15 +651,8 @@ table.bot-t td { vertical-align: top; } table.bot-t th:nth-child(-n+4), table.bo
       </div>
     </div>
     <div id="favList"></div>
-  </section>
-
-  <!-- CARTEIRA -->
-  <section data-panel="cart" hidden>
-    <div class="ftabs csubs" role="tablist" aria-label="Seções da carteira">
-      <button role="tab" data-csub="minha" aria-selected="true">💼 Minha carteira</button>
-      <button role="tab" data-csub="bot" aria-selected="false">🤖 Bot (simulação)</button>
     </div>
-    <div data-csub-panel="minha">
+    <div data-csub-panel="minha" hidden>
     <div class="vhead"><h3>Minha carteira</h3><span class="row2" style="margin:0"><button class="btn" id="simNew" type="button">🧮 Simular compra e venda</button><button class="btn primary" id="vNew" type="button">✨ Montar carteira automaticamente</button></span></div>
     <div class="totals" id="cartTotals"></div>
     <div id="cartMix"></div>
@@ -2021,6 +2019,7 @@ document.addEventListener("click", e => {
 });
 
 function showTab(name) {
+  if (name === "favs") { name = "cart"; try { localStorage.setItem(KEY + ".csub", "favs"); } catch {} }
   document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === name));
   document.querySelectorAll(".hdr-tab").forEach(b => b.setAttribute("aria-pressed", b.dataset.tab === name));
   document.querySelectorAll("[data-panel]").forEach(p => p.hidden = p.dataset.panel !== name);
