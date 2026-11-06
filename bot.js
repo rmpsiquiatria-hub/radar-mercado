@@ -12,7 +12,7 @@
   let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, msg = "", verMais = PAGINA, anteriores = [];
   let SPEC = null, rascunho = null, aberto = null;     // the form being edited survives re-renders
   let vivo = null, vivoBusy = false;                   // today's day trade, simulated live in the browser
-  const ui = () => ({ modo: null, merc: "todos", lado: "todos", periodo: "tudo", de: "", ate: "", ...(state.botUi || {}) });
+  const ui = () => ({ modo: null, merc: "todos", lado: "todos", res: "todos", periodo: "tudo", de: "", ate: "", ...(state.botUi || {}) });
   // the date range of the history filter: [from, to] as YYYY-MM-DD (Brasília), either end may be ""
   const hojeBR = () => new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
   const menos = (d, n) => { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() - n); return x.toISOString().slice(0, 10); };
@@ -186,8 +186,10 @@
     m = { ...m, operacoes: [...hoje, ...m.operacoes] };
     const atual = new Map((dtr && vivo?.posicoes || []).map(x => [x.mercado + x.ticker, x]));
     const [de, ate] = faixa(u);
-    const ops = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado) && (!de || o.data >= de) && (!ate || o.data <= ate));
     const pares = parear([...m.operacoes].reverse(), anteriores);
+    // the outcome of the trade each row belongs to: both rows of a closed trade share it
+    const desfecho = o => { const f = pares.get(o)?.fecha; return !f ? "andamento" : f.resultado_brl > 0 ? "lucro" : "prejuizo"; };
+    const ops = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado) && (u.res === "todos" || desfecho(o) === u.res) && (!de || o.data >= de) && (!ate || o.data <= ate));
     // every number below covers the same period: from the start of the test to the last closed day
     const fim = m.ultimo_candle || m.curva?.at(-1)?.[0], per = `de ${dt(m.inicio)} a ${dt(fim)}`;
     const dias = m.inicio && fim ? Math.round((Date.parse(fim) - Date.parse(m.inicio)) / 864e5) + 1 : null;
@@ -219,10 +221,11 @@
       ${dtr ? vivoHTML() : ""}
       <div class="vhead" style="margin-top:16px"><h4 class="sec-t" style="margin:0">📜 Histórico de operações (${m.total_operacoes > m.operacoes.length - hoje.length ? `${m.total_operacoes + hoje.length}; aqui as ${m.operacoes.length} mais recentes` : ops.length})</h4><button class="btn small" type="button" data-bot-csv="${k}">⬇ Baixar tudo (CSV)</button></div>
       <div class="ftabs dir-f">${[["todos", "Todos"], ...Object.entries(MERC)].map(([v, l]) => `<button role="tab" data-bot-merc="${v}" aria-selected="${u.merc === v}">${l}</button>`).join("")}<span class="bot-sep"></span>
-        ${[["todos", "Compras e vendas"], ["compra", "Compras"], ["venda", "Vendas"]].map(([v, l]) => `<button role="tab" data-bot-lado="${v}" aria-selected="${u.lado === v}">${l}</button>`).join("")}</div>
+        ${[["todos", "Compras e vendas"], ["compra", "Compras"], ["venda", "Vendas"]].map(([v, l]) => `<button role="tab" data-bot-lado="${v}" aria-selected="${u.lado === v}">${l}</button>`).join("")}<span class="bot-sep"></span>
+        ${[["todos", "Qualquer resultado"], ["lucro", "Com lucro"], ["prejuizo", "Com prejuízo"], ["andamento", "Em andamento"]].map(([v, l]) => `<button role="tab" data-bot-res="${v}" aria-selected="${u.res === v}">${l}</button>`).join("")}</div>
       <div class="ftabs dir-f bot-datas">${[["hoje", "Hoje"], ["7", "Últimos 7 dias"], ["30", "Últimos 30 dias"], ["tudo", "Todas as datas"]].map(([v, l]) => `<button role="tab" data-bot-periodo="${v}" aria-selected="${u.periodo === v}">${l}</button>`).join("")}<span class="bot-sep"></span>
         <label class="hint">de <input type="date" data-bot-data="de" value="${esc(de)}"></label><label class="hint">até <input type="date" data-bot-data="ate" value="${esc(ate)}"></label>
-        ${u.periodo !== "tudo" ? `<span class="hint">${ops.length} operações no período</span>` : ""}</div>
+        ${u.periodo !== "tudo" || u.res !== "todos" || u.merc !== "todos" || u.lado !== "todos" ? `<span class="hint">${ops.length} ${ops.length === 1 ? "linha" : "linhas"} com esses filtros</span>` : ""}</div>
       <div class="card scroll"><table class="grid bot-t"><thead><tr><th>Data</th><th>Ativo</th><th>Operação</th><th>Status</th><th>Qtd.</th><th>Compra</th><th>Venda</th><th>Valor</th><th>Resultado</th></tr></thead><tbody>
         ${ops.slice(0, verMais).map(o => { const p = pares.get(o), l = pernas(p), // when each leg happened: the time, plus the date if it was another day
           quando = x => !x ? "" : x.data === o.data ? x.hora || "" : dt(x.data) + (x.hora ? " " + x.hora : ""),
@@ -342,6 +345,7 @@
     const mc = t.closest("[data-bot-merc]"); if (mc) { verMais = PAGINA; return setUi({ merc: mc.dataset.botMerc }); }
     const pr = t.closest("[data-bot-periodo]"); if (pr) { verMais = PAGINA; return setUi({ periodo: pr.dataset.botPeriodo }); }
     const ld = t.closest("[data-bot-lado]"); if (ld) { verMais = PAGINA; return setUi({ lado: ld.dataset.botLado }); }
+    const rs = t.closest("[data-bot-res]"); if (rs) { verMais = PAGINA; return setUi({ res: rs.dataset.botRes }); }
     const c = t.closest("[data-bot-csv]"); if (c) return csv(c.dataset.botCsv);
   });
 
