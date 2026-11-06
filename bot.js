@@ -10,6 +10,7 @@
   const box = $("#botBox");
   let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, msg = "", verMais = 50, anteriores = [];
   let SPEC = null, rascunho = null, aberto = null;     // the form being edited survives re-renders
+  let vivo = null, vivoBusy = false;                   // today's day trade, simulated live in the browser
   const ui = () => ({ modo: null, merc: "todos", lado: "todos", ...(state.botUi || {}) });
   const setUi = o => { state.botUi = { ...ui(), ...o }; save(); render(); };
 
@@ -49,6 +50,48 @@
     SPEC = s; cfgOk = !!p.configurado && !p.erro; cfg = p.bot || (cfgOk ? null : r?.config) || null; res = r; carregado = true;
     if (aguardando && res && res.gerado_em > aguardando) { aguardando = null; msg = "✅ Simulação atualizada."; }
     render();
+    if (res?.modos?.daytrade) { await aoVivo(); render(); }
+  }
+
+  // Today's day trade, live: the night run (scripts/bot.mjs) only simulates closed days, so while the
+  // market is open the page fetches today's 5-minute candles and runs the same code
+  // (lib/bot-daytrade.js) from the cash the last closed day ended with. Refreshed every minute.
+  async function aoVivo() {
+    const m = res?.modos?.daytrade;
+    if (!m?.lista?.length || !res.regras || vivoBusy) return;
+    const agora = Date.now() / 1000, L = await import("/lib/bot-daytrade.js"), d = L.brt(agora).slice(0, 10);
+    if (m.ultimo_candle && m.ultimo_candle >= d) { vivo = null; return; }   // tonight's run already has today
+    vivoBusy = true;
+    try {
+      const syms = m.lista.map(a => a.sym), lotes = [];
+      for (let i = 0; i < syms.length; i += 20) lotes.push(syms.slice(i, i + 20));
+      const pedir = (s, q) => fetch(`/api/cotacoes?s=${encodeURIComponent(s.join(","))}&${q}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null).catch(() => null);
+      const [usd, ...partes] = await Promise.all([pedir(["USDBRL=X"], "range=1d"), ...lotes.map(l => pedir(l, "range=5d&iv=5m&ohlc=1"))]);
+      const Q = Object.assign({}, ...partes.map(p => p?.quotes || {})), dolar = usd?.quotes?.["USDBRL=X"]?.price;
+      if (!dolar || !partes.some(p => p)) throw new Error("sem preços");
+      const R = res.regras, dados = [];
+      for (const a of m.lista) {
+        const q = Q[a.sym]; if (!q?.bars?.length) continue;
+        // only closed candles: the one still forming waits for the next refresh
+        const bars = q.bars.filter(b => b[0] + 300 <= agora).map(([t, o, h, l, c, v]) => ({ t, o, h, l, c, v }));
+        const x = L.preparar(a, bars, R);
+        if (x.ini[d] == null) continue;
+        // the day's last bar has not happened yet: it comes when the session (crypto: the UTC day) ends
+        const fimT = a.mercado === "cripto" ? Date.parse(d + "T00:00:00Z") / 1000 + 86400 - 300
+          : q.session?.end && L.brt(q.session.end).slice(0, 10) === d ? q.session.end - 300
+          : Date.parse(d + (a.mercado === "b3" ? "T19:55:00Z" : "T20:55:00Z")) / 1000;
+        x.ultimoT[d] = Math.max(x.ultimoT[d], fimT);
+        dados.push(x);
+      }
+      const carteira = L.criarCarteira({ custos: res.fixos.custos, fx: mk => mk === "b3" ? 1 : dolar, ativado: m.ativado_em });
+      const w = L.simularDia(d, dados, { carteira, V0: m.valor_inicial, V: { caixa: m.caixa, ops: [] }, R, deslize: res.fixos.deslize, aoVivo: true });
+      const posicoes = [...w.pos.values()].map(p => {
+        const valor = p.qtd * p.ultimo * (p.a.mercado === "b3" ? 1 : dolar), r = valor * (1 - res.fixos.custos[p.a.mercado]) - p.custo_brl;
+        return { ticker: p.a.ticker, mercado: p.a.mercado, atual: p.ultimo, resultado_brl: r, resultado_pct: r / p.custo_brl * 100 };
+      });
+      vivo = { dia: d, em: agora, ops: w.ops, posicoes, pendentes: w.pendentes, patrimonio: w.patrimonio(d), inicio: m.caixa, erro: null };
+    } catch (e) { vivo = { ...(vivo || {}), dia: d, em: agora, erro: String(e.message || e) }; }
+    finally { vivoBusy = false; }
   }
 
   // the form: what is saved, or what is being typed
@@ -111,8 +154,22 @@
       </svg><div class="bot-ax hint"><span>${dt(curva[0][0])}</span><span>${brl(lo)} – ${brl(hi)}</span><span>${dt(curva.at(-1)[0])}</span></div></div>`;
   }
 
+  function vivoHTML() {
+    if (!vivo) return "";
+    const hora = t => new Date(t * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    if (!vivo.ops) return `<div class="card bot-vivo-box">🔴 <b>Hoje ao vivo</b> · não consegui buscar os preços agora (${esc(vivo.erro || "")}). Tento de novo em 1 minuto.</div>`;
+    const dia = vivo.patrimonio - vivo.inicio, enc = vivo.ops.filter(o => o.lado === "venda").length;
+    return `<div class="card bot-vivo-box"><b><span class="bot-vivo">●</span> Hoje ao vivo (${dt(vivo.dia)})</b><span class="hint"> · atualizado às ${hora(vivo.em)}, a cada minuto${vivo.erro ? " · ⚠ a última atualização falhou" : ""}</span>
+      <div class="bot-vivo-n">${vivo.ops.length} operações hoje · ${enc} encerradas · ${vivo.posicoes.length} abertas${vivo.pendentes?.length ? ` · ${vivo.pendentes.length} ordem(ns) para o próximo candle` : ""} · resultado do dia <b class="${dia > 0 ? "pos" : dia < 0 ? "neg" : ""}">${dia >= 0 ? "+" : "−"}${brl(Math.abs(dia))}</b> · patrimônio agora ${brl(vivo.patrimonio)}</div>
+      <small class="hint">As operações de hoje aparecem no histórico abaixo, marcadas "ao vivo". Os preços da B3 podem chegar com até 15 minutos de atraso. Às 21h30 o dia é fechado e guardado; os números podem mudar um pouco (dólar de fechamento e candles revisados).</small></div>`;
+  }
+
   function modoHTML(k, m) {
     const p = m.placar, u = ui(), dtr = k === "daytrade";
+    // day trade: today's live trades on top of the closed days, and the price now of what is still open
+    const hoje = dtr && vivo?.ops ? [...vivo.ops].reverse().map(o => ({ ...o, ao_vivo: true })) : [];
+    m = { ...m, operacoes: [...hoje, ...m.operacoes] };
+    const atual = new Map((dtr && vivo?.posicoes || []).map(x => [x.mercado + x.ticker, x]));
     const ops = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado));
     const pares = parear([...m.operacoes].reverse(), anteriores);
     const tot = (l, v, s = "") => `<div class="card tot"><div class="lbl">${l}</div><div class="v num">${v}</div>${s ? `<div class="hint">${s}</div>` : ""}</div>`;
@@ -137,14 +194,16 @@
       </tbody></table></div>` : `<p class="hint">Tudo em caixa.</p>`}
       <h4 class="sec-t">⏭️ Ordens para a próxima abertura (${m.pendentes.length})</h4>
       ${m.pendentes.length ? `<ul class="bot-pend">${m.pendentes.map(o => `<li><b class="${o.lado === "compra" ? "pos" : "neg"}">${o.lado === "compra" ? "Comprar" : "Vender"} ${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small> <span class="hint">· ${esc(o.motivo)}</span></li>`).join("")}</ul>` : `<p class="hint">Nenhuma.</p>`}`}
-      <div class="vhead" style="margin-top:16px"><h4 class="sec-t" style="margin:0">📜 Histórico de operações (${m.total_operacoes > m.operacoes.length ? `${m.total_operacoes}; aqui as ${m.operacoes.length} mais recentes` : ops.length})</h4><button class="btn small" type="button" data-bot-csv="${k}">⬇ Baixar tudo (CSV)</button></div>
+      ${dtr ? vivoHTML() : ""}
+      <div class="vhead" style="margin-top:16px"><h4 class="sec-t" style="margin:0">📜 Histórico de operações (${m.total_operacoes > m.operacoes.length - hoje.length ? `${m.total_operacoes + hoje.length}; aqui as ${m.operacoes.length} mais recentes` : ops.length})</h4><button class="btn small" type="button" data-bot-csv="${k}">⬇ Baixar tudo (CSV)</button></div>
       <div class="ftabs dir-f">${[["todos", "Todos"], ...Object.entries(MERC)].map(([v, l]) => `<button role="tab" data-bot-merc="${v}" aria-selected="${u.merc === v}">${l}</button>`).join("")}<span class="bot-sep"></span>
         ${[["todos", "Compras e vendas"], ["compra", "Compras"], ["venda", "Vendas"]].map(([v, l]) => `<button role="tab" data-bot-lado="${v}" aria-selected="${u.lado === v}">${l}</button>`).join("")}</div>
       <div class="card scroll"><table class="grid bot-t"><thead><tr><th>Data</th><th>Ativo</th><th>Operação</th><th>Status</th><th>Qtd.</th><th>Compra</th><th>Venda</th><th>Valor</th><th>Resultado</th></tr></thead><tbody>
-        ${ops.slice(0, verMais).map(o => { const p = pares.get(o), l = pernas(p), preco = (v, lado) => v == null ? "—" : o.lado === lado ? `<b>${px(v, o.mercado)}</b>` : px(v, o.mercado); return `<tr class="${o.teste ? "teste" : ""}"><td>${dt(o.data)}${o.hora ? ` ${o.hora}` : ""}${o.teste ? `<br><small class="hint">teste</small>` : ""}</td><td><b>${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small></td>
+        ${ops.slice(0, verMais).map(o => { const p = pares.get(o), l = pernas(p), preco = (v, lado) => v == null ? "—" : o.lado === lado ? `<b>${px(v, o.mercado)}</b>` : px(v, o.mercado), ag = !p.fecha && o.ao_vivo ? atual.get(o.mercado + o.ticker) : null;
+          return `<tr class="${o.teste ? "teste" : ""}"><td>${dt(o.data)}${o.hora ? ` ${o.hora}` : ""}${o.teste ? `<br><small class="hint">teste</small>` : o.ao_vivo ? `<br><small class="bot-vivo">● ao vivo</small>` : ""}</td><td><b>${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small></td>
           <td><b class="${o.lado === "compra" ? "pos" : "neg"}">${o.lado === "compra" ? "Compra" : "Venda"}</b><br><small class="hint bot-mot">${esc(o.motivo)}</small></td>
           <td>${p.fecha ? `Encerrada<br><small class="hint">${l.motivo}</small>` : `<span class="tag on">Aberta</span>`}${p.vendida ? ` <small class="bot-m">vendida</small>` : ""}</td>
-          <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra")}</td><td>${preco(l.venda, "venda")}</td><td>${brl(o.valor_brl)}</td><td>${o.lado === "venda" ? `${pc(o.resultado_pct)}<br><small>${brl(o.resultado_brl)}</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
+          <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra")}</td><td>${ag ? `<small class="hint">agora</small> ${px(ag.atual, o.mercado)}` : preco(l.venda, "venda")}</td><td>${brl(o.valor_brl)}</td><td>${o.lado === "venda" ? `${pc(o.resultado_pct)}<br><small>${brl(o.resultado_brl)}</small>` : ag ? `${pc(ag.resultado_pct)}<br><small class="hint">se vendesse agora</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
       </tbody></table></div>
       ${ops.length > verMais ? `<button class="btn" type="button" id="botMais" style="margin-top:8px">Ver mais ${Math.min(50, ops.length - verMais)}</button>` : ""}`;
   }
@@ -251,6 +310,14 @@
     const ld = t.closest("[data-bot-lado]"); if (ld) { verMais = 50; return setUi({ lado: ld.dataset.botLado }); }
     const c = t.closest("[data-bot-csv]"); if (c) return csv(c.dataset.botCsv);
   });
+
+  // live day trade: refreshed every minute while the bot is on screen, never while the user types in the form
+  setInterval(async () => {
+    if (!res?.modos?.daytrade || !box?.offsetParent || document.hidden) return;
+    await aoVivo();
+    const foco = document.activeElement;
+    if (!(foco && box.contains(foco) && /INPUT|SELECT|TEXTAREA/.test(foco.tagName))) render();
+  }, 60000);
 
   // Carteira sub-tabs
   const cartSub = () => { try { return localStorage.getItem(KEY + ".csub") === "bot" ? "bot" : "minha"; } catch { return "minha"; } };

@@ -52,6 +52,8 @@ async function one(symbol, range, interval, withBars) {
     volume: m.regularMarketVolume || null,
     time: m.regularMarketTime,
     open: m.instrumentType === "CRYPTOCURRENCY" || (tp ? now >= tp.start && now < tp.end : false),
+    // today's (or the next) regular session, in Unix seconds: the live day trade needs its end
+    session: tp ? { start: tp.start, end: tp.end } : null,
     points,
     ...(withBars ? { bars, interval } : {}),
   };
@@ -123,5 +125,5 @@ export async function GET(request) {
   results.forEach((r, i) => {
     out[symbols[i]] = r.status === "fulfilled" ? r.value : { symbol: symbols[i], error: String(r.reason?.message || r.reason) };
   });
-  return json({ range, interval, at: Math.floor(Date.now() / 1000), quotes: out }, range === "1d" ? 15 : 300);
+  return json({ range, interval, at: Math.floor(Date.now() / 1000), quotes: out }, range === "1d" || interval === "5m" ? 15 : 300);
 }

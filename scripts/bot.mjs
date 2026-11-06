@@ -14,7 +14,7 @@
 
 import { readFile, writeFile, mkdir, rm, readdir } from "node:fs/promises";
 import { FRAMES, candles, closedOnly, analisar } from "./tecnica-lib.mjs";
-import { ema } from "../lib/analise.js";
+import { iso, brt, casas, fmt, nfx, criarCarteira, preparar, simularDia } from "../lib/bot-daytrade.js";
 import { normalizar } from "../lib/bot-regras.js";
 
 const rel = new URL("../relatorios/", import.meta.url);
@@ -35,14 +35,10 @@ const universo = [
   ...CRIPTO.map(([sym, nome]) => ({ ticker: sym.replace("-USD", ""), nome, mercado: "cripto", sym, peso: 0 })),
 ].filter(a => R.mercados.includes(a.mercado));
 
-const iso = t => new Date(t * 1000).toISOString().slice(0, 10);
-const brt = t => new Date((t - 3 * 3600) * 1000).toISOString();            // Brasília (UTC−3, no summer time)
 const addDays = (d, n) => { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
 const hoje = brt(Date.now() / 1000).slice(0, 10);
 const ativado = cfg.ativado_em || hoje;
 const inicio = (() => { const x = new Date(ativado + "T12:00:00Z"); x.setUTCMonth(x.getUTCMonth() - FIXOS.historico_meses); return x.toISOString().slice(0, 10); })();
-const casas = m => m === "b3" ? 0 : m === "eua" ? 4 : 6;     // B3 shares are whole; US shares and crypto can be fractions
-const fmt = x => x.toLocaleString("pt-BR", { maximumSignificantDigits: 5 });
 
 // Crypto trades around the clock: a bar is closed only when its whole period has passed.
 function fechados(bars, frame, mercado) {
@@ -83,31 +79,8 @@ try {
 } catch (e) { console.error("CDI:", e.message); }
 const fx = (m, d) => m === "b3" ? 1 : ultimoAte(dolar, d) || ultimoAte(dolar, addDays(d, 7));
 
-// A wallet: cash in reais, open positions, and the trade log (shared by every mode).
-function carteira(V0, inicial = {}) {
-  const w = { caixa: inicial.caixa ?? V0, pos: new Map(), ops: inicial.ops || [] };
-  w.patrimonio = d => w.caixa + [...w.pos.values()].reduce((s, p) => s + p.qtd * p.ultimo * fx(p.a.mercado, d), 0);
-  w.comprar = (a, preco, d, motivo, max, extra = {}) => {
-    if (w.pos.size >= max) return null;
-    const taxa = FIXOS.custos[a.mercado], cambio = fx(a.mercado, d), pat = w.patrimonio(d);
-    const alvo = Math.min(pat / max, w.caixa / (1 + taxa));
-    const f = 10 ** casas(a.mercado), qtd = Math.floor(alvo / (preco * cambio) * f) / f, bruto = qtd * preco * cambio;
-    if (qtd <= 0 || bruto < pat * 0.03) return null;
-    const custo = bruto * taxa; w.caixa -= bruto + custo;
-    const p = { a, qtd, preco, custo_brl: bruto + custo, data: d, ultimo: preco, ...extra };
-    w.pos.set(a.ticker, p);
-    w.ops.push({ data: d, ...(extra.hora ? { hora: extra.hora } : {}), ticker: a.ticker, nome: a.nome, mercado: a.mercado, lado: "compra", qtd, preco: +preco.toPrecision(6),
-      valor_brl: +bruto.toFixed(2), custos_brl: +custo.toFixed(2), motivo, teste: d < ativado });
-    return p;
-  };
-  w.vender = (a, preco, d, motivo, hora) => {
-    const p = w.pos.get(a.ticker), bruto = p.qtd * preco * fx(a.mercado, d), custo = bruto * FIXOS.custos[a.mercado], res = bruto - custo - p.custo_brl;
-    w.caixa += bruto - custo; w.pos.delete(a.ticker);
-    w.ops.push({ data: d, ...(hora ? { hora } : {}), ticker: a.ticker, nome: a.nome, mercado: a.mercado, lado: "venda", qtd: p.qtd, preco: +preco.toPrecision(6), valor_brl: +bruto.toFixed(2),
-      custos_brl: +custo.toFixed(2), motivo, resultado_brl: +res.toFixed(2), resultado_pct: +(res / p.custo_brl * 100).toFixed(2), comprado_em: p.data, teste: d < ativado });
-  };
-  return w;
-}
+// A wallet: cash in reais, open positions, and the trade log (shared by every mode; lib/bot-daytrade.js).
+const carteira = criarCarteira({ custos: FIXOS.custos, fx, ativado });
 const bench = (curva0, V0, d) => {
   const i0 = ultimoAte(ibov, curva0), c0 = cdi && ultimoAte(cdi, curva0);
   return [i0 ? +(V0 * ultimoAte(ibov, d) / i0).toFixed(2) : null, c0 ? +(V0 * ultimoAte(cdi, d) / c0).toFixed(2) : null];
@@ -216,20 +189,7 @@ async function daytrade() {
   const ativos = [...b3, ...universo.filter(a => a.mercado !== "b3")];
   const dados = await pool(ativos, async a => {
     const bars = await candles(a.sym, { range: "60d", interval: "5m" });
-    const C = bars.map(b => b.c), e9 = ema(C, 9), e21 = ema(C, 21);
-    // day key: Brasília date for stocks, UTC date for crypto (its "day" closes at 21h in Brasília)
-    const dia = bars.map(b => a.mercado === "cripto" ? iso(b.t) : brt(b.t).slice(0, 10));
-    // VWAP of the day so far; crypto: average body of the previous candles
-    const vwap = [], corpo = []; let pv = 0, vol = 0, soma = 0;
-    bars.forEach((b, i) => {
-      if (i === 0 || dia[i] !== dia[i - 1]) { pv = 0; vol = 0; }
-      const tp = (b.h + b.l + b.c) / 3, v = b.v || 1; pv += tp * v; vol += v; vwap.push(pv / vol);
-      soma += Math.abs(b.c - b.o); if (i >= R.dtc_media) soma -= Math.abs(bars[i - R.dtc_media].c - bars[i - R.dtc_media].o);
-      corpo.push(i >= R.dtc_media ? soma / R.dtc_media : null);
-    });
-    // first and last bar of each day
-    const ini = {}, fim = {}; dia.forEach((d, i) => { ini[d] ??= i; fim[d] = i; });
-    return { ...a, bars, e9, e21, dia, vwap, corpo, ini, fim };
+    return preparar(a, bars, R);
   });
   if (!dados.length) throw new Error("sem candles de 5 minutos");
 
@@ -241,52 +201,7 @@ async function daytrade() {
   const novas = [], V = { caixa: est.caixa, ops: novas };
 
   for (const d of dias) {
-    const w = carteira(V0, V), pend = new Map();
-    // every 5-minute bar of the day, of every asset, in time order
-    const fila = dados.flatMap(a => a.ini[d] == null ? [] : Array.from({ length: a.fim[d] - a.ini[d] + 1 }, (_, j) => [a, a.ini[d] + j]))
-      .sort((x, y) => x[0].bars[x[1]].t - y[0].bars[y[1]].t || x[0].ticker.localeCompare(y[0].ticker));
-    for (const [a, i] of fila) {
-      const b = a.bars[i], hora = brt(b.t).slice(11, 16), cripto = a.mercado === "cripto";
-      const sell = (preco, motivo) => w.vender(a, preco * (1 - FIXOS.deslize), d, motivo, hora);
-      // 1. pending order of the previous bar, at this bar's open
-      const o = pend.get(a.ticker); pend.delete(a.ticker);
-      if (o?.lado === "venda" && w.pos.has(a.ticker)) sell(b.o, o.motivo);
-      if (o?.lado === "compra" && !w.pos.has(a.ticker)) {
-        const preco = b.o * (1 + FIXOS.deslize);
-        const stop = cripto ? o.stop : preco * (1 - R.dt_stop_pct / 100);
-        const alvo = cripto ? preco + R.dtc_rr * (preco - stop) : preco * (1 + R.dt_alvo_pct / 100);
-        if (stop < preco) { const p = w.comprar(a, preco, d, o.motivo, R.dt_max_posicoes, { hora, stop, alvo, barras: 0 }); if (p) p.ultimo = b.c; }
-      }
-      // 2. during the bar: stop first (the cautious assumption when both are touched), then target
-      const p = w.pos.get(a.ticker);
-      if (p) {
-        p.barras++;
-        if (b.o <= p.stop) sell(b.o, `Stop: abriu abaixo de ${fmt(p.stop)}`);
-        else if (b.l <= p.stop) sell(p.stop, `Stop: tocou ${fmt(p.stop)}`);
-        else if (b.o >= p.alvo) sell(b.o, `Alvo: abriu acima de ${fmt(p.alvo)}`);
-        else if (b.h >= p.alvo) sell(p.alvo, `Alvo atingido: ${fmt(p.alvo)}`);
-        else {
-          p.ultimo = b.c;
-          const resta = (a.bars[a.fim[d]].t - b.t) / 60;      // minutes from this bar to the day's last bar
-          if (i === a.fim[d] || (!cripto && resta < R.dt_zerar_min)) sell(b.c, cripto ? "Zerado no fim do dia (21h)" : "Zerado antes do fechamento");
-          else if (cripto && p.barras >= R.dtc_max_candles) sell(b.c, `Tempo máximo (${R.dtc_max_candles} candles de 5 min)`);
-          else if (!cripto && R.dt_sair_cruzamento && a.e9[i - 1] >= a.e21[i - 1] && a.e9[i] < a.e21[i]) pend.set(a.ticker, { lado: "venda", motivo: "MME 9 cruzou abaixo da MME 21 (5 min)" });
-        }
-      }
-      // 3. at the close of the bar: a new entry for the next bar?
-      if (w.pos.has(a.ticker) || i >= a.fim[d]) continue;
-      if (cripto) {
-        const corpo = b.c - b.o, media = a.corpo[i - 1];
-        if (corpo > 0 && media > 0 && corpo >= R.dtc_mult * media)
-          pend.set(a.ticker, { lado: "compra", stop: b.l, motivo: `Candle de alta ${nfx(corpo / media)}× maior que a média dos últimos ${R.dtc_media}` });
-      } else {
-        const desde = (b.t - a.bars[a.ini[d]].t) / 60 + 5, resta = (a.bars[a.fim[d]].t - b.t) / 60;
-        if (desde >= R.dt_inicio_min && resta >= R.dt_ultima_min && a.e9[i - 1] != null && a.e9[i - 1] <= a.e21[i - 1] && a.e9[i] > a.e21[i] && (!R.dt_vwap || b.c > a.vwap[i]))
-          pend.set(a.ticker, { lado: "compra", motivo: `MME 9 cruzou acima da MME 21 (5 min)${R.dt_vwap ? ", preço acima da VWAP" : ""}` });
-      }
-    }
-    // a gap in the data can leave something open: closed at its last price
-    for (const p of [...w.pos.values()]) w.vender(p.a, p.ultimo, d, "Zerado no fim do dia (sem mais candles)");
+    const w = simularDia(d, dados, { carteira, V0, V, R, deslize: FIXOS.deslize });
     V.caixa = w.caixa;
     est.dias.push([d, +w.caixa.toFixed(2)]);
   }
@@ -308,10 +223,11 @@ async function daytrade() {
     patrimonio: +est.caixa.toFixed(2), caixa: +est.caixa.toFixed(2), placar: placar(curva, todas, V0),
     // the page shows the latest 500 trades; the whole history is in the monthly files
     posicoes: [], pendentes: [], operacoes: todas.slice(-500).reverse(), total_operacoes: todas.length, meses: est.meses, curva,
+    // the assets and the cash at the end of the last day: the site simulates today live from here
+    lista: ativos.map(({ sym, ticker, nome, mercado }) => ({ sym, ticker, nome, mercado })),
     ativos: { b3: b3.length, eua: ativos.filter(a => a.mercado === "eua").length, cripto: ativos.filter(a => a.mercado === "cripto").length },
   };
 }
-const nfx = x => x.toLocaleString("pt-BR", { maximumFractionDigits: 1 });
 
 const modos = {};
 for (const frame of cfg.modos.filter(m => m === "diario" || m === "semanal")) {
