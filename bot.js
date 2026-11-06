@@ -8,7 +8,8 @@
   const MODOS = ["diario", "semanal", "daytrade"];
   const MERC = { b3: "B3", eua: "EUA", cripto: "Cripto" };
   const box = $("#botBox");
-  let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, msg = "", verMais = 50, anteriores = [];
+  const PAGINA = 20;                                   // history rows shown at a time
+  let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, msg = "", verMais = PAGINA, anteriores = [];
   let SPEC = null, rascunho = null, aberto = null;     // the form being edited survives re-renders
   let vivo = null, vivoBusy = false;                   // today's day trade, simulated live in the browser
   const ui = () => ({ modo: null, merc: "todos", lado: "todos", ...(state.botUi || {}) });
@@ -205,7 +206,7 @@
           <td>${p.fecha ? `Encerrada<br><small class="hint">${l.motivo}</small>` : `<span class="tag on">Aberta</span>`}${p.vendida ? ` <small class="bot-m">vendida</small>` : ""}</td>
           <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra")}</td><td>${ag ? `<small class="hint">agora</small> ${px(ag.atual, o.mercado)}` : preco(l.venda, "venda")}</td><td>${brl(o.valor_brl)}</td><td>${o.lado === "venda" ? `${pc(o.resultado_pct)}<br><small>${brl(o.resultado_brl)}</small>` : ag ? `${pc(ag.resultado_pct)}<br><small class="hint">se vendesse agora</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
       </tbody></table></div>
-      ${ops.length > verMais ? `<button class="btn" type="button" id="botMais" style="margin-top:8px">Ver mais ${Math.min(50, ops.length - verMais)}</button>` : ""}`;
+      ${ops.length > verMais ? `<button class="btn" type="button" id="botMais" style="margin-top:8px">Ver mais ${Math.min(PAGINA, ops.length - verMais)}</button>` : ""}`;
   }
 
   // the rules in force, in words
@@ -304,10 +305,10 @@
     const t = e.target;
     if (t.closest("#botSalvar")) return salvar();
     if (t.closest("#botPadrao")) { rascunho = { ...structuredClone(form()), regras: SPEC.padrao() }; return render(); }
-    if (t.closest("#botMais")) { verMais += 50; return render(); }
-    const md = t.closest("[data-bot-modo]"); if (md) { verMais = 50; return setUi({ modo: md.dataset.botModo }); }
-    const mc = t.closest("[data-bot-merc]"); if (mc) { verMais = 50; return setUi({ merc: mc.dataset.botMerc }); }
-    const ld = t.closest("[data-bot-lado]"); if (ld) { verMais = 50; return setUi({ lado: ld.dataset.botLado }); }
+    if (t.closest("#botMais")) { verMais += PAGINA; return render(); }
+    const md = t.closest("[data-bot-modo]"); if (md) { verMais = PAGINA; return setUi({ modo: md.dataset.botModo }); }
+    const mc = t.closest("[data-bot-merc]"); if (mc) { verMais = PAGINA; return setUi({ merc: mc.dataset.botMerc }); }
+    const ld = t.closest("[data-bot-lado]"); if (ld) { verMais = PAGINA; return setUi({ lado: ld.dataset.botLado }); }
     const c = t.closest("[data-bot-csv]"); if (c) return csv(c.dataset.botCsv);
   });
 
