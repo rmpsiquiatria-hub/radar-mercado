@@ -1,45 +1,45 @@
 {
- "data": "2026-11-05",
- "gerado_em": "2026-11-05T16:37:56.596Z",
- "pesquisa_data": "2026-11-05",
+ "data": "2026-11-06",
+ "gerado_em": "2026-11-06T09:09:55.834Z",
+ "pesquisa_data": "2026-11-06",
  "indicadores_data": "2026-11-05",
- "resumo_mercado": "Segundo Metrópoles, Itabira Online e Monitor do Mercado, o Ibovespa subiu cerca de 1,2% na quarta (4), perto de 167,5 mil pontos, interrompendo seis quedas seguidas; o dólar recuou para perto de R$ 5,45. A SpaceMoney aponta bancos em alta (Itaú +3,17%) e Petrobras em queda (-7,08%). Em Nova York, segundo relato no estilo AP, o S&P 500 subiu 1,6% e o Dow cerca de 3%, após a vitória democrata no Congresso dos EUA e queda do petróleo. As fontes citam expectativa em torno da Selic; não encontrei fonte confirmando decisão do Copom.",
+ "resumo_mercado": "Segundo Diário do Sudoeste e Agrolink, o Ibovespa caiu na quinta (5): 0,82% (166,2 mil pontos) ou 0,58%, conforme o veículo; o dólar subiu a cerca de R$ 5,48-5,49. O Diário do Sudoeste cita queda dos DIs (jan/2028 de 14,433% para 14,310%). Em Nova York, Yahoo Finance e CNBC apontam S&P 500 -4,36%; a Fox Business, Dow -3,44% e Nasdaq -5,5%, com ações de IA e chips. Não achei nas fontes agenda para hoje (6).",
  "fontes_mercado": [
   {
-   "nome": "Metrópoles",
-   "titulo": "Bolsa fecha em alta de 1,23% sob expectativa da Selic e pós-eleição nos EUA",
-   "url": "https://www.metropoles.com/brasil/bolsa-fecha-em-alta-de-123-sob-expectativa-da-selic-e-pos-eleicao-nos-eua",
-   "data": "2026-11-04"
+   "nome": "InfoMoney",
+   "titulo": "Ibovespa fecha em baixa, com fiscal e queda do exterior; dólar sobe a R$ 5,48",
+   "url": "https://www.infomoney.com.br/mercados/ibovespa-hoje-bolsa-de-valores-ao-vivo-05112026/",
+   "data": "2026-11-05"
   },
   {
-   "nome": "Itabira Online",
-   "titulo": "Dólar fecha em queda e Bolsa sobe mais de 1%, recuperando os 167 mil pontos",
-   "url": "https://itabiraonline.com.br/2026/11/04/dolar-fecha-em-queda-e-bolsa-sobe-mais-de-1-recuperando-os-167-mil-pontos/",
-   "data": "2026-11-04"
+   "nome": "Diário do Sudoeste",
+   "titulo": "Ibovespa cai 0,82% e dólar fecha a R$ 5,49, maior do ano",
+   "url": "https://diariodosudoeste.com.br/ibovespa-cai-082-e-dolar-fecha-a-r-549-maior-do-ano/",
+   "data": "2026-11-05"
   },
   {
-   "nome": "SpaceMoney",
-   "titulo": "Ibovespa sobe 1,23% e interrompe seis quedas seguidas",
-   "url": "https://www.spacemoney.com.br/investimentos/ibovespa-sobe-bancos-petrobras-cai",
-   "data": "2026-11-04"
+   "nome": "Agrolink",
+   "titulo": "Ibovespa cai 0,58% e dólar sobe a R$ 5,48",
+   "url": "https://www.agrolink.com.br/noticias/ibovespa-cai-0-58--e-dolar-sobe-a-r--5-48_520652.html",
+   "data": "2026-11-05"
   },
   {
-   "nome": "Monitor do Mercado",
-   "titulo": "Ibovespa: Bolsa volta a subir com vitória democrata nos EUA",
-   "url": "https://monitordomercado.com.br/noticias/434339-ibovespa-bolsa-volta-a-subir-com-vitoria-democrata-nos-eua",
-   "data": "2026-11-04"
+   "nome": "Yahoo Finance",
+   "titulo": "Stock market today: Dow plunges 1,800 points, Nasdaq enters correction in AI trade meltdown",
+   "url": "https://finance.yahoo.com/markets/live/stock-market-today-thursday-november-5-dow-sp-500-nasdaq-plunge-chip-stocks-melt-down-193726491.html",
+   "data": "2026-11-05"
   },
   {
-   "nome": "KRMG (AP)",
-   "titulo": "How major US stock indexes fared Wednesday 11/4/2026",
-   "url": "https://krmg.com/2026/11/04/how-major-us-stock-indexes-fared-wednesday-11-4-2026/",
-   "data": "2026-11-04"
+   "nome": "Fox Business",
+   "titulo": "Nasdaq tumbles 5%, Dow plunges more than 1,800 points",
+   "url": "https://www.foxbusiness.com/markets/stocks-nov-5-2026",
+   "data": "2026-11-05"
   },
   {
-   "nome": "StockTitan",
-   "titulo": "The Dow Soared in the Stock Market Today, November 4, 2026, After Democrats Won Congress and Oil Fell",
-   "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-4-2026",
-   "data": "2026-11-04"
+   "nome": "CNBC",
+   "titulo": "Dow drops 1,800 points; Nasdaq tumbles into correction territory on AI tech wreck: Live updates",
+   "url": "https://www.cnbc.com/2026/11/04/stock-market-today-live-updates.html",
+   "data": "2026-11-05"
   }
  ],
  "tecnica_data": "2026-11-05",
@@ -410,7 +410,7 @@
      ]
     }
    },
-   "resumo": "Segundo o Bradesco BBI, o Itaú é o banco preferido entre os grandes, com balanço defensivo e forte histórico de execução. O Money Times relata preço-alvo de R$ 45 do BBI, e reportagens do Clube Acionista citam XP com alvo de R$ 50 para o fim de 2027 e Safra com R$ 49 para 2026. O resultado do 3T26 deve sair na primeira semana de novembro, e a Seu Dinheiro aponta pressão de custo de risco no setor, com leitura mais favorável para o Itaú. No 2T26 o banco lucrou R$ 12,4 bilhões, alta de 7,8%.",
+   "resumo": "Segundo o Seu Dinheiro, o Itaú lucrou R$ 12,6 bilhões (recorrente gerencial) no 3T26, em linha com o esperado, com ROE de 23,6%; o Bradesco BBI havia apontado o Itaú como banco preferido entre os grandes, com alvo de R$ 45, e reportagens do Clube Acionista citam XP com alvo de R$ 50 (fim de 2027) e Safra com R$ 49. O Clube Acionista também cita preço-alvo médio de R$ 50,23 entre 64 casas, com 51 compras, 7 neutros e 6 vendas. No 2T26 o lucro havia sido de R$ 12,4 bilhões.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 3,
@@ -442,6 +442,12 @@
    "mudancas": [],
    "fontes": [
     {
+     "nome": "Seu Dinheiro",
+     "titulo": "Itaú (ITUB4) lucra R$ 12,6 bilhões no 3T26, em linha com o esperado; veja o que pesou no balanço",
+     "url": "https://www.seudinheiro.com/2026/empresas/itau-itub4-com-lucro-roe-rentabilidade-banco-balanco-do-3t26-miql/",
+     "data": null
+    },
+    {
      "nome": "Money Times",
      "titulo": "ITUB4 ou BBSA3? Bradesco BBI elege melhor banco da bolsa",
      "url": "https://www.moneytimes.com.br/itub4-ou-bbsa3-bradesco-bbi-elege-melhor-banco-da-bolsa/",
@@ -460,7 +466,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-06"
   },
   {
    "ticker": "PETR4",
@@ -2589,20 +2595,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Ambev divulgou o 3T26: lucro ajustado de R$ 4,39 bi (+14,3%), acima das estimativas; Ebitda abaixo do esperado segundo o JPMorgan; conselho aprovou recompra de até 190 milhões de ações.",
-     "fonte": "Investidor10",
-     "data": "2026-10-29"
-    },
-    {
-     "tipo": "outro",
-     "descricao": "Ágora Investimentos manteve recomendação neutra após o 3T26, citando incertezas sobre a sustentabilidade do crescimento diante da pressão de custos.",
-     "fonte": "Suno Notícias",
-     "data": "2026-10-29"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Investidor10",
@@ -4938,7 +4931,7 @@
      ]
     }
    },
-   "resumo": "No 2T26 a empresa teve lucro de R$ 2,2 bilhões (queda de 4% em um ano) e anunciou cerca de R$ 3,8 bilhões em dividendos (R$ 1,90 por ação, pagamento em 03/09/2026), segundo o Money Times. As fontes citam divergência entre casas, com rebaixamentos por grandes bancos, pressão da queda da Selic e incerteza sobre contratos com o Banco do Brasil após 2033. Nenhuma recomendação datada dos últimos 6 meses foi confirmada, por isso o consenso está zerado.",
+   "resumo": "No 2T26 a empresa teve lucro de R$ 2,2 bilhões (queda de 4% em um ano) e anunciou cerca de R$ 3,8 bilhões em dividendos (R$ 1,90 por ação, pagamento em 03/09/2026), segundo o Money Times. As fontes citam divergência entre casas, com rebaixamentos por grandes bancos, pressão da queda da Selic e incerteza sobre contratos com o Banco do Brasil após 2033. Nenhuma recomendação datada dos últimos 6 meses foi confirmada, por isso o consenso está zerado. Segundo o Eu Quero Investir, o 3T26 trouxe lucro gerencial recorrente de R$ 2,43 bilhões (-5,1% a/a), com menor contribuição de Brasilseg e BB Corretora, e a companhia passou a projetar queda de 11% a 15% nos prêmios emitidos da Brasilseg em 2026 (antes -3% a +2%); a data da publicação e a reação das casas não foram confirmadas.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 0,
@@ -4950,6 +4943,12 @@
    },
    "mudancas": [],
    "fontes": [
+    {
+     "nome": "Eu Quero Investir",
+     "titulo": "BB Seguridade balanço 3T26",
+     "url": "https://euqueroinvestir.com/mercados/bb-seguridade-balanco-3t26",
+     "data": null
+    },
     {
      "nome": "Money Times",
      "titulo": "BB Seguridade (BBSE3) pagará R$ 3,8 bilhões em dividendos; valor por ação chega a quase R$ 2",
@@ -4963,7 +4962,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-06"
   },
   {
    "ticker": "VIVT3",
@@ -5315,7 +5314,7 @@
      ]
     }
    },
-   "resumo": "O 2T26 teve receita bruta de R$ 12,8 bilhões (+18,3%), com ganho de participação e recuperação de rentabilidade, segundo o Investimentos.com.br. Em junho o Safra cortou o alvo de R$ 30 para R$ 27 mantendo compra; o Itaú BBA, neutro, reduziu o alvo de R$ 27 para R$ 20 após o 1T26.",
+   "resumo": "O 2T26 teve receita bruta de R$ 12,8 bilhões (+18,3%), com ganho de participação e recuperação de rentabilidade, segundo o Investimentos.com.br. Em junho o Safra cortou o alvo de R$ 30 para R$ 27 mantendo compra; o Itaú BBA, neutro, reduziu o alvo de R$ 27 para R$ 20 após o 1T26. Atualização: segundo o Euqueroinvestir, a RD Saúde já divulgou o 3T26, com lucro líquido ajustado de R$ 439,1 milhões (+9,2% a/a) e receita bruta de R$ 13,2 bilhões (+16%); a data exata da publicação não foi confirmada.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 1,
@@ -5341,6 +5340,12 @@
    "mudancas": [],
    "fontes": [
     {
+     "nome": "Euqueroinvestir",
+     "titulo": "RD Saúde: balanço 3T26",
+     "url": "https://euqueroinvestir.com/mercados/rd-saude-balanco-3t26",
+     "data": null
+    },
+    {
      "nome": "Investimentos.com.br",
      "titulo": "Análise dos resultados do 2T26 da RD Saúde (RADL3)",
      "url": "https://investimentos.com.br/artigos/analise-resultados-2t26-rd-saude-radl3/",
@@ -5359,7 +5364,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-06"
   },
   {
    "ticker": "RAIL3",
@@ -6611,7 +6616,7 @@
      ]
     }
    },
-   "resumo": "Segundo o Money Times, o balanço do 2T26 foi visto como neutro com viés negativo e a ação caiu cerca de 5%; o Itaú BBA reduziu o alvo para R$ 23 (fim de 2027) citando piora do ambiente competitivo. Santander e Monte Bravo aparecem com compra (R$ 26 e R$ 25); XP, Itaú BBA e Citi seguem neutros. Fontes citam dividend yield de cerca de 12% e recompra de ações aprovada. O resultado do 3T26 não foi encontrado.",
+   "resumo": "Segundo o Money Times, o balanço do 2T26 foi visto como neutro com viés negativo e a ação caiu cerca de 5%; o Itaú BBA reduziu o alvo para R$ 23 (fim de 2027) citando piora do ambiente competitivo. Santander e Monte Bravo aparecem com compra (R$ 26 e R$ 25); XP, Itaú BBA e Citi seguem neutros. Fontes citam dividend yield de cerca de 12% e recompra de ações aprovada. O resultado do 3T26 não foi encontrado. Segundo o Money Times, a TIM divulga o balanço do 3T26 em 9 de novembro, após o fechamento do mercado.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 2,
@@ -6679,7 +6684,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-06"
   },
   {
    "ticker": "MOTV3",
@@ -7860,7 +7865,7 @@
      ]
     }
    },
-   "resumo": "As casas com data nos últimos seis meses se dividem: Itaú BBA recomenda compra (alvo R$ 32,80), enquanto BTG (alvo R$ 29) e UBS BB (alvo R$ 35) estão neutros. O BTG avaliou o resultado regulatório do 2T26 como abaixo do esperado, apesar da operação sólida; o 2T26 trouxe dívida líquida de R$ 16,2 bilhões e lucro de R$ 174 milhões, queda de 32%, segundo o Investidor10.",
+   "resumo": "As casas com data nos últimos seis meses se dividem: Itaú BBA recomenda compra (alvo R$ 32,80), enquanto BTG (alvo R$ 29) e UBS BB (alvo R$ 35) estão neutros. O BTG avaliou o resultado regulatório do 2T26 como abaixo do esperado, apesar da operação sólida; o 2T26 trouxe dívida líquida de R$ 16,2 bilhões e lucro de R$ 174 milhões, queda de 32%, segundo o Investidor10. Segundo o Visno Invest (fonte única, sem confirmação no release), o 3T26 trouxe lucro líquido de R$ 1,9 bilhão, inflado por ganho contábil pontual de R$ 1,94 bilhão sem efeito no caixa na troca de participações em IE Madeira e IE Garanhuns com a Axia Energia; receita líquida de R$ 1,51 bilhão (+40,9%).",
    "sentimento": "neutro",
    "consenso": {
     "compra": 1,
@@ -7908,9 +7913,15 @@
      "titulo": "Isa Energia do Brasil (ISAE4) lucra R$ 174 milhões no 2T26, queda de 32%",
      "url": "https://investidor10.com.br/noticias/empresa-de-energia-abre-o-cofre-e-libera-r-400-milhoes-em-dividendos-122917/",
      "data": "2026-08-06"
+    },
+    {
+     "nome": "Visno Invest",
+     "titulo": "ISA Energia (ISAE4) registra lucro de R$ 1,9 bi no 3T26",
+     "url": "https://visnoinvest.com.br/news/16059/isa-energia-isae4-registra-lucro-de-r-19-bi-no-3t26",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-06"
   },
   {
    "ticker": "MBRF3",
@@ -14084,7 +14095,7 @@
      ]
     }
    },
-   "resumo": "Segundo as fontes, o Itaú BBA elevou o alvo de R$ 5 para R$ 9 e manteve compra em 20/10/2026. BTG, Bradesco BBI e Safra aparecem com compra e o Citi com neutro, em alvos de R$ 3,60 a R$ 6, de julho, quando a ação estava perto de R$ 3; em outubro os relatos citam cotação de R$ 6,5 a R$ 6,9, acima de vários alvos antigos. A prévia operacional foi vista como positiva. Em 21/10 a prévia do 3T26 mostrou receita total de R$ 1,59 bilhão (+4,3%) e de locação de R$ 1,15 bilhão (+11,5%), sem auditoria.",
+   "resumo": "Segundo as fontes, o Itaú BBA elevou o alvo de R$ 5 para R$ 9 e manteve compra em 20/10/2026. BTG, Bradesco BBI e Safra aparecem com compra e o Citi com neutro, em alvos de R$ 3,60 a R$ 6, de julho, quando a ação estava perto de R$ 3; em outubro os relatos citam cotação de R$ 6,5 a R$ 6,9, acima de vários alvos antigos. A prévia operacional foi vista como positiva. Em 21/10 a prévia do 3T26 mostrou receita total de R$ 1,59 bilhão (+4,3%) e de locação de R$ 1,15 bilhão (+11,5%), sem auditoria. O balanço completo do 3T26 está previsto para 12 de novembro, segundo as buscas.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 4,
@@ -14158,7 +14169,7 @@
      "data": "2026-10-21"
     }
    ],
-   "atualizado_em": "2026-10-26"
+   "atualizado_em": "2026-11-06"
   },
   {
    "ticker": "BEEF3",
