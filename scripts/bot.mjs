@@ -2,7 +2,7 @@
 // relatorios/config.json → bot: { valor_inicial, modos: ["diario", "semanal", "daytrade"], ativado_em,
 // regras } (the rules and their defaults are in lib/bot-regras.js) and writes the portfolio, the trade
 // history and the scoreboard of each mode to relatorios/bot/resultado.json.
-// Daily and weekly: every closed candle from 12 months before ativado_em to today is replayed on
+// Daily and weekly: every closed candle from historico_meses (default 12) months before ativado_em to today is replayed on
 // every run; the replay is deterministic, so the same candles always give the same trades and a
 // missed or late run loses nothing.
 // Day trade: Yahoo keeps 5-minute candles for only ~60 days, so each closed day is simulated once
@@ -21,11 +21,10 @@ const rel = new URL("../relatorios/", import.meta.url);
 const cfg = JSON.parse(await readFile(new URL("config.json", rel), "utf8")).bot;
 if (!cfg?.valor_inicial || !cfg.modos?.length) { console.log("Bot não configurado (escolha o valor e o modo no site)."); process.exit(0); }
 const R = normalizar(cfg.regras);
-// Not configurable: what each trade costs, and how far back the test goes.
+// Not configurable: what each trade costs.
 const FIXOS = {
   custos: { b3: 0.0003, eua: 0.001, cripto: 0.001 },   // fees per trade (share of the value)
   deslize: 0.0005,          // execution 0.05% worse than the price that triggered it (spread / slippage)
-  historico_meses: 12,      // back test before the activation date
 };
 const CRIPTO = [["BTC-USD", "Bitcoin"], ["ETH-USD", "Ethereum"], ["SOL-USD", "Solana"], ["XRP-USD", "XRP"], ["BNB-USD", "BNB"]];
 
@@ -38,7 +37,7 @@ const universo = [
 const addDays = (d, n) => { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
 const hoje = brt(Date.now() / 1000).slice(0, 10);
 const ativado = cfg.ativado_em || hoje;
-const inicio = (() => { const x = new Date(ativado + "T12:00:00Z"); x.setUTCMonth(x.getUTCMonth() - FIXOS.historico_meses); return x.toISOString().slice(0, 10); })();
+const inicio = (() => { const x = new Date(ativado + "T12:00:00Z"); x.setUTCMonth(x.getUTCMonth() - R.historico_meses); return x.toISOString().slice(0, 10); })();
 
 // Crypto trades around the clock: a bar is closed only when its whole period has passed.
 function fechados(bars, frame, mercado) {
@@ -68,7 +67,8 @@ async function pool(items, fn, n = 6) {
 }
 
 // Benchmarks and currency: Ibovespa and the dollar (daily), CDI from the Central Bank.
-const serie = async sym => closedOnly(await candles(sym, FRAMES.diario), "diario").map(b => [iso(b.t), b.c]);
+// 5 years: covers the longest back test (36 months) with room to spare
+const serie = async sym => closedOnly(await candles(sym, { ...FRAMES.diario, range: "5y" }), "diario").map(b => [iso(b.t), b.c]);
 const ultimoAte = (s, d) => { let lo = 0, hi = s.length - 1, r = null; while (lo <= hi) { const m = (lo + hi) >> 1; if (s[m][0] <= d) { r = s[m][1]; lo = m + 1; } else hi = m - 1; } return r; };
 const [ibov, dolar] = await Promise.all([serie("^BVSP"), serie("BRL=X")]);
 let cdi = null;
@@ -176,7 +176,9 @@ async function daytrade() {
   const V0 = cfg.valor_inicial, pasta = new URL("bot/daytrade/", rel), arq = new URL("estado.json", pasta);
   const chave = JSON.stringify([V0, ativado, R.mercados, ...Object.entries(R).filter(([k]) => k.startsWith("dt"))]);
   let est = null; try { est = JSON.parse(await readFile(arq, "utf8")); } catch {}
-  if (est?.chave !== chave) { est = { chave, dias: [], caixa: V0, placar: null }; await rm(pasta, { recursive: true, force: true }); }
+  // a shorter back test cuts days already kept: start over; a longer one keeps them (older 5-minute
+  // candles no longer exist anyway)
+  if (est?.chave !== chave || est.dias[0]?.[0] < inicio) { est = { chave, dias: [], caixa: V0, placar: null }; await rm(pasta, { recursive: true, force: true }); }
   await mkdir(pasta, { recursive: true });
   const mesArq = m => new URL(`ops-${m}.json`, pasta);
   const meses = (await readdir(pasta)).filter(f => /^ops-\d{4}-\d{2}\.json$/.test(f)).map(f => f.slice(4, 11)).sort();
@@ -232,7 +234,9 @@ async function daytrade() {
 const modos = {};
 for (const frame of cfg.modos.filter(m => m === "diario" || m === "semanal")) {
   const dados = await pool(universo, async a => {
-    const bars = fechados(await candles(a.sym, FRAMES[frame]), frame, a.mercado);
+    // a test longer than a year needs more daily history than the report's 2 years (300 bars of warm-up)
+    const fr = frame === "diario" && R.historico_meses > 12 ? { ...FRAMES.diario, range: "5y" } : FRAMES[frame];
+    const bars = fechados(await candles(a.sym, fr), frame, a.mercado);
     const atr = atrSerie(bars), first = bars.findIndex(b => iso(b.t) >= addDays(inicio, -10));
     // analysis of each bar from (just before) the start, on the 300 bars before it
     const sinais = bars.map((_, i) => i < first ? null : analisar(bars.slice(Math.max(0, i - 299), i + 1), frame));

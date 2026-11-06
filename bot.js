@@ -127,6 +127,14 @@
     const det = { b3: "as ações do Ibovespa", eua: "as ações dos EUA da sua lista", cripto: "BTC, ETH, SOL, XRP e BNB" };
     return `<fieldset class="bot-g bot-merc"><legend>${x.label}</legend><span class="bot-chk">${x.opcoes.map(([o, l]) => `<label><input type="checkbox" data-regra="mercados" value="${o}" ${v.includes(o) ? "checked" : ""}> <b>${l}</b> <small>${det[o]}</small></label>`).join("")}</span><small class="hint">${x.ajuda}</small></fieldset>`;
   }
+  // how long the back test is: also its own block, with the date it starts at
+  function periodoForm(f) {
+    const x = SPEC?.REGRAS.find(r => r.k === "historico_meses"); if (!x) return "";
+    const v = f.regras.historico_meses, base = cfg?.ativado_em || hojeBR(), ini = new Date(base + "T12:00:00Z");
+    ini.setUTCMonth(ini.getUTCMonth() - v);
+    return `<fieldset class="bot-g bot-merc"><legend>${x.label}</legend><label class="bot-r"><span>Meses de teste antes de ${dt(base)}</span><input type="number" data-regra="historico_meses" min="${x.min}" max="${x.max}" step="${x.passo}" value="${v}">
+      <small>Com ${v} ${v === 1 ? "mês" : "meses"}, o teste do diário e do semanal começa em <b>${dt(ini.toISOString().slice(0, 10))}</b>. De ${x.min} a ${x.max} meses · padrão ${x.padrao}. ${x.ajuda}</small></label></fieldset>`;
+  }
   function setup() {
     const f = form(), modos = cfg?.modos || [];
     const opt = (k, t, d) => `<label class="bot-opt"><input type="radio" name="botModo" value="${k}" ${f.escolha === k ? "checked" : ""}><span><b>${t}</b><small>${d}</small></span></label>`;
@@ -134,6 +142,7 @@
       <p class="hint">O bot usa <b>só a análise técnica</b> e dinheiro imaginário. Escolha com quanto ele começa, em quais mercados, em que gráfico opera e, se quiser, as regras.</p>
       <label class="bot-v">Valor inicial (R$)<input id="botValor" type="number" min="100" step="100" inputmode="decimal" value="${esc(f.valor)}" placeholder="ex.: 10000"></label>
       ${mercadosForm(f)}
+      ${periodoForm(f)}
       <div class="bot-opts">
         ${opt("diario", "Só gráfico diário", "decide no fechamento de cada dia e opera na abertura do dia seguinte")}
         ${opt("semanal", "Só gráfico semanal", "decide no fechamento de sexta e opera na abertura de segunda")}
@@ -179,18 +188,24 @@
     const [de, ate] = faixa(u);
     const ops = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado) && (!de || o.data >= de) && (!ate || o.data <= ate));
     const pares = parear([...m.operacoes].reverse(), anteriores);
+    // every number below covers the same period: from the start of the test to the last closed day
+    const fim = m.ultimo_candle || m.curva?.at(-1)?.[0], per = `de ${dt(m.inicio)} a ${dt(fim)}`;
+    const dias = m.inicio && fim ? Math.round((Date.parse(fim) - Date.parse(m.inicio)) / 864e5) + 1 : null;
+    let topo = null, queda = null;
+    for (const c of m.curva || []) { if (c[1] == null) continue; if (!topo || c[1] > topo[1]) topo = c; const q = c[1] / topo[1] - 1; if (!queda || q < queda.q) queda = { q, de: topo[0], ate: c[0] }; }
     const tot = (l, v, s = "") => `<div class="card tot"><div class="lbl">${l}</div><div class="v num">${v}</div>${s ? `<div class="hint">${s}</div>` : ""}</div>`;
     const quando = dtr
-      ? `O day trade usa candles de 5 minutos, que o Yahoo guarda por cerca de 60 dias: o teste no passado começa em ${dt(m.inicio)}. A partir de ${dt(m.ativado_em)} cada dia é simulado ao vivo às 21h30 e fica guardado.`
+      ? `O day trade usa candles de 5 minutos, que o Yahoo guarda por cerca de 60 dias: por isso o teste no passado dele começou em ${dt(m.inicio)}, mesmo que você escolha um teste mais longo. A partir de ${dt(m.ativado_em)} cada dia é simulado ao vivo às 21h30 e fica guardado.`
       : `De ${dt(m.inicio)} a ${dt(m.ativado_em)} é <b>teste no passado</b> (as mesmas regras aplicadas aos preços antigos); a partir de ${dt(m.ativado_em)} o bot roda <b>ao vivo</b>, todo dia às 21h30.`;
     return `
+      <p class="bot-per">📅 <b>Período dos números abaixo: ${per}</b>${dias ? ` (${dias} dias)` : ""}. Teste no passado até ${dt(menos(m.ativado_em, 1))}, ao vivo desde ${dt(m.ativado_em)}.${dtr && vivo?.ops ? " O dia de hoje, ao vivo, ainda não entra nestes números (ele aparece no quadro vermelho e no histórico)." : ""}</p>
       <div class="totals">
-        ${tot("Patrimônio", brl(m.patrimonio), `${pc(p.retorno_pct)} desde ${dt(m.inicio)}${dtr ? "" : ` · caixa ${brl(m.caixa)}`}`)}
-        ${tot("Ibovespa no período", pc(p.ibov_pct), "se tivesse comprado o índice")}
-        ${tot("CDI no período", pc(p.cdi_pct), "renda fixa sem risco")}
-        ${tot("Maior queda", pc(p.queda_maxima_pct), "do topo ao fundo")}
-        ${tot("Operações", `${p.operacoes}`, `${p.acerto_pct == null ? "—" : nf(1).format(p.acerto_pct)}% com lucro · ganho médio ${pc(p.ganho_medio_pct)} · perda média ${pc(p.perda_media_pct)}`)}
-        ${tot("Custos pagos", brl(p.custos_brl), "taxas e diferença de preço")}
+        ${tot("Patrimônio", brl(m.patrimonio), `${pc(p.retorno_pct)} ${per}${dtr ? "" : ` · caixa ${brl(m.caixa)}`}`)}
+        ${tot("Ibovespa no mesmo período", pc(p.ibov_pct), `${per} · se tivesse comprado o índice`)}
+        ${tot("CDI no mesmo período", pc(p.cdi_pct), `${per} · renda fixa sem risco`)}
+        ${tot("Maior queda", pc(p.queda_maxima_pct), queda && queda.q < 0 ? `do topo em ${dt(queda.de)} ao fundo em ${dt(queda.ate)}` : "do topo ao fundo")}
+        ${tot("Operações encerradas", `${p.operacoes}`, `${per} · cada uma é uma compra e a venda dela · ${p.acerto_pct == null ? "—" : nf(1).format(p.acerto_pct)}% com lucro · ganho médio ${pc(p.ganho_medio_pct)} · perda média ${pc(p.perda_media_pct)}`)}
+        ${tot("Custos pagos", brl(p.custos_brl), `${per} · taxas e diferença de preço`)}
       </div>
       <p class="hint">${quando}${p.ao_vivo_pct != null ? ` Ao vivo: ${pc(p.ao_vivo_pct)}.` : ""} Último dia usado: ${dt(m.ultimo_candle)}.</p>
       ${grafico(m.curva, m.ativado_em)}
@@ -248,8 +263,8 @@
     if (!cfg) corpo = `<div class="empty">Escolha o valor inicial e o modo acima para o bot começar.</div>`;
     else if (!k) corpo = aguardando ? "" : `<div class="empty">Ainda não há resultado. Ele aparece alguns minutos depois de salvar.</div>`;
     else {
-      const comp = modos.length > 1 ? `<div class="card scroll"><table class="grid"><thead><tr><th>Modelo</th><th>Patrimônio</th><th>Retorno</th><th>Ibovespa</th><th>CDI</th><th>Maior queda</th><th>Operações</th><th>Com lucro</th><th>Desde</th></tr></thead><tbody>
-        ${modos.map(x => { const m = res.modos[x], p = m.placar; return `<tr data-bot-modo="${x}"><td><b>${NOMES[x]}</b></td><td>${brl(m.patrimonio)}</td><td>${pc(p.retorno_pct)}</td><td>${pc(p.ibov_pct)}</td><td>${pc(p.cdi_pct)}</td><td>${pc(p.queda_maxima_pct)}</td><td>${p.operacoes}</td><td>${p.acerto_pct == null ? "—" : nf(1).format(p.acerto_pct) + "%"}</td><td>${dt(m.inicio)}</td></tr>`; }).join("")}</tbody></table></div>
+      const comp = modos.length > 1 ? `<div class="card scroll"><table class="grid"><thead><tr><th>Modelo</th><th>Patrimônio</th><th>Retorno</th><th>Ibovespa</th><th>CDI</th><th>Maior queda</th><th>Operações</th><th>Com lucro</th><th>Período</th></tr></thead><tbody>
+        ${modos.map(x => { const m = res.modos[x], p = m.placar; return `<tr data-bot-modo="${x}"><td><b>${NOMES[x]}</b></td><td>${brl(m.patrimonio)}</td><td>${pc(p.retorno_pct)}</td><td>${pc(p.ibov_pct)}</td><td>${pc(p.cdi_pct)}</td><td>${pc(p.queda_maxima_pct)}</td><td>${p.operacoes}</td><td>${p.acerto_pct == null ? "—" : nf(1).format(p.acerto_pct) + "%"}</td><td>${dt(m.inicio)} a ${dt(m.ultimo_candle)}</td></tr>`; }).join("")}</tbody></table></div>
         <p class="hint">O day trade começa mais tarde porque só há cerca de 60 dias de candles de 5 minutos; compare os retornos sabendo disso.</p>` : "";
       corpo = `${comp}${modos.length > 1 ? `<div class="ftabs" role="tablist" style="margin-top:12px">${modos.map(x => `<button role="tab" data-bot-modo="${x}" aria-selected="${x === k}">${NOMES[x]}</button>`).join("")}</div>` : `<h4 class="sec-t">${NOMES[k]}</h4>`}
         ${modoHTML(k, res.modos[k])}${regrasHTML(res, k)}`;
@@ -311,6 +326,7 @@
     const k = e.target.dataset?.regra; if (!k || !SPEC || !rascunho) return;
     const ok = SPEC.normalizar({ ...rascunho.regras, mercados: rascunho.regras.mercados?.length ? rascunho.regras.mercados : ["b3"] });
     if (e.target.type === "number") { rascunho.regras[k] = ok[k]; e.target.value = ok[k]; }
+    if (k === "historico_meses") render();       // the start date written under the field
   });
   box?.addEventListener("toggle", e => { const d = e.target.closest?.("[data-bot-fold]"); if (d) aberto = { ...aberto, [d.dataset.botFold]: d.open }; }, true);
   box?.addEventListener("click", e => {

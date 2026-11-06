@@ -467,6 +467,10 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .fx { font-family: "JetBrains Mono", monospace; font-size: 12.5px; background: var(--panel-2); border-radius: 6px; padding: 6px 8px; margin: 8px 0; }
 .fgal p, .fund-intro p { margin: 6px 0; font-size: 14px; }
 .fund-intro ul { margin: 6px 0; padding-left: 20px; font-size: 14px; }
+.fund-intro ul.refs { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.fund-intro ul.refs li { margin: 2px 0; }
+.xsubs { margin-bottom: 12px; }
+#candCiencia .fund-intro { grid-template-columns: 1fr; }
 .fex { font-size: 13px; color: var(--muted); }
 .cgal { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; align-items: start; }
 .cgal-i { padding: 10px; }
@@ -568,6 +572,7 @@ table.bot-t td { vertical-align: top; } table.bot-t th:nth-child(-n+4), table.bo
 .bot-sep { width: 1px; background: var(--line); margin: 2px 4px; align-self: stretch; } table.bot-t tbody tr { cursor: default; } table.bot-t tr.teste td { opacity: .75; }
 .bot-mot { display: inline-block; white-space: normal; max-width: 340px; line-height: 1.35; }
 .bot-vivo { color: #dc2626; font-weight: 700; } span.bot-vivo { animation: botPulse 1.6s ease-in-out infinite; } @keyframes botPulse { 50% { opacity: .25; } }
+.bot-per { margin: 4px 0 10px; font-size: 14px; }
 .bot-datas { align-items: center; margin-top: 6px; } .bot-datas label { display: inline-flex; align-items: center; gap: 4px; margin: 0 4px; } .bot-datas input[type=date] { padding: 3px 6px; font: inherit; }
 .bot-vivo-box { margin-top: 14px; border-left: 3px solid #dc2626; } .bot-vivo-n { margin: 6px 0 4px; }
 .bot-pend { margin: 0 0 8px; padding-left: 18px; font-size: 14px; } .bot-pend li { margin: 3px 0; }
@@ -693,7 +698,7 @@ table.bot-t td { vertical-align: top; } table.bot-t th:nth-child(-n+4), table.bo
       <button role="tab" data-esec="estatisticas">📐 Estatísticas</button>
       <button role="tab" data-esec="simulacao">🎚️ Simulação</button>
       <button role="tab" data-esec="fundamentos">📊 Análise fundamentalista</button>
-      <button role="tab" data-esec="candles">🕯️ Candlesticks</button>
+      <button role="tab" data-esec="tecnica">📉 Análise técnica</button>
       <button role="tab" data-esec="direito">⚖️ Direito</button>
     </div>
     <div data-esec-panel="mercados">
@@ -714,9 +719,30 @@ table.bot-t td { vertical-align: top; } table.bot-t th:nth-child(-n+4), table.bo
       <div class="edu-grid" id="eduStat" style="margin-top:14px"></div>
     </div>
     <div data-esec-panel="fundamentos" hidden>
+      <div class="ftabs xsubs" role="tablist" aria-label="Partes da análise fundamentalista" data-xsubs="fund">
+        <button role="tab" data-xsub="fund-ind" aria-selected="true">📋 Indicadores</button>
+        <button role="tab" data-xsub="fund-ciencia" aria-selected="false">🔬 O que dizem os estudos</button>
+      </div>
+      <div data-xsub-panel="fund-ind">
       <p class="hint">A análise fundamentalista olha para a <b>empresa</b>: quanto ela lucra, quanto deve, quanto paga de dividendos e se o preço da ação está caro ou barato perto disso. (A análise técnica, dos gráficos e candles, olha só para o comportamento do preço.) Estes são os indicadores que aparecem no Relatório e no e-mail. Toque em um para ver a explicação. Os exemplos usam os números da <b>empresa com mais peso no Ibovespa</b> no último relatório.</p>
       <div class="fund-intro" id="fundIntro"></div>
       <div class="fgal" id="fundList"></div>
+      </div>
+      <div data-xsub-panel="fund-ciencia" hidden id="fundCiencia"></div>
+    </div>
+    <div data-esec-panel="tecnica" hidden>
+      <div class="ftabs xsubs" role="tablist" aria-label="Partes da análise técnica" data-xsubs="tec">
+        <button role="tab" data-xsub="tec-base" aria-selected="true">🔬 Funciona? O que dizem os estudos</button>
+        <button role="tab" data-xsub="tec-ind" aria-selected="false">📏 Indicadores</button>
+        <button role="tab" data-xsub="tec-candles" aria-selected="false">🕯️ Candlesticks</button>
+      </div>
+      <div data-xsub-panel="tec-base" id="tecBase"></div>
+      <div data-xsub-panel="tec-ind" hidden id="tecInd"></div>
+      <div data-xsub-panel="tec-candles" hidden>
+        <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
+        <div id="candCiencia"></div>
+        <div class="cgal" id="cgal"></div>
+      </div>
     </div>
     <div data-esec-panel="simulacao" hidden>
       <p class="note"><b>ⓘ Passe o mouse (no celular, toque) sobre qualquer resultado</b> para ver, em palavras simples, de onde ele vem, a margem de erro e o quanto dá para confiar nele.</p>
@@ -732,10 +758,6 @@ table.bot-t td { vertical-align: top; } table.bot-t th:nth-child(-n+4), table.bo
       </div>
       <div data-dsub-panel="radar" id="dirRadar"><div class="empty">Carregando…</div></div>
       <div data-dsub-panel="onde" id="dirEdu" hidden></div>
-    </div>
-    <div data-esec-panel="candles" hidden>
-      <p class="hint">Os padrões que o sistema reconhece nos gráficos e nos alertas. Toque em um para ver a explicação completa. Verde = sinal de alta, vermelho = sinal de baixa; os candles cinza mostram a tendência que vem antes.</p>
-      <div class="cgal" id="cgal"></div>
     </div>
   </section>
 
@@ -1984,6 +2006,7 @@ document.addEventListener("click", e => {
   const ed = t.closest("[data-edu]"); if (ed) {
     showTab("edu");
     setTimeout(() => { const el = document.getElementById("edu-" + ed.dataset.edu); const sec = el?.closest("[data-esec-panel]"); if (sec) showEduSec(sec.dataset.esecPanel);
+      const sub = el?.closest("[data-xsub-panel]"); if (sub) showSub(sub.dataset.xsubPanel);
       const more = el?.querySelector("details[data-emore]"); if (more) { more.open = true; eduOpen.add(more.dataset.emore); } el?.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
     return;
   }
@@ -2816,6 +2839,7 @@ function revealSelectedTabs() {
 }
 document.addEventListener("click", e => { if (e.target.closest('[role="tab"]')) setTimeout(revealSelectedTabs, 30); });
 function showEduSec(name) {
+  if (name === "candles") { name = "tecnica"; showSub("tec-candles"); }
   setTimeout(revealSelectedTabs, 30);
   if (name === "simulacao") setTimeout(renderSim);
   if (name === "direito") setTimeout(() => window.renderDireito?.());
@@ -3219,6 +3243,216 @@ function renderFundEdu() {
   }).join("") + `<p class="hint" style="grid-column:1/-1;margin-top:8px">Fonte dos números: Fundamentus (balanços enviados à CVM, últimos 12 meses). As faixas citadas são referências comuns, não regras: cada setor tem seu padrão, e nenhum indicador sozinho diz se uma ação é boa compra. Não é recomendação de investimento.</p>`;
 }
 $("#fundList").addEventListener("toggle", e => { const d = e.target.closest?.("[data-fund]"); if (d) d.open ? fundOpen.add(d.dataset.fund) : fundOpen.delete(d.dataset.fund); }, true);
+
+/* ---------- educação: o que dizem os estudos ---------- */
+// Summaries of the published research behind fundamental and technical analysis, written by Claude
+// (Nov/2026) from the papers cited. Each card: titulo, sub, html; rendered like FUND_INTRO.
+const CIENCIA_AVISO = `<p class="hint">Resumo escrito por IA (Claude) a partir dos estudos citados. Pode conter imprecisões: os nomes, anos e revistas estão aí para você conferir na fonte. Os números de cada estudo valem para o mercado e o período que ele analisou. Não é recomendação de investimento.</p>`;
+const ref = (quem, titulo, onde) => `<li><b>${quem}</b> · <i>${titulo}</i> · ${onde}</li>`;
+const CIENCIA_FUND = [
+  { titulo: "A pergunta que os estudos tentam responder", sub: "Dá para ganhar do mercado olhando os balanços?",
+    html: `<p>A ideia da análise fundamentalista vem de <b>Benjamin Graham e David Dodd</b>, no livro <i>Security Analysis</i> (1934): toda empresa tem um <b>valor</b>, que depende do que ela lucra e do que tem, e o <b>preço</b> da ação às vezes se afasta dele. Comprar quando o preço está bem abaixo do valor seria a "margem de segurança".</p>
+      <p>Do outro lado está a <b>hipótese dos mercados eficientes</b>, de <b>Eugene Fama</b> (1970): se milhares de analistas leem os mesmos balanços, a informação pública já estaria no preço, e analisá-la não daria vantagem.</p>
+      <p>Os estudos abaixo testam isso com décadas de dados: as ações com bons indicadores renderam mais que as outras, <b>depois de considerar o risco</b>?</p>` },
+  { titulo: "Ações baratas (P/L e P/VP baixos)", sub: "O \"efeito valor\": a evidência mais antiga e mais estudada",
+    html: `<ul><li><b>Basu (1977)</b>: na bolsa de Nova York, de 1957 a 1971, as ações com <b>P/L baixo</b> renderam mais que as de P/L alto, mesmo ajustando pelo risco.</li>
+      <li><b>Fama e French (1992)</b>: de 1963 a 1990, duas coisas explicaram as diferenças de retorno entre as ações bem melhor que o risco de mercado (beta): o <b>tamanho</b> da empresa (as pequenas renderam mais) e o <b>P/VP baixo</b> (as "baratas" pelo patrimônio renderam mais). Virou o modelo de três fatores (1993), usado até hoje.</li>
+      <li><b>Lakonishok, Shleifer e Vishny (1994)</b>: as ações de valor superaram as "da moda" (crescimento) e <b>não eram mais arriscadas</b>. A explicação deles: os investidores extrapolam demais o passado, pagando caro por quem cresceu e vendendo barato quem foi mal.</li></ul>
+      <p><b>O outro lado:</b> <b>Fama e French (2021)</b> mostraram que o prêmio das ações baratas ficou <b>bem menor e mais incerto</b> depois de 1990. Entre 2007 e 2020, as ações de valor ficaram muito atrás das de crescimento nos EUA. Um efeito real pode passar mais de uma década sem aparecer.</p>
+      <ul class="refs">${ref("Basu, S. (1977)", "Investment Performance of Common Stocks in Relation to Their Price-Earnings Ratios", "Journal of Finance")}
+      ${ref("Fama, E. e French, K. (1992)", "The Cross-Section of Expected Stock Returns", "Journal of Finance")}
+      ${ref("Fama, E. e French, K. (1993)", "Common Risk Factors in the Returns on Stocks and Bonds", "Journal of Financial Economics")}
+      ${ref("Lakonishok, J., Shleifer, A. e Vishny, R. (1994)", "Contrarian Investment, Extrapolation, and Risk", "Journal of Finance")}
+      ${ref("Fama, E. e French, K. (2021)", "The Value Premium", "Review of Asset Pricing Studies")}</ul>` },
+  { titulo: "Lucratividade e qualidade (ROE, margens, dívida)", sub: "Empresas que lucram bem e devem pouco",
+    html: `<ul><li><b>Novy-Marx (2013)</b>: o <b>lucro bruto dividido pelos ativos</b> previu os retornos futuros quase tão bem quanto o P/VP. As empresas mais lucrativas renderam mais, mesmo sendo, em média, mais caras.</li>
+      <li><b>Fama e French (2015)</b> acrescentaram ao modelo dois fatores: <b>lucratividade</b> (as mais lucrativas rendem mais) e <b>investimento</b> (as que crescem os ativos devagar rendem mais que as que investem muito).</li>
+      <li><b>Asness, Frazzini e Pedersen (2019)</b>, "Quality Minus Junk": empresas <b>lucrativas, que crescem, com pouca dívida e que pagam bem</b> aos acionistas renderam mais que as de baixa qualidade, em 24 países.</li>
+      <li><b>Piotroski (2000)</b> criou o <b>F-Score</b>, nove testes simples no balanço (lucro positivo, caixa positivo, dívida caindo, margem subindo…). Entre as ações baratas pelo P/VP, as de nota alta renderam cerca de <b>23 pontos percentuais por ano</b> a mais que as de nota baixa, de 1976 a 1996.</li></ul>
+      <ul class="refs">${ref("Novy-Marx, R. (2013)", "The Other Side of Value: The Gross Profitability Premium", "Journal of Financial Economics")}
+      ${ref("Fama, E. e French, K. (2015)", "A Five-Factor Asset Pricing Model", "Journal of Financial Economics")}
+      ${ref("Asness, C., Frazzini, A. e Pedersen, L. (2019)", "Quality Minus Junk", "Review of Accounting Studies")}
+      ${ref("Piotroski, J. (2000)", "Value Investing: The Use of Historical Financial Statement Information to Separate Winners from Losers", "Journal of Accounting Research")}</ul>` },
+  { titulo: "O lucro e a qualidade do balanço", sub: "O preço reage aos números, mas não de uma vez",
+    html: `<ul><li><b>Ball e Brown (1968)</b>, o estudo que inaugurou a área: o preço das ações acompanha o lucro divulgado, e boa parte do movimento acontece <b>antes</b> do anúncio. Os balanços contêm informação que importa.</li>
+      <li><b>Bernard e Thomas (1989)</b>: depois de um lucro bem acima (ou abaixo) do esperado, o preço continua indo na mesma direção por cerca de <b>60 dias</b>. O mercado demora para absorver a notícia.</li>
+      <li><b>Sloan (1996)</b>: lucro que vem de <b>lançamentos contábeis</b> (sem entrada de dinheiro) se repete menos que lucro que vira <b>caixa</b>. As empresas com lucro mais "de caixa" renderam mais. É o mesmo cuidado do EBITDA: lucro bonito sem dinheiro entrando merece desconfiança.</li></ul>
+      <ul class="refs">${ref("Ball, R. e Brown, P. (1968)", "An Empirical Evaluation of Accounting Income Numbers", "Journal of Accounting Research")}
+      ${ref("Bernard, V. e Thomas, J. (1989)", "Post-Earnings-Announcement Drift: Delayed Price Response or Risk Premium?", "Journal of Accounting Research")}
+      ${ref("Sloan, R. (1996)", "Do Stock Prices Fully Reflect Information in Accruals and Cash Flows about Future Earnings?", "The Accounting Review")}</ul>` },
+  { titulo: "Dividendos", sub: "Evidência mais fraca do que parece",
+    html: `<p><b>Miller e Modigliani (1961)</b> mostraram que, num mercado sem impostos e sem custos, a política de dividendos <b>não muda o valor</b> da empresa: o dinheiro pago sai do caixa dela, e a ação cai mais ou menos o valor pago.</p>
+      <p>Na prática, <b>Black e Scholes (1974)</b> não encontraram relação clara entre o dividend yield e o retorno das ações. Um DY alto muitas vezes só indica que a ação está <b>barata</b> (o efeito valor da seção anterior) ou que o preço caiu por um problema, a chamada "armadilha de dividendos". Por isso vale olhar se o lucro sustenta os pagamentos.</p>
+      <ul class="refs">${ref("Miller, M. e Modigliani, F. (1961)", "Dividend Policy, Growth, and the Valuation of Shares", "Journal of Business")}
+      ${ref("Black, F. e Scholes, M. (1974)", "The Effects of Dividend Yield and Dividend Policy on Common Stock Prices and Returns", "Journal of Financial Economics")}</ul>` },
+  { titulo: "Os cuidados: o que enfraquece essas evidências", sub: "Por que os efeitos encolhem na vida real",
+    html: `<ul><li><b>McLean e Pontiff (2016)</b> refizeram 97 "anomalias" publicadas: fora do período estudado, o ganho caiu cerca de <b>26%</b>; depois que o artigo saiu, cerca de <b>58%</b>. Quando todo mundo conhece o efeito, ele diminui.</li>
+      <li><b>Harvey, Liu e Zhu (2016)</b> contaram mais de 300 fatores publicados e concluíram que <b>muitos são falsos positivos</b>: de tanto testar, alguns dão certo por acaso.</li>
+      <li><b>Fama e French (2010)</b>: entre os fundos de ações dos EUA, quase nenhum gestor mostrou habilidade suficiente para cobrir as taxas que cobra. Os relatórios <b>SPIVA</b> (S&amp;P Dow Jones Indices) mostram, ano após ano, que a maioria dos fundos ativos fica atrás do índice em 10 a 15 anos, também no Brasil.</li>
+      <li><b>No Brasil</b>, há poucas empresas negociadas, histórico curto e juros e inflação que mudam muito. Os estudos com a B3 (o NEFIN, da USP, publica os fatores brasileiros) encontram efeitos parecidos, mas <b>mais instáveis</b>.</li></ul>
+      <ul class="refs">${ref("McLean, R. D. e Pontiff, J. (2016)", "Does Academic Research Destroy Stock Return Predictability?", "Journal of Finance")}
+      ${ref("Harvey, C., Liu, Y. e Zhu, H. (2016)", "… and the Cross-Section of Expected Returns", "Review of Financial Studies")}
+      ${ref("Fama, E. e French, K. (2010)", "Luck versus Skill in the Cross-Section of Mutual Fund Returns", "Journal of Finance")}</ul>` },
+  { titulo: "Em resumo", sub: "O que dá para dizer com segurança",
+    html: `<ul><li>Há evidência de décadas e de vários países de que ações <b>baratas</b> e de empresas <b>lucrativas e pouco endividadas</b> renderam, em média, um pouco mais.</li>
+      <li>O efeito é <b>pequeno perto da variação do dia a dia</b>, pode sumir por mais de dez anos e encolhe depois de publicado.</li>
+      <li>Ele aparece em <b>carteiras com muitas ações</b>, mantidas por anos. Uma ação sozinha, escolhida por um indicador, pode ir muito mal.</li>
+      <li>Os indicadores do Relatório servem para <b>entender e filtrar</b> empresas, não garantem resultado.</li></ul>` },
+];
+
+const CIENCIA_TEC = [
+  { titulo: "A pergunta", sub: "O preço passado ajuda a prever o preço futuro?",
+    html: `<p>A análise técnica supõe que o gráfico tem padrões que se repetem. A <b>forma fraca da hipótese dos mercados eficientes</b> (<b>Fama, 1970</b>) diz o contrário: se fosse fácil lucrar com os preços passados, muita gente faria isso, e o padrão sumiria. Os preços seguiriam um "passeio aleatório", ideia popularizada por <b>Burton Malkiel</b> no livro <i>A Random Walk Down Wall Street</i> (1973).</p>
+      <p>Só que o passeio aleatório também não é perfeito: <b>Lo e MacKinlay (1988)</b> mostraram que os retornos semanais das ações americanas <b>não</b> se comportavam como um passeio aleatório puro. A briga real é outra: existem padrões, mas eles são <b>grandes o bastante para pagar os custos</b> e <b>estáveis</b> o suficiente para funcionar no futuro?</p>
+      <ul class="refs">${ref("Fama, E. (1970)", "Efficient Capital Markets: A Review of Theory and Empirical Work", "Journal of Finance")}
+      ${ref("Lo, A. e MacKinlay, C. (1988)", "Stock Market Prices Do Not Follow Random Walks: Evidence from a Simple Specification Test", "Review of Financial Studies")}</ul>` },
+  { titulo: "Quem usa", sub: "Muito usada pelos profissionais, principalmente no curto prazo",
+    html: `<ul><li><b>Taylor e Allen (1992)</b>: cerca de <b>90%</b> dos operadores de câmbio de Londres usavam análise técnica para prazos curtos (dias e semanas), e davam mais peso aos fundamentos em prazos longos.</li>
+      <li><b>Menkhoff (2010)</b> entrevistou quase 700 gestores de fundos em cinco países: <b>87%</b> davam alguma importância à análise técnica, e para prazos de semanas ela era a ferramenta preferida da maioria.</li></ul>
+      <p>Ser muito usada pode até ajudar a funcionar um pouco (se muitos compram no mesmo sinal, o preço sobe), mas também faz o sinal ser disputado e chegar "atrasado" para quem entra depois.</p>
+      <ul class="refs">${ref("Taylor, M. e Allen, H. (1992)", "The Use of Technical Analysis in the Foreign Exchange Market", "Journal of International Money and Finance")}
+      ${ref("Menkhoff, L. (2010)", "The Use of Technical Analysis by Fund Managers: International Evidence", "Journal of Banking & Finance")}</ul>` },
+  { titulo: "Evidências a favor", sub: "Tendência e momento têm a base mais forte",
+    html: `<ul><li><b>Brock, Lakonishok e LeBaron (1992)</b>, o estudo mais citado: no índice Dow Jones de 1897 a 1986, regras simples de <b>médias móveis</b> e de <b>rompimento</b> de máximas e mínimas foram seguidas por retornos maiores nos sinais de compra que nos de venda.</li>
+      <li><b>Lo, Mamaysky e Wang (2000)</b> reconheceram padrões gráficos (ombro-cabeça-ombro, topos duplos…) por computador, de 1962 a 1996, e concluíram que alguns trazem <b>alguma informação</b> sobre o movimento seguinte.</li>
+      <li><b>Park e Irwin (2007)</b> revisaram 95 estudos modernos: <b>56 acharam lucro</b> com análise técnica, 20 não acharam e 19 tiveram resultado misto. Os resultados positivos eram mais comuns em câmbio e futuros, e nos estudos mais antigos.</li>
+      <li><b>Moskowitz, Ooi e Pedersen (2012)</b> e <b>Hurst, Ooi e Pedersen (2017)</b>: <b>seguir a tendência</b> de meses (comprar o que subiu nos últimos 12 meses, vender o que caiu) funcionou em dezenas de mercados ao longo de mais de um século, e ajudou principalmente nas grandes crises.</li></ul>
+      <ul class="refs">${ref("Brock, W., Lakonishok, J. e LeBaron, B. (1992)", "Simple Technical Trading Rules and the Stochastic Properties of Stock Returns", "Journal of Finance")}
+      ${ref("Lo, A., Mamaysky, H. e Wang, J. (2000)", "Foundations of Technical Analysis", "Journal of Finance")}
+      ${ref("Park, C. e Irwin, S. (2007)", "What Do We Know About the Profitability of Technical Analysis?", "Journal of Economic Surveys")}
+      ${ref("Moskowitz, T., Ooi, Y. H. e Pedersen, L. (2012)", "Time Series Momentum", "Journal of Financial Economics")}
+      ${ref("Hurst, B., Ooi, Y. H. e Pedersen, L. (2017)", "A Century of Evidence on Trend-Following Investing", "Journal of Portfolio Management")}</ul>` },
+  { titulo: "Evidências contra e cuidados", sub: "O problema de testar muitas regras",
+    html: `<ul><li><b>Sullivan, Timmermann e White (1999)</b> testaram quase 8 mil regras com um método que corrige o "garimpo de dados" (de tanto testar, alguma regra dá certo por sorte). As regras de Brock e colegas eram boas até 1986, mas <b>de 1987 a 1996 a melhor delas não ganhou</b> de simplesmente comprar e segurar.</li>
+      <li><b>Bajgrowicz e Scaillet (2012)</b>: corrigindo as falsas descobertas e incluindo os <b>custos</b> de operar, as regras técnicas não deram lucro no Dow Jones nas décadas recentes.</li>
+      <li>Park e Irwin (2007) apontam os problemas comuns: escolher a regra depois de ver o resultado, ignorar custos e imposto, e não considerar o risco. Os ganhos <b>diminuíram com o tempo</b>, à medida que computadores passaram a explorar os mesmos padrões.</li></ul>
+      <p>É por isso que o bot deste site mostra o "teste no passado" separado do "ao vivo": uma regra que foi bem nos dados antigos pode ter sido só sorte.</p>
+      <ul class="refs">${ref("Sullivan, R., Timmermann, A. e White, H. (1999)", "Data-Snooping, Technical Trading Rule Performance, and the Bootstrap", "Journal of Finance")}
+      ${ref("Bajgrowicz, P. e Scaillet, O. (2012)", "Technical Trading Revisited: False Discoveries, Persistence Tests, and Transaction Costs", "Journal of Financial Economics")}</ul>` },
+  { titulo: "Day trade na prática", sub: "Os estudos com pessoas reais são os mais duros",
+    html: `<ul><li><b>Chague, De-Losso e Giovannetti (2019)</b>, com dados da <b>B3</b>: das pessoas que fizeram day trade de mini-índice por <b>300 dias ou mais</b> entre 2013 e 2015, <b>97% perderam dinheiro</b>, e só 1,1% ganhou mais que um salário mínimo.</li>
+      <li><b>Barber, Lee, Liu e Odean (2014)</b>, em Taiwan: <b>menos de 1%</b> dos day traders conseguiu lucro de forma consistente, depois das taxas.</li>
+      <li><b>Barber e Odean (2000)</b>: entre 66 mil famílias americanas (1991–1996), as que mais compravam e vendiam renderam cerca de <b>11% ao ano</b>, contra cerca de 18% do mercado. Operar muito custa caro.</li></ul>
+      <p>Isso combina com o que o bot de day trade deste site mostra: com custos e diferença de preço, é muito difícil ganhar da renda fixa.</p>
+      <ul class="refs">${ref("Chague, F., De-Losso, R. e Giovannetti, B. (2019)", "Day Trading for a Living?", "SSRN Working Paper (FEA-USP / FGV)")}
+      ${ref("Barber, B., Lee, Y.-T., Liu, Y.-J. e Odean, T. (2014)", "The Cross-Section of Speculator Skill: Evidence from Day Trading", "Journal of Financial Markets")}
+      ${ref("Barber, B. e Odean, T. (2000)", "Trading Is Hazardous to Your Wealth", "Journal of Finance")}</ul>` },
+  { titulo: "Em resumo", sub: "O que dá para dizer com segurança",
+    html: `<ul><li>A evidência mais sólida é a de <b>seguir tendências de meses</b>, em carteiras diversificadas: não dá grandes retornos, mas costuma reduzir as quedas nas crises.</li>
+      <li>Regras de <b>curto prazo</b> (dias, minutos) quase sempre <b>somem depois dos custos</b>, e os estudos com pessoas reais em day trade são muito negativos.</li>
+      <li>Nenhum indicador funciona sempre. Os que têm alguma base funcionam <b>na média de muitas operações</b>, com perdas frequentes no caminho.</li>
+      <li>Na aba 📏 Indicadores estão os estudos de cada indicador que o site usa.</li></ul>` },
+];
+
+// each indicator the site uses (charts, alerts, report score, bot)
+const CIENCIA_IND = [
+  { titulo: "Médias móveis", sub: "MME 9, MMS 21, 50 e 200; cruzamento dourado e da morte",
+    html: `<p><b>O que é:</b> a média dos últimos N preços de fechamento. A <b>simples</b> (MMS) dá o mesmo peso a todos; a <b>exponencial</b> (MME) dá mais peso aos mais recentes. Quando a média curta cruza acima da longa, é sinal de alta; abaixo, de baixa. O <b>cruzamento dourado</b> é a de 50 cruzando acima da de 200 (o da morte, abaixo).</p>
+      <p><b>No site:</b> no gráfico, na pontuação técnica do Relatório (cruzamento dourado/da morte vale ±2, MME 9 × MMS 21 vale ±1) e no day trade do bot (MME 9 × MME 21 em candles de 5 minutos).</p>
+      <p><b>O que dizem os estudos:</b></p>
+      <ul><li><b>Brock, Lakonishok e LeBaron (1992)</b> testaram justamente cruzamentos como 1×50, 1×200 e 5×150 dias no Dow Jones (1897–1986): os dias depois de um sinal de compra renderam mais que os depois de um sinal de venda.</li>
+      <li><b>Sullivan, Timmermann e White (1999)</b>: essas mesmas regras deixaram de ganhar do "comprar e segurar" a partir de 1987.</li>
+      <li><b>Faber (2007)</b>: ficar investido só quando o preço está acima da média de 10 meses deu retorno parecido com o do índice, com <b>quedas bem menores</b>, em quase um século de dados americanos.</li>
+      <li><b>Han, Yang e Zhou (2013)</b>: as médias móveis funcionaram melhor em ações <b>mais voláteis e pequenas</b>, onde a informação chega mais devagar.</li>
+      <li><b>Zakamulin (2017)</b>, um livro inteiro sobre o tema: a vantagem vem quase toda de <b>sair antes das grandes quedas</b>, e muitos testes publicados exageram o ganho. Em mercados de lado, as médias dão muitos sinais falsos.</li></ul>
+      <p><b>Em resumo:</b> base razoável em prazos longos (meses), para reduzir quedas. Em prazos muito curtos, como candles de 5 minutos, há pouca evidência de lucro depois dos custos.</p>
+      <ul class="refs">${ref("Brock, Lakonishok e LeBaron (1992)", "Simple Technical Trading Rules and the Stochastic Properties of Stock Returns", "Journal of Finance")}
+      ${ref("Faber, M. (2007)", "A Quantitative Approach to Tactical Asset Allocation", "Journal of Wealth Management")}
+      ${ref("Han, Y., Yang, K. e Zhou, G. (2013)", "A New Anomaly: The Cross-Sectional Profitability of Technical Analysis", "Journal of Financial and Quantitative Analysis")}
+      ${ref("Zakamulin, V. (2017)", "Market Timing with Moving Averages", "Palgrave Macmillan (livro)")}</ul>` },
+  { titulo: "Tendência e momento", sub: "O que subiu nos últimos meses continua subindo?",
+    html: `<p><b>O que é:</b> a tendência é a direção do preço nas últimas semanas e meses (no site, pelo preço em relação às médias). Momento é a mesma ideia medida pelo retorno passado.</p>
+      <p><b>No site:</b> é o item de maior peso na pontuação técnica (±2), e o bot diário/semanal não compra com tendência de baixa.</p>
+      <ul><li><b>Jegadeesh e Titman (1993)</b>: as ações que mais subiram nos últimos <b>3 a 12 meses</b> continuaram rendendo mais nos meses seguintes. É um dos efeitos mais repetidos em finanças, em quase todos os países.</li>
+      <li><b>Moskowitz, Ooi e Pedersen (2012)</b> acharam o mesmo comparando cada mercado com o próprio passado, em 58 mercados de futuros.</li>
+      <li><b>O outro lado:</b> em prazos de <b>uma semana a um mês</b> acontece o contrário: quem subiu muito tende a devolver um pouco (<b>Jegadeesh, 1990</b>; <b>Lehmann, 1990</b>). E o momento tem quedas bruscas e raras, quando o mercado vira de repente.</li></ul>
+      <ul class="refs">${ref("Jegadeesh, N. e Titman, S. (1993)", "Returns to Buying Winners and Selling Losers: Implications for Stock Market Efficiency", "Journal of Finance")}
+      ${ref("Jegadeesh, N. (1990)", "Evidence of Predictable Behavior of Security Returns", "Journal of Finance")}
+      ${ref("Lehmann, B. (1990)", "Fads, Martingales, and Market Efficiency", "Quarterly Journal of Economics")}</ul>` },
+  { titulo: "MACD", sub: "Diferença entre a MME 12 e a MME 26, e a média dela",
+    html: `<p><b>O que é:</b> criado por <b>Gerald Appel</b> no fim dos anos 1970. É a distância entre uma média exponencial curta (12) e uma longa (26); quando essa linha cruza a sua própria média de 9 períodos, dá o sinal. No fundo, é outra forma de cruzamento de médias.</p>
+      <p><b>No site:</b> no gráfico e na pontuação técnica (±1).</p>
+      <ul><li><b>Chong e Ng (2008)</b> testaram MACD e IFR no índice FT30 de Londres ao longo de 60 anos: algumas configurações renderam mais que comprar e segurar, antes de considerar todos os custos.</li>
+      <li>Como o MACD é feito de médias móveis, valem para ele os mesmos achados e cuidados das médias: base razoável para tendências, muitos sinais falsos em mercado de lado.</li></ul>
+      <ul class="refs">${ref("Chong, T. e Ng, W.-K. (2008)", "Technical Analysis and the London Stock Exchange: Testing the MACD and RSI Rules Using the FT30", "Applied Economics Letters")}</ul>` },
+  { titulo: "IFR (Índice de Força Relativa)", sub: "Sobrecompra acima de 70, sobrevenda abaixo de 30",
+    html: `<p><b>O que é:</b> criado por <b>J. Welles Wilder</b> no livro <i>New Concepts in Technical Trading Systems</i> (1978). Compara o tamanho das altas com o das quedas nos últimos 14 períodos, numa escala de 0 a 100.</p>
+      <p><b>No site:</b> no gráfico, nos alertas e na pontuação técnica (IFR ≤ 30 soma +1, IFR ≥ 70 tira 1).</p>
+      <ul><li><b>Wong, Manzur e Chew (2003)</b>, na bolsa de Singapura, e <b>Chong e Ng (2008)</b>, em Londres: as regras de IFR deram algum ganho em parte dos períodos testados.</li>
+      <li>A lógica do IFR é de <b>reversão de curto prazo</b>, que tem base nos estudos de <b>Jegadeesh (1990)</b> e <b>Lehmann (1990)</b>: quem cai muito numa semana tende a repicar um pouco. Mas esse efeito é pequeno e boa parte dele desaparece com os custos de operar.</li>
+      <li>Em tendências fortes, o IFR pode ficar "sobrecomprado" por semanas enquanto o preço continua subindo.</li></ul>
+      <ul class="refs">${ref("Wong, W.-K., Manzur, M. e Chew, B.-K. (2003)", "How Rewarding Is Technical Analysis? Evidence from Singapore Stock Market", "Applied Financial Economics")}
+      ${ref("Chong e Ng (2008)", "Technical Analysis and the London Stock Exchange", "Applied Economics Letters")}</ul>` },
+  { titulo: "Bandas de Bollinger", sub: "Média de 20 períodos ± 2 desvios padrão",
+    html: `<p><b>O que é:</b> criadas por <b>John Bollinger</b> nos anos 1980. Uma faixa em volta da média que se alarga quando o preço oscila mais. Tocar a banda de cima ou de baixo mostra que o preço se afastou do normal recente.</p>
+      <p><b>No site:</b> aparece como informação, mas <b>não entra na pontuação</b>.</p>
+      <ul><li><b>Lento, Gradojevic e Wright (2007)</b> testaram as bandas em índices dos EUA e do Canadá: <b>não deram lucro</b> depois dos custos.</li>
+      <li>O próprio Bollinger recomenda usá-las junto com outros indicadores, não sozinhas.</li></ul>
+      <ul class="refs">${ref("Lento, C., Gradojevic, N. e Wright, C. (2007)", "Investment Information Content in Bollinger Bands?", "Applied Financial Economics Letters")}</ul>` },
+  { titulo: "Volume", sub: "Quantas ações foram negociadas",
+    html: `<p><b>No site:</b> aparece como informação, mas <b>não entra na pontuação</b>.</p>
+      <ul><li><b>Blume, Easley e O'Hara (1994)</b>: o volume carrega informação que o preço sozinho não tem, sobre o quanto os investidores estão informados.</li>
+      <li><b>Gervais, Kaniel e Mingelgrin (2001)</b>: ações com volume <b>muito acima do normal</b> num dia ou numa semana tenderam a subir no mês seguinte, talvez porque chamam a atenção de novos compradores.</li>
+      <li><b>Lee e Swaminathan (2000)</b>: o volume ajuda a prever por quanto tempo o efeito momento dura.</li></ul>
+      <ul class="refs">${ref("Blume, L., Easley, D. e O'Hara, M. (1994)", "Market Statistics and Technical Analysis: The Role of Volume", "Journal of Finance")}
+      ${ref("Gervais, S., Kaniel, R. e Mingelgrin, D. (2001)", "The High-Volume Return Premium", "Journal of Finance")}
+      ${ref("Lee, C. e Swaminathan, B. (2000)", "Price Momentum and Trading Volume", "Journal of Finance")}</ul>` },
+  { titulo: "Máxima e mínima de 52 semanas", sub: "Perto do maior ou do menor preço do ano",
+    html: `<p><b>No site:</b> aparece como informação, mas <b>não entra na pontuação</b>.</p>
+      <ul><li><b>George e Hwang (2004)</b>: ações perto da <b>máxima de 52 semanas</b> renderam mais nos meses seguintes, e esse dado explicou boa parte do efeito momento. A explicação proposta é a <b>ancoragem</b>: os investidores hesitam em comprar acima de um preço que lembram como "alto", e a boa notícia entra no preço devagar.</li></ul>
+      <ul class="refs">${ref("George, T. e Hwang, C.-Y. (2004)", "The 52-Week High and Momentum Investing", "Journal of Finance")}</ul>` },
+  { titulo: "Suporte e resistência", sub: "Preços onde a queda ou a alta costumam parar",
+    html: `<p><b>No site:</b> as linhas de suporte e resistência do gráfico (mínima e máxima dos últimos 20 períodos).</p>
+      <ul><li><b>Osler (2000)</b>, do Federal Reserve de Nova York: os níveis de suporte e resistência divulgados por bancos ajudaram a prever onde o câmbio <b>interrompia</b> o movimento dentro do dia, mais do que níveis escolhidos ao acaso. Uma explicação é que muitas ordens de compra e venda ficam paradas nesses preços.</li>
+      <li><b>Brock, Lakonishok e LeBaron (1992)</b>: o rompimento de máximas e mínimas recentes foi seguido de retornos na mesma direção, no período antigo que estudaram.</li></ul>
+      <ul class="refs">${ref("Osler, C. (2000)", "Support for Resistance: Technical Analysis and Intraday Exchange Rates", "Economic Policy Review (Federal Reserve Bank of New York)")}</ul>` },
+  { titulo: "VWAP", sub: "Preço médio do dia, ponderado pelo volume",
+    html: `<p><b>O que é:</b> o preço médio pago por todas as ações negociadas no dia. Comprar abaixo dele é comprar mais barato que a média do mercado naquele dia.</p>
+      <p><b>No site:</b> um filtro opcional do day trade do bot (só comprar com o preço acima da VWAP).</p>
+      <ul><li><b>Berkowitz, Logue e Noser (1988)</b> propuseram a VWAP como <b>régua para medir o custo de execução</b> das ordens dos grandes investidores, e é para isso que ela é mais usada até hoje.</li>
+      <li>Como <b>sinal de compra ou venda</b>, há pouca pesquisa acadêmica publicada. Trate como um filtro de prática do mercado, não como algo comprovado.</li></ul>
+      <ul class="refs">${ref("Berkowitz, S., Logue, D. e Noser, E. (1988)", "The Total Cost of Transactions on the NYSE", "Journal of Finance")}</ul>` },
+  { titulo: "ATR e stops", sub: "Tamanho médio do movimento, e onde sair na perda",
+    html: `<p><b>O que é:</b> o ATR (<i>Average True Range</i>), também de <b>Wilder (1978)</b>, mede quanto o preço anda, em média, num candle. O bot usa o ATR para pôr o stop a uma distância que depende de quanto cada ativo oscila.</p>
+      <ul><li><b>Kaminski e Lo (2014)</b> estudaram quando o stop ajuda: se os preços fossem totalmente aleatórios, o stop <b>só reduziria</b> o retorno (sai e perde as recuperações). Ele ajuda quando há <b>tendência</b> (momento): aí cortar a perda cedo evita quedas maiores.</li>
+      <li>O stop não evita perdas: ele as limita, e às vezes faz vender logo antes de o preço voltar.</li></ul>
+      <ul class="refs">${ref("Kaminski, K. e Lo, A. (2014)", "When Do Stop-Loss Rules Stop Losses?", "Journal of Financial Markets")}</ul>` },
+];
+
+const CIENCIA_CANDLES = [
+  { titulo: "Os candles funcionam?", sub: "O que os estudos acharam",
+    html: `<p>Os candles japoneses teriam surgido no mercado de arroz do Japão, no século XVIII, e foram popularizados no Ocidente por <b>Steve Nison</b>, no livro <i>Japanese Candlestick Charting Techniques</i> (1991). Os estudos que testaram os padrões com dados reais acharam <b>pouca evidência</b>:</p>
+      <ul><li><b>Caginalp e Laurent (1998)</b>: nas ações do S&amp;P 500 de 1992 a 1996, alguns padrões de reversão de três candles <b>tiveram</b> algum poder de previsão. É um dos poucos resultados positivos.</li>
+      <li><b>Marshall, Young e Rose (2006)</b>: nas ações do Dow Jones de 1992 a 2002, os padrões <b>não geraram ganho</b> além do acaso.</li>
+      <li><b>Marshall, Young e Cahan (2008)</b> repetiram o teste <b>no Japão</b>, onde os candles nasceram, de 1975 a 2004: também <b>sem ganho</b>.</li>
+      <li><b>Lu, Shiu e Liu (2012)</b>, em Taiwan: alguns padrões de dois dias deram lucro mesmo depois dos custos.</li>
+      <li><b>Duvinage, Mazza e Petitjean (2013)</b>, com candles <b>dentro do dia</b> nas ações do Dow Jones: depois dos custos, os padrões não ganharam de comprar e segurar.</li></ul>
+      <p><b>Em resumo:</b> um candle sozinho é um sinal fraco. Os padrões são mais úteis como <b>complemento</b>: quando aparecem num suporte ou resistência, a favor da tendência e com volume alto. Por isso valem só ±1 na pontuação técnica do site.</p>
+      <ul class="refs">${ref("Caginalp, G. e Laurent, H. (1998)", "The Predictive Power of Price Patterns", "Applied Mathematical Finance")}
+      ${ref("Marshall, B., Young, M. e Rose, L. (2006)", "Candlestick Technical Trading Strategies: Can They Create Value for Investors?", "Journal of Banking & Finance")}
+      ${ref("Marshall, B., Young, M. e Cahan, R. (2008)", "Are Candlestick Technical Trading Strategies Profitable in the Japanese Equity Market?", "Review of Quantitative Finance and Accounting")}
+      ${ref("Lu, T.-H., Shiu, Y.-M. e Liu, T.-C. (2012)", "Profitable Candlestick Trading Strategies — The Evidence from a New Perspective", "Review of Financial Economics")}
+      ${ref("Duvinage, M., Mazza, P. e Petitjean, M. (2013)", "The Intra-Day Performance of Market Timing Strategies and Trading Systems Based on Japanese Candlesticks", "Quantitative Finance")}</ul>` },
+];
+const cienciaCards = l => l.map(i => `<article class="card edu"><div class="edu-h"><div><h3>${i.titulo}</h3><div class="hint">${i.sub}</div></div></div>${i.html}</article>`).join("");
+$("#fundCiencia").innerHTML = CIENCIA_AVISO + `<div class="fund-intro">${cienciaCards(CIENCIA_FUND)}</div>`;
+$("#tecBase").innerHTML = CIENCIA_AVISO + `<div class="fund-intro">${cienciaCards(CIENCIA_TEC)}</div>`;
+$("#tecInd").innerHTML = `<p class="hint">Os indicadores que o site usa nos gráficos, nos alertas, na pontuação técnica do Relatório e no bot, e o que os estudos dizem sobre cada um.</p>` + CIENCIA_AVISO + `<div class="fund-intro">${cienciaCards(CIENCIA_IND)}</div>`;
+$("#candCiencia").innerHTML = `<div class="fund-intro">${cienciaCards(CIENCIA_CANDLES)}</div>`;
+
+// sub-tabs inside an Education section (Análise fundamentalista, Análise técnica)
+function showSub(id) {
+  const p = document.querySelector(`[data-xsub-panel="${id}"]`); if (!p) return;
+  const bar = p.parentElement.querySelector(".xsubs");
+  p.parentElement.querySelectorAll(":scope > [data-xsub-panel]").forEach(x => x.hidden = x !== p);
+  bar?.querySelectorAll("[data-xsub]").forEach(b => b.setAttribute("aria-selected", b.dataset.xsub === id));
+  try { localStorage.setItem(KEY + ".sub." + bar.dataset.xsubs, id); } catch {}
+}
+document.querySelectorAll(".xsubs").forEach(bar => {
+  let id = null; try { id = localStorage.getItem(KEY + ".sub." + bar.dataset.xsubs); } catch {}
+  if (id && bar.querySelector(`[data-xsub="${id}"]`)) showSub(id);
+  bar.addEventListener("click", e => { const b = e.target.closest("[data-xsub]"); if (b) showSub(b.dataset.xsub); });
+});
 
 /* ---------- relatório diário ---------- */
 const CRIT_DEFAULT = { pl_max: 15, dy_min: 4, roe_min: 12, div_max: 2, min_casas: 3 };
