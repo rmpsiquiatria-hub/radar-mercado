@@ -42,7 +42,7 @@
     return pares;
   }
   const saida = m => /^Alvo/.test(m) ? "Alvo atingido" : /^Stop/.test(m) ? "Stop" : /^Zerado/.test(m) ? "Zerada" : /^Tempo/.test(m) ? "Tempo máximo" : "Sinal de saída";
-  const pernas = p => ({ compra: (p.vendida ? p.fecha : p.abre)?.preco ?? null, venda: (p.vendida ? p.abre : p.fecha)?.preco ?? null, motivo: p.fecha ? saida(p.fecha.motivo) : null });
+  const pernas = p => { const c = p.vendida ? p.fecha : p.abre, v = p.vendida ? p.abre : p.fecha; return { compra: c?.preco ?? null, venda: v?.preco ?? null, cOp: c, vOp: v, motivo: p.fecha ? saida(p.fecha.motivo) : null }; };
 
   async function carregar() {
     const [p, r, s] = await Promise.all([
@@ -224,11 +224,15 @@
         <label class="hint">de <input type="date" data-bot-data="de" value="${esc(de)}"></label><label class="hint">até <input type="date" data-bot-data="ate" value="${esc(ate)}"></label>
         ${u.periodo !== "tudo" ? `<span class="hint">${ops.length} operações no período</span>` : ""}</div>
       <div class="card scroll"><table class="grid bot-t"><thead><tr><th>Data</th><th>Ativo</th><th>Operação</th><th>Status</th><th>Qtd.</th><th>Compra</th><th>Venda</th><th>Valor</th><th>Resultado</th></tr></thead><tbody>
-        ${ops.slice(0, verMais).map(o => { const p = pares.get(o), l = pernas(p), preco = (v, lado) => v == null ? "—" : o.lado === lado ? `<b>${px(v, o.mercado)}</b>` : px(v, o.mercado), ag = !p.fecha && o.ao_vivo ? atual.get(o.mercado + o.ticker) : null;
+        ${ops.slice(0, verMais).map(o => { const p = pares.get(o), l = pernas(p), // when each leg happened: the time, plus the date if it was another day
+          quando = x => !x ? "" : x.data === o.data ? x.hora || "" : dt(x.data) + (x.hora ? " " + x.hora : ""),
+          preco = (v, lado, x) => v == null ? "—" : (o.lado === lado ? `<b>${px(v, o.mercado)}</b>` : px(v, o.mercado)) + (quando(x) ? `<br><small class="hint">${quando(x)}</small>` : ""),
+          // the result belongs to the trade: shown on both rows once it is closed
+          f = p.fecha, ag = !p.fecha && o.ao_vivo ? atual.get(o.mercado + o.ticker) : null;
           return `<tr class="${o.teste ? "teste" : ""}"><td>${dt(o.data)}${o.hora ? ` ${o.hora}` : ""}${o.teste ? `<br><small class="hint">teste</small>` : o.ao_vivo ? `<br><small class="bot-vivo">● ao vivo</small>` : ""}</td><td><b>${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small></td>
           <td><b class="${o.lado === "compra" ? "pos" : "neg"}">${o.lado === "compra" ? "Compra" : "Venda"}</b><br><small class="hint bot-mot">${esc(o.motivo)}</small></td>
           <td>${p.fecha ? `Encerrada<br><small class="hint">${l.motivo}</small>` : `<span class="tag on">Aberta</span>`}${p.vendida ? ` <small class="bot-m">vendida</small>` : ""}</td>
-          <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra")}</td><td>${ag ? `<small class="hint">agora</small> ${px(ag.atual, o.mercado)}` : preco(l.venda, "venda")}</td><td>${brl(o.valor_brl)}</td><td>${o.lado === "venda" ? `${pc(o.resultado_pct)}<br><small>${brl(o.resultado_brl)}</small>` : ag ? `${pc(ag.resultado_pct)}<br><small class="hint">se vendesse agora</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
+          <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra", l.cOp)}</td><td>${ag ? `<small class="hint">agora</small> ${px(ag.atual, o.mercado)}` : preco(l.venda, "venda", l.vOp)}</td><td>${brl(o.valor_brl)}</td><td>${f?.resultado_pct != null ? `${pc(f.resultado_pct)}<br><small>${brl(f.resultado_brl)}</small>` : ag ? `${pc(ag.resultado_pct)}<br><small class="hint">se vendesse agora</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
       </tbody></table></div>
       ${ops.length > verMais ? `<button class="btn" type="button" id="botMais" style="margin-top:8px">Ver mais ${Math.min(PAGINA, ops.length - verMais)}</button>` : ""}`;
   }
