@@ -12,7 +12,12 @@
   let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, msg = "", verMais = PAGINA, anteriores = [];
   let SPEC = null, rascunho = null, aberto = null;     // the form being edited survives re-renders
   let vivo = null, vivoBusy = false;                   // today's day trade, simulated live in the browser
-  const ui = () => ({ modo: null, merc: "todos", lado: "todos", ...(state.botUi || {}) });
+  const ui = () => ({ modo: null, merc: "todos", lado: "todos", periodo: "tudo", de: "", ate: "", ...(state.botUi || {}) });
+  // the date range of the history filter: [from, to] as YYYY-MM-DD (Brasília), either end may be ""
+  const hojeBR = () => new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
+  const menos = (d, n) => { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() - n); return x.toISOString().slice(0, 10); };
+  const faixa = u => u.periodo === "hoje" ? [hojeBR(), hojeBR()] : u.periodo === "7" ? [menos(hojeBR(), 6), ""] : u.periodo === "30" ? [menos(hojeBR(), 29), ""]
+    : u.periodo === "datas" ? [u.de, u.ate] : ["", ""];
   const setUi = o => { state.botUi = { ...ui(), ...o }; save(); render(); };
 
   const brl = v => v == null ? "—" : "R$ " + nf(2).format(v);
@@ -171,7 +176,8 @@
     const hoje = dtr && vivo?.ops ? [...vivo.ops].reverse().map(o => ({ ...o, ao_vivo: true })) : [];
     m = { ...m, operacoes: [...hoje, ...m.operacoes] };
     const atual = new Map((dtr && vivo?.posicoes || []).map(x => [x.mercado + x.ticker, x]));
-    const ops = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado));
+    const [de, ate] = faixa(u);
+    const ops = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado) && (!de || o.data >= de) && (!ate || o.data <= ate));
     const pares = parear([...m.operacoes].reverse(), anteriores);
     const tot = (l, v, s = "") => `<div class="card tot"><div class="lbl">${l}</div><div class="v num">${v}</div>${s ? `<div class="hint">${s}</div>` : ""}</div>`;
     const quando = dtr
@@ -199,6 +205,9 @@
       <div class="vhead" style="margin-top:16px"><h4 class="sec-t" style="margin:0">📜 Histórico de operações (${m.total_operacoes > m.operacoes.length - hoje.length ? `${m.total_operacoes + hoje.length}; aqui as ${m.operacoes.length} mais recentes` : ops.length})</h4><button class="btn small" type="button" data-bot-csv="${k}">⬇ Baixar tudo (CSV)</button></div>
       <div class="ftabs dir-f">${[["todos", "Todos"], ...Object.entries(MERC)].map(([v, l]) => `<button role="tab" data-bot-merc="${v}" aria-selected="${u.merc === v}">${l}</button>`).join("")}<span class="bot-sep"></span>
         ${[["todos", "Compras e vendas"], ["compra", "Compras"], ["venda", "Vendas"]].map(([v, l]) => `<button role="tab" data-bot-lado="${v}" aria-selected="${u.lado === v}">${l}</button>`).join("")}</div>
+      <div class="ftabs dir-f bot-datas">${[["hoje", "Hoje"], ["7", "Últimos 7 dias"], ["30", "Últimos 30 dias"], ["tudo", "Todas as datas"]].map(([v, l]) => `<button role="tab" data-bot-periodo="${v}" aria-selected="${u.periodo === v}">${l}</button>`).join("")}<span class="bot-sep"></span>
+        <label class="hint">de <input type="date" data-bot-data="de" value="${esc(de)}"></label><label class="hint">até <input type="date" data-bot-data="ate" value="${esc(ate)}"></label>
+        ${u.periodo !== "tudo" ? `<span class="hint">${ops.length} operações no período</span>` : ""}</div>
       <div class="card scroll"><table class="grid bot-t"><thead><tr><th>Data</th><th>Ativo</th><th>Operação</th><th>Status</th><th>Qtd.</th><th>Compra</th><th>Venda</th><th>Valor</th><th>Resultado</th></tr></thead><tbody>
         ${ops.slice(0, verMais).map(o => { const p = pares.get(o), l = pernas(p), preco = (v, lado) => v == null ? "—" : o.lado === lado ? `<b>${px(v, o.mercado)}</b>` : px(v, o.mercado), ag = !p.fecha && o.ao_vivo ? atual.get(o.mercado + o.ticker) : null;
           return `<tr class="${o.teste ? "teste" : ""}"><td>${dt(o.data)}${o.hora ? ` ${o.hora}` : ""}${o.teste ? `<br><small class="hint">teste</small>` : o.ao_vivo ? `<br><small class="bot-vivo">● ao vivo</small>` : ""}</td><td><b>${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small></td>
@@ -285,6 +294,7 @@
 
   // typing in the form keeps a draft, so a refresh of the results does not erase it
   box?.addEventListener("input", e => {
+    if (e.target.dataset?.botData) return;          // the history date filter is not part of the form
     const t = e.target, f = rascunho || (rascunho = structuredClone(form()));
     if (t.id === "botValor") f.valor = t.value;
     if (t.name === "botModo") f.escolha = t.value;
@@ -296,6 +306,8 @@
   });
   // out-of-range numbers are brought back into range when the field is left
   box?.addEventListener("change", e => {
+    const dd = e.target.dataset?.botData;
+    if (dd) { const [de, ate] = faixa(ui()); verMais = PAGINA; return setUi({ periodo: "datas", de, ate, [dd]: e.target.value }); }
     const k = e.target.dataset?.regra; if (!k || !SPEC || !rascunho) return;
     const ok = SPEC.normalizar({ ...rascunho.regras, mercados: rascunho.regras.mercados?.length ? rascunho.regras.mercados : ["b3"] });
     if (e.target.type === "number") { rascunho.regras[k] = ok[k]; e.target.value = ok[k]; }
@@ -308,6 +320,7 @@
     if (t.closest("#botMais")) { verMais += PAGINA; return render(); }
     const md = t.closest("[data-bot-modo]"); if (md) { verMais = PAGINA; return setUi({ modo: md.dataset.botModo }); }
     const mc = t.closest("[data-bot-merc]"); if (mc) { verMais = PAGINA; return setUi({ merc: mc.dataset.botMerc }); }
+    const pr = t.closest("[data-bot-periodo]"); if (pr) { verMais = PAGINA; return setUi({ periodo: pr.dataset.botPeriodo }); }
     const ld = t.closest("[data-bot-lado]"); if (ld) { verMais = PAGINA; return setUi({ lado: ld.dataset.botLado }); }
     const c = t.closest("[data-bot-csv]"); if (c) return csv(c.dataset.botCsv);
   });
