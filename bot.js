@@ -192,12 +192,16 @@
     const pares = parear([...m.operacoes].reverse(), anteriores);
     // the outcome of the trade each row belongs to: both rows of a closed trade share it
     const desfecho = o => { const f = pares.get(o)?.fecha; return !f ? "andamento" : f.resultado_brl > 0 ? "lucro" : "prejuizo"; };
-    const ops = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado) && (u.res === "todos" || desfecho(o) === u.res) && (!de || o.data >= de) && (!ate || o.data <= ate));
+    modoAtual = k; paresAtuais = pares;
+    const ops = opsVisiveis = m.operacoes.filter(o => (u.merc === "todos" || o.mercado === u.merc) && (u.lado === "todos" || o.lado === u.lado) && (u.res === "todos" || desfecho(o) === u.res) && (!de || o.data >= de) && (!ate || o.data <= ate));
     // every number below covers the same period: from the start of the test to the last closed day
     const fim = m.ultimo_candle || m.curva?.at(-1)?.[0], per = `de ${dt(m.inicio)} a ${dt(fim)}`;
     const dias = m.inicio && fim ? Math.round((Date.parse(fim) - Date.parse(m.inicio)) / 864e5) + 1 : null;
     let topo = null, queda = null;
     for (const c of m.curva || []) { if (c[1] == null) continue; if (!topo || c[1] > topo[1]) topo = c; const q = c[1] / topo[1] - 1; if (!queda || q < queda.q) queda = { q, de: topo[0], ate: c[0] }; }
+    const fechadas = [...new Set(ops.map(o => pares.get(o)).filter(x => x?.fecha?.resultado_brl != null))];
+    const soma = fechadas.reduce((s, x) => s + x.fecha.resultado_brl, 0), nLucro = fechadas.filter(x => x.fecha.resultado_brl > 0).length;
+    const custoT = fechadas.reduce((s, x) => s + (x.fecha.custos_brl || 0) + (x.abre?.custos_brl || 0), 0);
     const tot = (l, v, s = "") => `<div class="card tot"><div class="lbl">${l}</div><div class="v num">${v}</div>${s ? `<div class="hint">${s}</div>` : ""}</div>`;
     const quando = dtr
       ? `O day trade usa candles de 5 minutos, que o Yahoo guarda por cerca de 60 dias: por isso o teste no passado dele começou em ${dt(m.inicio)}, mesmo que você escolha um teste mais longo. A partir de ${dt(m.ativado_em)} cada dia é simulado ao vivo às 21h30 e fica guardado.`
@@ -231,17 +235,117 @@
         <label class="hint">de <input type="date" data-bot-data="de" value="${esc(de)}"></label><label class="hint">até <input type="date" data-bot-data="ate" value="${esc(ate)}"></label>
         ${u.periodo !== "tudo" || u.res !== "todos" || u.merc !== "todos" || u.lado !== "todos" ? `<span class="hint">${ops.length} ${ops.length === 1 ? "linha" : "linhas"} com esses filtros</span>` : ""}</div>
       <div class="card scroll"><table class="grid bot-t"><thead><tr><th>Data</th><th>Ativo</th><th>Operação</th><th>Status</th><th>Qtd.</th><th>Compra</th><th>Venda</th><th>Valor</th><th>Resultado</th></tr></thead><tbody>
-        ${ops.slice(0, verMais).map(o => { const p = pares.get(o), l = pernas(p), // when each leg happened: the time, plus the date if it was another day
+        ${ops.slice(0, verMais).map((o, idx) => { const p = pares.get(o), l = pernas(p), // when each leg happened: the time, plus the date if it was another day
           quando = x => !x ? "" : x.data === o.data ? x.hora || "" : dt(x.data) + (x.hora ? " " + x.hora : ""),
           preco = (v, lado, x) => v == null ? "—" : (o.lado === lado ? `<b>${px(v, o.mercado)}</b>` : px(v, o.mercado)) + (quando(x) ? `<br><small class="hint">${quando(x)}</small>` : ""),
           // the result belongs to the trade: shown on both rows once it is closed
           f = p.fecha, ag = !p.fecha && o.ao_vivo ? atual.get(o.mercado + o.ticker) : null;
           return `<tr class="${o.teste ? "teste" : ""}"><td>${dt(o.data)}${o.hora ? ` ${o.hora}` : ""}${o.teste ? `<br><small class="hint">teste</small>` : o.ao_vivo ? `<br><small class="bot-vivo">● ao vivo</small>` : ""}</td><td><b>${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small></td>
           <td><b class="${o.lado === "compra" ? "pos" : "neg"}">${o.lado === "compra" ? "Compra" : "Venda"}</b><br><small class="hint bot-mot">${esc(o.motivo)}</small></td>
-          <td>${p.fecha ? `Encerrada<br><small class="hint">${l.motivo}</small>` : `<span class="tag on">Aberta</span>`}${p.vendida ? ` <small class="bot-m">vendida</small>` : ""}</td>
+          <td>${p.fecha ? `Encerrada<br><small class="hint">${l.motivo}</small>` : `<span class="tag on">Aberta</span>`}${p.vendida ? ` <small class="bot-m">vendida</small>` : ""}<br><button class="link bot-gbtn" type="button" data-bot-graf="${idx}">📈 Ver gráfico</button></td>
           <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra", l.cOp)}</td><td>${ag ? `<small class="hint">agora</small> ${px(ag.atual, o.mercado)}` : preco(l.venda, "venda", l.vOp)}</td><td>${brl(o.valor_brl)}</td><td>${f?.resultado_pct != null ? `${pc(f.resultado_pct)}<br><small>${brl(f.resultado_brl)}</small>` : ag ? `${pc(ag.resultado_pct)}<br><small class="hint">se vendesse agora</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
-      </tbody></table></div>
+      </tbody>${fechadas.length ? `<tfoot><tr class="bot-tot"><td colspan="8"><b>Total</b> das ${fechadas.length} ${fechadas.length === 1 ? "operação encerrada" : "operações encerradas"} desta lista (${nLucro} com lucro, ${fechadas.length - nLucro} com prejuízo; cada operação conta uma vez, mesmo aparecendo na compra e na venda) · custos ${brl(custoT)}${ops.length > verMais ? " · inclui as linhas ainda não mostradas" : ""}</td>
+        <td>${pc(soma / m.valor_inicial * 100)}<br><small>${soma < 0 ? "−" : ""}${brl(Math.abs(soma))}</small><br><small class="hint">% do valor inicial</small></td></tr></tfoot>` : ""}</table></div>
       ${ops.length > verMais ? `<button class="btn" type="button" id="botMais" style="margin-top:8px">Ver mais ${Math.min(PAGINA, ops.length - verMais)}</button>` : ""}`;
+  }
+
+  // One trade on its chart, from a little before the purchase to a little after the sale, and the
+  // story of why it made or lost money, told from the candles. Opened by "📈 Ver gráfico" in the history.
+  let dlg = null, opsVisiveis = [], paresAtuais = null, modoAtual = null;
+  const simbolo = o => o.mercado === "b3" ? o.ticker + ".SA" : o.mercado === "cripto" ? o.ticker + "-USD" : o.ticker;
+  const pcT = v => `${v > 0 ? "+" : ""}${nf(2).format(v)}%`;
+  async function graficoOperacao(i) {
+    const o = opsVisiveis[i], p = paresAtuais?.get(o); if (!o || !p) return;
+    const l = pernas(p), ent = l.cOp || o, sai = l.vOp, k = modoAtual, intra = k === "daytrade", A = window.Analise;
+    if (!dlg) {
+      dlg = document.body.appendChild(Object.assign(document.createElement("dialog"), { className: "vdlg bot-gdlg" }));
+      dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-gclose]")) dlg.close(); });
+    }
+    const topo = `<div class="vdlg-h"><h2>${esc(o.ticker)} <small class="bot-m">${MERC[o.mercado]}</small> <small class="hint">${NOMES[k]}</small></h2><button class="btn small" type="button" data-gclose>✕ Fechar</button></div>`;
+    dlg.innerHTML = `<div class="card">${topo}<div class="empty">Carregando os candles…</div></div>`;
+    if (!dlg.open) dlg.showModal();
+    // the candles around the trade: 5-minute ones exist for ~60 days only
+    const dias = (Date.now() - Date.parse(ent.data + "T12:00:00Z")) / 864e5;
+    const [range, iv] = intra ? [dias <= 4 ? "5d" : dias <= 27 ? "1mo" : "60d", "5m"] : k === "semanal" ? ["10y", "1wk"] : [dias < 690 ? "2y" : "5y", "1d"];
+    let bars = [];
+    try {
+      const r = await fetch(`/api/cotacoes?s=${encodeURIComponent(simbolo(o))}&range=${range}&iv=${iv}&ohlc=1`).then(r => r.json());
+      bars = (r.quotes?.[simbolo(o)]?.bars || []).map(([t, op, h, lo, c, v]) => ({ t, o: op, h, l: lo, c, v }));
+    } catch {}
+    // the same clock as the bot: Brasília time for 5-minute candles, the UTC date for daily and weekly ones
+    const chave = b => intra ? new Date((b.t - 3 * 3600) * 1000).toISOString().slice(0, 16) : new Date(b.t * 1000).toISOString().slice(0, 10);
+    const quando = x => x.data + (intra && x.hora ? "T" + x.hora : "");
+    const achar = x => bars.findIndex(b => chave(b) >= quando(x));
+    const iA = achar(ent), iF = sai ? achar(sai) : bars.length - 1;
+    if (bars.length < 3 || iA < 0 || chave(bars[iA]).slice(0, 10) !== ent.data) {
+      dlg.innerHTML = `<div class="card">${topo}<div class="empty">Os candles dessa data não estão mais disponíveis${intra ? " (o Yahoo guarda os de 5 minutos por cerca de 60 dias)" : ""}.</div></div>`; return;
+    }
+    const fim = iF < 0 ? bars.length - 1 : iF, M = intra ? 12 : 15;
+    const de = Math.max(0, iA - M), ate = Math.min(bars.length, fim + M + 1), vis = bars.slice(de, ate);
+    const C = bars.map(b => b.c), m9 = A.ema(C, 9), m21 = intra ? A.ema(C, 21) : A.sma(C, 21), n21 = intra ? "MME 21" : "MMS 21";
+    const compra = l.compra, venda = l.venda ?? bars[fim].c, R = res?.regras || {};
+    const alvo = intra && o.mercado !== "cripto" && R.dt_alvo_pct ? compra * (1 + R.dt_alvo_pct / 100) : null;
+    const stop = intra && o.mercado !== "cripto" && R.dt_stop_pct ? compra * (1 - R.dt_stop_pct / 100) : null;
+
+    // the drawing
+    const W = 820, H = 320, pL = 6, pR = 92, ax = 18, n = vis.length, step = (W - pL - pR) / n, X = j => pL + (j + 0.5) * step;
+    const vals = vis.flatMap(b => [b.h, b.l]).concat([compra, venda, alvo, stop].filter(v => v != null));
+    let lo = Math.min(...vals), hi = Math.max(...vals); const pd = (hi - lo) * 0.08 || hi * 0.01; lo -= pd; hi += pd;
+    const Y = v => 8 + (1 - (v - lo) / (hi - lo)) * (H - ax - 16);
+    const f = v => nf(v < 1 ? 4 : 2).format(v);
+    const linha = (arr, cor) => { let d = "", pen = false; for (let j = 0; j < n; j++) { const v = arr[de + j]; if (v == null) { pen = false; continue; } d += (pen ? "L" : "M") + X(j).toFixed(1) + " " + Y(v).toFixed(1); pen = true; } return `<path d="${d}" fill="none" stroke="${cor}" stroke-width="1.4"/>`; };
+    const hor = (v, cor, txt) => v == null ? "" : `<line x1="${pL}" x2="${W - pR}" y1="${Y(v)}" y2="${Y(v)}" stroke="${cor}" stroke-dasharray="5 4"/><text x="${W - pR + 4}" y="${Y(v) + 4}" font-size="10.5" fill="${cor}">${txt}</text>`;
+    const variosDias = chave(vis[0]).slice(0, 10) !== chave(vis.at(-1)).slice(0, 10);
+    const hora = b => { const s = chave(b); return intra ? (variosDias ? dt(s.slice(0, 10)).slice(0, 5) + " " : "") + s.slice(11, 16) : dt(s.slice(0, 10)).slice(0, 5); };
+    let svg = `<svg viewBox="0 0 ${W} ${H}" class="bot-gsvg" role="img" aria-label="Gráfico da operação">`;
+    svg += `<rect x="${X(iA - de) - step / 2}" y="0" width="${(fim - iA + 1) * step}" height="${H - ax}" fill="var(--accent)" opacity=".07"/>`;
+    svg += hor(alvo, "var(--up)", `alvo ${f(alvo)}`) + hor(stop, "var(--down)", `stop ${f(stop)}`) + hor(compra, "var(--muted)", `compra ${f(compra)}`);
+    const cw = Math.max(1, Math.min(12, step * 0.66));
+    vis.forEach((b, j) => { const cor = b.c >= b.o ? "var(--up)" : "var(--down)", x = X(j), t = Math.min(Y(b.o), Y(b.c));
+      svg += `<line x1="${x}" x2="${x}" y1="${Y(b.h)}" y2="${Y(b.l)}" stroke="${cor}"/><rect x="${x - cw / 2}" y="${t}" width="${cw}" height="${Math.max(1, Math.abs(Y(b.o) - Y(b.c)))}" fill="${b.c >= b.o ? "var(--panel)" : cor}" stroke="${cor}"/>`; });
+    svg += linha(m9, "#f59e0b") + linha(m21, "#8b5cf6");
+    const seta = (j, v, cima, cor, txt) => { const x = X(j), y = Y(v); return cima
+      ? `<path d="M${x} ${y + 4} l7 12 h-14 z" fill="${cor}"/><text x="${x}" y="${y + 28}" font-size="11" font-weight="700" fill="${cor}" text-anchor="middle">${txt}</text>`
+      : `<path d="M${x} ${y - 4} l7 -12 h-14 z" fill="${cor}"/><text x="${x}" y="${y - 20}" font-size="11" font-weight="700" fill="${cor}" text-anchor="middle">${txt}</text>`; };
+    svg += seta(iA - de, compra, true, "var(--up)", "Compra");
+    if (sai) svg += seta(fim - de, venda, false, "var(--down)", "Venda");
+    [0, Math.floor(n / 2), n - 1].forEach((j, q) => { svg += `<text x="${X(j)}" y="${H - 4}" font-size="10.5" fill="var(--faint)" text-anchor="${q === 0 ? "start" : q === 2 ? "end" : "middle"}">${hora(vis[j])}</text>`; });
+    svg += `<text x="${pL + 4}" y="14" font-size="10.5" font-weight="600"><tspan fill="#f59e0b">MME 9</tspan> <tspan fill="#8b5cf6">${n21}</tspan></text></svg>`;
+
+    // the story
+    const dentro = bars.slice(iA, fim + 1), mx = Math.max(...dentro.map(b => b.h)), mn = Math.min(...dentro.map(b => b.l));
+    const mfe = (mx / compra - 1) * 100, mae = (mn / compra - 1) * 100, bruto = (venda / compra - 1) * 100;
+    const nb = fim - iA, dur = intra ? (nb * 5 >= 60 ? `${Math.floor(nb * 5 / 60)} h ${nb * 5 % 60 ? (nb * 5 % 60) + " min" : ""}` : `${Math.max(5, nb * 5)} minutos`) : `${nb} ${k === "semanal" ? (nb === 1 ? "semana" : "semanas") : nb === 1 ? "pregão" : "pregões"}`;
+    const custos = (ent.custos_brl || 0) + (sai?.custos_brl || 0), r = sai?.resultado_brl, rp = sai?.resultado_pct;
+    const mot = sai?.motivo || "", txt = [];
+    txt.push(`<p><b>Entrada:</b> comprou ${qtd(ent.qtd, o.mercado)} a <b>${px(compra, o.mercado)}</b> em ${dt(ent.data)}${ent.hora ? " às " + ent.hora : ""}. Motivo: ${esc(ent.motivo)}.</p>`);
+    txt.push(`<p><b>Durante a operação</b> (${dur}): o preço chegou a ${px(mx, o.mercado)} (<b>${pcT(mfe)}</b> sobre a compra) e desceu até ${px(mn, o.mercado)} (<b>${pcT(mae)}</b>).</p>`);
+    if (!sai) txt.push(`<p><b>Ainda em andamento.</b> Pelo último candle, o preço está em ${px(venda, o.mercado)} (${pcT(bruto)} sobre a compra).</p>`);
+    else {
+      const saida = /^Alvo/.test(mot) ? `<b>Saída no alvo:</b> o preço subiu até o alvo de ganho e a venda garantiu o lucro.`
+        : /^Stop/.test(mot) ? `<b>Saída no stop:</b> o preço caiu até o preço de proteção, e o stop limitou a perda.${mfe >= 0.5 ? ` Antes disso, a operação chegou a ficar ${pcT(mfe)} no positivo, mas o preço não alcançou o alvo e voltou.` : ""}`
+        : /^Zerado/.test(mot) ? `<b>Encerrada no fim do dia:</b> ${o.mercado === "cripto" ? "na cripto o dia termina às 21h" : "no day trade nada fica aberto para o dia seguinte"}, então a posição foi vendida antes do fechamento, sem tocar nem o alvo nem o stop. O resultado é só o quanto o preço andou até ali.`
+        : /^Limite de perda/.test(mot) ? `<b>Limite de perda do mês:</b> a carteira inteira caiu até o limite mensal, e o bot vendeu tudo, inclusive esta posição.`
+        : /^Tempo/.test(mot) ? `<b>Tempo máximo:</b> a operação passou do número máximo de candles e foi encerrada.`
+        : `<b>Sinal de saída:</b> ${esc(mot)}. A regra entende que o movimento de alta perdeu força.`;
+      txt.push(`<p>${saida}</p>`);
+      txt.push(`<p><b>Resultado:</b> o preço ${bruto >= 0 ? "subiu" : "caiu"} ${nf(2).format(Math.abs(bruto))}% entre a compra e a venda. Os custos (taxas e diferença de preço) somaram ${brl(custos)}. No fim: ${pc(rp)} (${brl(r)}).${bruto > 0 && r < 0 ? " O preço até subiu, mas tão pouco que os custos levaram o resultado para o negativo." : ""}${o.mercado !== "b3" ? " Em ativos em dólar, a variação do dólar no período também entra no resultado em reais." : ""}</p>`);
+      const porque = r > 0
+        ? (mae > -0.3 ? "O lucro veio de o preço ter subido logo depois do sinal de compra, quase sem andar contra a posição." : `O lucro veio de o preço ter subido depois do sinal, embora antes tenha chegado a ficar ${pcT(mae)} contra a posição.`)
+        : (mfe < 0.2 ? "O prejuízo veio de o preço praticamente não ter subido depois da compra: o sinal de alta não se confirmou." : `O prejuízo veio de o preço ter subido pouco (no máximo ${pcT(mfe)}) e depois voltado para baixo do preço de compra.`);
+      txt.push(`<p><b>Em resumo:</b> ${porque}</p>`);
+      const dep = bars.slice(fim + 1, ate);
+      if (dep.length) { const d2 = (dep.at(-1).c / venda - 1) * 100;
+        txt.push(`<p><b>Depois da venda:</b> ${dep.length} ${intra ? "candles (" + dep.length * 5 + " min)" : k === "semanal" ? "semanas" : "pregões"} depois, o preço estava em ${px(dep.at(-1).c, o.mercado)} (${pcT(d2)} sobre a venda)${Math.abs(d2) < 0.2 ? "." : d2 > 0 ? ": quem tivesse segurado teria ganhado mais." : ": a venda evitou essa queda."}</p>`); }
+    }
+    if (intra && o.mercado !== "cripto") {
+      const dia = bars.filter(b => chave(b).slice(0, 10) === ent.data);
+      if (dia.length) txt.push(`<p class="hint">No dia, ${esc(o.ticker)} foi de ${px(dia[0].o, o.mercado)} na abertura a ${px(dia.at(-1).c, o.mercado)} no último candle (${pcT((dia.at(-1).c / dia[0].o - 1) * 100)}).</p>`);
+    }
+    dlg.innerHTML = `<div class="card">${topo}${svg}
+      <p class="hint">Faixa colorida: o tempo em que a posição ficou aberta. ${alvo ? "Alvo e stop pelas regras atuais. " : ""}${M} candles antes da compra e depois da venda.</p>
+      <h4>📝 Por que deu ${!sai ? "esse resultado até agora" : r > 0 ? "lucro" : "prejuízo"}</h4>${txt.join("")}
+      <p class="hint">Análise automática e descritiva, feita a partir dos candles. Não é recomendação de investimento.</p></div>`;
   }
 
   // the months in which the loss limit stopped the bot (from the trades it closed because of it)
@@ -358,6 +462,7 @@
     const t = e.target;
     if (t.closest("#botSalvar")) return salvar();
     if (t.closest("#botPadrao")) { rascunho = { ...structuredClone(form()), regras: SPEC.padrao() }; return render(); }
+    const gf = t.closest("[data-bot-graf]"); if (gf) return graficoOperacao(+gf.dataset.botGraf);
     if (t.closest("#botMais")) { verMais += PAGINA; return render(); }
     const md = t.closest("[data-bot-modo]"); if (md) { verMais = PAGINA; return setUi({ modo: md.dataset.botModo }); }
     const mc = t.closest("[data-bot-merc]"); if (mc) { verMais = PAGINA; return setUi({ merc: mc.dataset.botMerc }); }
