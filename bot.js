@@ -115,6 +115,18 @@
     escolha: (cfg?.modos || []).length > 1 ? "todos" : cfg?.modos?.[0] || "",
     regras: SPEC ? SPEC.normalizar(cfg?.regras) : {},
   };
+  // only the rules of the chosen mode(s) and markets: [group, title, filter of its rules]
+  function gruposVisiveis(f) {
+    const modos = f.escolha === "todos" ? MODOS : f.escolha ? [f.escolha] : [], merc = f.regras.mercados || [];
+    const d = modos.includes("diario"), s = modos.includes("semanal"), dt = modos.includes("daytrade");
+    return Object.entries(SPEC.GRUPOS).flatMap(([g, t]) => {
+      if (g === "risco") return modos.length ? [[g, t]] : [];
+      if (g === "geral") return d || s ? [[g, d && s ? t : d ? "Gráfico diário" : "Gráfico semanal", x => x.k !== (d ? "espera_semanal" : "espera_diario") || (d && s)]] : [];
+      if (g === "dt") return dt && (merc.includes("b3") || merc.includes("eua")) ? [[g, t]] : [];
+      if (g === "dtc") return dt && merc.includes("cripto") ? [[g, t]] : [];
+      return [[g, t]];
+    });
+  }
   function regrasForm(f) {
     if (!SPEC) return "";
     const campo = x => {
@@ -124,7 +136,8 @@
       return `<label class="bot-r"><span>${x.label}</span><input type="number" data-regra="${x.k}" min="${x.min}" max="${x.max}" step="${x.passo}" value="${v}"><small>${x.ajuda ? x.ajuda + " " : ""}De ${num(x.min)} a ${num(x.max)} · padrão ${num(x.padrao)}.</small></label>`;
     };
     return `<details class="bot-rd" ${aberto?.regras ? "open" : ""} data-bot-fold="regras"><summary><b>📏 Regras de compra e venda</b> <span class="hint">· opcional; já vem com valores padrão</span></summary>
-      ${Object.entries(SPEC.GRUPOS).map(([g, t]) => `<fieldset class="bot-g"><legend>${t}</legend>${SPEC.REGRAS.filter(x => x.g === g).map(campo).join("")}</fieldset>`).join("")}
+      ${gruposVisiveis(f).map(([g, t, so]) => `<fieldset class="bot-g"><legend>${t}</legend>${SPEC.REGRAS.filter(x => x.g === g && (!so || so(x))).map(campo).join("")}</fieldset>`).join("")}
+      ${f.escolha ? "" : `<p class="hint">Escolha o modo acima para ver as regras dele.</p>`}
       <p class="hint">Mudar as regras refaz o histórico do diário e do semanal com as regras novas (mantendo a data de início). O day trade recomeça com os dias que ainda existem nos dados de 5 minutos (cerca de 60).</p>
       <button class="btn small" type="button" id="botPadrao">Voltar tudo ao padrão</button>
     </details>`;
@@ -468,6 +481,7 @@
     const dd = e.target.dataset?.botData;
     if (dd) { const [de, ate] = faixa(ui()); verMais = PAGINA; return setUi({ periodo: "datas", de, ate, [dd]: e.target.value }); }
     // the value is written back in reais when the field is left
+    if (rascunho && (e.target.name === "botModo" || e.target.dataset?.regra === "mercados")) return render();
     if (e.target.id === "botValor" && rascunho) { const v = lerReais(e.target.value); if (Number.isFinite(v)) e.target.value = rascunho.valor = emReais(v); return; }
     const k = e.target.dataset?.regra; if (!k || !SPEC || !rascunho) return;
     const ok = SPEC.normalizar({ ...rascunho.regras, mercados: rascunho.regras.mercados?.length ? rascunho.regras.mercados : ["b3"] });
