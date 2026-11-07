@@ -286,19 +286,23 @@
     const compra = l.compra, venda = l.venda ?? bars[fim].c, R = res?.regras || {};
     const alvo = intra && o.mercado !== "cripto" && R.dt_alvo_pct ? compra * (1 + R.dt_alvo_pct / 100) : null;
     const stop = intra && o.mercado !== "cripto" && R.dt_stop_pct ? compra * (1 - R.dt_stop_pct / 100) : null;
+    // support and resistance as they stood when the trade opened: lowest low and highest high of the
+    // 20 candles before the purchase (the same rule as the site's charts)
+    const sr = iA >= 2 ? A.supportResistance(bars, 20, iA - 1) : null;
 
     // the drawing
     const W = 820, H = 320, pL = 6, pR = 92, ax = 18, n = vis.length, step = (W - pL - pR) / n, X = j => pL + (j + 0.5) * step;
-    const vals = vis.flatMap(b => [b.h, b.l]).concat([compra, venda, alvo, stop].filter(v => v != null));
+    const vals = vis.flatMap(b => [b.h, b.l]).concat([compra, venda, alvo, stop, sr?.suporte, sr?.resistencia].filter(v => v != null));
     let lo = Math.min(...vals), hi = Math.max(...vals); const pd = (hi - lo) * 0.08 || hi * 0.01; lo -= pd; hi += pd;
     const Y = v => 8 + (1 - (v - lo) / (hi - lo)) * (H - ax - 16);
     const f = v => nf(v < 1 ? 4 : 2).format(v);
     const linha = (arr, cor) => { let d = "", pen = false; for (let j = 0; j < n; j++) { const v = arr[de + j]; if (v == null) { pen = false; continue; } d += (pen ? "L" : "M") + X(j).toFixed(1) + " " + Y(v).toFixed(1); pen = true; } return `<path d="${d}" fill="none" stroke="${cor}" stroke-width="1.4"/>`; };
-    const hor = (v, cor, txt) => v == null ? "" : `<line x1="${pL}" x2="${W - pR}" y1="${Y(v)}" y2="${Y(v)}" stroke="${cor}" stroke-dasharray="5 4"/><text x="${W - pR + 4}" y="${Y(v) + 4}" font-size="10.5" fill="${cor}">${txt}</text>`;
+    const hor = (v, cor, txt, tr = "5 4") => v == null ? "" : `<line x1="${pL}" x2="${W - pR}" y1="${Y(v)}" y2="${Y(v)}" stroke="${cor}" stroke-dasharray="${tr}" stroke-width="${tr === "5 4" ? 1 : 1.6}"/><text x="${W - pR + 4}" y="${Y(v) + 4}" font-size="10.5" fill="${cor}">${txt}</text>`;
     const variosDias = chave(vis[0]).slice(0, 10) !== chave(vis.at(-1)).slice(0, 10);
     const hora = b => { const s = chave(b); return intra ? (variosDias ? dt(s.slice(0, 10)).slice(0, 5) + " " : "") + s.slice(11, 16) : dt(s.slice(0, 10)).slice(0, 5); };
     let svg = `<svg viewBox="0 0 ${W} ${H}" class="bot-gsvg" role="img" aria-label="Gráfico da operação">`;
     svg += `<rect x="${X(iA - de) - step / 2}" y="0" width="${(fim - iA + 1) * step}" height="${H - ax}" fill="var(--accent)" opacity=".07"/>`;
+    if (sr) svg += hor(sr.resistencia, "#dc2626", `R ${f(sr.resistencia)}`, "1 3") + hor(sr.suporte, "#16a34a", `S ${f(sr.suporte)}`, "1 3");
     svg += hor(alvo, "var(--up)", `alvo ${f(alvo)}`) + hor(stop, "var(--down)", `stop ${f(stop)}`) + hor(compra, "var(--muted)", `compra ${f(compra)}`);
     const cw = Math.max(1, Math.min(12, step * 0.66));
     vis.forEach((b, j) => { const cor = b.c >= b.o ? "var(--up)" : "var(--down)", x = X(j), t = Math.min(Y(b.o), Y(b.c));
@@ -320,6 +324,10 @@
     const mot = sai?.motivo || "", txt = [];
     txt.push(`<p><b>Entrada:</b> comprou ${qtd(ent.qtd, o.mercado)} a <b>${px(compra, o.mercado)}</b> em ${dt(ent.data)}${ent.hora ? " às " + ent.hora : ""}. Motivo: ${esc(ent.motivo)}.</p>`);
     txt.push(`<p><b>Durante a operação</b> (${dur}): o preço chegou a ${px(mx, o.mercado)} (<b>${pcT(mfe)}</b> sobre a compra) e desceu até ${px(mn, o.mercado)} (<b>${pcT(mae)}</b>).</p>`);
+    if (sr) {
+      const dR = (sr.resistencia / compra - 1) * 100, dS = (sr.suporte / compra - 1) * 100;
+      txt.push(`<p><b>Suporte e resistência:</b> na hora da compra, a resistência (máxima dos 20 candles anteriores) estava em ${px(sr.resistencia, o.mercado)}, ${dR > 0 ? `${nf(2).format(dR)}% acima do preço de compra` : "abaixo do preço de compra: a compra foi num rompimento da resistência"}, e o suporte (mínima) em ${px(sr.suporte, o.mercado)}, ${nf(2).format(Math.abs(dS))}% abaixo.${dR > 0 ? (mx > sr.resistencia ? " Durante a operação o preço passou da resistência." : " Durante a operação o preço não passou da resistência.") : ""}${mn < sr.suporte ? " O preço chegou a perder o suporte." : ""}</p>`);
+    }
     if (!sai) txt.push(`<p><b>Ainda em andamento.</b> Pelo último candle, o preço está em ${px(venda, o.mercado)} (${pcT(bruto)} sobre a compra).</p>`);
     else {
       const saida = /^Alvo/.test(mot) ? `<b>Saída no alvo:</b> o preço subiu até o alvo de ganho e a venda garantiu o lucro.`
@@ -343,7 +351,7 @@
       if (dia.length) txt.push(`<p class="hint">No dia, ${esc(o.ticker)} foi de ${px(dia[0].o, o.mercado)} na abertura a ${px(dia.at(-1).c, o.mercado)} no último candle (${pcT((dia.at(-1).c / dia[0].o - 1) * 100)}).</p>`);
     }
     dlg.innerHTML = `<div class="card">${topo}${svg}
-      <p class="hint">Faixa colorida: o tempo em que a posição ficou aberta. ${alvo ? "Alvo e stop pelas regras atuais. " : ""}${M} candles antes da compra e depois da venda.</p>
+      <p class="hint">Faixa colorida: o tempo em que a posição ficou aberta. ${sr ? "Linhas pontilhadas S e R: suporte e resistência na hora da compra (mínima e máxima dos 20 candles anteriores). " : ""}${alvo ? "Alvo e stop pelas regras atuais. " : ""}${M} candles antes da compra e depois da venda.</p>
       <h4>📝 Por que deu ${!sai ? "esse resultado até agora" : r > 0 ? "lucro" : "prejuízo"}</h4>${txt.join("")}
       <p class="hint">Análise automática e descritiva, feita a partir dos candles. Não é recomendação de investimento.</p></div>`;
   }
