@@ -19,11 +19,11 @@
     "lista": []
   },
   "bot": {
-    "valor_inicial": 1000,
+    "valor_inicial": 400000000,
     "modos": [
       "daytrade"
     ],
-    "ativado_em": "2026-11-05",
+    "ativado_em": "2026-11-07",
     "regras": {
       "pontuacao_min": 2,
       "max_posicoes": 6,
@@ -35,9 +35,10 @@
       "vender_tendencia": false,
       "evitar_conflito": true,
       "mercados": [
-        "b3",
         "eua"
       ],
+      "historico_meses": 3,
+      "perda_mensal_pct": 6,
       "dt_alvo_pct": 2,
       "dt_stop_pct": 1,
       "dt_max_posicoes": 5,
