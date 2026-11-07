@@ -25,6 +25,13 @@
   const qtd = (v, m) => v.toLocaleString("pt-BR", { maximumFractionDigits: m === "b3" ? 0 : m === "eua" ? 4 : 6 });
   const pc = v => v == null ? "—" : `<span class="${v > 0 ? "pos" : v < 0 ? "neg" : ""}">${v > 0 ? "+" : ""}${nf(2).format(v)}%</span>`;
   const dt = d => d ? d.split("-").reverse().join("/") : "—";
+  // the initial value, typed and shown in reais: "1.234,56" (dots for thousands, comma for cents);
+  // a plain "1234.56" or "1234" is read too
+  const lerReais = s => { s = String(s ?? "").replace(/[^\d,.]/g, ""); if (!s) return NaN;
+    if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
+    else if (/\.\d{3}(\.|$)/.test(s)) s = s.replace(/\./g, "");
+    return +s; };
+  const emReais = v => Number.isFinite(v) ? nf(2).format(v) : "";
   const num = v => (+v).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
 
   // Both legs of each trade. A leg with a result closes the position; any other leg opens it, so a
@@ -104,7 +111,7 @@
 
   // the form: what is saved, or what is being typed
   const form = () => rascunho || {
-    valor: cfg?.valor_inicial ?? "",
+    valor: cfg?.valor_inicial != null ? emReais(cfg.valor_inicial) : "",
     escolha: (cfg?.modos || []).length > 1 ? "todos" : cfg?.modos?.[0] || "",
     regras: SPEC ? SPEC.normalizar(cfg?.regras) : {},
   };
@@ -142,7 +149,7 @@
     const opt = (k, t, d) => `<label class="bot-opt"><input type="radio" name="botModo" value="${k}" ${f.escolha === k ? "checked" : ""}><span><b>${t}</b><small>${d}</small></span></label>`;
     return `<details class="card bot-setup" ${(aberto?.setup ?? !cfg) ? "open" : ""} data-bot-fold="setup"><summary><b>⚙ ${cfg ? "Configuração do bot" : "Configurar o bot"}</b>${cfg ? `<span class="hint"> · ${brl(cfg.valor_inicial)} · ${modos.map(m => NOMES[m]).join(", ")}${SPEC ? " · " + SPEC.normalizar(cfg.regras).mercados.map(m => ({ b3: "B3", eua: "EUA", cripto: "Cripto" })[m]).join(", ") : ""} · simulação desde ${dt(cfg.ativado_em)}</span>` : ""}</summary>
       <p class="hint">O bot usa <b>só a análise técnica</b> e dinheiro imaginário. Escolha com quanto ele começa, em quais mercados, em que gráfico opera e, se quiser, as regras.</p>
-      <label class="bot-v">Valor inicial (R$)<input id="botValor" type="number" min="100" step="100" inputmode="decimal" value="${esc(f.valor)}" placeholder="ex.: 10000"></label>
+      <label class="bot-v">Valor inicial (R$)<input id="botValor" type="text" inputmode="decimal" autocomplete="off" value="${esc(f.valor)}" placeholder="ex.: 10.000,00"></label>
       ${mercadosForm(f)}
       ${periodoForm(f)}
       <div class="bot-opts">
@@ -411,7 +418,7 @@
   }
 
   async function salvar() {
-    const f = form(), v = +f.valor, m = $("#botMsg");
+    const f = form(), v = Math.round(lerReais(f.valor) * 100) / 100, m = $("#botMsg");
     if (!(v >= 100)) { m.textContent = "Digite um valor inicial de pelo menos R$ 100."; return; }
     if (!f.escolha) { m.textContent = "Escolha o modo."; return; }
     if (SPEC && !f.regras.mercados?.length) { m.textContent = "Escolha pelo menos um mercado."; return; }
@@ -460,6 +467,8 @@
   box?.addEventListener("change", e => {
     const dd = e.target.dataset?.botData;
     if (dd) { const [de, ate] = faixa(ui()); verMais = PAGINA; return setUi({ periodo: "datas", de, ate, [dd]: e.target.value }); }
+    // the value is written back in reais when the field is left
+    if (e.target.id === "botValor" && rascunho) { const v = lerReais(e.target.value); if (Number.isFinite(v)) e.target.value = rascunho.valor = emReais(v); return; }
     const k = e.target.dataset?.regra; if (!k || !SPEC || !rascunho) return;
     const ok = SPEC.normalizar({ ...rascunho.regras, mercados: rascunho.regras.mercados?.length ? rascunho.regras.mercados : ["b3"] });
     if (e.target.type === "number") { rascunho.regras[k] = ok[k]; e.target.value = ok[k]; }
