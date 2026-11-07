@@ -3806,7 +3806,7 @@ function renderConfig() {
         <button class="btn" type="button" data-cfg="critReset">Voltar ao padrão</button>
       </div>
       <p class="hint" style="margin-top:10px"><b>P/L</b>: quantos anos de lucro o preço representa (menor = mais barato). <b>Dividendos</b>: quanto a empresa pagou nos últimos 12 meses, em % do preço. <b>ROE</b>: lucro sobre o patrimônio (maior = mais rentável). <b>Dívida líquida/patrimônio</b>: endividamento (menor = mais folga).</p>
-      <p class="hint">Estes critérios valem para este navegador. O e-mail das 7h usa os critérios padrão (${esc(critSummary(CRIT_DEFAULT))}). Para mudar os do e-mail, peça ao Claude.</p>
+      <p class="hint">Estes critérios valem para este navegador. O e-mail das 7h15 usa os critérios padrão (${esc(critSummary(CRIT_DEFAULT))}). Para mudar os do e-mail, peça ao Claude.</p>
     </section>`,
     alertas: `
     <section class="card" id="cfgAlertas">
@@ -3829,7 +3829,7 @@ function renderConfig() {
     <section class="card">
       <h3>Relatório diário</h3>
       <p class="hint">Gráfico usado nos sinais técnicos e na coluna "Técnico" da tabela.</p>
-      <p class="hint">📧 O e-mail das 7h (segunda a sexta) usa sempre o gráfico <b>diário</b>. No sábado chega um e-mail só com a análise técnica da semana anterior, no gráfico <b>semanal</b>.</p>
+      <p class="hint">📧 O e-mail das 7h15 (segunda a sexta) usa sempre o gráfico <b>diário</b>. No sábado chega um e-mail só com a análise técnica da semana anterior, no gráfico <b>semanal</b>.</p>
       <div class="row2"><span class="seg">${FRAMES.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${frame() === k}">${l}</button>`).join("")}</span></div>
     </section>`,
     leis: `

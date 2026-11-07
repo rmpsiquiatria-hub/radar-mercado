@@ -3,7 +3,7 @@
 //                     or {"bot": {"valor_inicial": 10000, "modos": ["diario", "semanal", "daytrade"], "regras": {...}, "reiniciar": false}}
 //                        (rules: see lib/bot-regras.js; missing or out-of-range values become the defaults / limits)
 // Saves what was chosen in the site's Settings into relatorios/config.json on GitHub, which the
-// e-mails read (07:00 market report; Radar de leis). Needs a GITHUB_TOKEN environment variable in
+// e-mails read (07:15 market report; Radar de leis). Needs a GITHUB_TOKEN environment variable in
 // Vercel (fine-grained token, this repository only, Contents: read and write).
 // GET returns what the e-mails currently use and whether syncing is configured.
 
