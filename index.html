@@ -350,6 +350,12 @@ dialog.vdlg::backdrop { background: rgba(5,10,14,.55); }
 .pa-add input, .pa-add select { padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
 .pa-add input[data-pa-new="val"] { width: 110px; }
 .tec-cfg { padding: 14px; }
+.ma-presets { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr)); gap: 8px; margin: 8px 0 10px; }
+.ma-p { display: grid; gap: 2px; text-align: left; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: inherit; font: inherit; cursor: pointer; }
+.ma-p small { font-size: 12px; } .ma-p[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.ma-p:disabled { cursor: default; }
+.ma-rows { display: grid; gap: 6px; } .ma-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ma-cor { width: 18px; height: 4px; border-radius: 2px; } .ma-row select, .ma-row input { padding: 4px 6px; font: inherit; } .ma-row input { width: 90px; }
 .tec-cfg h4, .cfg-sub { margin: 16px 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
 .tec-cfg .pa-add { padding: 0; }
 .tec-auto { display: flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
@@ -1485,7 +1491,26 @@ const WRANGES = [
   { k: "Máx", range: "max", iv: "1mo", show: 0 },
 ];
 const PATTERN_MOVE = { "5m": 0.004, "15m": 0.006, "30m": 0.008, "1h": 0.01, "1d": 0.02, "1wk": 0.04, "1mo": 0.06 };
-const MA_DEF = [["mme9", "MME 9", "#f59e0b"], ["mms21", "MMS 21", "#8b5cf6"], ["mms50", "MMS 50", "#0ea5e9"], ["mms200", "MMS 200", "#ec4899"]];
+// The chart's moving averages: up to 4 lines, each exponential (MME) or simple (MMS) over n periods,
+// chosen in Configurações → Gráficos (state.medias). Only the charts: the report score and the bot
+// keep their own fixed averages.
+const MA_CORES = ["#f59e0b", "#8b5cf6", "#0ea5e9", "#ec4899"];
+const MA_PRESETS = [
+  ["padrao", "Padrão", "o clássico: curta, média e as de 50 e 200 dias", [["mme", 9], ["mms", 21], ["mms", 50], ["mms", 200]]],
+  ["curto", "Curto prazo", "para operações de dias a semanas", [["mme", 9], ["mme", 21], ["mme", 50]]],
+  ["longo", "Longo prazo", "tendência de meses e anos", [["mms", 50], ["mms", 100], ["mms", 200]]],
+  ["fibo", "Fibonacci", "períodos da sequência de Fibonacci", [["mme", 8], ["mme", 21], ["mme", 55], ["mme", 144]]],
+  ["cruz", "Cruzamento 20 × 50", "duas médias, para ver os cruzamentos", [["mme", 20], ["mms", 50]]],
+];
+const MA_MAX = 400;
+function mediasEscolhidas() {
+  const ok = (state.medias || []).filter(([t, n]) => (t === "mme" || t === "mms") && n >= 2 && n <= MA_MAX).slice(0, 4);
+  return ok.length || Array.isArray(state.medias) ? ok : MA_PRESETS[0][3];
+}
+const maNome = ([t, n]) => `${t === "mme" ? "MME" : "MMS"} ${n}`;
+// [key, label, colour, tipo, n] for each chosen line
+const maDef = () => mediasEscolhidas().map((m, i) => [m[0] + m[1] + "_" + i, maNome(m), MA_CORES[i], m[0], m[1]]);
+const maPreset = () => { const s = JSON.stringify(mediasEscolhidas()); return MA_PRESETS.find(p => JSON.stringify(p[3]) === s)?.[0] || "custom"; };
 const IND_DEF = [["mm", "Médias"], ["vol", "Volume"], ["ifr", "IFR"], ["macd", "MACD"], ["sr", "Sup./Res."], ["pad", "Padrões"]];
 function chartDefaults() { return { tipo: "candle", mm: true, vol: true, ifr: false, macd: false, sr: false, pad: true, ...(state.chart || {}) }; }
 const wins = [];
@@ -1786,6 +1811,8 @@ function presidenteEm(t) {   // t = unix seconds
   let p = null; for (const x of PRESIDENTES) if (x.ini <= d) p = x;
   return p;
 }
+// open chart windows follow a change of the averages at once
+function redrawWins() { for (const w of wins) if (w.el) drawWin(w); }
 function drawWin(w) {
   const A = window.Analise, box = w.el.querySelector(".win-chart");
   const r = winRange(w), c = w.cache[r.range + "|" + r.iv];
@@ -1794,7 +1821,7 @@ function drawWin(w) {
   const all = (c.q.bars || []).map(([t, o, h, l, cl, v]) => ({ t, o, h, l, c: cl, v }));
   if (all.length < 2) { box.innerHTML = `<div class="empty">Sem dados de gráfico para este período.</div>`; return; }
   const C = all.map(b => b.c);
-  const ma = { mme9: A.ema(C, 9), mms21: A.sma(C, 21), mms50: A.sma(C, 50), mms200: A.sma(C, 200) };
+  const MA_DEF = maDef(), ma = Object.fromEntries(MA_DEF.map(([k, , , t, p]) => [k, t === "mme" ? A.ema(C, p) : A.sma(C, p)]));
   const rsiS = A.rsi(C), mac = A.macd(C);
   // volume and its 20-period average (indices and macro series often come without volume)
   const V = all.map(b => b.v || 0), temVol = V.some(v => v > 0), vMed = A.sma(V, 20);
@@ -3749,6 +3776,17 @@ function renderConfig() {
   const box = $("#cfgBox"); if (!box || box.closest("[hidden]")) return;
   const c = crit(), d = chartDefaults(), th = themeChoice();
   const lp = leisPref();
+  // the chart's moving averages: a preset, or up to 4 lines of the user's own
+  const ms = mediasEscolhidas(), mp = maPreset();
+  const mediasHTML = `
+      <h4 class="cfg-sub">📈 Médias móveis do gráfico</h4>
+      <p class="hint">Escolha um conjunto pronto ou monte o seu, com até 4 médias. <b>MME</b> (exponencial) dá mais peso aos preços recentes e reage mais rápido; <b>MMS</b> (simples) pesa todos igual. O período é contado em candles: no gráfico diário, 21 = 21 pregões; no semanal, 21 semanas.</p>
+      <div class="ma-presets">${MA_PRESETS.map(([k, l, s, m]) => `<button type="button" class="ma-p" data-mapreset="${k}" aria-pressed="${mp === k}"><b>${l}</b><small>${m.map(maNome).join(" · ")}</small><small class="hint">${s}</small></button>`).join("")}
+        <button type="button" class="ma-p" aria-pressed="${mp === "custom"}" disabled><b>Personalizada</b><small>${mp === "custom" ? ms.map(maNome).join(" · ") || "nenhuma" : "mude uma linha abaixo"}</small></button></div>
+      <div class="ma-rows">${[0, 1, 2, 3].map(i => { const m = ms[i]; return `<div class="ma-row"><span class="ma-cor" style="background:${MA_CORES[i]}"></span>
+        <select data-ma-tipo="${i}" aria-label="Tipo da média ${i + 1}"><option value="">desligada</option><option value="mme" ${m?.[0] === "mme" ? "selected" : ""}>MME (exponencial)</option><option value="mms" ${m?.[0] === "mms" ? "selected" : ""}>MMS (simples)</option></select>
+        <input type="number" min="2" max="${MA_MAX}" step="1" data-ma-n="${i}" value="${m?.[1] ?? ""}" placeholder="período" aria-label="Período da média ${i + 1}" ${m ? "" : "disabled"}> <small class="hint">períodos</small></div>`; }).join("")}</div>
+      <p class="hint">Vale para os gráficos do site. A pontuação técnica do Relatório, os alertas, o e-mail e o bot continuam usando as médias fixas deles (MME 9, MMS 21, 50 e 200).</p>`;
   const sec = {
     criterios: `
     <section class="card">
@@ -3806,7 +3844,8 @@ function renderConfig() {
       <h3>Gráficos</h3>
       <p class="hint">Como cada gráfico abre. Dentro da janela do gráfico você também pode mudar na hora, e a última escolha passa a ser o padrão.</p>
       <div class="row2"><span class="seg"><button data-cdef="tipo" data-v="line" aria-pressed="${d.tipo === "line"}">Linha</button><button data-cdef="tipo" data-v="candle" aria-pressed="${d.tipo === "candle"}">Candles</button></span></div>
-      <div class="checks">${IND_DEF.map(([k, l]) => `<label><input type="checkbox" data-cind="${k}" ${d[k] ? "checked" : ""}> ${{ mm: "Médias móveis (MME 9, MMS 21, 50, 200)", vol: "Barras de volume (com a média de 20 períodos)", ifr: "IFR (índice de força relativa)", macd: "MACD", sr: "Suporte e resistência (20 períodos)", pad: "Bandeiras de candles de reversão" }[k]}</label>`).join("")}</div>
+      <div class="checks">${IND_DEF.map(([k, l]) => `<label><input type="checkbox" data-cind="${k}" ${d[k] ? "checked" : ""}> ${{ mm: `Médias móveis (${mediasEscolhidas().map(maNome).join(", ") || "nenhuma escolhida"})`, vol: "Barras de volume (com a média de 20 períodos)", ifr: "IFR (índice de força relativa)", macd: "MACD", sr: "Suporte e resistência (20 períodos)", pad: "Bandeiras de candles de reversão" }[k]}</label>`).join("")}</div>
+      ${mediasHTML}
     </section>`,
     aparencia: `
     <section class="card">
@@ -3829,6 +3868,14 @@ $("#cfgBox").addEventListener("change", e => {
   if (cu) { state.custos = { ...custos(), [cu.dataset.custo]: Math.max(0, +cu.value || 0) }; save(); return; }
   const inp = e.target.closest("[data-crit]");
   if (inp) { state.criterios = { ...crit(), [inp.dataset.crit]: inp.value === "" ? "" : +inp.value }; save(); renderReport(); return; }
+  const mt = e.target.closest("[data-ma-tipo], [data-ma-n]");
+  if (mt) {
+    const box = $("#cfgBox"), linhas = [0, 1, 2, 3].map(i => {
+      const t = box.querySelector(`[data-ma-tipo="${i}"]`).value, n = Math.round(+box.querySelector(`[data-ma-n="${i}"]`).value);
+      return t ? [t, Math.min(MA_MAX, Math.max(2, n || [9, 21, 50, 200][i]))] : null;
+    }).filter(Boolean);
+    state.medias = linhas; save(); renderConfig(); redrawWins(); return;
+  }
   const ci = e.target.closest("[data-cind]");
   if (ci) { state.chart = { ...chartDefaults(), [ci.dataset.cind]: ci.checked }; save(); return; }
   if (e.target.closest("[data-leis-d], [data-leis-l]")) {
@@ -3844,6 +3891,7 @@ $("#cfgBox").addEventListener("click", e => {
   if (b.dataset.cfg === "export") return $("#exportBtn").click();
   if (b.dataset.cfg === "import") return $("#importBtn").click();
   if (b.dataset.tf) { state.tempoGrafico = b.dataset.tf; save(); renderConfig(); renderReport(); return; }
+  if (b.dataset.mapreset) { state.medias = MA_PRESETS.find(p => p[0] === b.dataset.mapreset)[3].map(m => [...m]); save(); renderConfig(); redrawWins(); return; }
   if (b.dataset.cdef) { state.chart = { ...chartDefaults(), tipo: b.dataset.v }; save(); renderConfig(); return; }
   if (b.dataset.themeSet) {
     const t = b.dataset.themeSet;
