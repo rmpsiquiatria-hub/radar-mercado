@@ -1,11 +1,11 @@
-# Sends the Saturday e-mail at 08:00 (Brasília): technical analysis of the week that closed on
+# Sends the Saturday e-mail at 07:15 (Brasília): technical analysis of the week that closed on
 # Friday, on the weekly chart. Prices and technicals are refreshed first, keeping the research
 # of the last weekday report. "Run workflow" by hand sends immediately (useful to test).
 name: E-mail semanal
 
 on:
   schedule:
-    - cron: "0 11 * * 6"
+    - cron: "15 10 * * 6"
   workflow_dispatch:
 
 permissions:

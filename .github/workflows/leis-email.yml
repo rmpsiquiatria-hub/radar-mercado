@@ -1,6 +1,7 @@
 # Radar de leis, step 3: sends the e-mail for the day collected in relatorios/leis/coleta.json.
-# - When the Claude routine pushes the analysis (relatorios/leis/ultimo.json), it sends right away.
-# - At 08:00 (Brasília, every day) a scheduled run sends the plain list if nothing went out for that
+# - When the Claude routine pushes the analysis (relatorios/leis/ultimo.json), it waits until 07:15
+#   (Brasília) and sends; a push after 07:15 sends right away.
+# - At 07:35 (Brasília, every day) a scheduled run sends the plain list if nothing went out for that
 #   day (the routine failed or GitHub delayed the collection).
 # - "Run workflow" by hand sends immediately.
 # relatorios/leis/email-enviado.txt records the last collection e-mailed (day + collection time: a day
@@ -12,7 +13,7 @@ on:
     branches: [main]
     paths: [relatorios/leis/ultimo.json]
   schedule:
-    - cron: "0 11 * * *"
+    - cron: "35 10 * * *"
   workflow_dispatch:
 
 permissions:
@@ -25,12 +26,19 @@ concurrency:
 jobs:
   email:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Esperar até 07:15 (Brasília)
+        if: github.event_name == 'push'
+        run: |
+          target=$(TZ=America/Sao_Paulo date -d "today 07:15" +%s)
+          wait=$(( target - $(date +%s) ))
+          if [ "$wait" -gt 0 ] && [ "$wait" -lt 10800 ]; then echo "Esperando ${wait}s"; sleep "$wait"; fi
+          git pull --rebase
       - name: Enviar
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
