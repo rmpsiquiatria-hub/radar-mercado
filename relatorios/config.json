@@ -19,9 +19,9 @@
     "lista": []
   },
   "bot": {
-    "valor_inicial": 400000000,
+    "valor_inicial": 1000000,
     "modos": [
-      "daytrade"
+      "diario"
     ],
     "ativado_em": "2026-11-07",
     "regras": {
@@ -35,7 +35,9 @@
       "vender_tendencia": false,
       "evitar_conflito": true,
       "mercados": [
-        "eua"
+        "b3",
+        "eua",
+        "cripto"
       ],
       "historico_meses": 3,
       "perda_mensal_pct": 6,
