@@ -1486,8 +1486,8 @@ const WRANGES = [
 ];
 const PATTERN_MOVE = { "5m": 0.004, "15m": 0.006, "30m": 0.008, "1h": 0.01, "1d": 0.02, "1wk": 0.04, "1mo": 0.06 };
 const MA_DEF = [["mme9", "MME 9", "#f59e0b"], ["mms21", "MMS 21", "#8b5cf6"], ["mms50", "MMS 50", "#0ea5e9"], ["mms200", "MMS 200", "#ec4899"]];
-const IND_DEF = [["mm", "Médias"], ["ifr", "IFR"], ["macd", "MACD"], ["sr", "Sup./Res."], ["pad", "Padrões"]];
-function chartDefaults() { return { tipo: "candle", mm: true, ifr: false, macd: false, sr: false, pad: true, ...(state.chart || {}) }; }
+const IND_DEF = [["mm", "Médias"], ["vol", "Volume"], ["ifr", "IFR"], ["macd", "MACD"], ["sr", "Sup./Res."], ["pad", "Padrões"]];
+function chartDefaults() { return { tipo: "candle", mm: true, vol: true, ifr: false, macd: false, sr: false, pad: true, ...(state.chart || {}) }; }
 const wins = [];
 let topZ = 50, winSeq = 0;
 const isPhone = () => innerWidth < 700;
@@ -1543,7 +1543,7 @@ function openWin(sym) {
   const d = chartDefaults();
   const mac = isMacro(sym);
   const w = mac ? { id: ++winSeq, sym, range: "Máx", tipo: "line", ind: {}, cache: {}, el: null }
-    : { id: ++winSeq, sym, range: "6M", tipo: d.tipo, ind: { mm: d.mm, ifr: d.ifr, macd: d.macd, sr: d.sr, pad: d.pad }, cache: {}, el: null };
+    : { id: ++winSeq, sym, range: "6M", tipo: d.tipo, ind: { mm: d.mm, vol: d.vol, ifr: d.ifr, macd: d.macd, sr: d.sr, pad: d.pad }, cache: {}, el: null };
   const n = wins.length, W = Math.min(680, innerWidth - 24), H = Math.min(540, innerHeight - 90);
   w.x = Math.min(24 + n * 32, Math.max(8, innerWidth - W - 8));
   w.y = Math.min(70 + n * 32, Math.max(8, innerHeight - H - 60));
@@ -1796,6 +1796,8 @@ function drawWin(w) {
   const C = all.map(b => b.c);
   const ma = { mme9: A.ema(C, 9), mms21: A.sma(C, 21), mms50: A.sma(C, 50), mms200: A.sma(C, 200) };
   const rsiS = A.rsi(C), mac = A.macd(C);
+  // volume and its 20-period average (indices and macro series often come without volume)
+  const V = all.map(b => b.v || 0), temVol = V.some(v => v > 0), vMed = A.sma(V, 20);
   let from = r.show ? Math.max(0, all.length - r.show) : 0, to = all.length;
   if (w.vz) { to = Math.max(Math.min(all.length, w.vz.span), all.length - w.vz.endOff); from = Math.max(0, to - w.vz.span); }
   w._v = { from, to, len: all.length };
@@ -1810,8 +1812,8 @@ function drawWin(w) {
   const W = box.clientWidth || 600, H = box.clientHeight || 360;
   // bottom rows: president, then world events (only when the chart reaches one)
   const temEvento = !["1D", "5D"].includes(r.k) && bars.some(b => eventoEm(b.t));
-  const padL = 6, padR = 62, axisH = 18, presH = 18, evH = temEvento ? 18 : 0, rowsH = presH + evH, subIfr = w.ind.ifr ? 74 : 0, subMacd = w.ind.macd ? 84 : 0;
-  const mainH = Math.max(120, H - axisH - rowsH - subIfr - subMacd);
+  const padL = 6, padR = 62, axisH = 18, presH = 18, evH = temEvento ? 18 : 0, rowsH = presH + evH, subVol = w.ind.vol && c.q.type !== "MACRO" ? 64 : 0, subIfr = w.ind.ifr ? 74 : 0, subMacd = w.ind.macd ? 84 : 0;
+  const mainH = Math.max(120, H - axisH - rowsH - subVol - subIfr - subMacd);
   const plotW = W - padL - padR, step = plotW / n;
   const X = i => padL + (i + 0.5) * step;
   const candle = w.tipo === "candle";
@@ -1867,6 +1869,22 @@ function drawWin(w) {
     for (const [k, lbl, col] of MA_DEF) { const v = sl(ma[k]).at(-1); if (v == null) continue; const t = `${lbl} ${fmt(v)}`, tw = t.length * 6.1; if (lx + tw > W - padR - 4) { lx = padL + 4; ly += 13; } svg += `<text x="${lx}" y="${ly}" font-size="10.5" fill="${col}" font-weight="600">${t}</text>`; lx += tw + 10; }
   }
   let y0 = mainH;
+  const fmtVol = v => new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 1 }).format(v);
+  if (subVol) {
+    const top = y0 + 6, h = subVol - 12;
+    svg += `<line x1="${padL}" x2="${W - padR}" y1="${y0 + 1}" y2="${y0 + 1}" stroke="var(--line)"/>`;
+    if (!temVol) svg += `<text x="${padL + 4}" y="${top + 9}" font-size="10.5" fill="var(--muted)">Volume: não disponível para este ativo</text>`;
+    else {
+      const vs = sl(V), ms = sl(vMed), mx = Math.max(1, ...vs, ...ms.filter(v => v != null)), YV = v => top + h - (v / mx) * (h - 12);
+      const bw = Math.max(1, step * 0.66);
+      vs.forEach((v, i) => { if (!v) return; const b = bars[i], alta = b.c >= (b.o ?? b.c); svg += `<rect x="${X(i) - bw / 2}" y="${YV(v)}" width="${bw}" height="${Math.max(0.5, top + h - YV(v))}" fill="var(${alta ? "--up" : "--down"})" opacity=".5"/>`; });
+      svg += `<path d="${path(ms, YV)}" fill="none" stroke="#d97706" stroke-width="1.3"/>`;
+      svg += `<text x="${W - padR + 5}" y="${YV(mx) + 4}" font-size="10" fill="var(--faint)" font-family="JetBrains Mono, monospace">${fmtVol(mx)}</text>`;
+      const ult = vs.at(-1), mu = ms.at(-1);
+      svg += `<text x="${padL + 4}" y="${top + 9}" font-size="10.5" font-weight="600"><tspan fill="var(--muted)">Volume${ult ? ": " + fmtVol(ult) : ""}${ult && mu ? ` (${nf(1).format(ult / mu)}× a média)` : ""}</tspan> <tspan fill="#d97706">― média 20</tspan></text>`;
+    }
+    y0 += subVol;
+  }
   if (w.ind.ifr) {
     const top = y0 + 6, h = subIfr - 12, YI = v => top + (1 - v / 100) * h, last = sl(rsiS).at(-1);
     svg += `<line x1="${padL}" x2="${W - padR}" y1="${y0 + 1}" y2="${y0 + 1}" stroke="var(--line)"/>`;
@@ -1926,6 +1944,7 @@ function drawWin(w) {
     let html = `<div class="tt-d">${fmtT(b.t)}</div>`;
     html += candle ? `<div class="num">A ${mv(b.o)} · M ${mv(b.h)}<br>m ${mv(b.l)} · F <b>${mv(b.c)}</b></div>` : `<div class="num"><b>${mv(b.c)}</b></div>`;
     if (w.ind.mm) html += `<div class="num tt-ma">${MA_DEF.map(([k, l, col]) => { const v = ma[k][from + i]; return v == null ? "" : `<span style="color:${col}">${l} ${fmt(v)}</span>`; }).filter(Boolean).join(" ")}</div>`;
+    if (subVol && temVol && V[from + i]) html += `<div class="num">Volume ${fmtVol(V[from + i])}${vMed[from + i] ? ` · ${nf(1).format(V[from + i] / vMed[from + i])}× a média de 20` : ""}</div>`;
     if (w.ind.ifr && rsiS[from + i] != null) html += `<div class="num">IFR ${nf(0).format(rsiS[from + i])}</div>`;
     if (w.ind.macd && mac.line[from + i] != null) html += `<div class="num">MACD ${nf(3).format(mac.line[from + i])} · sinal ${nf(3).format(mac.signal[from + i] ?? 0)}</div>`;
     const ps = flags[i] || [];
@@ -3389,7 +3408,7 @@ const CIENCIA_IND = [
       <li>O próprio Bollinger recomenda usá-las junto com outros indicadores, não sozinhas.</li></ul>
       <ul class="refs">${ref("Lento, C., Gradojevic, N. e Wright, C. (2007)", "Investment Information Content in Bollinger Bands?", "Applied Financial Economics Letters")}</ul>` },
   { titulo: "Volume", sub: "Quantas ações foram negociadas",
-    html: `<p><b>No site:</b> aparece como informação, mas <b>não entra na pontuação</b>.</p>
+    html: `<p><b>No site:</b> as barras embaixo do gráfico (botão "Volume"), verdes nos candles de alta e vermelhas nos de baixa, com a linha laranja da média de 20 períodos; e um aviso no Relatório quando o volume passa de 2× essa média. <b>Não entra na pontuação.</b></p>
       <ul><li><b>Blume, Easley e O'Hara (1994)</b>: o volume carrega informação que o preço sozinho não tem, sobre o quanto os investidores estão informados.</li>
       <li><b>Gervais, Kaniel e Mingelgrin (2001)</b>: ações com volume <b>muito acima do normal</b> num dia ou numa semana tenderam a subir no mês seguinte, talvez porque chamam a atenção de novos compradores.</li>
       <li><b>Lee e Swaminathan (2000)</b>: o volume ajuda a prever por quanto tempo o efeito momento dura.</li></ul>
@@ -3787,7 +3806,7 @@ function renderConfig() {
       <h3>Gráficos</h3>
       <p class="hint">Como cada gráfico abre. Dentro da janela do gráfico você também pode mudar na hora, e a última escolha passa a ser o padrão.</p>
       <div class="row2"><span class="seg"><button data-cdef="tipo" data-v="line" aria-pressed="${d.tipo === "line"}">Linha</button><button data-cdef="tipo" data-v="candle" aria-pressed="${d.tipo === "candle"}">Candles</button></span></div>
-      <div class="checks">${IND_DEF.map(([k, l]) => `<label><input type="checkbox" data-cind="${k}" ${d[k] ? "checked" : ""}> ${{ mm: "Médias móveis (MME 9, MMS 21, 50, 200)", ifr: "IFR (índice de força relativa)", macd: "MACD", sr: "Suporte e resistência (20 períodos)", pad: "Bandeiras de candles de reversão" }[k]}</label>`).join("")}</div>
+      <div class="checks">${IND_DEF.map(([k, l]) => `<label><input type="checkbox" data-cind="${k}" ${d[k] ? "checked" : ""}> ${{ mm: "Médias móveis (MME 9, MMS 21, 50, 200)", vol: "Barras de volume (com a média de 20 períodos)", ifr: "IFR (índice de força relativa)", macd: "MACD", sr: "Suporte e resistência (20 períodos)", pad: "Bandeiras de candles de reversão" }[k]}</label>`).join("")}</div>
     </section>`,
     aparencia: `
     <section class="card">
