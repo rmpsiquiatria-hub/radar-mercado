@@ -176,8 +176,9 @@ function simular(frame, dados) {
 }
 
 /* ---------- day trade on 5-minute candles ---------- */
-// Stocks: buys when the 9-period average crosses above the 21-period one (above the VWAP, if chosen),
-// sells at the target, at the stop, when the averages cross back down, or before the close.
+// Stocks: buys when the 9-period average crosses above the 21-period one (above the VWAP, if chosen)
+// or when a candle touches the support and closes above it; sells at the resistance, the target, the
+// stop, when the averages cross back down, or before the close. Optional: only on above-average volume.
 // Crypto: buys after a rising candle much bigger than the recent ones; stop at that candle's low,
 // target a multiple of the risk, and a time limit. Nothing is held overnight (crypto: past 21h).
 async function daytrade() {

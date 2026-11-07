@@ -48,7 +48,7 @@
     }
     return pares;
   }
-  const saida = m => /^Alvo/.test(m) ? "Alvo atingido" : /^Stop/.test(m) ? "Stop" : /^Zerado/.test(m) ? "Zerada" : /^Tempo/.test(m) ? "Tempo máximo" : "Sinal de saída";
+  const saida = m => /^Resist/.test(m) ? "Resistência" : /^Alvo/.test(m) ? "Alvo atingido" : /^Limite de perda/.test(m) ? "Limite do mês" : /^Stop/.test(m) ? "Stop" : /^Zerado/.test(m) ? "Zerada" : /^Tempo/.test(m) ? "Tempo máximo" : "Sinal de saída";
   const pernas = p => { const c = p.vendida ? p.fecha : p.abre, v = p.vendida ? p.abre : p.fecha; return { compra: c?.preco ?? null, venda: v?.preco ?? null, cOp: c, vOp: v, motivo: p.fecha ? saida(p.fecha.motivo) : null }; };
 
   async function carregar() {
@@ -124,6 +124,7 @@
       if (g === "geral") return d || s ? [[g, d && s ? t : d ? "Gráfico diário" : "Gráfico semanal", x => x.k !== (d ? "espera_semanal" : "espera_diario") || (d && s)]] : [];
       if (g === "dt") return dt && (merc.includes("b3") || merc.includes("eua")) ? [[g, t]] : [];
       if (g === "dtc") return dt && merc.includes("cripto") ? [[g, t]] : [];
+      if (g === "dtx") return dt ? [[g, t]] : [];
       return [[g, t]];
     });
   }
@@ -308,7 +309,7 @@
     const stop = intra && o.mercado !== "cripto" && R.dt_stop_pct ? compra * (1 - R.dt_stop_pct / 100) : null;
     // support and resistance as they stood when the trade opened: lowest low and highest high of the
     // 20 candles before the purchase (the same rule as the site's charts)
-    const sr = iA >= 2 ? A.supportResistance(bars, 20, iA - 1) : null;
+    const nSR = intra ? R.dt_sr_candles || 20 : 20, sr = iA >= 2 ? A.supportResistance(bars, nSR, iA - 1) : null;
 
     // the drawing
     const W = 820, H = 320, pL = 6, pR = 92, ax = 18, n = vis.length, step = (W - pL - pR) / n, X = j => pL + (j + 0.5) * step;
@@ -346,11 +347,12 @@
     txt.push(`<p><b>Durante a operação</b> (${dur}): o preço chegou a ${px(mx, o.mercado)} (<b>${pcT(mfe)}</b> sobre a compra) e desceu até ${px(mn, o.mercado)} (<b>${pcT(mae)}</b>).</p>`);
     if (sr) {
       const dR = (sr.resistencia / compra - 1) * 100, dS = (sr.suporte / compra - 1) * 100;
-      txt.push(`<p><b>Suporte e resistência:</b> na hora da compra, a resistência (máxima dos 20 candles anteriores) estava em ${px(sr.resistencia, o.mercado)}, ${dR > 0 ? `${nf(2).format(dR)}% acima do preço de compra` : "abaixo do preço de compra: a compra foi num rompimento da resistência"}, e o suporte (mínima) em ${px(sr.suporte, o.mercado)}, ${nf(2).format(Math.abs(dS))}% abaixo.${dR > 0 ? (mx > sr.resistencia ? " Durante a operação o preço passou da resistência." : " Durante a operação o preço não passou da resistência.") : ""}${mn < sr.suporte ? " O preço chegou a perder o suporte." : ""}</p>`);
+      txt.push(`<p><b>Suporte e resistência:</b> na hora da compra, a resistência (máxima dos ${nSR} candles anteriores) estava em ${px(sr.resistencia, o.mercado)}, ${dR > 0 ? `${nf(2).format(dR)}% acima do preço de compra` : "abaixo do preço de compra: a compra foi num rompimento da resistência"}, e o suporte (mínima) em ${px(sr.suporte, o.mercado)}, ${nf(2).format(Math.abs(dS))}% abaixo.${dR > 0 ? (mx > sr.resistencia ? " Durante a operação o preço passou da resistência." : " Durante a operação o preço não passou da resistência.") : ""}${mn < sr.suporte ? " O preço chegou a perder o suporte." : ""}</p>`);
     }
     if (!sai) txt.push(`<p><b>Ainda em andamento.</b> Pelo último candle, o preço está em ${px(venda, o.mercado)} (${pcT(bruto)} sobre a compra).</p>`);
     else {
-      const saida = /^Alvo/.test(mot) ? `<b>Saída no alvo:</b> o preço subiu até o alvo de ganho e a venda garantiu o lucro.`
+      const saida = /^Resist/.test(mot) ? `<b>Saída na resistência:</b> o preço subiu até a resistência que valia na compra (a máxima recente), e a venda garantiu o ganho antes de um possível recuo.`
+        : /^Alvo/.test(mot) ? `<b>Saída no alvo:</b> o preço subiu até o alvo de ganho e a venda garantiu o lucro.`
         : /^Stop/.test(mot) ? `<b>Saída no stop:</b> o preço caiu até o preço de proteção, e o stop limitou a perda.${mfe >= 0.5 ? ` Antes disso, a operação chegou a ficar ${pcT(mfe)} no positivo, mas o preço não alcançou o alvo e voltou.` : ""}`
         : /^Zerado/.test(mot) ? `<b>Encerrada no fim do dia:</b> ${o.mercado === "cripto" ? "na cripto o dia termina às 21h" : "no day trade nada fica aberto para o dia seguinte"}, então a posição foi vendida antes do fechamento, sem tocar nem o alvo nem o stop. O resultado é só o quanto o preço andou até ali.`
         : /^Limite de perda/.test(mot) ? `<b>Limite de perda do mês:</b> a carteira inteira caiu até o limite mensal, e o bot vendeu tudo, inclusive esta posição.`
@@ -371,7 +373,7 @@
       if (dia.length) txt.push(`<p class="hint">No dia, ${esc(o.ticker)} foi de ${px(dia[0].o, o.mercado)} na abertura a ${px(dia.at(-1).c, o.mercado)} no último candle (${pcT((dia.at(-1).c / dia[0].o - 1) * 100)}).</p>`);
     }
     dlg.innerHTML = `<div class="card">${topo}${svg}
-      <p class="hint">Faixa colorida: o tempo em que a posição ficou aberta. ${sr ? "Linhas pontilhadas S e R: suporte e resistência na hora da compra (mínima e máxima dos 20 candles anteriores). " : ""}${alvo ? "Alvo e stop pelas regras atuais. " : ""}${M} candles antes da compra e depois da venda.</p>
+      <p class="hint">Faixa colorida: o tempo em que a posição ficou aberta. ${sr ? "Linhas pontilhadas S e R: suporte e resistência na hora da compra (mínima e máxima dos ${nSR} candles anteriores). " : ""}${alvo ? "Alvo e stop pelas regras atuais. " : ""}${M} candles antes da compra e depois da venda.</p>
       <h4>📝 Por que deu ${!sai ? "esse resultado até agora" : r > 0 ? "lucro" : "prejuízo"}</h4>${txt.join("")}
       <p class="hint">Análise automática e descritiva, feita a partir dos candles. Não é recomendação de investimento.</p></div>`;
   }
@@ -395,8 +397,9 @@
     const custos = `<li><b>Custos:</b> ${nf(2).format(f.custos.b3 * 100)}% por operação na B3, ${nf(1).format(f.custos.eua * 100)}% nos EUA e em cripto, e cada execução ${nf(2).format(f.deslize * 100)}% pior que o preço do sinal. Ativos em dólar são convertidos pela cotação do dia. <b>Imposto de renda, IOF e dividendos não estão incluídos.</b></li>`;
     const itens = k === "daytrade" ? `
       <li><b>Ativos:</b> as ${res.modos.daytrade?.ativos?.b3 ?? g.dt_b3_top} ações de maior peso no Ibovespa${g.mercados.includes("eua") ? ", as ações dos EUA da sua lista" : ""}${g.mercados.includes("cripto") ? " e as criptomoedas" : ""}, em candles de 5 minutos.</li>
-      <li><b>Ações — compra</b> quando a MME 9 cruza acima da MME 21${g.dt_vwap ? " com o preço acima da VWAP (preço médio do dia)" : ""}, depois dos primeiros ${g.dt_inicio_min} minutos e até ${g.dt_ultima_min} minutos antes do fechamento.</li>
-      <li><b>Ações — vende</b> no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%)${g.dt_sair_cruzamento ? ", quando a MME 9 cruza abaixo da MME 21" : ""} ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
+      <li><b>Ações — compra</b> ${[g.dt_comprar_cruzamento && `quando a MME 9 cruza acima da MME 21${g.dt_vwap ? " com o preço acima da VWAP (preço médio do dia)" : ""}`, g.dt_comprar_suporte && `quando um candle toca o <b>suporte</b> (mínima dos ${g.dt_sr_candles} candles anteriores) e fecha acima dele`].filter(Boolean).join(", ou ") || "<b>nunca</b> (nenhum sinal de compra está ligado)"}, depois dos primeiros ${g.dt_inicio_min} minutos e até ${g.dt_ultima_min} minutos antes do fechamento.</li>
+      <li><b>Ações — vende</b> ${g.dt_vender_resistencia ? `na <b>resistência</b> (máxima dos ${g.dt_sr_candles} candles anteriores ao sinal, se estiver abaixo do alvo), ` : ""}no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%)${g.dt_sair_cruzamento ? ", quando a MME 9 cruza abaixo da MME 21" : ""} ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
+      ${g.dt_volume ? `<li><b>Volume:</b> só compra se o volume do candle do sinal for maior que a média dos ${g.dt_volume_n} candles anteriores (ações e cripto).</li>` : ""}
       <li><b>Cripto — compra</b> depois de um candle de alta com corpo ${num(g.dtc_mult)}× maior que a média dos ${g.dtc_media} anteriores. <b>Vende</b> no stop (mínima desse candle), no alvo (${num(g.dtc_rr)}× o risco), depois de ${g.dtc_max_candles} candles, ou às 21h (fim do dia em UTC).</li>
       ${g.perda_mensal_pct > 0 ? `<li><b>Limite de perda no mês:</b> se o patrimônio cair ${num(g.perda_mensal_pct)}% desde o início do mês, vende tudo na hora e não opera mais até o mês seguinte.</li>` : ""}
       <li><b>Tamanho:</b> até ${g.dt_max_posicoes} posições ao mesmo tempo, cada uma com cerca de 1/${g.dt_max_posicoes} do patrimônio. Se o stop e o alvo forem tocados no mesmo candle, conta o stop (a hipótese mais cautelosa).</li>`
