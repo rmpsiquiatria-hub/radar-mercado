@@ -90,12 +90,14 @@
         dados.push(x);
       }
       const carteira = L.criarCarteira({ custos: res.fixos.custos, fx: mk => mk === "b3" ? 1 : dolar, ativado: m.ativado_em });
-      const w = L.simularDia(d, dados, { carteira, V0: m.valor_inicial, V: { caixa: m.caixa, ops: [] }, R, deslize: res.fixos.deslize, aoVivo: true });
+      // the month's loss limit, from the patrimônio at the end of the previous month (as the night run)
+      const base = (m.curva || []).filter(c => c[0] < d.slice(0, 7) + "-01").at(-1)?.[1] ?? m.valor_inicial;
+      const w = L.simularDia(d, dados, { carteira, V0: m.valor_inicial, V: { caixa: m.caixa, ops: [] }, R, deslize: res.fixos.deslize, aoVivo: true, piso: L.pisoDoMes(base, R) });
       const posicoes = [...w.pos.values()].map(p => {
         const valor = p.qtd * p.ultimo * (p.a.mercado === "b3" ? 1 : dolar), r = valor * (1 - res.fixos.custos[p.a.mercado]) - p.custo_brl;
         return { ticker: p.a.ticker, mercado: p.a.mercado, atual: p.ultimo, resultado_brl: r, resultado_pct: r / p.custo_brl * 100 };
       });
-      vivo = { dia: d, em: agora, ops: w.ops, posicoes, pendentes: w.pendentes, patrimonio: w.patrimonio(d), inicio: m.caixa, erro: null };
+      vivo = { dia: d, em: agora, ops: w.ops, posicoes, pendentes: w.pendentes, patrimonio: w.patrimonio(d), inicio: m.caixa, travado: !!w.travado, erro: null };
     } catch (e) { vivo = { ...(vivo || {}), dia: d, em: agora, erro: String(e.message || e) }; }
     finally { vivoBusy = false; }
   }
@@ -176,6 +178,7 @@
     const dia = vivo.patrimonio - vivo.inicio, enc = vivo.ops.filter(o => o.lado === "venda").length;
     return `<div class="card bot-vivo-box"><b><span class="bot-vivo">●</span> Hoje ao vivo (${dt(vivo.dia)})</b><span class="hint"> · atualizado às ${hora(vivo.em)}, a cada minuto${vivo.erro ? " · ⚠ a última atualização falhou" : ""}</span>
       <div class="bot-vivo-n">${vivo.ops.length} operações hoje · ${enc} encerradas · ${vivo.posicoes.length} abertas${vivo.pendentes?.length ? ` · ${vivo.pendentes.length} ordem(ns) para o próximo candle` : ""} · resultado do dia <b class="${dia > 0 ? "pos" : dia < 0 ? "neg" : ""}">${dia >= 0 ? "+" : "−"}${brl(Math.abs(dia))}</b> · patrimônio agora ${brl(vivo.patrimonio)}</div>
+      ${vivo.travado ? `<div class="note">🛑 <b>Limite de perda do mês atingido</b> (−${num(res.regras.perda_mensal_pct)}%): o bot vendeu tudo e só volta a operar no dia 1º do mês que vem.</div>` : ""}
       <small class="hint">As operações de hoje aparecem no histórico abaixo, marcadas "ao vivo". Os preços da B3 podem chegar com até 15 minutos de atraso. Às 21h30 o dia é fechado e guardado; os números podem mudar um pouco (dólar de fechamento e candles revisados).</small></div>`;
   }
 
@@ -209,6 +212,7 @@
         ${tot("Operações encerradas", `${p.operacoes}`, `${per} · cada uma é uma compra e a venda dela · ${p.acerto_pct == null ? "—" : nf(1).format(p.acerto_pct)}% com lucro · ganho médio ${pc(p.ganho_medio_pct)} · perda média ${pc(p.perda_media_pct)}`)}
         ${tot("Custos pagos", brl(p.custos_brl), `${per} · taxas e diferença de preço`)}
       </div>
+      ${limiteHTML(m, k)}
       <p class="hint">${quando}${p.ao_vivo_pct != null ? ` Ao vivo: ${pc(p.ao_vivo_pct)}.` : ""} Último dia usado: ${dt(m.ultimo_candle)}.</p>
       ${grafico(m.curva, m.ativado_em)}
       ${dtr ? `<p class="hint">💤 No day trade tudo é vendido no mesmo dia (cripto: até as 21h), então não há posições abertas de um dia para o outro.</p>` : `
@@ -240,6 +244,18 @@
       ${ops.length > verMais ? `<button class="btn" type="button" id="botMais" style="margin-top:8px">Ver mais ${Math.min(PAGINA, ops.length - verMais)}</button>` : ""}`;
   }
 
+  // the months in which the loss limit stopped the bot (from the trades it closed because of it)
+  function limiteHTML(m, k) {
+    const L = res?.regras?.perda_mensal_pct; if (!L) return "";
+    const hoje = k === "daytrade" && vivo?.ops ? vivo.ops : [];
+    const dias = new Map();
+    for (const o of [...hoje, ...m.operacoes]) if (/^Limite de perda do mês/.test(o.motivo) && !dias.has(o.data.slice(0, 7))) dias.set(o.data.slice(0, 7), o.data);
+    if (!dias.size && !(k === "daytrade" && vivo?.travado)) return `<p class="hint">🛡️ Limite de perda no mês: −${num(L)}%. Ainda não foi atingido.</p>`;
+    const mes = ym => new Date(ym + "-15T12:00:00Z").toLocaleDateString("pt-BR", { month: "short", year: "numeric" }).replace(".", "");
+    const agora = hojeBR().slice(0, 7), parado = dias.has(agora) || (k === "daytrade" && vivo?.travado);
+    return `<p class="${parado ? "note" : "hint"}">🛡️ Limite de perda no mês (−${num(L)}%) atingido em: ${[...dias.values()].sort().map(d => `${mes(d.slice(0, 7))} (dia ${dt(d).slice(0, 5)})`).join(", ") || "hoje"}.${parado ? " <b>Neste mês o bot está parado</b> e volta a operar no dia 1º." : ""}</p>`;
+  }
+
   // the rules in force, in words
   function regrasHTML(r, k) {
     if (!r?.regras) return "";
@@ -250,12 +266,14 @@
       <li><b>Ações — compra</b> quando a MME 9 cruza acima da MME 21${g.dt_vwap ? " com o preço acima da VWAP (preço médio do dia)" : ""}, depois dos primeiros ${g.dt_inicio_min} minutos e até ${g.dt_ultima_min} minutos antes do fechamento.</li>
       <li><b>Ações — vende</b> no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%)${g.dt_sair_cruzamento ? ", quando a MME 9 cruza abaixo da MME 21" : ""} ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
       <li><b>Cripto — compra</b> depois de um candle de alta com corpo ${num(g.dtc_mult)}× maior que a média dos ${g.dtc_media} anteriores. <b>Vende</b> no stop (mínima desse candle), no alvo (${num(g.dtc_rr)}× o risco), depois de ${g.dtc_max_candles} candles, ou às 21h (fim do dia em UTC).</li>
+      ${g.perda_mensal_pct > 0 ? `<li><b>Limite de perda no mês:</b> se o patrimônio cair ${num(g.perda_mensal_pct)}% desde o início do mês, vende tudo na hora e não opera mais até o mês seguinte.</li>` : ""}
       <li><b>Tamanho:</b> até ${g.dt_max_posicoes} posições ao mesmo tempo, cada uma com cerca de 1/${g.dt_max_posicoes} do patrimônio. Se o stop e o alvo forem tocados no mesmo candle, conta o stop (a hipótese mais cautelosa).</li>`
       : `
       <li><b>Ativos:</b> ${merc.join(", ")}.</li>
       <li><b>Compra</b> quando a pontuação técnica é +${g.pontuacao_min} ou mais (a mesma do relatório) e a tendência não é de baixa${g.evitar_conflito ? ", sem sinal de alta e de baixa ao mesmo tempo" : ""}. Se há mais candidatos que espaço, entram os de maior pontuação.</li>
       <li><b>Vende</b> ${[g.vender_tendencia && "quando a tendência vira de baixa", g.vender_vies && "quando o viés vira de baixa", `quando o preço toca o <b>stop</b>: começa ${num(g.stop_atr)} ATR abaixo do preço de compra${g.trailing_atr > 0 ? ` e sobe junto com o preço (${num(g.trailing_atr)} ATR abaixo do maior fechamento)` : ""}`].filter(Boolean).join(", ")}. ATR é o tamanho médio do movimento de um candle.</li>
       <li><b>Tamanho:</b> até ${g.max_posicoes} posições, cada uma com cerca de 1/${g.max_posicoes} do patrimônio. Depois de vender, espera ${g.espera_diario} pregões (diário) ou ${g.espera_semanal} semanas (semanal) para comprar o mesmo ativo de novo.</li>
+      ${g.perda_mensal_pct > 0 ? `<li><b>Limite de perda no mês:</b> se, num fechamento, o patrimônio estiver ${num(g.perda_mensal_pct)}% abaixo do início do mês, vende tudo na abertura seguinte e não compra mais até o mês seguinte.</li>` : ""}
       <li><b>Sem olhar o futuro:</b> decide com o candle já fechado e executa na abertura do candle seguinte.</li>`;
     return `<details class="card bot-regras"><summary><b>📏 Regras em uso (${NOMES[k]})</b></summary><ul>${itens}${custos}</ul></details>`;
   }

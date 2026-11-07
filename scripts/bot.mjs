@@ -14,7 +14,7 @@
 
 import { readFile, writeFile, mkdir, rm, readdir } from "node:fs/promises";
 import { FRAMES, candles, closedOnly, analisar } from "./tecnica-lib.mjs";
-import { iso, brt, casas, fmt, nfx, criarCarteira, preparar, simularDia } from "../lib/bot-daytrade.js";
+import { iso, brt, casas, fmt, nfx, criarCarteira, preparar, simularDia, pisoDoMes, motivoLimite } from "../lib/bot-daytrade.js";
 import { normalizar } from "../lib/bot-regras.js";
 
 const rel = new URL("../relatorios/", import.meta.url);
@@ -111,13 +111,16 @@ function simular(frame, dados) {
   const datas = [...new Set(dados.flatMap(a => a.bars.map(b => iso(b.t))))].filter(d => d >= inicio).sort();
   const w = carteira(V0), pend = new Map(), espera = new Map(), curva = [];
   const vender = (a, preco, d, motivo) => { w.vender(a, preco, d, motivo); espera.set(a.ticker, idx.get(a.ticker).get(d) + ESPERA); };
+  // the month's loss limit: base = patrimônio at the end of the previous month
+  let mes = null, piso = -Infinity, travado = false;
 
   for (const d of datas) {
+    if (d.slice(0, 7) !== mes) { mes = d.slice(0, 7); piso = pisoDoMes(curva.at(-1)?.[1] ?? V0, R); travado = false; }
     const hojeA = dados.filter(a => idx.get(a.ticker).has(d));
     const bar = a => a.bars[idx.get(a.ticker).get(d)];
     // 1. at the open: sales first (they free money), then purchases by score
     for (const a of hojeA) if (pend.get(a.ticker)?.lado === "venda") { if (w.pos.has(a.ticker)) vender(a, bar(a).o * (1 - FIXOS.deslize), d, pend.get(a.ticker).motivo); pend.delete(a.ticker); }
-    const compras = hojeA.filter(a => pend.get(a.ticker)?.lado === "compra").sort((x, y) => pend.get(y.ticker).score - pend.get(x.ticker).score || x.ticker.localeCompare(y.ticker));
+    const compras = travado ? [] : hojeA.filter(a => pend.get(a.ticker)?.lado === "compra").sort((x, y) => pend.get(y.ticker).score - pend.get(x.ticker).score || x.ticker.localeCompare(y.ticker));
     for (const a of compras) {
       const o = pend.get(a.ticker); pend.delete(a.ticker);
       const preco = bar(a).o * (1 + FIXOS.deslize);
@@ -139,11 +142,16 @@ function simular(frame, dados) {
       if (p) {
         if (R.vender_tendencia && s.tendencia === "baixa") pend.set(a.ticker, { lado: "venda", motivo: `Tendência virou de baixa: ${motivoDe(s, "baixa")}` });
         else if (R.vender_vies && s.vies === "baixa" && !conflito(s)) pend.set(a.ticker, { lado: "venda", motivo: `Viés de baixa (pontuação ${s.pontuacao}): ${motivoDe(s, "baixa")}` });
-      } else if (s.pontuacao >= R.pontuacao_min && s.tendencia !== "baixa" && !conflito(s) && i >= (espera.get(a.ticker) ?? 0)) {
+      } else if (!travado && s.pontuacao >= R.pontuacao_min && s.tendencia !== "baixa" && !conflito(s) && i >= (espera.get(a.ticker) ?? 0)) {
         pend.set(a.ticker, { lado: "compra", score: s.pontuacao, atr: a.atr[i], motivo: `Viés de alta (pontuação +${s.pontuacao}): ${motivoDe(s, "alta")}` });
       } else if (pend.get(a.ticker)?.lado === "compra") pend.delete(a.ticker);
     }
     const v = vd(d);
+    // below the limit at the close: everything is sold at the next open, and no buying this month
+    if (!travado && w.patrimonio(v) <= piso) {
+      travado = true; pend.clear();
+      for (const t of w.pos.keys()) pend.set(t, { lado: "venda", motivo: motivoLimite(R) });
+    }
     curva.push([v, +w.patrimonio(v).toFixed(2), ...bench(vd(datas[0]), V0, v)]);
   }
 
@@ -174,7 +182,7 @@ function simular(frame, dados) {
 // target a multiple of the risk, and a time limit. Nothing is held overnight (crypto: past 21h).
 async function daytrade() {
   const V0 = cfg.valor_inicial, pasta = new URL("bot/daytrade/", rel), arq = new URL("estado.json", pasta);
-  const chave = JSON.stringify([V0, ativado, R.mercados, ...Object.entries(R).filter(([k]) => k.startsWith("dt"))]);
+  const chave = JSON.stringify([V0, ativado, R.mercados, ...Object.entries(R).filter(([k]) => k.startsWith("dt")), R.perda_mensal_pct]);
   let est = null; try { est = JSON.parse(await readFile(arq, "utf8")); } catch {}
   // a shorter back test cuts days already kept: start over; a longer one keeps them (older 5-minute
   // candles no longer exist anyway)
@@ -203,7 +211,9 @@ async function daytrade() {
   const novas = [], V = { caixa: est.caixa, ops: novas };
 
   for (const d of dias) {
-    const w = simularDia(d, dados, { carteira, V0, V, R, deslize: FIXOS.deslize });
+    // the month's loss limit, from the patrimônio at the end of the previous month
+    const base = est.dias.filter(x => x[0] < d.slice(0, 7) + "-01").at(-1)?.[1] ?? V0;
+    const w = simularDia(d, dados, { carteira, V0, V, R, deslize: FIXOS.deslize, piso: pisoDoMes(base, R) });
     V.caixa = w.caixa;
     est.dias.push([d, +w.caixa.toFixed(2)]);
   }
