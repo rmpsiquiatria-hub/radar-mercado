@@ -21,6 +21,8 @@ const rel = new URL("../relatorios/", import.meta.url);
 const cfg = JSON.parse(await readFile(new URL("config.json", rel), "utf8")).bot;
 if (!cfg?.valor_inicial || !cfg.modos?.length) { console.log("Bot não configurado (escolha o valor e o modo no site)."); process.exit(0); }
 const R = normalizar(cfg.regras);
+// the averages of the technical score, from the rules
+const MM = { curta: R.mm_curta, media: R.mm_media, rapida: R.mm_rapida, lenta: R.mm_lenta };
 // Not configurable: what each trade costs.
 const FIXOS = {
   custos: { b3: 0.0003, eua: 0.001, cripto: 0.001 },   // fees per trade (share of the value)
@@ -250,7 +252,7 @@ for (const frame of cfg.modos.filter(m => m === "diario" || m === "semanal")) {
     const bars = fechados(await candles(a.sym, fr), frame, a.mercado);
     const atr = atrSerie(bars), first = bars.findIndex(b => iso(b.t) >= addDays(inicio, -10));
     // analysis of each bar from (just before) the start, on the 300 bars before it
-    const sinais = bars.map((_, i) => i < first ? null : analisar(bars.slice(Math.max(0, i - 299), i + 1), frame));
+    const sinais = bars.map((_, i) => i < first ? null : analisar(bars.slice(Math.max(0, i - 299), i + 1), frame, MM));
     return { ...a, bars, atr, sinais };
   });
   if (!dados.length) { console.error("sem candles; resultado mantido"); process.exit(1); }

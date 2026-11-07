@@ -51,12 +51,16 @@ export function closedOnly(bars, frame) {
   return open ? bars.slice(0, -1) : bars;
 }
 
-// Analysis of the last bar of b, which must contain closed bars only.
-export function analisar(b, frameKey) {
+// Analysis of the last bar of b, which must contain closed bars only. mm: the four averages as
+// [mme | mms, period] (the bot's rules can change them; the report uses the defaults).
+const MM_PADRAO = { curta: ["mme", 9], media: ["mms", 21], rapida: ["mms", 50], lenta: ["mms", 200] };
+const nomeMM = ([t, p]) => `${t === "mme" ? "MME" : "MMS"} ${p}`;
+export function analisar(b, frameKey, mm = MM_PADRAO) {
   const f = FRAMES[frameKey];
   if (b.length < 30) return null;
-  const C = b.map(x => x.c), n = C.length, k = n - 1;
-  const m9 = ema(C, 9), m21 = sma(C, 21), m50 = sma(C, 50), m200 = sma(C, 200);
+  const C = b.map(x => x.c), n = C.length, k = n - 1, calc = ([t, p]) => t === "mme" ? ema(C, p) : sma(C, p);
+  const m9 = calc(mm.curta), m21 = calc(mm.media), m50 = calc(mm.rapida), m200 = calc(mm.lenta);
+  const [nC, nM, nR, nL] = [mm.curta, mm.media, mm.rapida, mm.lenta].map(nomeMM);
   const r = rsi(C), { line: macd, signal: sig } = macdCalc(C), bb = bollinger(C);
   const date = i => new Date(b[i].t * 1000).toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
   const round = x => x == null ? null : +x.toFixed(x >= 100 ? 2 : 4);
@@ -65,7 +69,7 @@ export function analisar(b, frameKey) {
   const push = (texto, sinal, peso = 1) => { sinais.push({ texto, sinal }); score += sinal === "alta" ? peso : sinal === "baixa" ? -peso : 0; };
 
   // Trend: price vs 50 and 200 (or 21 and 50 when there is not enough history).
-  const [slow, fast, slowN, fastN] = m200[k] != null ? [m200, m50, 200, 50] : [m50, m21, 50, 21];
+  const [slow, fast, slowN, fastN] = m200[k] != null ? [m200, m50, mm.lenta[1], mm.rapida[1]] : [m50, m21, mm.rapida[1], mm.media[1]];
   let tendencia = "lateral";
   if (slow[k] != null && fast[k] != null) {
     if (C[k] > fast[k] && fast[k] > slow[k]) tendencia = "alta";
@@ -75,13 +79,13 @@ export function analisar(b, frameKey) {
 
   const cruzamentos = [];
   const crosses = [
-    [m9, m21, "MME 9 × MMS 21 (curto prazo)"],
+    [m9, m21, `${nC} × ${nM} (curto prazo)`],
     [m50, m200, null],
     [macd, sig, "MACD × linha de sinal"],
   ];
   for (const [a, bb, nome] of crosses) {
     const x = lastCross(a, bb, f.recent); if (!x) continue;
-    const label = nome || (x.dir === "alta" ? "Golden cross (MMS 50 cruza acima da MMS 200)" : "Death cross (MMS 50 cruza abaixo da MMS 200)");
+    const label = nome || (x.dir === "alta" ? `Golden cross (${nR} cruza acima da ${nL})` : `Death cross (${nR} cruza abaixo da ${nL})`);
     cruzamentos.push({ nome: label, sinal: x.dir, data: date(x.i) });
     push(`${label} para ${x.dir} em ${date(x.i).split("-").reverse().join("/")}`, x.dir, a === m50 ? 2 : 1);
   }

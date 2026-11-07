@@ -132,6 +132,8 @@
     if (!SPEC) return "";
     const campo = x => {
       const v = f.regras[x.k];
+      if (x.tipo === "media") return `<div class="bot-r"><span>${x.label}</span><span class="bot-mm"><select data-regra="${x.k}" data-parte="tipo" aria-label="Tipo"><option value="mme" ${v[0] === "mme" ? "selected" : ""}>MME (exponencial)</option><option value="mms" ${v[0] === "mms" ? "selected" : ""}>MMS (simples)</option></select>
+        <input type="number" data-regra="${x.k}" data-parte="n" min="${x.min}" max="${x.max}" step="1" value="${v[1]}" aria-label="Período"></span><small>${x.ajuda ? x.ajuda + " " : ""}Período de ${x.min} a ${x.max} candles · padrão ${SPEC.nomeMedia(x.padrao)}.</small></div>`;
       if (x.tipo === "bool") return `<label class="bot-r bool"><input type="checkbox" data-regra="${x.k}" ${v ? "checked" : ""}> ${x.label}</label>`;
       if (x.tipo === "lista") return `<div class="bot-r"><span>${x.label}</span><span class="bot-chk">${x.opcoes.map(([o, l]) => `<label><input type="checkbox" data-regra="${x.k}" value="${o}" ${v.includes(o) ? "checked" : ""}> ${l}</label>`).join("")}</span>${x.ajuda ? `<small>${x.ajuda}</small>` : ""}</div>`;
       return `<label class="bot-r"><span>${x.label}</span><input type="number" data-regra="${x.k}" min="${x.min}" max="${x.max}" step="${x.passo}" value="${v}"><small>${x.ajuda ? x.ajuda + " " : ""}De ${num(x.min)} a ${num(x.max)} · padrão ${num(x.padrao)}.</small></label>`;
@@ -303,7 +305,8 @@
     }
     const fim = iF < 0 ? bars.length - 1 : iF, M = intra ? 12 : 15;
     const de = Math.max(0, iA - M), ate = Math.min(bars.length, fim + M + 1), vis = bars.slice(de, ate);
-    const C = bars.map(b => b.c), m9 = A.ema(C, 9), m21 = intra ? A.ema(C, 21) : A.sma(C, 21), n21 = intra ? "MME 21" : "MMS 21";
+    const R0 = res?.regras || {}, C = bars.map(b => b.c), mmC = (intra ? R0.dt_mm_curta : R0.mm_curta) || ["mme", 9], mmL = (intra ? R0.dt_mm_longa : R0.mm_media) || (intra ? ["mme", 21] : ["mms", 21]);
+    const calc = ([t, p]) => t === "mme" ? A.ema(C, p) : A.sma(C, p), m9 = calc(mmC), m21 = calc(mmL), n9 = SPEC?.nomeMedia(mmC) ?? "MME 9", n21 = SPEC?.nomeMedia(mmL) ?? "MMS 21";
     const compra = l.compra, venda = l.venda ?? bars[fim].c, R = res?.regras || {};
     const alvo = intra && o.mercado !== "cripto" && R.dt_alvo_pct ? compra * (1 + R.dt_alvo_pct / 100) : null;
     const stop = intra && o.mercado !== "cripto" && R.dt_stop_pct ? compra * (1 - R.dt_stop_pct / 100) : null;
@@ -335,7 +338,7 @@
     svg += seta(iA - de, compra, true, "var(--up)", "Compra");
     if (sai) svg += seta(fim - de, venda, false, "var(--down)", "Venda");
     [0, Math.floor(n / 2), n - 1].forEach((j, q) => { svg += `<text x="${X(j)}" y="${H - 4}" font-size="10.5" fill="var(--faint)" text-anchor="${q === 0 ? "start" : q === 2 ? "end" : "middle"}">${hora(vis[j])}</text>`; });
-    svg += `<text x="${pL + 4}" y="14" font-size="10.5" font-weight="600"><tspan fill="#f59e0b">MME 9</tspan> <tspan fill="#8b5cf6">${n21}</tspan></text></svg>`;
+    svg += `<text x="${pL + 4}" y="14" font-size="10.5" font-weight="600"><tspan fill="#f59e0b">${n9}</tspan> <tspan fill="#8b5cf6">${n21}</tspan></text></svg>`;
 
     // the story
     const dentro = bars.slice(iA, fim + 1), mx = Math.max(...dentro.map(b => b.h)), mn = Math.min(...dentro.map(b => b.l));
@@ -397,15 +400,16 @@
     const custos = `<li><b>Custos:</b> ${nf(2).format(f.custos.b3 * 100)}% por operação na B3, ${nf(1).format(f.custos.eua * 100)}% nos EUA e em cripto, e cada execução ${nf(2).format(f.deslize * 100)}% pior que o preço do sinal. Ativos em dólar são convertidos pela cotação do dia. <b>Imposto de renda, IOF e dividendos não estão incluídos.</b></li>`;
     const itens = k === "daytrade" ? `
       <li><b>Ativos:</b> as ${res.modos.daytrade?.ativos?.b3 ?? g.dt_b3_top} ações de maior peso no Ibovespa${g.mercados.includes("eua") ? ", as ações dos EUA da sua lista" : ""}${g.mercados.includes("cripto") ? " e as criptomoedas" : ""}, em candles de 5 minutos.</li>
-      <li><b>Ações — compra</b> ${[g.dt_comprar_cruzamento && `quando a MME 9 cruza acima da MME 21${g.dt_vwap ? " com o preço acima da VWAP (preço médio do dia)" : ""}`, g.dt_comprar_suporte && `quando um candle toca o <b>suporte</b> (mínima dos ${g.dt_sr_candles} candles anteriores) e fecha acima dele`].filter(Boolean).join(", ou ") || "<b>nunca</b> (nenhum sinal de compra está ligado)"}, depois dos primeiros ${g.dt_inicio_min} minutos e até ${g.dt_ultima_min} minutos antes do fechamento.</li>
-      <li><b>Ações — vende</b> ${g.dt_vender_resistencia ? `na <b>resistência</b> (máxima dos ${g.dt_sr_candles} candles anteriores ao sinal, se estiver abaixo do alvo), ` : ""}no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%)${g.dt_sair_cruzamento ? ", quando a MME 9 cruza abaixo da MME 21" : ""} ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
+      <li><b>Ações — compra</b> ${[g.dt_comprar_cruzamento && `quando a ${SPEC?.nomeMedia(g.dt_mm_curta) ?? "MME 9"} cruza acima da ${SPEC?.nomeMedia(g.dt_mm_longa) ?? "MME 21"}${g.dt_vwap ? " com o preço acima da VWAP (preço médio do dia)" : ""}`, g.dt_comprar_suporte && `quando um candle toca o <b>suporte</b> (mínima dos ${g.dt_sr_candles} candles anteriores) e fecha acima dele`].filter(Boolean).join(", ou ") || "<b>nunca</b> (nenhum sinal de compra está ligado)"}, depois dos primeiros ${g.dt_inicio_min} minutos e até ${g.dt_ultima_min} minutos antes do fechamento.</li>
+      <li><b>Ações — vende</b> ${g.dt_vender_resistencia ? `na <b>resistência</b> (máxima dos ${g.dt_sr_candles} candles anteriores ao sinal, se estiver abaixo do alvo), ` : ""}no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%)${g.dt_sair_cruzamento ? `, quando a ${SPEC?.nomeMedia(g.dt_mm_curta) ?? "MME 9"} cruza abaixo da ${SPEC?.nomeMedia(g.dt_mm_longa) ?? "MME 21"}` : ""} ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
       ${g.dt_volume ? `<li><b>Volume:</b> só compra se o volume do candle do sinal for maior que a média dos ${g.dt_volume_n} candles anteriores (ações e cripto).</li>` : ""}
       <li><b>Cripto — compra</b> depois de um candle de alta com corpo ${num(g.dtc_mult)}× maior que a média dos ${g.dtc_media} anteriores. <b>Vende</b> no stop (mínima desse candle), no alvo (${num(g.dtc_rr)}× o risco), depois de ${g.dtc_max_candles} candles, ou às 21h (fim do dia em UTC).</li>
       ${g.perda_mensal_pct > 0 ? `<li><b>Limite de perda no mês:</b> se o patrimônio cair ${num(g.perda_mensal_pct)}% desde o início do mês, vende tudo na hora e não opera mais até o mês seguinte.</li>` : ""}
       <li><b>Tamanho:</b> até ${g.dt_max_posicoes} posições ao mesmo tempo, cada uma com cerca de 1/${g.dt_max_posicoes} do patrimônio. Se o stop e o alvo forem tocados no mesmo candle, conta o stop (a hipótese mais cautelosa).</li>`
       : `
       <li><b>Ativos:</b> ${merc.join(", ")}.</li>
-      <li><b>Compra</b> quando a pontuação técnica é +${g.pontuacao_min} ou mais (a mesma do relatório) e a tendência não é de baixa${g.evitar_conflito ? ", sem sinal de alta e de baixa ao mesmo tempo" : ""}. Se há mais candidatos que espaço, entram os de maior pontuação.</li>
+      ${g.mm_curta ? `<li><b>Médias da pontuação:</b> curto prazo ${SPEC.nomeMedia(g.mm_curta)} × ${SPEC.nomeMedia(g.mm_media)}; tendência e cruzamento dourado com ${SPEC.nomeMedia(g.mm_rapida)} e ${SPEC.nomeMedia(g.mm_lenta)}.</li>` : ""}
+      <li><b>Compra</b> quando a pontuação técnica é +${g.pontuacao_min} ou mais (calculada como a do relatório, com as médias acima) e a tendência não é de baixa${g.evitar_conflito ? ", sem sinal de alta e de baixa ao mesmo tempo" : ""}. Se há mais candidatos que espaço, entram os de maior pontuação.</li>
       <li><b>Vende</b> ${[g.vender_tendencia && "quando a tendência vira de baixa", g.vender_vies && "quando o viés vira de baixa", `quando o preço toca o <b>stop</b>: começa ${num(g.stop_atr)} ATR abaixo do preço de compra${g.trailing_atr > 0 ? ` e sobe junto com o preço (${num(g.trailing_atr)} ATR abaixo do maior fechamento)` : ""}`].filter(Boolean).join(", ")}. ATR é o tamanho médio do movimento de um candle.</li>
       <li><b>Tamanho:</b> até ${g.max_posicoes} posições, cada uma com cerca de 1/${g.max_posicoes} do patrimônio. Depois de vender, espera ${g.espera_diario} pregões (diário) ou ${g.espera_semanal} semanas (semanal) para comprar o mesmo ativo de novo.</li>
       ${g.perda_mensal_pct > 0 ? `<li><b>Limite de perda no mês:</b> se, num fechamento, o patrimônio estiver ${num(g.perda_mensal_pct)}% abaixo do início do mês, vende tudo na abertura seguinte e não compra mais até o mês seguinte.</li>` : ""}
@@ -477,6 +481,7 @@
     const x = SPEC.REGRAS.find(r => r.k === k);
     if (x.tipo === "bool") f.regras[k] = t.checked;
     else if (x.tipo === "lista") f.regras[k] = [...box.querySelectorAll(`[data-regra="${k}"]:checked`)].map(i => i.value);
+    else if (x.tipo === "media") { const n = +box.querySelector(`[data-regra="${k}"][data-parte="n"]`).value; f.regras[k] = [box.querySelector(`[data-regra="${k}"][data-parte="tipo"]`).value, n || f.regras[k]?.[1] || x.padrao[1]]; }
     else if (t.value !== "") f.regras[k] = +t.value;
   });
   // out-of-range numbers are brought back into range when the field is left
@@ -488,7 +493,7 @@
     if (e.target.id === "botValor" && rascunho) { const v = lerReais(e.target.value); if (Number.isFinite(v)) e.target.value = rascunho.valor = emReais(v); return; }
     const k = e.target.dataset?.regra; if (!k || !SPEC || !rascunho) return;
     const ok = SPEC.normalizar({ ...rascunho.regras, mercados: rascunho.regras.mercados?.length ? rascunho.regras.mercados : ["b3"] });
-    if (e.target.type === "number") { rascunho.regras[k] = ok[k]; e.target.value = ok[k]; }
+    if (e.target.type === "number") { rascunho.regras[k] = ok[k]; e.target.value = Array.isArray(ok[k]) ? ok[k][1] : ok[k]; }
     if (k === "historico_meses") render();       // the start date written under the field
   });
   box?.addEventListener("toggle", e => { const d = e.target.closest?.("[data-bot-fold]"); if (d) aberto = { ...aberto, [d.dataset.botFold]: d.open }; }, true);
