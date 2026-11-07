@@ -21,15 +21,17 @@
   "bot": {
     "valor_inicial": 1000000,
     "modos": [
-      "semanal"
+      "diario",
+      "semanal",
+      "daytrade"
     ],
     "ativado_em": "2026-11-07",
     "regras": {
-      "pontuacao_min": 2,
-      "max_posicoes": 6,
+      "pontuacao_min": 1,
+      "max_posicoes": 1,
       "stop_atr": 2,
       "trailing_atr": 3,
-      "espera_diario": 5,
+      "espera_diario": 1,
       "espera_semanal": 2,
       "vender_vies": false,
       "vender_tendencia": false,
@@ -41,7 +43,7 @@
       ],
       "historico_meses": 3,
       "perda_mensal_pct": 6,
-      "dt_alvo_pct": 2,
+      "dt_alvo_pct": 4,
       "dt_stop_pct": 1,
       "dt_max_posicoes": 5,
       "dt_inicio_min": 15,
