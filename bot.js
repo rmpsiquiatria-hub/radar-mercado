@@ -50,7 +50,7 @@
     }
     return pares;
   }
-  const saida = m => /^Resist/.test(m) ? "Resistência" : /^Alvo/.test(m) ? "Alvo atingido" : /^Limite de perda/.test(m) ? "Limite do mês" : /^Stop/.test(m) ? "Stop" : /^Zerado/.test(m) ? "Zerada" : /^Tempo/.test(m) ? "Tempo máximo" : "Sinal de saída";
+  const saida = m => /^Resist/.test(m) ? "Resistência" : /^Suporte/.test(m) ? "Suporte" : /^Alvo/.test(m) ? "Alvo atingido" : /^Limite de perda/.test(m) ? "Limite do mês" : /^Stop/.test(m) ? "Stop" : /^Zerado/.test(m) ? "Zerada" : /^Tempo/.test(m) ? "Tempo máximo" : "Sinal de saída";
   const pernas = p => { const c = p.vendida ? p.fecha : p.abre, v = p.vendida ? p.abre : p.fecha; return { compra: c?.preco ?? null, venda: v?.preco ?? null, cOp: c, vOp: v, motivo: p.fecha ? saida(p.fecha.motivo) : null }; };
 
   async function carregar() {
@@ -106,7 +106,7 @@
       const base = (m.curva || []).filter(c => c[0] < d.slice(0, 7) + "-01").at(-1)?.[1] ?? m.valor_inicial;
       const w = L.simularDia(d, dados, { carteira, V0: m.valor_inicial, V: { caixa: m.caixa, ops: [] }, R, deslize: res.fixos.deslize, aoVivo: true, piso: L.pisoDoMes(base, R), ibov });
       const posicoes = [...w.pos.values()].map(p => {
-        const valor = p.qtd * p.ultimo * (p.a.mercado === "b3" ? 1 : dolar), r = valor * (1 - res.fixos.custos[p.a.mercado]) - p.custo_brl;
+        const valor = p.qtd * p.ultimo * (p.a.mercado === "b3" ? 1 : dolar), r = w.resultado(p, valor);
         return { ticker: p.a.ticker, mercado: p.a.mercado, atual: p.ultimo, resultado_brl: r, resultado_pct: r / p.custo_brl * 100 };
       });
       vivo = { dia: d, em: agora, ops: w.ops, posicoes, pendentes: w.pendentes, patrimonio: w.patrimonio(d), inicio: m.caixa, travado: !!w.travado, erro: null };
@@ -204,7 +204,7 @@
     if (!vivo) return "";
     const hora = t => new Date(t * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
     if (!vivo.ops) return `<div class="card bot-vivo-box">🔴 <b>Hoje ao vivo</b> · não consegui buscar os preços agora (${esc(vivo.erro || "")}). Tento de novo em 1 minuto.</div>`;
-    const dia = vivo.patrimonio - vivo.inicio, enc = vivo.ops.filter(o => o.lado === "venda").length;
+    const dia = vivo.patrimonio - vivo.inicio, enc = vivo.ops.filter(o => o.resultado_pct != null).length;
     return `<div class="card bot-vivo-box"><b><span class="bot-vivo">●</span> Hoje ao vivo (${dt(vivo.dia)})</b><span class="hint"> · atualizado às ${hora(vivo.em)}, a cada minuto${vivo.erro ? " · ⚠ a última atualização falhou" : ""}</span>
       <div class="bot-vivo-n">${vivo.ops.length} operações hoje · ${enc} encerradas · ${vivo.posicoes.length} abertas${vivo.pendentes?.length ? ` · ${vivo.pendentes.length} ordem(ns) para o próximo candle` : ""} · resultado do dia <b class="${dia > 0 ? "pos" : dia < 0 ? "neg" : ""}">${dia >= 0 ? "+" : "−"}${brl(Math.abs(dia))}</b> · patrimônio agora ${brl(vivo.patrimonio)}</div>
       ${vivo.travado ? `<div class="note">🛑 <b>Limite de perda do mês atingido</b> (−${num(res.regras.perda_mensal_pct)}%): o bot vendeu tudo e só volta a operar no dia 1º do mês que vem.</div>` : ""}
@@ -269,7 +269,7 @@
           return `<tr class="${o.teste ? "teste" : ""}"><td>${dt(o.data)}${o.hora ? ` ${o.hora}` : ""}${o.teste ? `<br><small class="hint">teste</small>` : o.ao_vivo ? `<br><small class="bot-vivo">● ao vivo</small>` : ""}</td><td><b>${esc(o.ticker)}</b> <small class="bot-m">${MERC[o.mercado]}</small></td>
           <td><b class="${o.lado === "compra" ? "pos" : "neg"}">${o.lado === "compra" ? "Compra" : "Venda"}</b><br><small class="hint bot-mot">${esc(o.motivo)}</small></td>
           <td>${p.fecha ? `Encerrada<br><small class="hint">${l.motivo}</small>` : `<span class="tag on">Aberta</span>`}${p.vendida ? ` <small class="bot-m">vendida</small>` : ""}<br><button class="link bot-gbtn" type="button" data-bot-graf="${idx}">📈 Ver gráfico</button></td>
-          <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra", l.cOp)}</td><td>${ag ? `<small class="hint">agora</small> ${px(ag.atual, o.mercado)}` : preco(l.venda, "venda", l.vOp)}</td><td>${brl(o.valor_brl)}</td><td>${f?.resultado_pct != null ? `${pc(f.resultado_pct)}<br><small>${brl(f.resultado_brl)}</small>` : ag ? `${pc(ag.resultado_pct)}<br><small class="hint">se vendesse agora</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
+          <td>${qtd(o.qtd, o.mercado)}</td><td>${preco(l.compra, "compra", l.cOp)}</td><td>${ag ? `<small class="hint">agora</small> ${px(ag.atual, o.mercado)}` : preco(l.venda, "venda", l.vOp)}</td><td>${brl(o.valor_brl)}</td><td>${f?.resultado_pct != null ? `${pc(f.resultado_pct)}<br><small>${brl(f.resultado_brl)}</small>` : ag ? `${pc(ag.resultado_pct)}<br><small class="hint">se ${p.vendida ? "recomprasse" : "vendesse"} agora</small>` : ""}</td></tr>`; }).join("") || `<tr><td colspan="9" class="hint">Nenhuma operação com esse filtro.</td></tr>`}
       </tbody>${fechadas.length ? `<tfoot><tr class="bot-tot"><td colspan="8"><b>Total</b> das ${fechadas.length} ${fechadas.length === 1 ? "operação encerrada" : "operações encerradas"} desta lista (${nLucro} com lucro, ${fechadas.length - nLucro} com prejuízo; cada operação conta uma vez, mesmo aparecendo na compra e na venda) · custos ${brl(custoT)}${ops.length > verMais ? " · inclui as linhas ainda não mostradas" : ""}</td>
         <td>${pc(soma / m.valor_inicial * 100)}<br><small>${soma < 0 ? "−" : ""}${brl(Math.abs(soma))}</small><br><small class="hint">% do valor inicial</small></td></tr></tfoot>` : ""}</table></div>
       ${ops.length > verMais ? `<button class="btn" type="button" id="botMais" style="margin-top:8px">Ver mais ${Math.min(PAGINA, ops.length - verMais)}</button>` : ""}`;
@@ -282,7 +282,7 @@
   const pcT = v => `${v > 0 ? "+" : ""}${nf(2).format(v)}%`;
   async function graficoOperacao(i) {
     const o = opsVisiveis[i], p = paresAtuais?.get(o); if (!o || !p) return;
-    const l = pernas(p), ent = l.cOp || o, sai = l.vOp, k = modoAtual, intra = k === "daytrade", A = window.Analise;
+    const V = p.vendida, l = pernas(p), ent = (V ? l.vOp : l.cOp) || o, sai = V ? l.cOp : l.vOp, k = modoAtual, intra = k === "daytrade", A = window.Analise;
     if (!dlg) {
       dlg = document.body.appendChild(Object.assign(document.createElement("dialog"), { className: "vdlg bot-gdlg" }));
       dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-gclose]")) dlg.close(); });
@@ -310,9 +310,10 @@
     const de = Math.max(0, iA - M), ate = Math.min(bars.length, fim + M + 1), vis = bars.slice(de, ate);
     const R0 = res?.regras || {}, C = bars.map(b => b.c), mmC = (intra ? R0.dt_mm_curta : R0.mm_curta) || ["mme", 9], mmL = (intra ? R0.dt_mm_longa : R0.mm_media) || (intra ? ["mme", 21] : ["mms", 21]);
     const calc = ([t, p]) => t === "mme" ? A.ema(C, p) : A.sma(C, p), m9 = calc(mmC), m21 = calc(mmL), n9 = SPEC?.nomeMedia(mmC) ?? "MME 9", n21 = SPEC?.nomeMedia(mmL) ?? "MMS 21";
-    const compra = l.compra, venda = l.venda ?? bars[fim].c, R = res?.regras || {};
-    const alvo = intra && o.mercado !== "cripto" && R.dt_alvo_pct ? compra * (1 + R.dt_alvo_pct / 100) : null;
-    const stop = intra && o.mercado !== "cripto" && R.dt_stop_pct ? compra * (1 - R.dt_stop_pct / 100) : null;
+    // below, compra is the price the trade entered at and venda the one it left at (a short enters by selling)
+    const compra = V ? l.venda : l.compra, venda = (V ? l.compra : l.venda) ?? bars[fim].c, R = res?.regras || {}, ato = V ? "venda" : "compra", fecho = V ? "recompra" : "venda";
+    const alvo = intra && o.mercado !== "cripto" && R.dt_alvo_pct ? compra * (1 + (V ? -1 : 1) * R.dt_alvo_pct / 100) : null;
+    const stop = intra && o.mercado !== "cripto" && R.dt_stop_pct ? compra * (1 - (V ? -1 : 1) * R.dt_stop_pct / 100) : null;
     // support and resistance as they stood when the trade opened: lowest low and highest high of the
     // 20 candles before the purchase (the same rule as the site's charts)
     const nSR = intra ? R.dt_sr_candles || 20 : 20, sr = iA >= 2 ? A.supportResistance(bars, nSR, iA - 1) : null;
@@ -330,7 +331,7 @@
     let svg = `<svg viewBox="0 0 ${W} ${H}" class="bot-gsvg" role="img" aria-label="Gráfico da operação">`;
     svg += `<rect x="${X(iA - de) - step / 2}" y="0" width="${(fim - iA + 1) * step}" height="${H - ax}" fill="var(--accent)" opacity=".07"/>`;
     if (sr) svg += hor(sr.resistencia, "#dc2626", `R ${f(sr.resistencia)}`, "1 3") + hor(sr.suporte, "#16a34a", `S ${f(sr.suporte)}`, "1 3");
-    svg += hor(alvo, "var(--up)", `alvo ${f(alvo)}`) + hor(stop, "var(--down)", `stop ${f(stop)}`) + hor(compra, "var(--muted)", `compra ${f(compra)}`);
+    svg += hor(alvo, "var(--up)", `alvo ${f(alvo)}`) + hor(stop, "var(--down)", `stop ${f(stop)}`) + hor(compra, "var(--muted)", `${ato} ${f(compra)}`);
     const cw = Math.max(1, Math.min(12, step * 0.66));
     vis.forEach((b, j) => { const cor = b.c >= b.o ? "var(--up)" : "var(--down)", x = X(j), t = Math.min(Y(b.o), Y(b.c));
       svg += `<line x1="${x}" x2="${x}" y1="${Y(b.h)}" y2="${Y(b.l)}" stroke="${cor}"/><rect x="${x - cw / 2}" y="${t}" width="${cw}" height="${Math.max(1, Math.abs(Y(b.o) - Y(b.c)))}" fill="${b.c >= b.o ? "var(--panel)" : cor}" stroke="${cor}"/>`; });
@@ -338,26 +339,33 @@
     const seta = (j, v, cima, cor, txt) => { const x = X(j), y = Y(v); return cima
       ? `<path d="M${x} ${y + 4} l7 12 h-14 z" fill="${cor}"/><text x="${x}" y="${y + 28}" font-size="11" font-weight="700" fill="${cor}" text-anchor="middle">${txt}</text>`
       : `<path d="M${x} ${y - 4} l7 -12 h-14 z" fill="${cor}"/><text x="${x}" y="${y - 20}" font-size="11" font-weight="700" fill="${cor}" text-anchor="middle">${txt}</text>`; };
-    svg += seta(iA - de, compra, true, "var(--up)", "Compra");
-    if (sai) svg += seta(fim - de, venda, false, "var(--down)", "Venda");
+    svg += V ? seta(iA - de, compra, false, "var(--down)", "Venda") : seta(iA - de, compra, true, "var(--up)", "Compra");
+    if (sai) svg += V ? seta(fim - de, venda, true, "var(--up)", "Recompra") : seta(fim - de, venda, false, "var(--down)", "Venda");
     [0, Math.floor(n / 2), n - 1].forEach((j, q) => { svg += `<text x="${X(j)}" y="${H - 4}" font-size="10.5" fill="var(--faint)" text-anchor="${q === 0 ? "start" : q === 2 ? "end" : "middle"}">${hora(vis[j])}</text>`; });
     svg += `<text x="${pL + 4}" y="14" font-size="10.5" font-weight="600"><tspan fill="#f59e0b">${n9}</tspan> <tspan fill="#8b5cf6">${n21}</tspan></text></svg>`;
 
     // the story
     const dentro = bars.slice(iA, fim + 1), mx = Math.max(...dentro.map(b => b.h)), mn = Math.min(...dentro.map(b => b.l));
-    const mfe = (mx / compra - 1) * 100, mae = (mn / compra - 1) * 100, bruto = (venda / compra - 1) * 100;
+    // mfe, mae and bruto are in the trade's favour; mov is what the price itself did
+    const mov = (venda / compra - 1) * 100, mfe = V ? (1 - mn / compra) * 100 : (mx / compra - 1) * 100, mae = V ? (1 - mx / compra) * 100 : (mn / compra - 1) * 100, bruto = V ? -mov : mov;
     const nb = fim - iA, dur = intra ? (nb * 5 >= 60 ? `${Math.floor(nb * 5 / 60)} h ${nb * 5 % 60 ? (nb * 5 % 60) + " min" : ""}` : `${Math.max(5, nb * 5)} minutos`) : `${nb} ${k === "semanal" ? (nb === 1 ? "semana" : "semanas") : nb === 1 ? "pregão" : "pregões"}`;
     const custos = (ent.custos_brl || 0) + (sai?.custos_brl || 0), r = sai?.resultado_brl, rp = sai?.resultado_pct;
     const mot = sai?.motivo || "", txt = [];
-    txt.push(`<p><b>Entrada:</b> comprou ${qtd(ent.qtd, o.mercado)} a <b>${px(compra, o.mercado)}</b> em ${dt(ent.data)}${ent.hora ? " às " + ent.hora : ""}. Motivo: ${esc(ent.motivo)}.</p>`);
-    txt.push(`<p><b>Durante a operação</b> (${dur}): o preço chegou a ${px(mx, o.mercado)} (<b>${pcT(mfe)}</b> sobre a compra) e desceu até ${px(mn, o.mercado)} (<b>${pcT(mae)}</b>).</p>`);
+    txt.push(`<p><b>Entrada:</b> ${V ? "vendeu, para recomprar depois (operação vendida)," : "comprou"} ${qtd(ent.qtd, o.mercado)} a <b>${px(compra, o.mercado)}</b> em ${dt(ent.data)}${ent.hora ? " às " + ent.hora : ""}. Motivo: ${esc(ent.motivo)}.</p>`);
+    txt.push(`<p><b>Durante a operação</b> (${dur}): ${V ? `o preço desceu até ${px(mn, o.mercado)} (<b>${pcT(mfe)}</b> a favor) e subiu até ${px(mx, o.mercado)} (<b>${pcT(mae)}</b> contra)` : `o preço chegou a ${px(mx, o.mercado)} (<b>${pcT(mfe)}</b> sobre a compra) e desceu até ${px(mn, o.mercado)} (<b>${pcT(mae)}</b>)`}.</p>`);
     if (sr) {
       const dR = (sr.resistencia / compra - 1) * 100, dS = (sr.suporte / compra - 1) * 100;
-      txt.push(`<p><b>Suporte e resistência:</b> na hora da compra, a resistência (máxima dos ${nSR} candles anteriores) estava em ${px(sr.resistencia, o.mercado)}, ${dR > 0 ? `${nf(2).format(dR)}% acima do preço de compra` : "abaixo do preço de compra: a compra foi num rompimento da resistência"}, e o suporte (mínima) em ${px(sr.suporte, o.mercado)}, ${nf(2).format(Math.abs(dS))}% abaixo.${dR > 0 ? (mx > sr.resistencia ? " Durante a operação o preço passou da resistência." : " Durante a operação o preço não passou da resistência.") : ""}${mn < sr.suporte ? " O preço chegou a perder o suporte." : ""}</p>`);
+      txt.push(`<p><b>Suporte e resistência:</b> na hora da ${ato}, a resistência (máxima dos ${nSR} candles anteriores) estava em ${px(sr.resistencia, o.mercado)}, ${dR > 0 ? `${nf(2).format(dR)}% acima do preço de ${ato}` : V ? "abaixo do preço de venda" : "abaixo do preço de compra: a compra foi num rompimento da resistência"}, e o suporte (mínima) em ${px(sr.suporte, o.mercado)}, ${nf(2).format(Math.abs(dS))}% abaixo.${dR > 0 ? (mx > sr.resistencia ? " Durante a operação o preço passou da resistência." : " Durante a operação o preço não passou da resistência.") : ""}${mn < sr.suporte ? " O preço chegou a perder o suporte." : ""}</p>`);
     }
-    if (!sai) txt.push(`<p><b>Ainda em andamento.</b> Pelo último candle, o preço está em ${px(venda, o.mercado)} (${pcT(bruto)} sobre a compra).</p>`);
+    if (!sai) txt.push(`<p><b>Ainda em andamento.</b> Pelo último candle, o preço está em ${px(venda, o.mercado)} (${pcT(bruto)} ${V ? "de resultado, antes dos custos" : "sobre a compra"}).</p>`);
     else {
-      const saida = /^Resist/.test(mot) ? `<b>Saída na resistência:</b> o preço subiu até a resistência que valia na compra (a máxima recente), e a venda garantiu o ganho antes de um possível recuo.`
+      const saida = V ? (/^Suporte/.test(mot) ? `<b>Saída no suporte:</b> o preço caiu até o suporte que valia na venda (a mínima recente), e a recompra garantiu o ganho antes de um possível repique.`
+        : /^Alvo/.test(mot) ? `<b>Saída no alvo:</b> o preço caiu até o alvo de ganho e a recompra garantiu o lucro.`
+        : /^Stop/.test(mot) ? `<b>Saída no stop:</b> o preço subiu até o preço de proteção, e o stop limitou a perda.${mfe >= 0.5 ? ` Antes disso, a operação chegou a ficar ${pcT(mfe)} no positivo, mas o preço não alcançou o alvo e voltou.` : ""}`
+        : /^Zerado/.test(mot) ? `<b>Encerrada no fim do dia:</b> no day trade nada fica aberto para o dia seguinte, então a posição foi recomprada antes do fechamento, sem tocar nem o alvo nem o stop. O resultado é só o quanto o preço andou até ali.`
+        : /^Limite de perda/.test(mot) ? `<b>Limite de perda do mês:</b> a carteira inteira caiu até o limite mensal, e o bot encerrou tudo, inclusive esta posição.`
+        : `<b>Sinal de saída:</b> ${esc(mot)}. A regra entende que o movimento de queda perdeu força.`)
+        : /^Resist/.test(mot) ? `<b>Saída na resistência:</b> o preço subiu até a resistência que valia na compra (a máxima recente), e a venda garantiu o ganho antes de um possível recuo.`
         : /^Alvo/.test(mot) ? `<b>Saída no alvo:</b> o preço subiu até o alvo de ganho e a venda garantiu o lucro.`
         : /^Stop/.test(mot) ? `<b>Saída no stop:</b> o preço caiu até o preço de proteção, e o stop limitou a perda.${mfe >= 0.5 ? ` Antes disso, a operação chegou a ficar ${pcT(mfe)} no positivo, mas o preço não alcançou o alvo e voltou.` : ""}`
         : /^Zerado/.test(mot) ? `<b>Encerrada no fim do dia:</b> ${o.mercado === "cripto" ? "na cripto o dia termina às 21h" : "no day trade nada fica aberto para o dia seguinte"}, então a posição foi vendida antes do fechamento, sem tocar nem o alvo nem o stop. O resultado é só o quanto o preço andou até ali.`
@@ -365,21 +373,24 @@
         : /^Tempo/.test(mot) ? `<b>Tempo máximo:</b> a operação passou do número máximo de candles e foi encerrada.`
         : `<b>Sinal de saída:</b> ${esc(mot)}. A regra entende que o movimento de alta perdeu força.`;
       txt.push(`<p>${saida}</p>`);
-      txt.push(`<p><b>Resultado:</b> o preço ${bruto >= 0 ? "subiu" : "caiu"} ${nf(2).format(Math.abs(bruto))}% entre a compra e a venda. Os custos (taxas e diferença de preço) somaram ${brl(custos)}. No fim: ${pc(rp)} (${brl(r)}).${bruto > 0 && r < 0 ? " O preço até subiu, mas tão pouco que os custos levaram o resultado para o negativo." : ""}${o.mercado !== "b3" ? " Em ativos em dólar, a variação do dólar no período também entra no resultado em reais." : ""}</p>`);
-      const porque = r > 0
+      txt.push(`<p><b>Resultado:</b> o preço ${mov >= 0 ? "subiu" : "caiu"} ${nf(2).format(Math.abs(mov))}% entre a ${ato} e a ${fecho}. Os custos (taxas e diferença de preço) somaram ${brl(custos)}. No fim: ${pc(rp)} (${brl(r)}).${bruto > 0 && r < 0 ? ` O preço até ${V ? "caiu" : "subiu"}, mas tão pouco que os custos levaram o resultado para o negativo.` : ""}${o.mercado !== "b3" ? " Em ativos em dólar, a variação do dólar no período também entra no resultado em reais." : ""}</p>`);
+      const porque = V ? (r > 0
+        ? (mae > -0.3 ? "O lucro veio de o preço ter caído logo depois do sinal de venda, quase sem andar contra a posição." : `O lucro veio de o preço ter caído depois do sinal, embora antes tenha chegado a ficar ${pcT(mae)} contra a posição.`)
+        : (mfe < 0.2 ? "O prejuízo veio de o preço praticamente não ter caído depois da venda: o sinal de queda não se confirmou." : `O prejuízo veio de o preço ter caído pouco (no máximo ${pcT(mfe)}) e depois voltado para cima do preço de venda.`))
+        : r > 0
         ? (mae > -0.3 ? "O lucro veio de o preço ter subido logo depois do sinal de compra, quase sem andar contra a posição." : `O lucro veio de o preço ter subido depois do sinal, embora antes tenha chegado a ficar ${pcT(mae)} contra a posição.`)
         : (mfe < 0.2 ? "O prejuízo veio de o preço praticamente não ter subido depois da compra: o sinal de alta não se confirmou." : `O prejuízo veio de o preço ter subido pouco (no máximo ${pcT(mfe)}) e depois voltado para baixo do preço de compra.`);
       txt.push(`<p><b>Em resumo:</b> ${porque}</p>`);
       const dep = bars.slice(fim + 1, ate);
       if (dep.length) { const d2 = (dep.at(-1).c / venda - 1) * 100;
-        txt.push(`<p><b>Depois da venda:</b> ${dep.length} ${intra ? "candles (" + dep.length * 5 + " min)" : k === "semanal" ? "semanas" : "pregões"} depois, o preço estava em ${px(dep.at(-1).c, o.mercado)} (${pcT(d2)} sobre a venda)${Math.abs(d2) < 0.2 ? "." : d2 > 0 ? ": quem tivesse segurado teria ganhado mais." : ": a venda evitou essa queda."}</p>`); }
+        txt.push(`<p><b>Depois da ${fecho}:</b> ${dep.length} ${intra ? "candles (" + dep.length * 5 + " min)" : k === "semanal" ? "semanas" : "pregões"} depois, o preço estava em ${px(dep.at(-1).c, o.mercado)} (${pcT(d2)} sobre a ${fecho})${Math.abs(d2) < 0.2 ? "." : (d2 > 0) !== !!V ? ": quem tivesse segurado teria ganhado mais." : V ? ": a recompra evitou essa alta." : ": a venda evitou essa queda."}</p>`); }
     }
     if (intra && o.mercado !== "cripto") {
       const dia = bars.filter(b => chave(b).slice(0, 10) === ent.data);
       if (dia.length) txt.push(`<p class="hint">No dia, ${esc(o.ticker)} foi de ${px(dia[0].o, o.mercado)} na abertura a ${px(dia.at(-1).c, o.mercado)} no último candle (${pcT((dia.at(-1).c / dia[0].o - 1) * 100)}).</p>`);
     }
     dlg.innerHTML = `<div class="card">${topo}${svg}
-      <p class="hint">Faixa colorida: o tempo em que a posição ficou aberta. ${sr ? "Linhas pontilhadas S e R: suporte e resistência na hora da compra (mínima e máxima dos ${nSR} candles anteriores). " : ""}${alvo ? "Alvo e stop pelas regras atuais. " : ""}${M} candles antes da compra e depois da venda.</p>
+      <p class="hint">Faixa colorida: o tempo em que a posição ficou aberta. ${sr ? `Linhas pontilhadas S e R: suporte e resistência na hora da ${ato} (mínima e máxima dos ${nSR} candles anteriores). ` : ""}${alvo ? "Alvo e stop pelas regras atuais. " : ""}${M} candles antes da ${ato} e depois da ${fecho}.</p>
       <h4>📝 Por que deu ${!sai ? "esse resultado até agora" : r > 0 ? "lucro" : "prejuízo"}</h4>${txt.join("")}
       <p class="hint">Análise automática e descritiva, feita a partir dos candles. Não é recomendação de investimento.</p></div>`;
   }
@@ -406,7 +417,7 @@
       <li><b>Ações — compra</b> ${[g.dt_comprar_cruzamento && `quando a ${SPEC?.nomeMedia(g.dt_mm_curta) ?? "MME 9"} cruza acima da ${SPEC?.nomeMedia(g.dt_mm_longa) ?? "MME 21"}${g.dt_vwap ? " com o preço acima da VWAP (preço médio do dia)" : ""}`, g.dt_comprar_suporte && `quando um candle toca o <b>suporte</b> (mínima dos ${g.dt_sr_candles} candles anteriores) e fecha acima dele`].filter(Boolean).join(", ou ") || "<b>nunca</b> (nenhum sinal de compra está ligado)"}, depois dos primeiros ${g.dt_inicio_min} minutos e até ${g.dt_ultima_min} minutos antes do fechamento.</li>
       <li><b>Ações — vende</b> ${g.dt_vender_resistencia ? `na <b>resistência</b> (máxima dos ${g.dt_sr_candles} candles anteriores ao sinal, se estiver abaixo do alvo), ` : ""}no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%)${g.dt_sair_cruzamento ? `, quando a ${SPEC?.nomeMedia(g.dt_mm_curta) ?? "MME 9"} cruza abaixo da ${SPEC?.nomeMedia(g.dt_mm_longa) ?? "MME 21"}` : ""} ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
       ${g.dt_volume ? `<li><b>Volume:</b> só compra se o volume do candle do sinal for maior que a média dos ${g.dt_volume_n} candles anteriores (ações e cripto).</li>` : ""}
-      ${g.dt_ibov ? `<li><b>Ibovespa:</b> nas ações da B3, só compra com o Ibovespa em alta no dia (acima do fechamento do dia anterior). Com o índice em queda, o bot não abre operações na B3, porque ele só opera comprado.</li>` : ""}
+      ${g.dt_ibov ? `<li><b>Ibovespa:</b> nas ações da B3, opera na direção do índice. Só compra com o Ibovespa em alta no dia (acima do fechamento do dia anterior). ${g.dt_vendido ? `Com ele em queda, <b>opera vendido</b> pelas mesmas regras espelhadas: vende primeiro e recompra no stop (+${num(g.dt_stop_pct)}%), no alvo (−${num(g.dt_alvo_pct)}%)${g.dt_vender_resistencia ? ", no suporte" : ""} ou no zeramento do fim do dia, sempre no mesmo dia.` : "Com ele em queda, não abre operações na B3."}</li>` : ""}
       ${g.dt_pausa ? `<li><b>Intervalo:</b> das ${g.dt_pausa_ini} às ${g.dt_pausa_fim} (Brasília) não abre operações. As já abertas seguem com stop, alvo, resistência e zeramento do fim do dia.</li>` : ""}
       <li><b>Cripto — compra</b> depois de um candle de alta com corpo ${num(g.dtc_mult)}× maior que a média dos ${g.dtc_media} anteriores. <b>Vende</b> no stop (mínima desse candle), no alvo (${num(g.dtc_rr)}× o risco), depois de ${g.dtc_max_candles} candles, ou às 21h (fim do dia em UTC).</li>
       ${g.perda_mensal_pct > 0 ? `<li><b>Limite de perda no mês:</b> se o patrimônio cair ${num(g.perda_mensal_pct)}% desde o início do mês, vende tudo na hora e não opera mais até o mês seguinte.</li>` : ""}

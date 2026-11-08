@@ -90,7 +90,7 @@ const bench = (curva0, V0, d) => {
 function placar(curva, ops, V0) {
   const fim = curva.at(-1)?.[1] ?? V0, ultimo = curva.at(-1);
   let topo = -Infinity, dd = 0; for (const [, v] of curva) { topo = Math.max(topo, v); dd = Math.min(dd, v / topo - 1); }
-  const vendas = ops.filter(o => o.lado === "venda"), ganhos = vendas.filter(o => o.resultado_brl > 0), perdas = vendas.filter(o => o.resultado_brl <= 0);
+  const vendas = ops.filter(o => o.resultado_pct != null), ganhos = vendas.filter(o => o.resultado_brl > 0), perdas = vendas.filter(o => o.resultado_brl <= 0);
   const media = l => l.length ? +(l.reduce((s, o) => s + o.resultado_pct, 0) / l.length).toFixed(2) : null;
   const pctDe = (a, b) => a && b ? +((a / b - 1) * 100).toFixed(2) : null;
   const naAtivacao = curva.filter(c => c[0] < ativado).at(-1);
