@@ -84,12 +84,15 @@
       const [usd, ...partes] = await Promise.all([pedir(["USDBRL=X"], "range=1d"), ...lotes.map(l => pedir(l, "range=5d&iv=5m&ohlc=1"))]);
       const Q = Object.assign({}, ...partes.map(p => p?.quotes || {})), dolar = usd?.quotes?.["USDBRL=X"]?.price;
       if (!dolar || !partes.some(p => p)) throw new Error("sem preços");
+      // only closed candles: the one still forming waits for the next refresh
+      const fechadas = q => q.bars.filter(b => b[0] + 300 <= agora).map(([t, o, h, l, c, v]) => ({ t, o, h, l, c, v }));
       const R = res.regras, dados = [];
+      const qIbov = R.dt_ibov ? (await pedir(["^BVSP"], "range=5d&iv=5m&ohlc=1"))?.quotes?.["^BVSP"] : null;
+      if (R.dt_ibov && !qIbov?.bars?.length) throw new Error("sem candles do Ibovespa");
+      const ibov = R.dt_ibov ? L.serieIbov(fechadas(qIbov)) : null;
       for (const a of m.lista) {
         const q = Q[a.sym]; if (!q?.bars?.length) continue;
-        // only closed candles: the one still forming waits for the next refresh
-        const bars = q.bars.filter(b => b[0] + 300 <= agora).map(([t, o, h, l, c, v]) => ({ t, o, h, l, c, v }));
-        const x = L.preparar(a, bars, R);
+        const x = L.preparar(a, fechadas(q), R);
         if (x.ini[d] == null) continue;
         // the day's last bar has not happened yet: it comes when the session (crypto: the UTC day) ends
         const fimT = a.mercado === "cripto" ? Date.parse(d + "T00:00:00Z") / 1000 + 86400 - 300
@@ -101,7 +104,7 @@
       const carteira = L.criarCarteira({ custos: res.fixos.custos, fx: mk => mk === "b3" ? 1 : dolar, ativado: m.ativado_em });
       // the month's loss limit, from the patrimônio at the end of the previous month (as the night run)
       const base = (m.curva || []).filter(c => c[0] < d.slice(0, 7) + "-01").at(-1)?.[1] ?? m.valor_inicial;
-      const w = L.simularDia(d, dados, { carteira, V0: m.valor_inicial, V: { caixa: m.caixa, ops: [] }, R, deslize: res.fixos.deslize, aoVivo: true, piso: L.pisoDoMes(base, R) });
+      const w = L.simularDia(d, dados, { carteira, V0: m.valor_inicial, V: { caixa: m.caixa, ops: [] }, R, deslize: res.fixos.deslize, aoVivo: true, piso: L.pisoDoMes(base, R), ibov });
       const posicoes = [...w.pos.values()].map(p => {
         const valor = p.qtd * p.ultimo * (p.a.mercado === "b3" ? 1 : dolar), r = valor * (1 - res.fixos.custos[p.a.mercado]) - p.custo_brl;
         return { ticker: p.a.ticker, mercado: p.a.mercado, atual: p.ultimo, resultado_brl: r, resultado_pct: r / p.custo_brl * 100 };
@@ -136,7 +139,8 @@
       const v = f.regras[x.k];
       if (x.tipo === "media") return `<div class="bot-r"><span>${x.label}</span><span class="bot-mm"><select data-regra="${x.k}" data-parte="tipo" aria-label="Tipo"><option value="mme" ${v[0] === "mme" ? "selected" : ""}>MME (exponencial)</option><option value="mms" ${v[0] === "mms" ? "selected" : ""}>MMS (simples)</option></select>
         <input type="number" data-regra="${x.k}" data-parte="n" min="${x.min}" max="${x.max}" step="1" value="${v[1]}" aria-label="Período"></span><small>${x.ajuda ? x.ajuda + " " : ""}Período de ${x.min} a ${x.max} candles · padrão ${SPEC.nomeMedia(x.padrao)}.</small></div>`;
-      if (x.tipo === "bool") return `<label class="bot-r bool"><input type="checkbox" data-regra="${x.k}" ${v ? "checked" : ""}> ${x.label}</label>`;
+      if (x.tipo === "hora") return `<label class="bot-r"><span>${x.label}</span><input type="time" data-regra="${x.k}" step="300" value="${v}"></label>`;
+      if (x.tipo === "bool") return `<label class="bot-r bool"><input type="checkbox" data-regra="${x.k}" ${v ? "checked" : ""}> <span>${x.label}${x.ajuda ? `<small>${x.ajuda}</small>` : ""}</span></label>`;
       if (x.tipo === "lista") return `<div class="bot-r"><span>${x.label}</span><span class="bot-chk">${x.opcoes.map(([o, l]) => `<label><input type="checkbox" data-regra="${x.k}" value="${o}" ${v.includes(o) ? "checked" : ""}> ${l}</label>`).join("")}</span>${x.ajuda ? `<small>${x.ajuda}</small>` : ""}</div>`;
       return `<label class="bot-r"><span>${x.label}</span><input type="number" data-regra="${x.k}" min="${x.min}" max="${x.max}" step="${x.passo}" value="${v}"><small>${x.ajuda ? x.ajuda + " " : ""}De ${num(x.min)} a ${num(x.max)} · padrão ${num(x.padrao)}.</small></label>`;
     };
@@ -402,6 +406,8 @@
       <li><b>Ações — compra</b> ${[g.dt_comprar_cruzamento && `quando a ${SPEC?.nomeMedia(g.dt_mm_curta) ?? "MME 9"} cruza acima da ${SPEC?.nomeMedia(g.dt_mm_longa) ?? "MME 21"}${g.dt_vwap ? " com o preço acima da VWAP (preço médio do dia)" : ""}`, g.dt_comprar_suporte && `quando um candle toca o <b>suporte</b> (mínima dos ${g.dt_sr_candles} candles anteriores) e fecha acima dele`].filter(Boolean).join(", ou ") || "<b>nunca</b> (nenhum sinal de compra está ligado)"}, depois dos primeiros ${g.dt_inicio_min} minutos e até ${g.dt_ultima_min} minutos antes do fechamento.</li>
       <li><b>Ações — vende</b> ${g.dt_vender_resistencia ? `na <b>resistência</b> (máxima dos ${g.dt_sr_candles} candles anteriores ao sinal, se estiver abaixo do alvo), ` : ""}no alvo (+${num(g.dt_alvo_pct)}%), no stop (−${num(g.dt_stop_pct)}%)${g.dt_sair_cruzamento ? `, quando a ${SPEC?.nomeMedia(g.dt_mm_curta) ?? "MME 9"} cruza abaixo da ${SPEC?.nomeMedia(g.dt_mm_longa) ?? "MME 21"}` : ""} ou ${g.dt_zerar_min} minutos antes do fechamento.</li>
       ${g.dt_volume ? `<li><b>Volume:</b> só compra se o volume do candle do sinal for maior que a média dos ${g.dt_volume_n} candles anteriores (ações e cripto).</li>` : ""}
+      ${g.dt_ibov ? `<li><b>Ibovespa:</b> nas ações da B3, só compra com o Ibovespa em alta no dia (acima do fechamento do dia anterior). Com o índice em queda, o bot não abre operações na B3, porque ele só opera comprado.</li>` : ""}
+      ${g.dt_pausa ? `<li><b>Intervalo:</b> das ${g.dt_pausa_ini} às ${g.dt_pausa_fim} (Brasília) não abre operações. As já abertas seguem com stop, alvo, resistência e zeramento do fim do dia.</li>` : ""}
       <li><b>Cripto — compra</b> depois de um candle de alta com corpo ${num(g.dtc_mult)}× maior que a média dos ${g.dtc_media} anteriores. <b>Vende</b> no stop (mínima desse candle), no alvo (${num(g.dtc_rr)}× o risco), depois de ${g.dtc_max_candles} candles, ou às 21h (fim do dia em UTC).</li>
       ${g.perda_mensal_pct > 0 ? `<li><b>Limite de perda no mês:</b> se o patrimônio cair ${num(g.perda_mensal_pct)}% desde o início do mês, vende tudo na hora e não opera mais até o mês seguinte.</li>` : ""}
       <li><b>Tamanho:</b> até ${g.dt_max_posicoes} posições ao mesmo tempo, cada uma com cerca de 1/${g.dt_max_posicoes} do patrimônio. Se o stop e o alvo forem tocados no mesmo candle, conta o stop (a hipótese mais cautelosa).</li>`
@@ -514,6 +520,7 @@
     const x = SPEC.REGRAS.find(r => r.k === k);
     if (x.tipo === "bool") f.regras[k] = t.checked;
     else if (x.tipo === "lista") f.regras[k] = [...box.querySelectorAll(`[data-regra="${k}"]:checked`)].map(i => i.value);
+    else if (x.tipo === "hora") f.regras[k] = t.value;
     else if (x.tipo === "media") { const n = +box.querySelector(`[data-regra="${k}"][data-parte="n"]`).value; f.regras[k] = [box.querySelector(`[data-regra="${k}"][data-parte="tipo"]`).value, n || f.regras[k]?.[1] || x.padrao[1]]; }
     else if (t.value !== "") f.regras[k] = +t.value;
   });

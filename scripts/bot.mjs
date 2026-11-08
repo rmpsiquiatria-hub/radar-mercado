@@ -14,7 +14,7 @@
 
 import { readFile, writeFile, mkdir, rm, readdir } from "node:fs/promises";
 import { FRAMES, candles, closedOnly, analisar } from "./tecnica-lib.mjs";
-import { iso, brt, casas, fmt, nfx, criarCarteira, preparar, simularDia, pisoDoMes, motivoLimite } from "../lib/bot-daytrade.js";
+import { iso, brt, casas, fmt, nfx, criarCarteira, preparar, serieIbov, simularDia, pisoDoMes, motivoLimite } from "../lib/bot-daytrade.js";
 import { normalizar } from "../lib/bot-regras.js";
 
 const rel = new URL("../relatorios/", import.meta.url);
@@ -205,6 +205,8 @@ async function daytrade() {
     return preparar(a, bars, R);
   });
   if (!dados.length) throw new Error("sem candles de 5 minutos");
+  const ibov5m = R.dt_ibov ? serieIbov(await candles("^BVSP", { range: "60d", interval: "5m" })) : null;
+  if (R.dt_ibov && !ibov5m.size) throw new Error("sem candles de 5 minutos do Ibovespa");
 
   // a day is closed once crypto's UTC day has ended (21h in Brasília); the bot runs at 21h30
   const agora = Date.now() / 1000, fechouHoje = (agora - 3 * 3600) % 86400 >= 21 * 3600;
@@ -216,7 +218,7 @@ async function daytrade() {
   for (const d of dias) {
     // the month's loss limit, from the patrimônio at the end of the previous month
     const base = est.dias.filter(x => x[0] < d.slice(0, 7) + "-01").at(-1)?.[1] ?? V0;
-    const w = simularDia(d, dados, { carteira, V0, V, R, deslize: FIXOS.deslize, piso: pisoDoMes(base, R) });
+    const w = simularDia(d, dados, { carteira, V0, V, R, deslize: FIXOS.deslize, piso: pisoDoMes(base, R), ibov: ibov5m });
     V.caixa = w.caixa;
     est.dias.push([d, +w.caixa.toFixed(2)]);
   }
