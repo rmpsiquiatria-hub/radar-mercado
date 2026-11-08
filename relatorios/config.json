@@ -19,15 +19,29 @@
     "lista": []
   },
   "bot": {
-    "valor_inicial": 1000000,
+    "valor_inicial": 100000,
     "modos": [
-      "diario",
-      "semanal",
       "daytrade"
     ],
-    "ativado_em": "2026-11-07",
+    "ativado_em": "2026-11-08",
     "regras": {
       "pontuacao_min": 1,
+      "mm_curta": [
+        "mme",
+        9
+      ],
+      "mm_media": [
+        "mms",
+        21
+      ],
+      "mm_rapida": [
+        "mms",
+        50
+      ],
+      "mm_lenta": [
+        "mms",
+        200
+      ],
       "max_posicoes": 1,
       "stop_atr": 2,
       "trailing_atr": 3,
@@ -37,21 +51,33 @@
       "vender_tendencia": false,
       "evitar_conflito": true,
       "mercados": [
-        "b3",
-        "eua",
-        "cripto"
+        "b3"
       ],
       "historico_meses": 3,
       "perda_mensal_pct": 6,
-      "dt_alvo_pct": 4,
+      "dt_alvo_pct": 2,
       "dt_stop_pct": 1,
       "dt_max_posicoes": 5,
-      "dt_inicio_min": 15,
+      "dt_inicio_min": 60,
       "dt_ultima_min": 60,
       "dt_zerar_min": 15,
       "dt_b3_top": 30,
       "dt_vwap": false,
-      "dt_sair_cruzamento": false,
+      "dt_mm_curta": [
+        "mme",
+        9
+      ],
+      "dt_mm_longa": [
+        "mme",
+        21
+      ],
+      "dt_sair_cruzamento": true,
+      "dt_comprar_cruzamento": true,
+      "dt_comprar_suporte": true,
+      "dt_vender_resistencia": true,
+      "dt_sr_candles": 20,
+      "dt_volume": true,
+      "dt_volume_n": 20,
       "dtc_mult": 2.5,
       "dtc_media": 20,
       "dtc_rr": 2,
