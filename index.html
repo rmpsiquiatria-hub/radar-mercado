@@ -580,6 +580,16 @@ table.bot-t td { vertical-align: top; } table.bot-t th:nth-child(-n+4), table.bo
 .bot-mot { display: inline-block; white-space: normal; max-width: 340px; line-height: 1.35; }
 .bot-vivo { color: #dc2626; font-weight: 700; } span.bot-vivo { animation: botPulse 1.6s ease-in-out infinite; } @keyframes botPulse { 50% { opacity: .25; } }
 .bot-per { margin: 4px 0 10px; font-size: 14px; }
+.bot-rodando { display: flex; gap: 14px; align-items: center; padding: 16px; margin-bottom: 14px; border: 2px solid var(--accent); border-radius: 12px; background: var(--accent-soft); }
+.bot-rodando > div { flex: 1; min-width: 0; } .bot-rodando p { margin: 6px 0 0; font-size: 14px; } .bot-rodando-t { font-size: 17px; }
+.bot-gira { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 4px solid var(--line); border-top-color: var(--accent); animation: botGira 1s linear infinite; }
+.bot-barra { height: 8px; margin-top: 10px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.bot-barra i { display: block; width: 35%; height: 100%; border-radius: 4px; background: var(--accent); animation: botBarra 1.6s ease-in-out infinite; }
+.bot-antigo { opacity: .45; }
+.bot-pronto { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; margin-bottom: 14px; border: 2px solid var(--up); border-radius: 12px; background: var(--up-soft); font-size: 15px; }
+.bot-pronto button { border: 0; background: none; color: inherit; font-size: 16px; cursor: pointer; padding: 2px 6px; }
+@keyframes botGira { to { transform: rotate(360deg); } } @keyframes botBarra { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
+@media (prefers-reduced-motion: reduce) { .bot-gira, .bot-barra i { animation: none; } }
 .bot-tot td { background: var(--panel-2); font-size: 14px; border-top: 2px solid var(--line); }
 .bot-gbtn { font-size: 12px; padding: 0; margin-top: 2px; }
 dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }

@@ -9,8 +9,10 @@
   const MERC = { b3: "B3", eua: "EUA", cripto: "Cripto" };
   const box = $("#botBox");
   const PAGINA = 20;                                   // history rows shown at a time
-  let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, msg = "", verMais = PAGINA, anteriores = [];
+  const ESPERA_MAX = 1200;                             // seconds before giving up on a run (the workflow's own limit)
+  let cfg, cfgOk = false, res = null, carregado = false, aguardando = null, fim = null, msg = "", verMais = PAGINA, anteriores = [];
   let SPEC = null, rascunho = null, aberto = null;     // the form being edited survives re-renders
+  let relogio = null, audio = null;                    // the running banner's clock and the "finished" sound
   let vivo = null, vivoBusy = false;                   // today's day trade, simulated live in the browser
   const ui = () => ({ modo: null, merc: "todos", lado: "todos", res: "todos", periodo: "tudo", de: "", ate: "", ...(state.botUi || {}) });
   // the date range of the history filter: [from, to] as YYYY-MM-DD (Brasília), either end may be ""
@@ -61,7 +63,7 @@
     const dtr = r?.modos?.daytrade, velha = dtr?.total_operacoes > dtr?.operacoes.length ? dtr.operacoes.at(-1)?.data.slice(0, 7) : null;
     anteriores = velha ? await fetch(`/relatorios/bot/daytrade/ops-${velha}.json`).then(x => x.ok ? x.json() : []).catch(() => []) : [];
     SPEC = s; cfgOk = !!p.configurado && !p.erro; cfg = p.bot || (cfgOk ? null : r?.config) || null; res = r; carregado = true;
-    if (aguardando && res && res.gerado_em > aguardando) { aguardando = null; msg = "✅ Simulação atualizada."; }
+    if (aguardando && res && res.gerado_em > aguardando) { marcarEspera(null); fim = "ok"; tocarFim(); }
     render();
     if (res?.modos?.daytrade) { await aoVivo(); render(); }
   }
@@ -220,8 +222,6 @@
     // every number below covers the same period: from the start of the test to the last closed day
     const fim = m.ultimo_candle || m.curva?.at(-1)?.[0], per = `de ${dt(m.inicio)} a ${dt(fim)}`;
     const dias = m.inicio && fim ? Math.round((Date.parse(fim) - Date.parse(m.inicio)) / 864e5) + 1 : null;
-    let topo = null, queda = null;
-    for (const c of m.curva || []) { if (c[1] == null) continue; if (!topo || c[1] > topo[1]) topo = c; const q = c[1] / topo[1] - 1; if (!queda || q < queda.q) queda = { q, de: topo[0], ate: c[0] }; }
     const fechadas = [...new Set(ops.map(o => pares.get(o)).filter(x => x?.fecha?.resultado_brl != null))];
     const soma = fechadas.reduce((s, x) => s + x.fecha.resultado_brl, 0), nLucro = fechadas.filter(x => x.fecha.resultado_brl > 0).length;
     const custoT = fechadas.reduce((s, x) => s + (x.fecha.custos_brl || 0) + (x.abre?.custos_brl || 0), 0);
@@ -235,7 +235,6 @@
         ${tot("Patrimônio", brl(m.patrimonio), `${pc(p.retorno_pct)} ${per}${dtr ? "" : ` · caixa ${brl(m.caixa)}`}`)}
         ${tot("Ibovespa no mesmo período", pc(p.ibov_pct), `${per} · se tivesse comprado o índice`)}
         ${tot("CDI no mesmo período", pc(p.cdi_pct), `${per} · renda fixa sem risco`)}
-        ${tot("Maior queda", pc(p.queda_maxima_pct), queda && queda.q < 0 ? `do topo em ${dt(queda.de)} ao fundo em ${dt(queda.ate)}` : "do topo ao fundo")}
         ${tot("Operações encerradas", `${p.operacoes}`, `${per} · cada uma é uma compra e a venda dela · ${p.acerto_pct == null ? "—" : nf(1).format(p.acerto_pct)}% com lucro · ganho médio ${pc(p.ganho_medio_pct)} · perda média ${pc(p.perda_media_pct)}`)}
         ${tot("Custos pagos", brl(p.custos_brl), `${per} · taxas e diferença de preço`)}
       </div>
@@ -422,18 +421,24 @@
     if (!carregado) { box.innerHTML = `<div class="empty">Carregando…</div>`; return; }
     const u = ui(), modos = res?.modos ? MODOS.filter(k => res.modos[k] && (cfg?.modos?.includes(k) ?? true)) : [];
     const k = modos.includes(u.modo) ? u.modo : modos[0];
-    const espera = aguardando ? `<div class="note">⏳ Simulando… o bot leva uns 3 a 5 minutos para refazer as contas e publicar. Esta página atualiza sozinha.</div>` : "";
+    const espera = aguardando ? `<div class="bot-rodando" role="status"><span class="bot-gira"></span><div>
+        <b class="bot-rodando-t">🤖 O bot está rodando a simulação…</b>
+        <p>Ele está refazendo as contas com as suas regras. Costuma levar de 3 a 5 minutos. Tempo até agora: <b class="num" id="botTempo">${tempoEspera()}</b></p>
+        <div class="bot-barra"><i></i></div>
+        <p class="hint">🔔 Um som avisa quando terminar. Pode usar outras abas, mas deixe esta aberta.${k ? " Os números abaixo ainda são os da simulação anterior." : ""}</p></div></div>`
+      : fim === "ok" ? `<div class="bot-pronto" role="status"><span>✅ <b>Simulação concluída!</b> Os números abaixo já são os novos.</span><button type="button" id="botFimOk" aria-label="Fechar aviso">✕</button></div>`
+      : fim ? `<div class="note">⏳ A simulação está demorando mais que o normal. Volte daqui a pouco: os números novos aparecem aqui quando ela terminar.</div>` : "";
     let corpo = "";
     if (!cfg) corpo = `<div class="empty">Escolha o valor inicial e o modo acima para o bot começar.</div>`;
     else if (!k) corpo = aguardando ? "" : `<div class="empty">Ainda não há resultado. Ele aparece alguns minutos depois de salvar.</div>`;
     else {
-      const comp = modos.length > 1 ? `<div class="card scroll"><table class="grid"><thead><tr><th>Modelo</th><th>Patrimônio</th><th>Retorno</th><th>Ibovespa</th><th>CDI</th><th>Maior queda</th><th>Operações</th><th>Com lucro</th><th>Período</th></tr></thead><tbody>
-        ${modos.map(x => { const m = res.modos[x], p = m.placar; return `<tr data-bot-modo="${x}"><td><b>${NOMES[x]}</b></td><td>${brl(m.patrimonio)}</td><td>${pc(p.retorno_pct)}</td><td>${pc(p.ibov_pct)}</td><td>${pc(p.cdi_pct)}</td><td>${pc(p.queda_maxima_pct)}</td><td>${p.operacoes}</td><td>${p.acerto_pct == null ? "—" : nf(1).format(p.acerto_pct) + "%"}</td><td>${dt(m.inicio)} a ${dt(m.ultimo_candle)}</td></tr>`; }).join("")}</tbody></table></div>
+      const comp = modos.length > 1 ? `<div class="card scroll"><table class="grid"><thead><tr><th>Modelo</th><th>Patrimônio</th><th>Retorno</th><th>Ibovespa</th><th>CDI</th><th>Operações</th><th>Com lucro</th><th>Período</th></tr></thead><tbody>
+        ${modos.map(x => { const m = res.modos[x], p = m.placar; return `<tr data-bot-modo="${x}"><td><b>${NOMES[x]}</b></td><td>${brl(m.patrimonio)}</td><td>${pc(p.retorno_pct)}</td><td>${pc(p.ibov_pct)}</td><td>${pc(p.cdi_pct)}</td><td>${p.operacoes}</td><td>${p.acerto_pct == null ? "—" : nf(1).format(p.acerto_pct) + "%"}</td><td>${dt(m.inicio)} a ${dt(m.ultimo_candle)}</td></tr>`; }).join("")}</tbody></table></div>
         <p class="hint">O day trade começa mais tarde porque só há cerca de 60 dias de candles de 5 minutos; compare os retornos sabendo disso.</p>` : "";
       corpo = `${comp}${modos.length > 1 ? `<div class="ftabs" role="tablist" style="margin-top:12px">${modos.map(x => `<button role="tab" data-bot-modo="${x}" aria-selected="${x === k}">${NOMES[x]}</button>`).join("")}</div>` : `<h4 class="sec-t">${NOMES[k]}</h4>`}
         ${modoHTML(k, res.modos[k])}${regrasHTML(res, k)}`;
     }
-    box.innerHTML = `${setup()}${espera}${corpo}
+    box.innerHTML = `${setup()}${espera}${aguardando ? `<div class="bot-antigo">${corpo}</div>` : corpo}
       <p class="note" style="margin-top:14px">Simulação com dinheiro imaginário, para estudar como regras de análise técnica teriam se saído. Não é recomendação de investimento, e resultado passado não garante resultado futuro.</p>`;
   }
 
@@ -443,19 +448,47 @@
     if (!f.escolha) { m.textContent = "Escolha o modo."; return; }
     if (SPEC && !f.regras.mercados?.length) { m.textContent = "Escolha pelo menos um mercado."; return; }
     const modos = f.escolha === "todos" ? MODOS : [f.escolha];
-    m.textContent = "Salvando…";
+    m.textContent = "Salvando…"; ligarSom();                 // the browser only allows sound that a click unlocked
     try {
       const r = await fetch("/api/preferencias", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bot: { valor_inicial: v, modos, ...(SPEC ? { regras: f.regras } : {}), reiniciar: !!$("#botReiniciar")?.checked } }) });
       const j = await r.json(); if (!r.ok || j.erro) throw new Error(j.erro || r.status);
       cfg = j.bot; rascunho = null; msg = j.mudou ? "" : "Nada mudou.";
-      if (j.mudou) { aguardando = new Date().toISOString(); aberto = { ...aberto, setup: false }; acompanhar(); }
+      if (j.mudou) { marcarEspera(new Date().toISOString()); fim = null; aberto = { ...aberto, setup: false }; acompanhar(); }
       render();
+      if (j.mudou) box.querySelector(".bot-rodando")?.scrollIntoView({ behavior: "smooth", block: "center" });
     } catch (e) { m.textContent = "Não consegui salvar: " + e.message; }
   }
-  // after saving, check every 30 s (up to 10 min) until the new result is published
+  // the wait survives a page reload, so the banner and the sound are not lost
+  function marcarEspera(v) {
+    aguardando = v;
+    try { v ? localStorage.setItem(KEY + ".botEspera", v) : localStorage.removeItem(KEY + ".botEspera"); } catch {}
+  }
+  const segundosEspera = () => Math.max(0, Math.floor((Date.now() - Date.parse(aguardando)) / 1000));
+  const tempoEspera = () => { const s = segundosEspera(); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+  // after saving, tick the clock every second and check every 30 s (up to 20 min) until the new result is published
   function acompanhar() {
-    let n = 0; const t = setInterval(() => { if (!aguardando || ++n > 20) { clearInterval(t); if (aguardando) { aguardando = null; msg = "A simulação está demorando; volte daqui a pouco."; render(); } return; } carregar(); }, 30000);
+    clearInterval(relogio);
+    let ultima = Date.now();
+    relogio = setInterval(() => {
+      if (!aguardando) return clearInterval(relogio);
+      const e = $("#botTempo"); if (e) e.textContent = tempoEspera();
+      if (segundosEspera() > ESPERA_MAX) { clearInterval(relogio); marcarEspera(null); fim = "demora"; return render(); }
+      if (Date.now() - ultima >= 30000) { ultima = Date.now(); carregar(); }
+    }, 1000);
+  }
+  function ligarSom() {
+    try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); if (audio.state === "suspended") audio.resume(); } catch {}
+  }
+  // three rising notes when the simulation is published
+  function tocarFim() {
+    if (audio?.state !== "running") return;
+    [[660, 0], [880, 0.16], [1175, 0.32]].forEach(([f, d]) => {
+      const o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime + d;
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+      o.connect(g).connect(audio.destination); o.start(t); o.stop(t + 0.55);
+    });
   }
 
   async function csv(k) {
@@ -500,6 +533,7 @@
   box?.addEventListener("click", e => {
     const t = e.target;
     if (t.closest("#botSalvar")) return salvar();
+    if (t.closest("#botFimOk")) { fim = null; return render(); }
     if (t.closest("#botPadrao")) { rascunho = { ...structuredClone(form()), regras: SPEC.padrao() }; return render(); }
     const gf = t.closest("[data-bot-graf]"); if (gf) return graficoOperacao(+gf.dataset.botGraf);
     if (t.closest("#botMais")) { verMais += PAGINA; return render(); }
@@ -528,5 +562,10 @@
     if (name === "bot" && !carregado) { render(); carregar(); }
   };
   document.querySelector(".csubs")?.addEventListener("click", e => { const b = e.target.closest("[data-csub]"); if (b) window.showCartSub(b.dataset.csub); });
+  try {
+    const s = localStorage.getItem(KEY + ".botEspera");
+    if (s && Date.now() - Date.parse(s) < ESPERA_MAX * 1000) { aguardando = s; document.addEventListener("pointerdown", ligarSom, { once: true }); acompanhar(); }
+    else if (s) localStorage.removeItem(KEY + ".botEspera");
+  } catch {}
   window.showCartSub();
 })();
