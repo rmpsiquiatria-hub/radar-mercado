@@ -341,6 +341,7 @@ dialog.vdlg::backdrop { background: rgba(5,10,14,.55); }
 .vprev-r { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 2px 0; }
 .vprev-r .hint { font-size: 11.5px; }
 .vdlg-f { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.alert-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 @media (max-width: 560px) { .vgrid { grid-template-columns: 1fr; } }
 .sec-t { font-size: 15px; margin: 22px 0 8px; }
@@ -687,8 +688,7 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
   <!-- ALERTAS -->
   <section data-panel="alerts" hidden>
     <div class="note" id="notifNote">Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). <button class="btn small" id="notifBtn" type="button">Ativar avisos no computador/celular</button></div>
-    <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">🔔 Alertas de preço</h3><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></div>
-    <div class="card" id="alertList"></div>
+    <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">🔔 Alertas de preço</h3><span class="alert-btns"><button class="btn" type="button" id="alertVer">📋 Ver alertas (0)</button><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></span></div>
     <h3 class="sec-t">📈 Sinais técnicos recentes <span class="hint" style="font-weight:400">· gráfico diário dos ativos vigiados, agrupados por ativo</span></h3>
     <div class="card tec-feed" id="tecFeed"></div>
     <p class="hint" id="tecResumo" style="margin-top:10px"></p>
@@ -795,6 +795,11 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
 
 <dialog id="simDlg" class="vdlg simdlg"><div class="card" id="simBody"></div></dialog>
 <dialog id="vDlg" class="vdlg"><div class="card" id="vDlgBody"></div></dialog>
+<dialog id="alertDlg" class="vdlg"><div class="card">
+  <div class="vdlg-h"><h2>🔔 Alertas de preço</h2><button type="button" class="icon-btn" data-alert-fechar aria-label="Fechar">✕</button></div>
+  <div id="alertList" style="margin-top:12px"></div>
+  <div class="vdlg-f"><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></div>
+</div></dialog>
 <div id="wins"></div>
 <div id="winDock" hidden></div>
 <script type="module">
@@ -1478,6 +1483,7 @@ function renderCart() {
 }
 function renderAlerts() {
   safeHTML($("#alertList"), priceAlertsView());
+  $("#alertVer").textContent = `📋 Ver alertas (${state.alerts.length})`;
   safeHTML($("#tecFeed"), tecFeedHTML());
   const tc = tecCfg(), on = TEC_TIPOS.filter(([k]) => tc.tipos[k]).length;
   safeHTML($("#tecResumo"), `Vigiando <b>${tecMonitored().length}</b> ativo(s)${tc.auto ? " (favoritos e carteira automaticamente)" : ""} em <b>${on} de ${TEC_TIPOS.length}</b> tipos de sinal. <button class="linkbtn" type="button" data-goto-alertas>Mudar em Configurações</button>`);
@@ -2148,6 +2154,9 @@ function renderNotif() {
   $("#notifBtn").hidden = !ok || p !== "default";
   if (p === "granted") $("#notifNote").firstChild.textContent = "Avisos ativados. Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). ";
 }
+$("#alertVer").addEventListener("click", () => $("#alertDlg").showModal());
+// closes on the backdrop, on ✕, and before going elsewhere: a chart or the settings would open behind it
+$("#alertDlg").addEventListener("click", e => { if (e.target === e.currentTarget || e.target.closest("[data-alert-fechar],[data-open],[data-goto-alertas]")) e.currentTarget.close(); });
 $("#notifBtn").addEventListener("click", async () => { try { await Notification.requestPermission(); } catch {} renderNotif(); beep(); });
 
 /* ---------- fichas dos padrões de candlestick ---------- */
