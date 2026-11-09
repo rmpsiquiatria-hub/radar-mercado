@@ -18,6 +18,9 @@
 // Expectativa de vida: World Bank SP.DYN.LE00.IN (UN estimates, yearly, includes the pandemic dip).
 // IDH: IPEA series IDHM, Brazil level (Atlas do Desenvolvimento Humano, PNUD/IPEA/FJP), yearly from
 //        2012 on PNAD data (the 1991/2000/2010 census values use another method, so they are left out).
+// Dívida pública: Central Bank SGS 13762 and 13761 (general government gross debt, % of GDP and R$ million;
+//        IPEA does not carry it); IPEA BM12_DTSPY12 and BM12_DTSPN12 (net public sector debt, same as SGS 4513
+//        and 4478); IBGE SIDRA table 6579 (population estimate), for the amount per person.
 
 import { json, bad } from "./_yahoo.js";
 
@@ -152,10 +155,20 @@ async function idh() {
   return { fonte: "Atlas do Desenvolvimento Humano (PNUD, IPEA, FJP), via IPEA", anos };
 }
 
+async function divida() {
+  const sgs = id => getJson(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${id}/dados?formato=json`)
+    .then(rows => rows.map(r => [`${r.data.slice(6)}-${r.data.slice(3, 5)}`, Number(r.valor)]).filter(([, v]) => Number.isFinite(v)));
+  const ipea = c => getJson(`http://www.ipeadata.gov.br/api/odata4/ValoresSerie(SERCODIGO='${c}')`)
+    .then(o => o.value.filter(r => r.VALVALOR != null).map(r => [r.VALDATA.slice(0, 7), r.VALVALOR]).sort((a, b) => a[0].localeCompare(b[0])));
+  const [bruta, brutaRs, liquida, liquidaRs, pop] = await Promise.all([sgs(13762), sgs(13761), ipea("BM12_DTSPY12"), ipea("BM12_DTSPN12"), getJson("https://apisidra.ibge.gov.br/values/t/6579/n1/all/v/9324/p/last%201")]);
+  if (!bruta.length || !liquida.length) throw new Error("sem dados");
+  return { bruta, liquida, bruta_rs: brutaRs.at(-1)[1] * 1e6, liquida_rs: liquidaRs.at(-1)[1] * 1e6, populacao: Number(pop[1].V), pop_ano: +pop[1].D3C };
+}
+
 export async function GET(request) {
   const longo = new URL(request.url).searchParams.has("historico");
-  const [s, i, d, sm, ev, ih, pb, pc, rd] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh(), pib(), pibpc(), renda()]);
+  const [s, i, d, sm, ev, ih, pb, pc, rd, dv] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh(), pib(), pibpc(), renda(), divida()]);
   if ([s, i, d].every(x => x.status === "rejected")) return bad("fontes indisponíveis", 502);
   const val = x => x.status === "fulfilled" ? x.value : { erro: String(x.reason?.message || x.reason) };
-  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih), pib: val(pb), pibpc: val(pc), renda: val(rd) }, 21600);
+  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih), pib: val(pb), pibpc: val(pc), renda: val(rd), divida: val(dv) }, 21600);
 }

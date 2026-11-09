@@ -1084,6 +1084,20 @@ function macroCards() {
       ${(() => { const r = cargaReais(ct[0]); return r?.total ? `<span class="idx-sub"><span>Em reais · ${ct[0]}</span><b class="num">R$ ${nf(2).format(r.total / 1e12)} tri</b></span>` : ""; })()}
       ${(() => { const r = cargaReais(ct[0]); return r?.pc ? `<span class="idx-sub" title="Carga tributária × PIB per capita: impostos do ano divididos por todos os habitantes"><span>Per capita · anual · ${ct[0]}</span><b class="num">R$ ${nf(0).format(r.pc)}</b><small class="num">(R$ ${nf(0).format(r.pc / 12)} por mês)</small></span>` : ""; })()}
     </button>`);
+  // Public debt card: gross on top, then net and the amount per person.
+  const dv = macro.divida;
+  if (dv?.bruta?.length) {
+    const b = dv.bruta, l = dv.liquida, pp = d => (d > 0 ? "+" : "") + nf(1).format(d) + " p.p. em 12m", dif = s => s.length > 12 ? s.at(-1)[1] - s.at(-13)[1] : null;
+    const db = dif(b), dl = dif(l), porPessoa = v => "R$ " + nf(0).format(v / dv.populacao);
+    out.push(`<button class="card idx macro" data-open="MACRO:divida" data-max="1" title="Dívida bruta do governo geral (Banco Central) · ver o histórico">
+      <div class="lbl">Dívida pública<span class="mk">${mesCurto(b.at(-1)[0])}</span></div>
+      <div class="px num">${nf(1).format(b.at(-1)[1])}% <span style="font-size:12px;font-weight:500">do PIB</span></div>
+      <div class="ch num flat">${db != null ? pp(db) : "&nbsp;"}</div>
+      <div class="since">bruta · R$ ${nf(2).format(dv.bruta_rs / 1e12)} tri</div>
+      <span class="idx-sub" title="Dívida bruta menos o que o setor público tem a receber, como as reservas internacionais"><span>Dívida líquida · ${mesCurto(l.at(-1)[0])}</span><b class="num">${nf(1).format(l.at(-1)[1])}% do PIB</b><small class="num">R$ ${nf(2).format(dv.liquida_rs / 1e12)} tri</small>${dl != null ? `<small class="num">${pp(dl)}</small>` : ""}</span>
+      <span class="idx-sub" title="Dívida dividida por todos os habitantes (IBGE, estimativa de ${dv.pop_ano}), inclusive crianças e quem não trabalha"><span>Por pessoa · bruta</span><b class="num">${porPessoa(dv.bruta_rs)}</b><small class="num">(líquida: ${porPessoa(dv.liquida_rs)})</small></span>
+    </button>`);
+  }
   const ev = macro.expvida?.anos, ih = macro.idh?.anos, id = IDEB.anos.at(-1), idp = IDEB.anos.at(-2);
   if (ev?.length > 1) { const [y, v] = ev.at(-1), d = v - ev.at(-2)[1];
     out.push(`<button class="card idx macro" data-open="MACRO:expvida" data-max="1" title="Quantos anos, em média, vive quem nasce hoje · ver o histórico">
@@ -1563,6 +1577,9 @@ function degraus(pts, ate) {
   return out;
 }
 Object.assign(MACRO_WIN, {
+  "MACRO:divida": { titulo: "Dívida pública", sub: "Em % do PIB · linha principal: dívida bruta do governo geral; também a dívida líquida do setor público", edu: "divida", fonte: "Banco Central (bruta, método atual) e IPEA (líquida, série do Banco Central)", principal: "Bruta",
+    serie: m => m.divida?.bruta, fmt: v => nf(1).format(v) + "% do PIB", dfmt: d => (d > 0 ? "+" : "") + nf(1).format(d) + " p.p.",
+    extras: () => { const d = macro?.divida; return d?.bruta ? [{ nome: "Líquida", cor: "var(--warn)", v: d.bruta.map(([k]) => valAt(d.liquida, k)) }] : []; } },
   "MACRO:pib": { titulo: "PIB", sub: "Crescimento real dos últimos 4 trimestres sobre os 4 anteriores, em % · dado trimestral", edu: "pib", fonte: "IBGE, Contas Nacionais Trimestrais, desde 1996",
     carregar: async () => { const q = macro?.pib?.quatro_tri_serie || (await loadMacroHist()).pib?.quatro_tri_serie; return degraus(q, q?.at(-1)?.[0]); }, fmt: v => pct(v), lagTxt: "em 12 meses" },
   "MACRO:pibpc": { titulo: "PIB per capita", sub: "PIB dividido pela população, em reais de cada ano (sem descontar a inflação) · dado anual", edu: "pibpc", fonte: "Banco Mundial (dados do IBGE), desde 1996",
@@ -2662,6 +2679,14 @@ function eduItems() {
       porque: "Mostra o peso do Estado na economia. Carga alta financia serviços públicos e reduz o déficit, mas encarece produtos e tira dinheiro de famílias e empresas. O Brasil cobra perto da média dos países ricos da OCDE (cerca de 34% do PIB) e bem acima da média da América Latina (cerca de 22%). A <b>reforma tributária</b>, em fase de teste desde 2026, vai trocar PIS, Cofins, IPI, ICMS e ISS por dois impostos sobre consumo (CBS e IBS) até 2033.",
       horario: [["Divulgação", "uma vez por ano, por volta de abril (Tesouro Nacional)"], ["Dado oficial", "a Receita Federal publica o seu cálculo mais tarde"]],
       nota: "Fonte: Tesouro Nacional, série de 2010 a 2025. O valor em reais é a porcentagem vezes o PIB do mesmo ano (IBGE); o valor por pessoa é a porcentagem vezes o PIB per capita (Banco Mundial), ou seja, divide os impostos por toda a população, inclusive crianças e quem não trabalha. Quem paga de fato varia muito: os impostos sobre consumo pesam mais, proporcionalmente, para quem ganha menos. Em 2026 o Tesouro revisou a metodologia de toda a série (tirou, por exemplo, os recursos do Fundeb e subsídios de energia), por isso alguns números antigos publicados na imprensa são diferentes. Os dados de 2025 ainda são preliminares." },
+    { id: "divida", titulo: "Dívida pública", sub: "Quanto o governo deve, em relação ao tamanho da economia",
+      valor: () => { const d = macro?.divida; if (!d?.bruta?.length) return ""; const b = d.bruta.at(-1), l = d.liquida.at(-1), pessoa = v => "R$ " + nf(0).format(v / d.populacao);
+        return `<b class="num">${nf(1).format(b[1])}% do PIB</b> <span class="hint">dívida bruta em ${mesCurto(b[0])}</span>
+          <table class="edu-t" style="margin-top:8px"><tr><th></th><th>Bruta</th><th>Líquida</th></tr><tr><td>% do PIB</td><td><b class="num">${nf(1).format(b[1])}%</b></td><td><b class="num">${nf(1).format(l[1])}%</b></td></tr><tr><td>Em reais</td><td><b class="num">R$ ${nf(2).format(d.bruta_rs / 1e12)} tri</b></td><td><b class="num">R$ ${nf(2).format(d.liquida_rs / 1e12)} tri</b></td></tr><tr><td>Por pessoa</td><td><b class="num">${pessoa(d.bruta_rs)}</b></td><td><b class="num">${pessoa(d.liquida_rs)}</b></td></tr></table>`; },
+      oque: "É tudo o que o governo deve, comparado com o <b>PIB</b>, o que o país produz em 12 meses. A <b>dívida bruta</b> soma o que devem o governo federal, o INSS, os estados e os municípios: é o número mais acompanhado. A <b>dívida líquida</b> olha também para o Banco Central e as estatais e desconta o que o setor público tem a receber, principalmente as <b>reservas internacionais</b>. Por isso é menor. Funciona como uma família que deve R$ 100 mil, mas tem R$ 15 mil guardados: a dívida bruta é 100, a líquida é 85.",
+      porque: "Quanto maior a dívida e mais rápido ela cresce, mais os investidores desconfiam da capacidade de pagamento e cobram <b>juros mais altos</b> para emprestar ao governo. Isso costuma encarecer o crédito, pressionar o dólar e deixar a bolsa e os títulos longos mais sensíveis. Por isso a <b>direção</b> importa mais que o número de um mês só. Ela depende do déficit do governo, dos juros e do crescimento do PIB.",
+      horario: [["Divulgação", "todo mês, pelo Banco Central, cerca de 30 a 40 dias depois do fim do mês"], ["Atualização aqui", "automática"]],
+      nota: "Fonte: Banco Central, com a série líquida obtida pelo IPEA. O valor por pessoa divide a dívida por todos os habitantes (estimativa de população do IBGE), inclusive crianças e quem não trabalha: serve para dar ideia do tamanho, não é uma conta que alguém recebe. A dívida bruta usa o método do Banco Central; o FMI usa outro critério e chega a um número maior, por isso os valores publicados podem ser diferentes. Quando o dólar sobe, as reservas valem mais em reais e a dívida líquida pode cair sem que o governo tenha economizado. Dados mensais servem como contexto, não como sinal de compra ou venda." },
     { id: "expvida", titulo: "Expectativa de vida", sub: "Quantos anos, em média, vive quem nasce hoje",
       valor: () => { const a = macro?.expvida?.anos; if (!a?.length) return ""; const [y, v] = a.at(-1), y20 = a.find(x => x[0] === y - 20);
         return `<b class="num">${nf(1).format(v)} anos em ${y}</b>${y20 ? ` <span class="hint">· ${nf(1).format(y20[1])} anos em ${y20[0]}</span>` : ""}`; },
