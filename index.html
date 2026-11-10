@@ -342,6 +342,8 @@ dialog.vdlg::backdrop { background: rgba(5,10,14,.55); }
 .vprev-r .hint { font-size: 11.5px; }
 .vdlg-f { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
 .alert-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+dialog.tecdlg { width: min(860px, calc(100vw - 20px)); }
+.toast.clica span { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 @media (max-width: 560px) { .vgrid { grid-template-columns: 1fr; } }
 .sec-t { font-size: 15px; margin: 22px 0 8px; }
@@ -689,8 +691,7 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
   <section data-panel="alerts" hidden>
     <div class="note" id="notifNote">Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). <button class="btn small" id="notifBtn" type="button">Ativar avisos no computador/celular</button></div>
     <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">🔔 Alertas de preço</h3><span class="alert-btns"><button class="btn" type="button" id="alertVer">📋 Ver alertas (0)</button><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></span></div>
-    <h3 class="sec-t">📈 Sinais técnicos recentes <span class="hint" style="font-weight:400">· gráfico diário dos ativos vigiados, agrupados por ativo</span></h3>
-    <div class="card tec-feed" id="tecFeed"></div>
+    <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">📈 Sinais técnicos recentes <span class="hint" style="font-weight:400">· gráfico diário dos ativos vigiados</span></h3><span class="alert-btns"><button class="btn primary" type="button" id="tecVer">📋 Ver sinais (0)</button></span></div>
     <p class="hint" id="tecResumo" style="margin-top:10px"></p>
   </section>
 
@@ -800,6 +801,12 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
   <div id="alertList" style="margin-top:12px"></div>
   <div class="vdlg-f"><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></div>
 </div></dialog>
+<dialog id="tecDlg" class="vdlg tecdlg"><div class="card">
+  <div class="vdlg-h"><h2>📈 Sinais técnicos recentes</h2><button type="button" class="icon-btn" data-alert-fechar aria-label="Fechar">✕</button></div>
+  <p class="hint" style="margin:4px 0 0">Gráfico diário dos ativos vigiados, agrupados por ativo.</p>
+  <div class="tec-feed" id="tecFeed" style="margin-top:8px"></div>
+  <div class="vdlg-f"><button class="btn" type="button" data-goto-alertas>⚙ Escolher ativos e tipos de sinal</button></div>
+</div></dialog>
 <div id="wins"></div>
 <div id="winDock" hidden></div>
 <script type="module">
@@ -887,11 +894,13 @@ function group(sym, q) {
   return "Exterior";
 }
 const GROUPS = ["Brasil (B3)", "Exterior", "Moedas", "Criptomoedas"];
-function toast(msg, alarm) {
+// `abrir`, when given, runs when the text is clicked (and closes the notice).
+function toast(msg, alarm, abrir) {
   const el = document.createElement("div");
-  el.className = "toast" + (alarm ? " alarm" : "");
+  el.className = "toast" + (alarm ? " alarm" : "") + (abrir ? " clica" : "");
   const txt = document.createElement("span"), x = document.createElement("button");
   txt.textContent = msg;
+  if (abrir) { txt.title = "Clique para ver"; txt.addEventListener("click", () => { el.remove(); abrir(); }); }
   x.type = "button"; x.className = "toast-x"; x.textContent = "✕"; x.title = "Fechar este aviso"; x.setAttribute("aria-label", "Fechar este aviso");
   x.addEventListener("click", () => el.remove());
   el.append(txt, x);
@@ -1512,6 +1521,8 @@ function renderAlerts() {
   safeHTML($("#alertList"), priceAlertsView());
   $("#alertVer").textContent = `📋 Ver alertas (${state.alerts.length})`;
   safeHTML($("#tecFeed"), tecFeedHTML());
+  const feed = tecCfg().feed, nNovos = feed.filter(n => !n.lido).length;
+  $("#tecVer").textContent = `📋 Ver sinais (${feed.length}${nNovos ? ` · ${nNovos} novo${nNovos > 1 ? "s" : ""}` : ""})`;
   const tc = tecCfg(), on = TEC_TIPOS.filter(([k]) => tc.tipos[k]).length;
   safeHTML($("#tecResumo"), `Vigiando <b>${tecMonitored().length}</b> ativo(s)${tc.auto ? " (favoritos e carteira automaticamente)" : ""} em <b>${on} de ${TEC_TIPOS.length}</b> tipos de sinal. <button class="linkbtn" type="button" data-goto-alertas>Mudar em Configurações</button>`);
   safeHTML($("#cfgPA"), priceAlertsHTML(true));
@@ -2129,7 +2140,7 @@ function showTab(name) {
   if (name === "edu") renderEdu();
   if (name === "cart") window.showCartSub?.();
   if (name === "config") renderConfig();
-  if (name === "alerts") { renderAlerts(); setTimeout(() => { const f = tecCfg().feed; if (f.some(x => !x.lido)) setTec({ feed: f.map(x => ({ ...x, lido: true })) }); }, 5000); }
+  if (name === "alerts") renderAlerts();
 }
 document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) showTab(b.dataset.tab); });
 document.querySelector("header").addEventListener("click", e => { const b = e.target.closest(".hdr-tab"); if (b) { showTab(b.dataset.tab); document.querySelector("nav.tabs").scrollIntoView({ behavior: "smooth", block: "start" }); } });
@@ -2188,6 +2199,12 @@ function renderNotif() {
   if (p === "granted") $("#notifNote").firstChild.textContent = "Avisos ativados. Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). ";
 }
 $("#alertVer").addEventListener("click", () => $("#alertDlg").showModal());
+$("#tecVer").addEventListener("click", abrirSinais);
+// Opens the technical signals popup from anywhere (the button, a notice or a system notification).
+function abrirSinais() { renderAlerts(); const d = $("#tecDlg"); if (!d.open) { document.querySelectorAll("dialog[open]").forEach(x => x.close()); d.showModal(); } }
+// The new ones stay highlighted while the popup is open, and count as seen once it is closed.
+$("#tecDlg").addEventListener("close", () => { const f = tecCfg().feed; if (f.some(x => !x.lido)) setTec({ feed: f.map(x => ({ ...x, lido: true })) }); renderAlerts(); });
+$("#tecDlg").addEventListener("click", e => { if (e.target === e.currentTarget || e.target.closest("[data-alert-fechar],[data-open],[data-sim],[data-goto-alertas]")) e.currentTarget.close(); });
 // closes on the backdrop, on ✕, and before going elsewhere: a chart or the settings would open behind it
 $("#alertDlg").addEventListener("click", e => { if (e.target === e.currentTarget || e.target.closest("[data-alert-fechar],[data-open],[data-goto-alertas]")) e.currentTarget.close(); });
 $("#notifBtn").addEventListener("click", async () => { try { await Notification.requestPermission(); } catch {} renderNotif(); beep(); });
@@ -2420,10 +2437,10 @@ function tecEvaluate() {
   for (const [k, t] of Object.entries(vistos)) if (t < limite) delete vistos[k];
   setTec({ vistos, feed: novos.concat(c.feed).slice(0, 150) });
   const lado = n => n.sinal === "alta" ? "▲ sinal de compra" : n.sinal === "baixa" ? "▼ sinal de venda" : "◆";
-  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`, true));
-  else toast(`📈 ${novos.length} novos sinais técnicos nos seus ativos — veja em Alertas`, true);
+  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`, true, abrirSinais));
+  else toast(`📈 ${novos.length} novos sinais técnicos nos seus ativos — clique para ver`, true, abrirSinais);
   beep();
-  try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); } catch {}
+  try { if (Notification.permission === "granted") { const nt = new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); nt.onclick = () => { window.focus(); abrirSinais(); nt.close(); }; } } catch {}
   renderAlerts();
 }
 
