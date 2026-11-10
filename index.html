@@ -351,6 +351,7 @@ dialog.vdlg::backdrop { background: rgba(5,10,14,.55); }
 .dono-bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
 dialog.tecdlg { width: min(860px, calc(100vw - 20px)); }
 .notif-abas { margin-top: 12px; flex-wrap: wrap; }
+.tec-filt .tec-limpar { margin-left: auto; }
 .toast.clica span { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 @media (max-width: 560px) { .vgrid { grid-template-columns: 1fr; } }
@@ -805,7 +806,7 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
 <dialog id="simDlg" class="vdlg simdlg"><div class="card" id="simBody"></div></dialog>
 <dialog id="vDlg" class="vdlg"><div class="card" id="vDlgBody"></div></dialog>
 <dialog id="notifDlg" class="vdlg tecdlg"><div class="card">
-  <div class="vdlg-h"><h2>🔔 Notificações</h2><button type="button" class="icon-btn" data-alert-fechar aria-label="Fechar">✕</button></div>
+  <div class="vdlg-h"><h2>🔔 Notificações</h2><span class="alert-btns"><button class="btn primary" type="button" data-goto-alertas>⚙ Configurar</button><button type="button" class="icon-btn" data-alert-fechar aria-label="Fechar">✕</button></span></div>
   <span class="seg notif-abas" role="group" aria-label="Tipo de notificação"><button type="button" data-notif-aba="sinais" aria-pressed="true">📈 Sinais automáticos</button><button type="button" data-notif-aba="precos" aria-pressed="false">🔔 Meus alertas de preço</button></span>
   <div data-notif-painel="sinais">
     <p class="hint" style="margin:8px 0 0">O site lê sozinho o gráfico diário dos ativos vigiados e avisa quando aparece um padrão de análise técnica.</p>
@@ -815,7 +816,6 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
     <p class="hint" style="margin:8px 0 0">Avisos que você criou para quando um ativo chegar a um preço escolhido.</p>
     <div id="alertList" style="margin-top:8px"></div>
   </div>
-  <div class="vdlg-f"><button class="btn primary" type="button" data-goto-alertas>⚙ Configurar notificações</button></div>
 </div></dialog>
 <div id="wins"></div>
 <div id="winDock" hidden></div>
@@ -2573,7 +2573,8 @@ function tecFeedHTML() {
       <span class="hint">São leituras do gráfico (análise técnica): probabilidades, não certezas. Não é recomendação de investimento.</span></div>`;
   const filters = `<div class="tec-filt">
       <span class="seg" role="group" aria-label="Lado">${[["todos", "Todos"], ["compra", "▲ Compra"], ["venda", "▼ Venda"]].map(([k, l]) => `<button type="button" data-tdir="${k}" aria-pressed="${tecDir === k}">${l}</button>`).join("")}</span>
-      <span class="seg" role="group" aria-label="Mercado">${[["todos", "Todos os mercados"], ...mkts.map(g => [g, g])].map(([k, l]) => `<button type="button" data-tmkt="${esc(k)}" aria-pressed="${tecMkt === k}">${esc(l)}</button>`).join("")}</span></div>`;
+      <span class="seg" role="group" aria-label="Mercado">${[["todos", "Todos os mercados"], ...mkts.map(g => [g, g])].map(([k, l]) => `<button type="button" data-tmkt="${esc(k)}" aria-pressed="${tecMkt === k}">${esc(l)}</button>`).join("")}</span>
+      <button class="btn small tec-limpar" data-tec-clear type="button" title="Apagar todos os sinais da lista">🗑 Limpar lista</button></div>`;
   const cards = [...by.entries()].map(([sym, list]) => {
     const q = quotes[sym], nC = list.filter(n => n.sinal === "alta").length, nV = list.filter(n => n.sinal === "baixa").length;
     const head = nC && nV ? `<span class="tside mix">▲▼ Sinais mistos</span>` : nC ? `<span class="tside up">▲ Sinal de compra</span>` : `<span class="tside down">▼ Sinal de venda</span>`;
@@ -2597,7 +2598,7 @@ function tecFeedHTML() {
       }).join("")}
     </article>`;
   }).join("");
-  return legend + filters + (cards || `<div class="empty">Nenhum sinal neste filtro.</div>`) + `<div class="row2" style="justify-content:flex-end"><button class="btn small" data-tec-clear type="button">Limpar lista</button></div>`;
+  return legend + filters + (cards || `<div class="empty">Nenhum sinal neste filtro.</div>`);
 }
 document.addEventListener("change", e => {
   const t = e.target;
