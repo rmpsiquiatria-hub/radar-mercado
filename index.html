@@ -342,6 +342,13 @@ dialog.vdlg::backdrop { background: rgba(5,10,14,.55); }
 .vprev-r .hint { font-size: 11.5px; }
 .vdlg-f { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
 .alert-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.donos { display: grid; }
+.dono { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.dono:last-child { border-bottom: 0; }
+.dono .hint { font-size: 12px; }
+.dono-v { text-align: right; display: grid; } .dono-v small { font-size: 11.5px; color: var(--muted); }
+.dono-bar { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--panel-2); }
+.dono-bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
 dialog.tecdlg { width: min(860px, calc(100vw - 20px)); }
 .toast.clica span { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
@@ -1020,6 +1027,26 @@ function cargaReais(y) {
 }
 // IDEB (0 to 10), every two years: [year, early primary (1º–5º), late primary (6º–9º), high school].
 // Brazil, all school networks. Typed in from INEP; the next edition (2027) comes out around August/2028.
+// Who holds the federal government's domestic bonds (DPMFi), from the Treasury's monthly debt report
+// (Relatório Mensal da Dívida, as released by the Ministério da Fazenda). Updated by hand each month;
+// "Governo e outros" is what is left to 100%.
+const DETENTORES = { mes: "2026-09", total: 9.037e12, dpfe_pct: 3.68, grupos: [
+  ["Bancos e outras instituições financeiras", 31.33, "aplicam o próprio caixa e usam os títulos como garantia"],
+  ["Fundos de investimento", 22.93, "inclusive os fundos de renda fixa em que muita gente aplica"],
+  ["Previdência", 22.41, "fundos de pensão e planos de previdência privada"],
+  ["Estrangeiros", 9.58, "investidores que moram fora do Brasil"],
+  ["Seguradoras", 3.26, "guardam reservas para pagar seguros"],
+  ["Tesouro Direto", 3.09, "pessoas que compram títulos direto pelo programa do Tesouro"],
+  ["Governo e outros", 7.40, "órgãos e fundos do próprio governo e demais grupos"],
+] };
+function detentoresHTML() {
+  const D = DETENTORES, max = Math.max(...D.grupos.map(g => g[1]));
+  return `<h4>Para quem o governo deve</h4>
+    <div class="donos">${D.grupos.map(([nome, p, quem]) => `<div class="dono"><div><b>${nome}</b><div class="hint">${quem}</div></div>
+      <div class="dono-v"><b class="num">${nf(1).format(p)}%</b><small class="num">R$ ${nf(2).format(D.total * p / 100 / 1e12)} tri</small></div>
+      <div class="dono-bar"><i style="width:${(p / max * 100).toFixed(1)}%"></i></div></div>`).join("")}</div>
+    <p class="hint" style="margin-top:6px">Títulos do governo federal vendidos no Brasil (DPMFi): R$ ${nf(2).format(D.total / 1e12)} trilhões em ${mesCurto(D.mes)}. A parte devida em moeda estrangeira (${nf(1).format(D.dpfe_pct)}% da dívida federal) e as dívidas de estados e municípios ficam de fora.</p>`;
+}
 const IDEB = {
   fonte: "INEP/MEC, Brasil (todas as redes)",
   anos: [[2005, 3.8, 3.5, 3.4], [2007, 4.2, 3.8, 3.5], [2009, 4.6, 4.0, 3.6], [2011, 5.0, 4.1, 3.7], [2013, 5.2, 4.2, 3.7], [2015, 5.5, 4.5, 3.7],
@@ -2723,11 +2750,11 @@ function eduItems() {
     { id: "divida", titulo: "Dívida pública", sub: "Quanto o governo deve, em relação ao tamanho da economia",
       valor: () => { const d = macro?.divida; if (!d?.bruta?.length) return ""; const b = d.bruta.at(-1), l = d.liquida.at(-1), pessoa = v => "R$ " + nf(0).format(v / d.populacao);
         return `<b class="num">${nf(1).format(b[1])}% do PIB</b> <span class="hint">dívida bruta em ${mesCurto(b[0])}</span>
-          <table class="edu-t" style="margin-top:8px"><tr><th></th><th>Bruta</th><th>Líquida</th></tr><tr><td>% do PIB</td><td><b class="num">${nf(1).format(b[1])}%</b></td><td><b class="num">${nf(1).format(l[1])}%</b></td></tr><tr><td>Em reais</td><td><b class="num">R$ ${nf(2).format(d.bruta_rs / 1e12)} tri</b></td><td><b class="num">R$ ${nf(2).format(d.liquida_rs / 1e12)} tri</b></td></tr><tr><td>Por pessoa</td><td><b class="num">${pessoa(d.bruta_rs)}</b></td><td><b class="num">${pessoa(d.liquida_rs)}</b></td></tr></table>`; },
+          <table class="edu-t" style="margin-top:8px"><tr><th></th><th>Bruta</th><th>Líquida</th></tr><tr><td>% do PIB</td><td><b class="num">${nf(1).format(b[1])}%</b></td><td><b class="num">${nf(1).format(l[1])}%</b></td></tr><tr><td>Em reais</td><td><b class="num">R$ ${nf(2).format(d.bruta_rs / 1e12)} tri</b></td><td><b class="num">R$ ${nf(2).format(d.liquida_rs / 1e12)} tri</b></td></tr><tr><td>Por pessoa</td><td><b class="num">${pessoa(d.bruta_rs)}</b></td><td><b class="num">${pessoa(d.liquida_rs)}</b></td></tr></table>${detentoresHTML()}`; },
       oque: "É tudo o que o governo deve, comparado com o <b>PIB</b>, o que o país produz em 12 meses. A <b>dívida bruta</b> soma o que devem o governo federal, o INSS, os estados e os municípios: é o número mais acompanhado. A <b>dívida líquida</b> olha também para o Banco Central e as estatais e desconta o que o setor público tem a receber, principalmente as <b>reservas internacionais</b>. Por isso é menor. Funciona como uma família que deve R$ 100 mil, mas tem R$ 15 mil guardados: a dívida bruta é 100, a líquida é 85.",
       porque: "Quanto maior a dívida e mais rápido ela cresce, mais os investidores desconfiam da capacidade de pagamento e cobram <b>juros mais altos</b> para emprestar ao governo. Isso costuma encarecer o crédito, pressionar o dólar e deixar a bolsa e os títulos longos mais sensíveis. Por isso a <b>direção</b> importa mais que o número de um mês só. Ela depende do déficit do governo, dos juros e do crescimento do PIB.",
-      horario: [["Divulgação", "todo mês, pelo Banco Central, cerca de 30 a 40 dias depois do fim do mês"], ["Atualização aqui", "automática"]],
-      nota: "Fonte: Banco Central, com a série líquida obtida pelo IPEA. O valor por pessoa divide a dívida por todos os habitantes (estimativa de população do IBGE), inclusive crianças e quem não trabalha: serve para dar ideia do tamanho, não é uma conta que alguém recebe. A dívida bruta usa o método do Banco Central; o FMI usa outro critério e chega a um número maior, por isso os valores publicados podem ser diferentes. Quando o dólar sobe, as reservas valem mais em reais e a dívida líquida pode cair sem que o governo tenha economizado. Dados mensais servem como contexto, não como sinal de compra ou venda." },
+      horario: [["Divulgação", "todo mês, pelo Banco Central, cerca de 30 a 40 dias depois do fim do mês"], ["Atualização aqui", "automática"], ["Para quem o governo deve", "Tesouro Nacional, todo mês (aqui atualizado à mão)"]],
+      nota: "Fonte: Banco Central, com a série líquida obtida pelo IPEA. O valor por pessoa divide a dívida por todos os habitantes (estimativa de população do IBGE), inclusive crianças e quem não trabalha: serve para dar ideia do tamanho, não é uma conta que alguém recebe. A dívida bruta usa o método do Banco Central; o FMI usa outro critério e chega a um número maior, por isso os valores publicados podem ser diferentes. Quando o dólar sobe, as reservas valem mais em reais e a dívida líquida pode cair sem que o governo tenha economizado. Dados mensais servem como contexto, não como sinal de compra ou venda. Quem tem a dívida vem do Relatório Mensal da Dívida do Tesouro Nacional. Boa parte do que está com bancos, fundos e previdência é, no fim, dinheiro aplicado por famílias e empresas brasileiras." },
     { id: "expvida", titulo: "Expectativa de vida", sub: "Quantos anos, em média, vive quem nasce hoje",
       valor: () => { const a = macro?.expvida?.anos; if (!a?.length) return ""; const [y, v] = a.at(-1), y20 = a.find(x => x[0] === y - 20);
         return `<b class="num">${nf(1).format(v)} anos em ${y}</b>${y20 ? ` <span class="hint">· ${nf(1).format(y20[1])} anos em ${y20[0]}</span>` : ""}`; },
