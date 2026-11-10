@@ -350,6 +350,7 @@ dialog.vdlg::backdrop { background: rgba(5,10,14,.55); }
 .dono-bar { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--panel-2); }
 .dono-bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
 dialog.tecdlg { width: min(860px, calc(100vw - 20px)); }
+.notif-abas { margin-top: 12px; flex-wrap: wrap; }
 .toast.clica span { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 @media (max-width: 560px) { .vgrid { grid-template-columns: 1fr; } }
@@ -651,7 +652,7 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
       Radar do Mercado
     </div>
     <div class="status"><span class="dot" id="dot"></span><span id="stamp">Conectando…</span></div>
-    <button class="icon-btn hdr-tab" data-tab="alerts" title="Alertas" aria-label="Alertas">🔔<span class="hdr-badge" id="nAlerts" hidden>0</span></button>
+    <button class="icon-btn hdr-tab" data-tab="alerts" title="Notificações" aria-label="Notificações">🔔<span class="hdr-badge" id="nAlerts" hidden>0</span></button>
     <button class="icon-btn hdr-tab" data-tab="config" title="Configurações" aria-label="Configurações">⚙</button>
   </header>
 
@@ -697,9 +698,9 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
   <!-- ALERTAS -->
   <section data-panel="alerts" hidden>
     <div class="note" id="notifNote">Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). <button class="btn small" id="notifBtn" type="button">Ativar avisos no computador/celular</button></div>
-    <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">🔔 Alertas de preço</h3><span class="alert-btns"><button class="btn" type="button" id="alertVer">📋 Ver alertas (0)</button><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></span></div>
-    <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">📈 Sinais técnicos recentes <span class="hint" style="font-weight:400">· gráfico diário dos ativos vigiados</span></h3><span class="alert-btns"><button class="btn primary" type="button" id="tecVer">📋 Ver sinais (0)</button></span></div>
-    <p class="hint" id="tecResumo" style="margin-top:10px"></p>
+    <div class="vhead" style="margin-top:14px"><h3 class="sec-t" style="margin:0">🔔 Notificações</h3><span class="alert-btns"><button class="btn primary" type="button" id="notifVer">📋 Ver notificações</button><button class="btn" type="button" data-goto-alertas>⚙ Configurar</button></span></div>
+    <p class="hint" id="notifResumo" style="margin-top:10px"></p>
+    <p class="hint" id="tecResumo" style="margin-top:6px"></p>
   </section>
 
   <!-- RELATÓRIO -->
@@ -803,16 +804,18 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
 
 <dialog id="simDlg" class="vdlg simdlg"><div class="card" id="simBody"></div></dialog>
 <dialog id="vDlg" class="vdlg"><div class="card" id="vDlgBody"></div></dialog>
-<dialog id="alertDlg" class="vdlg"><div class="card">
-  <div class="vdlg-h"><h2>🔔 Alertas de preço</h2><button type="button" class="icon-btn" data-alert-fechar aria-label="Fechar">✕</button></div>
-  <div id="alertList" style="margin-top:12px"></div>
-  <div class="vdlg-f"><button class="btn primary" type="button" data-goto-alertas>⚙ Criar ou editar alertas</button></div>
-</div></dialog>
-<dialog id="tecDlg" class="vdlg tecdlg"><div class="card">
-  <div class="vdlg-h"><h2>📈 Sinais técnicos recentes</h2><button type="button" class="icon-btn" data-alert-fechar aria-label="Fechar">✕</button></div>
-  <p class="hint" style="margin:4px 0 0">Gráfico diário dos ativos vigiados, agrupados por ativo.</p>
-  <div class="tec-feed" id="tecFeed" style="margin-top:8px"></div>
-  <div class="vdlg-f"><button class="btn" type="button" data-goto-alertas>⚙ Escolher ativos e tipos de sinal</button></div>
+<dialog id="notifDlg" class="vdlg tecdlg"><div class="card">
+  <div class="vdlg-h"><h2>🔔 Notificações</h2><button type="button" class="icon-btn" data-alert-fechar aria-label="Fechar">✕</button></div>
+  <span class="seg notif-abas" role="group" aria-label="Tipo de notificação"><button type="button" data-notif-aba="sinais" aria-pressed="true">📈 Sinais automáticos</button><button type="button" data-notif-aba="precos" aria-pressed="false">🔔 Meus alertas de preço</button></span>
+  <div data-notif-painel="sinais">
+    <p class="hint" style="margin:8px 0 0">O site lê sozinho o gráfico diário dos ativos vigiados e avisa quando aparece um padrão de análise técnica.</p>
+    <div class="tec-feed" id="tecFeed" style="margin-top:8px"></div>
+  </div>
+  <div data-notif-painel="precos" hidden>
+    <p class="hint" style="margin:8px 0 0">Avisos que você criou para quando um ativo chegar a um preço escolhido.</p>
+    <div id="alertList" style="margin-top:8px"></div>
+  </div>
+  <div class="vdlg-f"><button class="btn primary" type="button" data-goto-alertas>⚙ Configurar notificações</button></div>
 </div></dialog>
 <div id="wins"></div>
 <div id="winDock" hidden></div>
@@ -1546,10 +1549,12 @@ function renderCart() {
 }
 function renderAlerts() {
   safeHTML($("#alertList"), priceAlertsView());
-  $("#alertVer").textContent = `📋 Ver alertas (${state.alerts.length})`;
   safeHTML($("#tecFeed"), tecFeedHTML());
-  const feed = tecCfg().feed, nNovos = feed.filter(n => !n.lido).length;
-  $("#tecVer").textContent = `📋 Ver sinais (${feed.length}${nNovos ? ` · ${nNovos} novo${nNovos > 1 ? "s" : ""}` : ""})`;
+  const feed = tecCfg().feed, nNovos = feed.filter(n => !n.lido).length, nP = state.alerts.length, novosTxt = nNovos ? ` · ${nNovos} novo${nNovos > 1 ? "s" : ""}` : "";
+  $('[data-notif-aba="sinais"]').textContent = `📈 Sinais automáticos (${feed.length}${novosTxt})`;
+  $('[data-notif-aba="precos"]').textContent = `🔔 Meus alertas de preço (${nP})`;
+  $("#notifVer").textContent = `📋 Ver notificações (${feed.length + nP}${novosTxt})`;
+  $("#notifResumo").textContent = `${feed.length} sinal(is) automático(s)${novosTxt} e ${nP} alerta(s) de preço criados por você.`;
   const tc = tecCfg(), on = TEC_TIPOS.filter(([k]) => tc.tipos[k]).length;
   safeHTML($("#tecResumo"), `Vigiando <b>${tecMonitored().length}</b> ativo(s)${tc.auto ? " (favoritos e carteira automaticamente)" : ""} em <b>${on} de ${TEC_TIPOS.length}</b> tipos de sinal. <button class="linkbtn" type="button" data-goto-alertas>Mudar em Configurações</button>`);
   safeHTML($("#cfgPA"), priceAlertsHTML(true));
@@ -2170,7 +2175,7 @@ function showTab(name) {
   if (name === "alerts") renderAlerts();
 }
 document.querySelector("nav.tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) showTab(b.dataset.tab); });
-document.querySelector("header").addEventListener("click", e => { const b = e.target.closest(".hdr-tab"); if (b) { showTab(b.dataset.tab); document.querySelector("nav.tabs").scrollIntoView({ behavior: "smooth", block: "start" }); } });
+document.querySelector("header").addEventListener("click", e => { const b = e.target.closest(".hdr-tab"); if (b) { showTab(b.dataset.tab); if (b.dataset.tab === "alerts") abrirNotif(); document.querySelector("nav.tabs").scrollIntoView({ behavior: "smooth", block: "start" }); } });
 
 $("#favList").addEventListener("click", e => {
   const b = e.target.closest("[data-ftab]"); if (!b) return;
@@ -2213,8 +2218,8 @@ function checkAlerts() {
     if (a.op === ">" ? q.price >= a.value : q.price <= a.value) {
       a.fired = Date.now(); changed = true;
       const msg = `${short(a.symbol)} ${a.op === ">" ? "subiu acima de" : "caiu abaixo de"} ${money(a.value, q.currency, q.type)} — agora ${money(q.price, q.currency, q.type)}${tagCarteira(a.symbol)}`;
-      toast("🔔 " + msg, true); beep();
-      try { if (Notification.permission === "granted") new Notification("Radar do Mercado", { body: msg, tag: a.id }); } catch {}
+      toast("🔔 " + msg, true, () => abrirNotif("precos")); beep();
+      try { if (Notification.permission === "granted") { const nt = new Notification("Radar do Mercado", { body: msg, tag: a.id }); nt.onclick = () => { window.focus(); abrirNotif("precos"); nt.close(); }; } } catch {}
     }
   }
   if (changed) { save(); renderAlerts(); }
@@ -2225,15 +2230,26 @@ function renderNotif() {
   $("#notifBtn").hidden = !ok || p !== "default";
   if (p === "granted") $("#notifNote").firstChild.textContent = "Avisos ativados. Os alertas funcionam enquanto esta página estiver aberta (pode ficar em outra aba). ";
 }
-$("#alertVer").addEventListener("click", () => $("#alertDlg").showModal());
-$("#tecVer").addEventListener("click", abrirSinais);
-// Opens the technical signals popup from anywhere (the button, a notice or a system notification).
-function abrirSinais() { renderAlerts(); const d = $("#tecDlg"); if (!d.open) { document.querySelectorAll("dialog[open]").forEach(x => x.close()); d.showModal(); } }
-// The new ones stay highlighted while the popup is open, and count as seen once it is closed.
-$("#tecDlg").addEventListener("close", () => { const f = tecCfg().feed; if (f.some(x => !x.lido)) setTec({ feed: f.map(x => ({ ...x, lido: true })) }); renderAlerts(); });
-$("#tecDlg").addEventListener("click", e => { if (e.target === e.currentTarget || e.target.closest("[data-alert-fechar],[data-open],[data-sim],[data-goto-alertas]")) e.currentTarget.close(); });
-// closes on the backdrop, on ✕, and before going elsewhere: a chart or the settings would open behind it
-$("#alertDlg").addEventListener("click", e => { if (e.target === e.currentTarget || e.target.closest("[data-alert-fechar],[data-open],[data-goto-alertas]")) e.currentTarget.close(); });
+// One popup for both kinds of notice: the automatic technical signals and the user's price alerts.
+function notifAba(aba) {
+  document.querySelectorAll("[data-notif-aba]").forEach(b => b.setAttribute("aria-pressed", b.dataset.notifAba === aba));
+  document.querySelectorAll("[data-notif-painel]").forEach(p => p.hidden = p.dataset.notifPainel !== aba);
+}
+// Opens it from anywhere (the bell, the button, a notice or a system notification); with no tab given,
+// it opens on the signals when there are new ones or no price alerts, otherwise on the price alerts.
+function abrirNotif(aba) {
+  renderAlerts();
+  notifAba(aba || (tecCfg().feed.some(n => !n.lido) || !state.alerts.length ? "sinais" : "precos"));
+  const d = $("#notifDlg"); if (!d.open) { document.querySelectorAll("dialog[open]").forEach(x => x.close()); d.showModal(); }
+}
+$("#notifVer").addEventListener("click", () => abrirNotif());
+// New signals stay highlighted while the popup is open, and count as seen once it is closed.
+$("#notifDlg").addEventListener("close", () => { const f = tecCfg().feed; if (f.some(x => !x.lido)) setTec({ feed: f.map(x => ({ ...x, lido: true })) }); renderAlerts(); });
+$("#notifDlg").addEventListener("click", e => {
+  const ab = e.target.closest("[data-notif-aba]"); if (ab) { notifAba(ab.dataset.notifAba); return; }
+  // closes on the backdrop, on ✕, and before going elsewhere: a chart or the settings would open behind it
+  if (e.target === e.currentTarget || e.target.closest("[data-alert-fechar],[data-open],[data-sim],[data-goto-alertas]")) e.currentTarget.close();
+});
 $("#notifBtn").addEventListener("click", async () => { try { await Notification.requestPermission(); } catch {} renderNotif(); beep(); });
 
 /* ---------- fichas dos padrões de candlestick ---------- */
@@ -2464,10 +2480,10 @@ function tecEvaluate() {
   for (const [k, t] of Object.entries(vistos)) if (t < limite) delete vistos[k];
   setTec({ vistos, feed: novos.concat(c.feed).slice(0, 150) });
   const lado = n => n.sinal === "alta" ? "▲ sinal de compra" : n.sinal === "baixa" ? "▼ sinal de venda" : "◆";
-  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`, true, abrirSinais));
-  else toast(`📈 ${novos.length} novos sinais técnicos nos seus ativos — clique para ver`, true, abrirSinais);
+  if (novos.length <= 3) novos.forEach(n => toast(`📈 ${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`, true, () => abrirNotif("sinais")));
+  else toast(`📈 ${novos.length} novos sinais técnicos nos seus ativos — clique para ver`, true, () => abrirNotif("sinais"));
   beep();
-  try { if (Notification.permission === "granted") { const nt = new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); nt.onclick = () => { window.focus(); abrirSinais(); nt.close(); }; } } catch {}
+  try { if (Notification.permission === "granted") { const nt = new Notification("Radar do Mercado", { body: novos.slice(0, 4).map(n => `${short(n.sym)} · ${lado(n)}: ${n.titulo}${tagCarteira(n.sym)}`).join("\n") + (novos.length > 4 ? `\n…e mais ${novos.length - 4}` : ""), tag: "tec" }); nt.onclick = () => { window.focus(); abrirNotif("sinais"); nt.close(); }; } } catch {}
   renderAlerts();
 }
 
