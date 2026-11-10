@@ -1,33 +1,27 @@
 {
- "data": "2026-11-09",
- "gerado_em": "2026-11-09T18:58:29.264Z",
- "pesquisa_data": "2026-11-09",
+ "data": "2026-11-10",
+ "gerado_em": "2026-11-10T09:11:10.031Z",
+ "pesquisa_data": "2026-11-10",
  "indicadores_data": "2026-11-09",
- "resumo_mercado": "Segundo InfoMoney e Money Times, o Ibovespa fechou sexta (6/11) em alta de 1,39%, a 168.498 pontos, e teve a primeira semana positiva após três; o dólar subiu cerca de 0,4%, a R$ 5,51, maior fechamento desde dezembro de 2025, e os juros futuros recuaram na curva. O payroll americano veio forte, elevou os yields dos Treasuries e as apostas de nova alta de juros do Fed em dezembro. Em Nova York, relato isolado aponta Nasdaq +1,09%, S&P 500 +0,32% e Dow -0,46%. Para segunda, o InfoMoney cita o Ibovespa tentando firmar fundo perto de 164 mil pontos e o dólar em sobrecompra técnica.",
+ "resumo_mercado": "Segundo as fontes, o Ibovespa fechou a segunda-feira (9/11) em alta de 2,22%, aos 172.236 pontos, a maior alta diária desde outubro, puxado por bancos e mineradoras. O dólar comercial recuou 0,06%, a R$ 5,5048, e o petróleo Brent caiu 5,85% após falas de Trump sobre o Irã. A bolsa recuperou parte de três semanas seguidas de perdas. Não foram localizados nas fontes consultadas dados confirmados de juros futuros, Wall Street e destaques da agenda de hoje (10/11).",
  "fontes_mercado": [
   {
-   "nome": "InfoMoney",
-   "titulo": "Ibovespa fecha com ganhos e tem primeira semana positiva depois de três; dólar sobe",
-   "url": "https://www.infomoney.com.br/mercados/ibovespa-hoje-bolsa-de-valores-ao-vivo-06112026/",
-   "data": "2026-11-06"
-  },
-  {
-   "nome": "Money Times",
-   "titulo": "Payroll fecha semana antes de pronunciamento de Lula ao mercado; Ibovespa em dólar cai nesta sexta-feira (6)",
-   "url": "https://www.moneytimes.com.br/payroll-fecha-semana-antes-de-pronunciamento-de-lula-ao-mercado-ibovespa-em-dolar-cai-nesta-sexta-feira-6-rens/",
-   "data": "2026-11-06"
-  },
-  {
-   "nome": "InfoMoney",
-   "titulo": "Ibovespa tenta firmar fundo e dólar encosta em sobrecompra: o que vigiar na segunda?",
-   "url": "https://www.infomoney.com.br/mercados/ibovespa-tenta-firmar-fundo-e-dolar-encosta-em-sobrecompra-o-que-vigiar-na-segunda/",
+   "nome": "Metrópoles",
+   "titulo": "Ibovespa sobe 2,22%. Dólar tem baixa e termina o dia cotado a R$ 5,50",
+   "url": "https://www.metropoles.com/brasil/ibovespa-sobe-222-dolar-tem-baixa-e-termina-o-dia-cotado-a-r-550",
    "data": "2026-11-09"
   },
   {
-   "nome": "Journal Arta",
-   "titulo": "Wall Street close: Nasdaq rises 1.09% and S&P 500 gains 0.32% as Dow slips 0.46%",
-   "url": "https://journalarta.com/en/2026/11/07/wall-street-close-nasdaq-rises-1-09-and-sp-500-gains-0-32-as-dow-slips-0-46/",
-   "data": "2026-11-07"
+   "nome": "PAIPEE",
+   "titulo": "Ibovespa avança 2,22% e dólar recua, encerrando o dia a R$ 5,50",
+   "url": "https://br.paipee.com/2026/11/09/ibovespa-avanca-222-e-dolar-recua-encerrando-o-dia-a-r-550/",
+   "data": "2026-11-09"
+  },
+  {
+   "nome": "Campo Grande News",
+   "titulo": "Dólar fecha em queda a R$ 5,50 e Ibovespa sobe 2,22%",
+   "url": "https://www.campograndenews.com.br/economia/dolar-abre-semana-em-queda-e-fecha-cotado-a-r-5-50",
+   "data": "2026-11-09"
   }
  ],
  "tecnica_data": "2026-11-09",
@@ -7361,12 +7355,6 @@
    },
    "mudancas": [
     {
-     "tipo": "resultado",
-     "descricao": "Klabin reportou lucro de R$ 393 milhões no 3T26 (-18% a/a) e Ebitda ajustado de R$ 1,856 bi (-12%); ação caiu cerca de 6,8% no dia. BB manteve compra (alvo R$ 23).",
-     "fonte": "Money Times / BB Investalk",
-     "data": "2026-10-28"
-    },
-    {
      "tipo": "outro",
      "descricao": "BTG Pactual lista recomendação neutra e preço-alvo de R$ 23 para KLBN11, vendo o 3T26 praticamente em linha.",
      "fonte": "BTG Pactual Research",
@@ -13150,14 +13138,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Usiminas reverteu prejuízo e lucrou R$ 243 milhões no 3T26, mas o balanço ficou abaixo do esperado; ações chegaram a cair cerca de 4%.",
-     "fonte": "Seu Dinheiro",
-     "data": "2026-10-30"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Seu Dinheiro",
@@ -15323,12 +15304,6 @@
     ]
    },
    "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Apple reportou lucro por ação de US$ 2,10 e receita de US$ 114,48 bilhões no 4º tri fiscal, acima das estimativas LSEG; ações caíram cerca de 3% após o fechamento por projeção de margem bruta abaixo do esperado, segundo o Yahoo Finance.",
-     "fonte": "Yahoo Finance",
-     "data": "2026-11-02"
-    },
     {
      "tipo": "elevacao",
      "descricao": "UBS elevou o preço-alvo de US$ 296 para US$ 340, mantendo neutro; Barclays elevou de US$ 245 para US$ 261, mantendo underweight, após o balanço.",
