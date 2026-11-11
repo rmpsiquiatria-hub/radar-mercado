@@ -1,493 +1,339 @@
 {
- "data": "2026-11-09",
- "gerado_em": "2026-11-10T05:30:00-03:00",
+ "data": "2026-11-10",
+ "gerado_em": "2026-11-11T08:09:59.644Z",
  "resumo": {
-  "federal": "O destaque é o Decreto 13.159, que prorroga até 9/12/2026 o PIS/Cofins e a Cide zerados sobre a gasolina, e o PIS/Cofins zerado sobre o etanol hidratado. Uma Medida Provisória estende o Auxílio Gás do Povo até 2031. A Anatel passou a exigir que operadoras de celular atendam clientes de outras operadoras (roaming) em rodovias e em cidades pequenas, e aprovou novo regulamento do espectro de radiofrequências. O Ministério da Saúde criou repasse extra a municípios para combater o sarampo.",
-  "estadual": "A Receita Estadual do RS mudou a regra do registro de passagem fiscal de mercadorias e divulgou nova lista de empresas no projeto-piloto do IBS. A Fepam alterou a norma sobre água de reuso, a Seduc listou as escolas de tempo integral de 2027 e a Agergs definiu regras de progressão de seus servidores.",
-  "municipal": "Lajeado publicou três atos de pessoal (nomeações de professor e de enfermeiras aprovados em concurso); nenhuma mudança de regra geral."
+  "federal": "Dia sem lei ou decreto no Diário Oficial da União. O destaque é a regra de avaliação anual dos médicos do Mais Médicos, com desligamento em caso de conceito insatisfatório. Também saíram regras sobre apostas (bets), CONFAZ/ICMS, CARF, antidumping de fibra de poliéster e conselhos da criança e do adolescente.",
+  "estadual": "O governador publicou dois decretos que mudam o regulamento do ICMS (isenção para medicamentos de laboratórios públicos e para um equipamento importado em Gramado), transformou uma escola de Lajeado em escola de ensino médio e alterou 20 decretos de comitês de bacias hidrográficas. O IGP fixou regras para advogados acompanharem exames médico-legais e a Seduc aprovou as matrizes curriculares de 2027.",
+  "municipal": "A fonte de Lajeado falhou (HTTP 500), então não foi possível verificar as publicações do município neste dia."
  },
  "destaques": [
   {
-   "id": "dou-743190422",
-   "relevancia": "alta",
-   "area": "fazenda",
-   "temas": [
-    "tributos",
-    "combustíveis"
-   ],
-   "o_que_muda": "O governo prorrogou por mais 30 dias, até 9/12/2026, a alíquota zero de PIS/Pasep, Cofins e Cide sobre a gasolina e de PIS/Pasep e Cofins sobre o etanol hidratado. Sem a prorrogação, os tributos voltariam a ser cobrados. Para o consumidor, o imposto federal sobre a gasolina continua zerado (não aumenta).",
-   "quem_afeta": "Motoristas, postos, distribuidoras e importadores de gasolina e etanol.",
-   "vigencia": "Na publicação; vale de 10/10/2026 a 9/12/2026.",
-   "imposto": {
-    "tributo": "PIS/Cofins + Cide sobre a gasolina (por litro)",
-    "antes": "R$ 0,89 por litro (R$ 0,79 de PIS/Cofins + R$ 0,10 de Cide), valor cheio que voltaria sem a prorrogação (não confirmado)",
-    "depois": "R$ 0,00 até 9/12/2026",
-    "variacao_pct": -100,
-    "obs": "O decreto não traz o valor anterior. O R$ 0,89 vem de reportagens sobre a prorrogação (PAIPEE, 10/11/2026; Portal N10). Uma fonte (Retributaria) fala em redução de R$ 0,63 por litro só de PIS/Cofins em outubro, então a base de comparação não está totalmente clara. Etanol hidratado: desoneração de cerca de R$ 0,19 por litro, também até 9/12."
-   },
-   "esfera": "federal",
-   "titulo": "DECRETO Nº 13.159, DE 9 DE NOVEMBRO DE 2026",
-   "orgao": "Atos do Poder Executivo",
-   "tipo": "Decreto numerado",
-   "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.159-de-9-de-novembro-de-2026-743190422",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-742421812",
-   "relevancia": "alta",
-   "area": "outros",
-   "temas": [
-    "benefícios",
-    "assistência social"
-   ],
-   "o_que_muda": "A Medida Provisória 1.400 prorroga a vigência da lei do Auxílio Gás do Povo até 19/11/2031, para o benefício não acabar no prazo anterior.",
-   "quem_afeta": "Famílias de baixa renda que recebem o auxílio para comprar gás de cozinha.",
-   "vigencia": "Na publicação (MP precisa ser votada pelo Congresso).",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "MEDIDA PROVISÓRIA Nº 1.400, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Atos do Poder Judiciário / Plenário",
-   "tipo": "Medida Provisória",
-   "url": "https://www.in.gov.br/web/dou/-/medida-provisoria-n-1.400-de-6-de-novembro-de-2026-742421812",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-742435481",
-   "relevancia": "alta",
-   "area": "outros",
-   "temas": [
-    "telecomunicações",
-    "consumidor"
-   ],
-   "o_que_muda": "As operadoras de celular passam a ser obrigadas a atender clientes de outras operadoras (roaming) em rodovias federais e estaduais, em cidades com menos de 30 mil habitantes e em localidades que não são sede de município, onde a rede foi feita com compromisso de cobertura ou dinheiro público.",
-   "quem_afeta": "Usuários de celular que viajam por rodovias ou moram em cidades pequenas; operadoras de telefonia móvel.",
-   "vigencia": "Resolução vale em 30 dias; obrigações em 90 dias (cidades pequenas), 150 dias (localidades não sede) e 210 dias (rodovias) depois disso.",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO ANATEL Nº 794, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério das Comunicações / Conselho Diretor",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-anatel-n-794-de-6-de-novembro-de-2026-742435481",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-742419246",
+   "id": "dou-743268696",
    "relevancia": "alta",
    "area": "saude",
    "temas": [
     "saúde",
-    "vacinação"
+    "médicos"
    ],
-   "o_que_muda": "O Ministério da Saúde criou um repasse extra, em parcela única, a municípios listados em anexo para reforçar vacinação, vigilância e bloqueio de casos de sarampo.",
-   "quem_afeta": "Secretarias municipais de saúde dos municípios do anexo e equipes de vigilância e vacinação.",
-   "vigencia": "Na publicação.",
-   "imposto": null,
+   "o_que_muda": "Cria a avaliação anual obrigatória dos médicos do Projeto Mais Médicos para o Brasil, feita pelo supervisor e pela gestão local. Quem tiver conceito insatisfatório nas duas avaliações é desligado em até 30 dias e perde o direito à indenização por área de difícil fixação.",
+   "quem_afeta": "Médicos do Mais Médicos com pelo menos 12 meses de projeto; municípios e supervisores.",
+   "vigencia": "Na publicação (4/11/2026).",
    "esfera": "federal",
-   "titulo": "Portaria GM/MS Nº 12.281, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.281-de-6-de-novembro-de-2026-742419246",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-742460945",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "telecomunicações"
-   ],
-   "o_que_muda": "A Anatel aprovou o novo Regulamento de Uso do Espectro de Radiofrequências e mexeu em outras normas (equipamentos de radiação restrita, licenciamento, satélites), revogando quatro resoluções antigas.",
-   "quem_afeta": "Operadoras, radiodifusores, fabricantes e usuários de equipamentos que usam radiofrequência.",
-   "vigencia": "Na publicação.",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO ANATEL Nº 793, DE 5 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério das Comunicações / Conselho Diretor",
+   "titulo": "RESOLUÇÃO Nº 597, DE 4 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Saúde / Secretaria de Gestão do Trabalho e da Educação na Saúde",
    "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-anatel-n-793-de-5-de-novembro-de-2026-742460945",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-n-597-de-4-de-novembro-de-2026-743268696",
    "fonte": "DOU"
   },
   {
-   "id": "dou-742460703",
+   "id": "rs-1503491",
+   "relevancia": "alta",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "saúde",
+    "medicamentos"
+   ],
+   "o_que_muda": "Isenta de ICMS, em 2027 e 2028, a saída de certos medicamentos produzidos por laboratórios públicos oficiais (Fiocruz, Furp, Lafepe, Funed e outros) para órgãos públicos, desde que haja isenção ou alíquota zero de outros tributos federais.",
+   "quem_afeta": "Laboratórios públicos, órgãos de saúde que compram os medicamentos.",
+   "vigencia": "De 1º/01/2027 a 31/12/2028.",
+   "imposto": {
+    "tributo": "ICMS sobre medicamentos de laboratórios públicos vendidos a órgãos públicos",
+    "antes": "não encontrado",
+    "depois": "isento (R$ 0)",
+    "obs": "Isenção nova com base no Convênio ICMS 100/26; o valor anterior não foi pesquisado/confirmado. A lista de medicamentos está no Apêndice LI do decreto."
+   },
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.048, DE 7 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1503491",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1502105",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "perícia",
+    "médicos"
+   ],
+   "o_que_muda": "Define que o advogado só pode acompanhar um exame médico-legal se a pessoa examinada concordar de forma expressa e o perito médico-legista autorizar por escrito. A autorização pode ser parcial ou negada para proteger a intimidade.",
+   "quem_afeta": "Peritos médico-legistas, advogados e pessoas examinadas no IGP-RS.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "ORDEM DE SERVIÇO IGP N°. 09/2026",
+   "orgao": "Gabinete do Diretor-Geral",
+   "tipo": "Ordens de Serviço",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502105",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "dou-743271550",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "previdência"
+   ],
+   "o_que_muda": "A Receita Federal explica que, de 2025 a 2027, a empresa que contrata serviços com cessão de mão de obra de empresa na CPRB retém 3,5% da nota; a partir de 2028 a retenção volta a 11%. Sem opção regular pela CPRB, a retenção é de 11%.",
+   "quem_afeta": "Empresas contratantes de serviços com cessão de mão de obra e empresas na CPRB.",
+   "vigencia": "Retenção de 3,5% de 2025 a 2027; 11% a partir de 1º/01/2028.",
+   "esfera": "federal",
+   "titulo": "SOLUÇÃO DE CONSULTA Nº 219, DE 6 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Coordenação-Geral de Tributação",
+   "tipo": "Solução de Consulta",
+   "url": "https://www.in.gov.br/web/dou/-/solucao-de-consulta-n-219-de-6-de-novembro-de-2026-743271550",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-743556300",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "apostas",
+    "bets"
+   ],
+   "o_que_muda": "Define como os agentes operadores de apostas podem usar ou liberar a reserva financeira para devolver valores a apostadores, conforme a Medida Provisória 1.394/2026. Qualquer movimentação depende de autorização prévia da Secretaria de Prêmios e Apostas.",
+   "quem_afeta": "Empresas de apostas (bets) e apostadores.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "Instrução Normativa SPA/MF nº 32, DE 6 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria de Prêmios e Apostas",
+   "tipo": "Instrução Normativa",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-spa/mf-n-32-de-6-de-novembro-de-2026-743556300",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-743256804",
    "relevancia": "media",
    "area": "fazenda",
    "temas": [
     "comércio exterior",
     "tributos"
    ],
-   "o_que_muda": "A Gecex criou a Lista Temporária de Exceções à Tarifa Externa Comum do Mercosul (Letec+), com alíquotas de importação excepcionais e temporárias para produtos listados em anexo, e passou produtos do Anexo V para essa lista. Os valores por produto estão no anexo e não foram comparados aqui.",
-   "quem_afeta": "Importadores e indústrias que usam os produtos da lista.",
-   "vigencia": "Na publicação, conforme o texto.",
-   "imposto": null,
+   "o_que_muda": "O governo abriu avaliação de interesse público sobre a medida antidumping que encarece fibras de poliéster importadas da China, Índia, Tailândia e Vietnã. A medida continua valendo durante a avaliação.",
+   "quem_afeta": "Indústria têxtil e importadores de fibra de poliéster.",
+   "vigencia": "Avaliação inicia na publicação (9/11/2026).",
    "esfera": "federal",
-   "titulo": "RESOLUÇÃO GECEX Nº 978, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Presidência da República / Comitê-Executivo de Gestão",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-gecex-n-978-de-6-de-novembro-de-2026-742460703",
+   "titulo": "CIRCULAR Nº 107, DE 9 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços / Secretaria de Comércio Exterior",
+   "tipo": "Circular",
+   "url": "https://www.in.gov.br/web/dou/-/circular-n-107-de-9-de-novembro-de-2026-743256804",
    "fonte": "DOU"
   },
   {
-   "id": "dou-743191511",
+   "id": "dou-743261321",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "bancos",
+    "contabilidade"
+   ],
+   "o_que_muda": "O Banco Central ajusta contas contábeis dos bancos, incluindo novas contas para renegociação de dívidas rurais da MP 1.376/2026 e para recursos de municípios captados por cooperativas de crédito.",
+   "quem_afeta": "Bancos, cooperativas de crédito e demais instituições reguladas pelo BC.",
+   "vigencia": "Conforme o texto (sem data clara na triagem).",
+   "esfera": "federal",
+   "titulo": "INSTRUÇÃO NORMATIVA BCB Nº 786, DE 5 DE NOVEMBRO DE 2026",
+   "orgao": "Banco Central do Brasil / Departamento de Regulação do Sistema Financeiro",
+   "tipo": "Instrução Normativa",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-bcb-n-786-de-5-de-novembro-de-2026-743261321",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-743276586",
    "relevancia": "media",
    "area": "fazenda",
    "temas": [
     "tributos",
-    "reforma tributária"
+    "combustíveis"
    ],
-   "o_que_muda": "A Receita Federal definiu como estados, municípios e o Comitê Gestor do IBS pedem acesso aos dados compartilhados da reforma tributária: pedido digital com termo de responsabilidade assinado; pedido incompleto é negado automaticamente.",
-   "quem_afeta": "Fiscos estaduais e municipais e o Comitê Gestor do IBS.",
-   "vigencia": "Na publicação.",
-   "imposto": null,
+   "o_que_muda": "Divulga os novos preços médios de combustíveis usados como base de cálculo do ICMS. Em vários estados os valores mudaram; no RS, o etanol hidratado (R$ 4,3582/litro) e o GNV (R$ 5,3269/m³) aparecem sem marca de alteração.",
+   "quem_afeta": "Postos, distribuidoras e consumidores de combustíveis.",
+   "vigencia": "A partir de 16/11/2026.",
    "esfera": "federal",
-   "titulo": "PORTARIA RFB Nº 754, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-rfb-n-754-de-6-de-novembro-de-2026-743191511",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-743191618",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "mercado financeiro"
-   ],
-   "o_que_muda": "A CVM atualizou a norma das agências de classificação de risco de crédito (ratings), incluindo definições e a perspectiva de classificação.",
-   "quem_afeta": "Agências de rating e emissores de títulos.",
-   "vigencia": "Na publicação.",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "Resolução CVM nº 251, DE 5 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Gerência Executiva",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-cvm-n-251-de-5-de-novembro-de-2026-743191618",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-742641169",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "mercado financeiro"
-   ],
-   "o_que_muda": "A CVM ampliou a lista de certificações aceitas (CFP, ANBIMA C-Pro, CNCI, entre outras) na Resolução CVM 19.",
-   "quem_afeta": "Profissionais que atuam no mercado de valores mobiliários.",
-   "vigencia": "Na publicação.",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "Resolução CVM nº 250, de 5 de NOVEMBRO de 2026",
-   "orgao": "Ministério da Fazenda / Gerência Executiva",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-cvm-n-250-de-5-de-novembro-de-2026-742641169",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-742460207",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "educação"
-   ],
-   "o_que_muda": "O MEC alterou as regras das cotas nas instituições federais: a renda familiar passa a poder ser checada por dados do MEC e foi incluída a fórmula de vagas para quilombolas. Instituições têm 6 meses para se adaptar.",
-   "quem_afeta": "Candidatos a vagas por cotas em universidades e institutos federais.",
-   "vigencia": "Na publicação; adaptação das instituições em 6 meses.",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "PORTARIA MEC Nº 796, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Educação / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-796-de-6-de-novembro-de-2026-742460207",
+   "titulo": "ATO COTEPE/PMPF Nº 30, DE 9 de NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "tipo": "Ato Normativo",
+   "url": "https://www.in.gov.br/web/dou/-/ato-cotepe/pmpf-n-30-de-9-de-novembro-de-2026-743276586",
    "fonte": "DOU"
   },
   {
-   "id": "dou-742424451",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "servidores"
-   ],
-   "o_que_muda": "O INSS mudou a escala de notas da avaliação de desempenho (gratificação GDASS) e exige justificativa por escrito para cada nota.",
-   "quem_afeta": "Servidores da carreira do Seguro Social.",
-   "vigencia": "Na publicação.",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "INSTRUÇÃO NORMATIVA PRES/INSS Nº 216, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Previdência Social / Instituto Nacional do Seguro Social",
-   "tipo": "Instrução Normativa",
-   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-pres/inss-n-216-de-6-de-novembro-de-2026-742424451",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-743190557",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "agropecuária",
-    "sanidade animal"
-   ],
-   "o_que_muda": "O Ministério da Agricultura criou o regulamento técnico para produção, controle e uso de vacinas autógenas (feitas a partir de agentes isolados na própria propriedade).",
-   "quem_afeta": "Produtores rurais, veterinários e fabricantes de vacinas.",
-   "vigencia": "",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "PORTARIA SDA/MAPA Nº 1.707, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Agricultura e Pecuária / Secretaria de Defesa Agropecuária",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-sda/mapa-n-1.707-de-6-de-novembro-de-2026-743190557",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-743191964",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "indústria",
-    "meio ambiente"
-   ],
-   "o_que_muda": "O MDIC fixou regras para a compensação antecipada de materiais pela reciclagem de veículos em fim de vida e para o credenciamento de sistemas de rastreabilidade da desmontagem (Programa Mover).",
-   "quem_afeta": "Montadoras, desmontadoras e recicladoras de veículos.",
-   "vigencia": "",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "PORTARIA GM/MDIC Nº 325, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/mdic-n-325-de-6-de-novembro-de-2026-743191964",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-742640926",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "indústria"
-   ],
-   "o_que_muda": "O MDIC implementou o Grupo de Acompanhamento do Programa Mover e o Conselho Gestor do Observatório Nacional das Indústrias para a Mobilidade Verde.",
-   "quem_afeta": "Setor automotivo e órgãos do governo envolvidos no Mover.",
-   "vigencia": "",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "PORTARIA GM/MDIC Nº 326, DE 6 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/mdic-n-326-de-6-de-novembro-de-2026-742640926",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-743190737",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "educação",
-    "pós-graduação"
-   ],
-   "o_que_muda": "A Capes definiu regime de transição para processos de devolução de bolsa baseados só na não obtenção do título, ligado à Portaria 180/2026.",
-   "quem_afeta": "Bolsistas de pós-graduação (DS, Proex, Prosup, Prosuc).",
-   "vigencia": "",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "PORTARIA CAPES Nº 455, DE 4 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Educação",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-capes-n-455-de-4-de-novembro-de-2026-743190737",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-742641429",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "educação"
-   ],
-   "o_que_muda": "O Comitê do PAR definiu as regras do 5º ciclo do Plano de Ações Articuladas (Novo PAR, 2025-2028) entre União, estados e municípios.",
-   "quem_afeta": "Secretarias de educação de estados e municípios.",
-   "vigencia": "",
-   "imposto": null,
-   "esfera": "federal",
-   "titulo": "Resolução CEPAR Nº 1, DE 27 DE OUTUBRO DE 2026",
-   "orgao": "Ministério da Educação / Comitê Estratégico do Plano de Ações Articuladas",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-cepar-n-1-de-27-de-outubro-de-2026-742641429",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "rs-1502550",
+   "id": "dou-743254524",
    "relevancia": "media",
    "area": "fazenda",
    "temas": [
     "tributos",
     "ICMS"
    ],
-   "o_que_muda": "A Receita Estadual mudou a instrução sobre o registro de passagem de documentos fiscais de mercadorias que entram no RS e disse que o monitoramento automático ficará nos Postos Fiscais.",
-   "quem_afeta": "Empresas e transportadoras com operações interestaduais.",
+   "o_que_muda": "Publica o Protocolo ICMS 124/2026, que prorroga até 31/12/2032 as regras para operações de indústrias da Zona Franca de Manaus por armazém geral em Uberlândia (MG).",
+   "quem_afeta": "Indústrias da Zona Franca de Manaus e o armazém em Uberlândia.",
    "vigencia": "Na publicação.",
-   "imposto": null,
-   "esfera": "estadual",
-   "titulo": "INSTRUÇÃO NORMATIVA RE Nº 090/26",
-   "orgao": "Receita Estadual",
-   "tipo": "Instruções Normativas",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502550",
-   "fonte": "DOE-RS"
+   "esfera": "federal",
+   "titulo": "DESPACHO Nº 53, DE 9 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "tipo": "Ato Normativo",
+   "url": "https://www.in.gov.br/web/dou/-/despacho-n-53-de-9-de-novembro-de-2026-743254524",
+   "fonte": "DOU"
   },
   {
-   "id": "rs-1502634",
+   "id": "dou-743557073",
    "relevancia": "media",
    "area": "fazenda",
    "temas": [
     "tributos",
-    "reforma tributária"
+    "contencioso"
    ],
-   "o_que_muda": "A Receita Estadual publicou a lista complementar de empresas habilitadas ao projeto-piloto do sistema de apuração assistida do IBS (Etapa 3); elas receberão carta-convite para aderir.",
-   "quem_afeta": "Empresas listadas no anexo.",
+   "o_que_muda": "O CARF aprovou manuais de exame de admissibilidade de embargos, de recurso especial e de agravo, que orientam como os recursos de contribuintes são aceitos ou barrados.",
+   "quem_afeta": "Contribuintes e advogados com processos no CARF.",
    "vigencia": "Na publicação.",
-   "imposto": null,
-   "esfera": "estadual",
-   "titulo": "PORTARIA Nº 044/2026 - RE",
-   "orgao": "Receita Estadual",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502634",
-   "fonte": "DOE-RS"
+   "esfera": "federal",
+   "titulo": "PORTARIA CARF/MF Nº 3.242, DE 5 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Administrativo de Recursos Fiscais",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-carf/mf-n-3.242-de-5-de-novembro-de-2026-743557073",
+   "fonte": "DOU (extra)"
   },
   {
-   "id": "rs-1502439",
+   "id": "dou-743487721",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "meio ambiente"
+    "crianças e adolescentes"
    ],
-   "o_que_muda": "A Fepam passou a aplicar diretamente a Resolução Consema 419/2020 (água de reuso urbano, industrial, agrícola e florestal) no lugar da norma técnica antiga de 1995.",
-   "quem_afeta": "Empresas e produtores que usam ou querem usar água de reuso no RS.",
-   "vigencia": "",
-   "imposto": null,
+   "o_que_muda": "O CONANDA fixa parâmetros para criar e fazer funcionar os fundos dos direitos da criança e do adolescente (nacional, estaduais e municipais). Outra resolução, a 291, define diretrizes para programas de acompanhamento de jovens após medidas socioeducativas.",
+   "quem_afeta": "Conselhos e gestores municipais e estaduais dos direitos da criança e do adolescente.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO Nº 292, DE 22 DE OUTUBRO DE 2026",
+   "orgao": "Ministério dos Direitos Humanos e da Cidadania / Coordenação-Geral do Conselho Nacional dos Direitos da Criança e do Adolescente",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-n-292-de-22-de-outubro-de-2026-743487721",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-743276922",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "transporte",
+    "seguros"
+   ],
+   "o_que_muda": "A ANTT abriu audiência pública sobre uma proposta de resolução que trata das exigências de seguros no transporte rodoviário de cargas.",
+   "quem_afeta": "Transportadores de carga e seguradoras.",
+   "vigencia": "Audiência pública aberta na publicação.",
+   "esfera": "federal",
+   "titulo": "DELIBERAÇÃO ANTT Nº 319, DE 9 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério dos Transportes / Diretoria Colegiada",
+   "tipo": "Deliberação",
+   "url": "https://www.in.gov.br/web/dou/-/deliberacao-antt-n-319-de-9-de-novembro-de-2026-743276922",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1503490",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS"
+   ],
+   "o_que_muda": "Isenta de ICMS a importação, até 31/12/2027, de um equipamento de simulação de voo (Flying Theater) sem similar nacional, destinado a uma empresa específica em Gramado.",
+   "quem_afeta": "Uma empresa em Gramado.",
+   "vigencia": "Na publicação; vale até 31/12/2027.",
+   "imposto": {
+    "tributo": "ICMS na importação do equipamento Flying Theater",
+    "antes": "não encontrado",
+    "depois": "isento (R$ 0)",
+    "obs": "Isenção pontual, Convênio ICMS 102/26. Valor anterior não pesquisado."
+   },
    "esfera": "estadual",
-   "titulo": "PORTARIA FEPAM nº 640/2026",
-   "orgao": "Diretoria da Presidência da FEPAM",
-   "tipo": "Atos Administrativos",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502439",
+   "titulo": "DECRETO Nº 59.047, DE 7 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1503490",
    "fonte": "DOE-RS"
   },
   {
-   "id": "rs-1502533",
+   "id": "rs-1502943",
    "relevancia": "media",
    "area": "outros",
    "temas": [
     "educação"
    ],
-   "o_que_muda": "A Seduc divulgou a lista das escolas estaduais que terão educação em tempo integral a partir de 2027.",
-   "quem_afeta": "Alunos, famílias e profissionais das escolas listadas.",
+   "o_que_muda": "A Secretaria da Educação aprovou o Guia de Matrizes Curriculares 2027 do Ensino Fundamental e Médio das escolas estaduais, de uso obrigatório.",
+   "quem_afeta": "Escolas estaduais, professores e alunos.",
    "vigencia": "Ano letivo de 2027.",
-   "imposto": null,
    "esfera": "estadual",
-   "titulo": "PORTARIA SEDUC/RS Nº 1486/2026",
+   "titulo": "PORTARIA SEDUC/RS Nº 1496/2026",
    "orgao": "Gabinete da Secretária",
    "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502533",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502943",
    "fonte": "DOE-RS"
   },
   {
-   "id": "rs-1502744",
+   "id": "rs-1503493",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "servidores"
+    "educação",
+    "Lajeado"
    ],
-   "o_que_muda": "A Agergs aprovou o regulamento de critérios e procedimento para progressão funcional de seus servidores (Especialista e Assistente de Regulação).",
-   "quem_afeta": "Servidores da Agergs.",
-   "vigencia": "",
-   "imposto": null,
+   "o_que_muda": "A Escola Estadual de Ensino Fundamental Irmã Branca, em Lajeado, passa a ser Escola Estadual de Ensino Médio.",
+   "quem_afeta": "Alunos e famílias ligados à escola, em Lajeado.",
+   "vigencia": "Na publicação.",
    "esfera": "estadual",
-   "titulo": "RESOLUÇÃO DECISÓRIA",
-   "orgao": "Conselho-Superior",
-   "tipo": "Resoluções",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502744",
+   "titulo": "DECRETO Nº 59.050, DE 7 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1503493",
    "fonte": "DOE-RS"
   },
   {
-   "id": "laj-2683-1",
+   "id": "rs-1503521",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "servidores"
+    "meio ambiente",
+    "água"
    ],
-   "o_que_muda": "A Prefeitura nomeou candidato aprovado em concurso para Professor de Educação Infantil (30 horas semanais).",
-   "quem_afeta": "O nomeado e a rede municipal de educação infantil.",
+   "o_que_muda": "O governador alterou 20 decretos de comitês de bacias hidrográficas (Tramandaí e outras), definindo que os representantes de usuários e da população sejam escolhidos a cada quatro anos.",
+   "quem_afeta": "Membros e entidades dos comitês de bacias.",
    "vigencia": "Na publicação.",
-   "imposto": null,
-   "esfera": "municipal",
-   "titulo": "portaria n.º 36.630, de 22 de outubro de 2026, para exercer o cargo de provimento efetivo de",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "portaria n.º 36.630, de 22 de outubro de 2026, para exercer o cargo de provimento efetivo de",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2683"
-  },
-  {
-   "id": "laj-2683-2",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "servidores",
-    "saúde"
-   ],
-   "o_que_muda": "A Portaria 36.670 nomeia candidatas aprovadas em concurso para o cargo de Enfermeiro (40 horas semanais), por aposentadorias.",
-   "quem_afeta": "As nomeadas e os serviços municipais de saúde.",
-   "vigencia": "Na publicação; 15 dias para tomar posse.",
-   "imposto": null,
-   "esfera": "municipal",
-   "titulo": "Edital de Homologação n.º 363-03/2023.",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "Edital de Homologação n.º 363-03/2023.",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2683"
-  },
-  {
-   "id": "laj-2683-3",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "servidores"
-   ],
-   "o_que_muda": "A edição também traz nomeação de aprovadas em concurso (12º e 13º lugares) e termos de credenciamento, concessão de uso e distrato de locação do município.",
-   "quem_afeta": "Os nomeados e empresas credenciadas.",
-   "vigencia": "Na publicação.",
-   "imposto": null,
-   "esfera": "municipal",
-   "titulo": "Lei n.º 10.079, de 30 de março de 2016, que instituiu o Plano de Carreira dos servidores do Município",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "Lei n.º 10.079, de 30 de março de 2016, que instituiu o Plano de Carreira dos servidores do Município",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2683"
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.071, DE 7 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1503521",
+   "fonte": "DOE-RS"
   }
  ],
  "demais": {
-  "federal": "Cerca de 460 outros atos: resoluções individuais da Anvisa, habilitações de saúde, portarias de repasses e do MEC, outorgas de rádio, atos da Receita sobre empresas específicas, decretos que promulgam acordos internacionais e portarias de pessoal.",
-  "estadual": "Cerca de 40 outros atos: portarias de pessoal da Seduc, extratos de contratos, súmulas, notificações e resoluções da CIB/RS sobre repasses.",
-  "municipal": "Os três atos de Lajeado estão nos destaques."
+  "federal": "Cerca de 360 atos sem destaque: portarias de pessoal, despachos e decisões individuais, autorizações de telecomunicações, zoneamento agrícola da aveia, resoluções individuais da Anvisa, atos da ANTT sobre concessões, pautas e retificações. Também saiu declaração de escassez hídrica em rios de Roraima.",
+  "estadual": "Demais atos: portarias de comissões e pessoal, delegações de competência, atos de inativação, extratos de contratos, portarias da Habitação e da Educação e decreto de emergência em Caiçara.",
+  "municipal": "Sem dados de Lajeado: fonte indisponível neste dia."
  },
  "fontes": {
   "federal": {
    "ok": true,
-   "atos": 483,
-   "lista": 3005
+   "atos": 379,
+   "lista": 3480
   },
   "estadual": {
    "ok": true,
-   "atos": 68,
-   "lista": 313,
-   "publicados": 432
+   "atos": 107,
+   "lista": 461,
+   "publicados": 601
   },
   "municipal": {
-   "ok": true,
-   "atos": 3,
-   "lista": 0,
-   "edicoes": [
-    "2683 (Normal)"
-   ]
+   "ok": false,
+   "erro": "HTTP 500"
   }
  },
- "coletado_em": "2026-11-10T05:16:49.808Z",
+ "coletado_em": "2026-11-11T03:48:30.199Z",
  "totais": {
-  "federal": 3488,
-  "estadual": 381,
-  "municipal": 3
+  "federal": 3859,
+  "estadual": 568,
+  "municipal": 0
  }
 }

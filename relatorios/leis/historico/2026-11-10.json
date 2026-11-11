@@ -1,0 +1,339 @@
+{
+ "data": "2026-11-10",
+ "gerado_em": "2026-11-11T08:09:59.644Z",
+ "resumo": {
+  "federal": "Dia sem lei ou decreto no Diário Oficial da União. O destaque é a regra de avaliação anual dos médicos do Mais Médicos, com desligamento em caso de conceito insatisfatório. Também saíram regras sobre apostas (bets), CONFAZ/ICMS, CARF, antidumping de fibra de poliéster e conselhos da criança e do adolescente.",
+  "estadual": "O governador publicou dois decretos que mudam o regulamento do ICMS (isenção para medicamentos de laboratórios públicos e para um equipamento importado em Gramado), transformou uma escola de Lajeado em escola de ensino médio e alterou 20 decretos de comitês de bacias hidrográficas. O IGP fixou regras para advogados acompanharem exames médico-legais e a Seduc aprovou as matrizes curriculares de 2027.",
+  "municipal": "A fonte de Lajeado falhou (HTTP 500), então não foi possível verificar as publicações do município neste dia."
+ },
+ "destaques": [
+  {
+   "id": "dou-743268696",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "médicos"
+   ],
+   "o_que_muda": "Cria a avaliação anual obrigatória dos médicos do Projeto Mais Médicos para o Brasil, feita pelo supervisor e pela gestão local. Quem tiver conceito insatisfatório nas duas avaliações é desligado em até 30 dias e perde o direito à indenização por área de difícil fixação.",
+   "quem_afeta": "Médicos do Mais Médicos com pelo menos 12 meses de projeto; municípios e supervisores.",
+   "vigencia": "Na publicação (4/11/2026).",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO Nº 597, DE 4 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Saúde / Secretaria de Gestão do Trabalho e da Educação na Saúde",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-n-597-de-4-de-novembro-de-2026-743268696",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1503491",
+   "relevancia": "alta",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "saúde",
+    "medicamentos"
+   ],
+   "o_que_muda": "Isenta de ICMS, em 2027 e 2028, a saída de certos medicamentos produzidos por laboratórios públicos oficiais (Fiocruz, Furp, Lafepe, Funed e outros) para órgãos públicos, desde que haja isenção ou alíquota zero de outros tributos federais.",
+   "quem_afeta": "Laboratórios públicos, órgãos de saúde que compram os medicamentos.",
+   "vigencia": "De 1º/01/2027 a 31/12/2028.",
+   "imposto": {
+    "tributo": "ICMS sobre medicamentos de laboratórios públicos vendidos a órgãos públicos",
+    "antes": "não encontrado",
+    "depois": "isento (R$ 0)",
+    "obs": "Isenção nova com base no Convênio ICMS 100/26; o valor anterior não foi pesquisado/confirmado. A lista de medicamentos está no Apêndice LI do decreto."
+   },
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.048, DE 7 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1503491",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1502105",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "perícia",
+    "médicos"
+   ],
+   "o_que_muda": "Define que o advogado só pode acompanhar um exame médico-legal se a pessoa examinada concordar de forma expressa e o perito médico-legista autorizar por escrito. A autorização pode ser parcial ou negada para proteger a intimidade.",
+   "quem_afeta": "Peritos médico-legistas, advogados e pessoas examinadas no IGP-RS.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "ORDEM DE SERVIÇO IGP N°. 09/2026",
+   "orgao": "Gabinete do Diretor-Geral",
+   "tipo": "Ordens de Serviço",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502105",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "dou-743271550",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "previdência"
+   ],
+   "o_que_muda": "A Receita Federal explica que, de 2025 a 2027, a empresa que contrata serviços com cessão de mão de obra de empresa na CPRB retém 3,5% da nota; a partir de 2028 a retenção volta a 11%. Sem opção regular pela CPRB, a retenção é de 11%.",
+   "quem_afeta": "Empresas contratantes de serviços com cessão de mão de obra e empresas na CPRB.",
+   "vigencia": "Retenção de 3,5% de 2025 a 2027; 11% a partir de 1º/01/2028.",
+   "esfera": "federal",
+   "titulo": "SOLUÇÃO DE CONSULTA Nº 219, DE 6 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Coordenação-Geral de Tributação",
+   "tipo": "Solução de Consulta",
+   "url": "https://www.in.gov.br/web/dou/-/solucao-de-consulta-n-219-de-6-de-novembro-de-2026-743271550",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-743556300",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "apostas",
+    "bets"
+   ],
+   "o_que_muda": "Define como os agentes operadores de apostas podem usar ou liberar a reserva financeira para devolver valores a apostadores, conforme a Medida Provisória 1.394/2026. Qualquer movimentação depende de autorização prévia da Secretaria de Prêmios e Apostas.",
+   "quem_afeta": "Empresas de apostas (bets) e apostadores.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "Instrução Normativa SPA/MF nº 32, DE 6 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria de Prêmios e Apostas",
+   "tipo": "Instrução Normativa",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-spa/mf-n-32-de-6-de-novembro-de-2026-743556300",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-743256804",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "comércio exterior",
+    "tributos"
+   ],
+   "o_que_muda": "O governo abriu avaliação de interesse público sobre a medida antidumping que encarece fibras de poliéster importadas da China, Índia, Tailândia e Vietnã. A medida continua valendo durante a avaliação.",
+   "quem_afeta": "Indústria têxtil e importadores de fibra de poliéster.",
+   "vigencia": "Avaliação inicia na publicação (9/11/2026).",
+   "esfera": "federal",
+   "titulo": "CIRCULAR Nº 107, DE 9 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços / Secretaria de Comércio Exterior",
+   "tipo": "Circular",
+   "url": "https://www.in.gov.br/web/dou/-/circular-n-107-de-9-de-novembro-de-2026-743256804",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-743261321",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "bancos",
+    "contabilidade"
+   ],
+   "o_que_muda": "O Banco Central ajusta contas contábeis dos bancos, incluindo novas contas para renegociação de dívidas rurais da MP 1.376/2026 e para recursos de municípios captados por cooperativas de crédito.",
+   "quem_afeta": "Bancos, cooperativas de crédito e demais instituições reguladas pelo BC.",
+   "vigencia": "Conforme o texto (sem data clara na triagem).",
+   "esfera": "federal",
+   "titulo": "INSTRUÇÃO NORMATIVA BCB Nº 786, DE 5 DE NOVEMBRO DE 2026",
+   "orgao": "Banco Central do Brasil / Departamento de Regulação do Sistema Financeiro",
+   "tipo": "Instrução Normativa",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-bcb-n-786-de-5-de-novembro-de-2026-743261321",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-743276586",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "combustíveis"
+   ],
+   "o_que_muda": "Divulga os novos preços médios de combustíveis usados como base de cálculo do ICMS. Em vários estados os valores mudaram; no RS, o etanol hidratado (R$ 4,3582/litro) e o GNV (R$ 5,3269/m³) aparecem sem marca de alteração.",
+   "quem_afeta": "Postos, distribuidoras e consumidores de combustíveis.",
+   "vigencia": "A partir de 16/11/2026.",
+   "esfera": "federal",
+   "titulo": "ATO COTEPE/PMPF Nº 30, DE 9 de NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "tipo": "Ato Normativo",
+   "url": "https://www.in.gov.br/web/dou/-/ato-cotepe/pmpf-n-30-de-9-de-novembro-de-2026-743276586",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-743254524",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS"
+   ],
+   "o_que_muda": "Publica o Protocolo ICMS 124/2026, que prorroga até 31/12/2032 as regras para operações de indústrias da Zona Franca de Manaus por armazém geral em Uberlândia (MG).",
+   "quem_afeta": "Indústrias da Zona Franca de Manaus e o armazém em Uberlândia.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "DESPACHO Nº 53, DE 9 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "tipo": "Ato Normativo",
+   "url": "https://www.in.gov.br/web/dou/-/despacho-n-53-de-9-de-novembro-de-2026-743254524",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-743557073",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "contencioso"
+   ],
+   "o_que_muda": "O CARF aprovou manuais de exame de admissibilidade de embargos, de recurso especial e de agravo, que orientam como os recursos de contribuintes são aceitos ou barrados.",
+   "quem_afeta": "Contribuintes e advogados com processos no CARF.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "PORTARIA CARF/MF Nº 3.242, DE 5 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Administrativo de Recursos Fiscais",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-carf/mf-n-3.242-de-5-de-novembro-de-2026-743557073",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-743487721",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "crianças e adolescentes"
+   ],
+   "o_que_muda": "O CONANDA fixa parâmetros para criar e fazer funcionar os fundos dos direitos da criança e do adolescente (nacional, estaduais e municipais). Outra resolução, a 291, define diretrizes para programas de acompanhamento de jovens após medidas socioeducativas.",
+   "quem_afeta": "Conselhos e gestores municipais e estaduais dos direitos da criança e do adolescente.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO Nº 292, DE 22 DE OUTUBRO DE 2026",
+   "orgao": "Ministério dos Direitos Humanos e da Cidadania / Coordenação-Geral do Conselho Nacional dos Direitos da Criança e do Adolescente",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-n-292-de-22-de-outubro-de-2026-743487721",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-743276922",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "transporte",
+    "seguros"
+   ],
+   "o_que_muda": "A ANTT abriu audiência pública sobre uma proposta de resolução que trata das exigências de seguros no transporte rodoviário de cargas.",
+   "quem_afeta": "Transportadores de carga e seguradoras.",
+   "vigencia": "Audiência pública aberta na publicação.",
+   "esfera": "federal",
+   "titulo": "DELIBERAÇÃO ANTT Nº 319, DE 9 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério dos Transportes / Diretoria Colegiada",
+   "tipo": "Deliberação",
+   "url": "https://www.in.gov.br/web/dou/-/deliberacao-antt-n-319-de-9-de-novembro-de-2026-743276922",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1503490",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS"
+   ],
+   "o_que_muda": "Isenta de ICMS a importação, até 31/12/2027, de um equipamento de simulação de voo (Flying Theater) sem similar nacional, destinado a uma empresa específica em Gramado.",
+   "quem_afeta": "Uma empresa em Gramado.",
+   "vigencia": "Na publicação; vale até 31/12/2027.",
+   "imposto": {
+    "tributo": "ICMS na importação do equipamento Flying Theater",
+    "antes": "não encontrado",
+    "depois": "isento (R$ 0)",
+    "obs": "Isenção pontual, Convênio ICMS 102/26. Valor anterior não pesquisado."
+   },
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.047, DE 7 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1503490",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1502943",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "educação"
+   ],
+   "o_que_muda": "A Secretaria da Educação aprovou o Guia de Matrizes Curriculares 2027 do Ensino Fundamental e Médio das escolas estaduais, de uso obrigatório.",
+   "quem_afeta": "Escolas estaduais, professores e alunos.",
+   "vigencia": "Ano letivo de 2027.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SEDUC/RS Nº 1496/2026",
+   "orgao": "Gabinete da Secretária",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1502943",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1503493",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "educação",
+    "Lajeado"
+   ],
+   "o_que_muda": "A Escola Estadual de Ensino Fundamental Irmã Branca, em Lajeado, passa a ser Escola Estadual de Ensino Médio.",
+   "quem_afeta": "Alunos e famílias ligados à escola, em Lajeado.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.050, DE 7 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1503493",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1503521",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "meio ambiente",
+    "água"
+   ],
+   "o_que_muda": "O governador alterou 20 decretos de comitês de bacias hidrográficas (Tramandaí e outras), definindo que os representantes de usuários e da população sejam escolhidos a cada quatro anos.",
+   "quem_afeta": "Membros e entidades dos comitês de bacias.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.071, DE 7 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1503521",
+   "fonte": "DOE-RS"
+  }
+ ],
+ "demais": {
+  "federal": "Cerca de 360 atos sem destaque: portarias de pessoal, despachos e decisões individuais, autorizações de telecomunicações, zoneamento agrícola da aveia, resoluções individuais da Anvisa, atos da ANTT sobre concessões, pautas e retificações. Também saiu declaração de escassez hídrica em rios de Roraima.",
+  "estadual": "Demais atos: portarias de comissões e pessoal, delegações de competência, atos de inativação, extratos de contratos, portarias da Habitação e da Educação e decreto de emergência em Caiçara.",
+  "municipal": "Sem dados de Lajeado: fonte indisponível neste dia."
+ },
+ "fontes": {
+  "federal": {
+   "ok": true,
+   "atos": 379,
+   "lista": 3480
+  },
+  "estadual": {
+   "ok": true,
+   "atos": 107,
+   "lista": 461,
+   "publicados": 601
+  },
+  "municipal": {
+   "ok": false,
+   "erro": "HTTP 500"
+  }
+ },
+ "coletado_em": "2026-11-11T03:48:30.199Z",
+ "totais": {
+  "federal": 3859,
+  "estadual": 568,
+  "municipal": 0
+ }
+}
