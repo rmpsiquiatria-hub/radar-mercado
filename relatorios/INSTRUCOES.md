@@ -34,8 +34,11 @@ Radar do Mercado (radar-mercado-xi.vercel.app). O site só lê arquivos JSON des
    dividendos anunciados, fatos relevantes, riscos citados.
 4. Monte `relatorios/ultimo.json` no formato abaixo e copie o mesmo conteúdo para
    `relatorios/historico/AAAA-MM-DD.json`.
-5. Valide: `node scripts/validar-relatorio.mjs` (precisa terminar sem erros).
-6. Faça commit (`Relatório diário AAAA-MM-DD`) e `git push` para `main`. O Vercel publica sozinho.
+5. Se alguma empresa ainda não estiver em `relatorios/descricoes.json`, acrescente uma linha curta (até ~120 caracteres)
+   dizendo o que ela faz, em português simples, sem opinião (ex.: "Maior rede de farmácias do país (Droga Raia e Drogasil)").
+   O site e o e-mail mostram essa frase junto do nome.
+6. Valide: `node scripts/validar-relatorio.mjs` (precisa terminar sem erros).
+7. Faça commit (`Relatório diário AAAA-MM-DD`) e `git push` para `main`. O Vercel publica sozinho.
 
 ## Formato de `relatorios/ultimo.json`
 

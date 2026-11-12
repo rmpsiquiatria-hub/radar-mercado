@@ -550,6 +550,7 @@ table.grid.gov-t tbody th { text-align: left; position: sticky; left: 0; z-index
 .idx-sub > span { width: 100%; font-size: 10.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
 .idx-sub small { font-size: 11.5px; }
 .idx-sub:hover > b { text-decoration: underline; }
+.emp-desc { font-size: 11.5px; color: var(--muted); min-width: 230px; max-width: 320px; white-space: normal; line-height: 1.35; margin-top: 2px; }
 /* Economy cards differ a lot in height, so they are packed in columns instead of rows that stretch to the tallest. */
 .strip.eco { display: block; columns: 175px; column-gap: 10px; }
 .strip.eco > * { display: block; width: 100%; break-inside: avoid; margin-bottom: 10px; }
@@ -3673,7 +3674,7 @@ document.querySelectorAll(".xsubs").forEach(bar => {
 
 /* ---------- relatório diário ---------- */
 const CRIT_DEFAULT = { pl_max: 15, dy_min: 4, roe_min: 12, div_max: 2, min_casas: 3 };
-let report = null, repFilter = "todas", repQuery = "", repOpen = null;
+let report = null, repFilter = "todas", repQuery = "", repOpen = null, DESC = {};
 function crit() { return { ...CRIT_DEFAULT, ...(state.criterios || {}) }; }
 const isSet = v => v !== "" && v != null && isFinite(v);
 
@@ -3719,10 +3720,17 @@ function techEvents(e) {
 // Where both analyses point the same way, on the chart chosen in Settings:
 // fundamental buy signal + technical bias "alta", or fundamental attention + technical bias "baixa".
 // Mirrors convergence() in scripts/email.mjs — keep both in step.
+// Side the chart points to (mirrors ladoTec() in scripts/email.mjs): a recent buy or sell alert wins; with
+// none, the trend bias; nothing when the alerts point both ways (they cancel each other).
+function techSide(e) {
+  const ev = techEvents(e);
+  if (ev.some(t => t.sinal === "alta") && ev.some(t => t.sinal === "baixa")) return null;
+  return ev.length ? ev[0].sinal : e.tecnica?.[frame()]?.vies;
+}
 function convergence(emps) {
   const out = { compra: [], venda: [] };
   for (const e of emps) {
-    const s = signal(e), v = e.tecnica?.[frame()]?.vies;
+    const s = signal(e), v = techSide(e);
     if (s?.kind === "compra" && v === "alta") out.compra.push([e, s]);
     if (s?.kind === "atencao" && v === "baixa") out.venda.push([e, s]);
   }
@@ -3743,6 +3751,8 @@ async function loadReport(force) {
     const r = await fetch("/relatorios/ultimo.json", { cache: "no-store" });
     if (!r.ok) throw 0;
     report = await r.json();
+    // one line on what each company does, kept by hand
+    try { const d = await fetch("/relatorios/descricoes.json", { cache: "no-store" }); if (d.ok) DESC = await d.json(); } catch {}
     renderReport();
   } catch {
     $("#reportBox").innerHTML = `<div class="empty"><b>O primeiro relatório ainda não foi gerado.</b><br>Toda manhã aparece aqui um resumo do que os sites de análise fundamentalista dizem sobre as empresas do Ibovespa e os papéis da sua lista.</div>`;
@@ -3825,7 +3835,7 @@ function repRow(e, mine) {
   const bar = tot ? `<div class="cbar" title="${k.compra} compra · ${k.neutro} neutro · ${k.venda} venda"><i class="b" style="flex:${k.compra}"></i><i class="n" style="flex:${k.neutro}"></i><i class="s" style="flex:${k.venda}"></i></div><span class="num cnt">${k.compra}·${k.neutro}·${k.venda}</span>` : `<span class="hint">sem cobertura encontrada</span>`;
   const sent = { positivo: "up", negativo: "down" }[e.sentimento] || "flat";
   return `<tr data-rep="${esc(e.ticker)}" class="${open ? "open" : ""}">
-    <td><span class="sdot ${sent}" title="tom das notícias: ${esc(e.sentimento)}"></span><b>${esc(e.ticker)}</b>${mine.has(e.ticker) ? ` <span class="tag on">sua lista</span>` : ""}<div class="hint">${esc(e.nome)}</div></td>
+    <td><span class="sdot ${sent}" title="tom das notícias: ${esc(e.sentimento)}"></span><b>${esc(e.ticker)}</b>${mine.has(e.ticker) ? ` <span class="tag on">sua lista</span>` : ""}<div class="hint">${esc(e.nome)}</div>${DESC[e.ticker] ? `<div class="emp-desc">${esc(DESC[e.ticker])}</div>` : ""}</td>
     <td><div class="cwrap">${bar}</div></td>
     <td class="num">${k.preco_alvo_medio ? money(k.preco_alvo_medio, k.moeda || (e.bolsa === "B3" ? "BRL" : "USD")) : "—"}</td>
     <td class="num ${cls(up)}">${up == null ? "—" : pct(up)}</td>
@@ -4665,6 +4675,9 @@ try { applyTheme(localStorage.getItem(KEY + ".theme")); } catch {}
 
 /* ---------- início ---------- */
 try { const t = localStorage.getItem(KEY + ".tab"); if (t) showTab(t); } catch {}
+// Links from the e-mail: #empresas/sinais opens the Empresas tab with that filter.
+{ const [aba, filtro] = decodeURIComponent(location.hash.slice(1)).split("/");
+  if (aba === "empresas") { if (["todas", "minha", "sinais", "criterios", "mudancas", "tecnicos"].includes(filtro)) repFilter = filtro; showTab("empresas"); setTimeout(() => document.querySelector("nav.tabs").scrollIntoView({ block: "start" }), 300); } }
 $("#cgal").innerHTML = Object.entries(CANDLE_EDU).map(([nome, i]) => `<details class="card cgal-i"><summary>${candleFigure(nome, 200, 92, true)}<div><b>${nome}</b><div class="hint ${i.sinal === "alta" ? "up" : i.sinal === "baixa" ? "down" : ""}">${i.sinal === "neutro" ? "indecisão" : "sinal de " + i.sinal}</div></div></summary>${candleSheet(nome)}</details>`).join("");
 migrarVirtuais(); renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 6000);
 </script>

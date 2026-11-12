@@ -5,12 +5,19 @@
 // Settings (timeframes, criteria) come from relatorios/config.json.
 // The buy/attention rules mirror signal() in index.html — keep both in step.
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, readdir } from "node:fs/promises";
 import { sendGmail } from "./gmail.mjs";
 
 const rel = new URL("../relatorios/", import.meta.url);
 const rep = JSON.parse(await readFile(new URL("ultimo.json", rel), "utf8"));
 const cfg = JSON.parse(await readFile(new URL("config.json", rel), "utf8"));
+// One line on what each company does (relatorios/descricoes.json, kept by hand).
+const DESC = await readFile(new URL("descricoes.json", rel), "utf8").then(JSON.parse).catch(() => ({}));
+// The previous report (the latest file in historico/ dated before this one), to show only what changed.
+const prevRep = await (async () => {
+  const dias = (await readdir(new URL("historico/", rel)).catch(() => [])).filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f)).map(f => f.slice(0, 10)).filter(d => d < rep.data).sort();
+  return dias.length ? JSON.parse(await readFile(new URL(`historico/${dias.at(-1)}.json`, rel), "utf8")) : null;
+})();
 const C = cfg.criterios;
 const args = process.argv.slice(2);
 // Weekday e-mail: technical analysis on the daily chart. Saturday e-mail: the weekly chart (the week
@@ -71,13 +78,27 @@ function techEvents(e, f) {
 const emps = rep.empresas;
 const sig = emps.map(e => [e, signal(e)]);
 const buys = sig.filter(([, s]) => s?.kind === "compra"), warns = sig.filter(([, s]) => s?.kind === "atencao");
-// Both analyses on the same side (mirrors convergence() in index.html): buy signal + technical
-// bias "alta" on TF, or attention + technical bias "baixa".
+// Part 1 lists only what changed since the previous report: new signals, or a company that switched side.
+// The signal of the day before is recomputed from that report with today's criteria.
+const prevKind = new Map((prevRep?.empresas || []).map(e => [e.ticker, signal(e)?.kind || null]));
+const mudou = ([e, s]) => !prevRep || prevKind.get(e.ticker) !== s.kind;
+const buysNew = buys.filter(mudou), warnsNew = warns.filter(mudou);
+const KIND_TXT = { compra: "sinal de compra", atencao: "ponto de atenção" };
+const antes = e => !prevRep ? "" : !prevKind.has(e.ticker) ? "nova no relatório" : prevKind.get(e.ticker) ? `antes: ${KIND_TXT[prevKind.get(e.ticker)]}` : "novo sinal";
+// Signals that disappeared since the previous report (a switch of side is already in the lists above).
+const sairam = prevRep ? (prevRep.empresas || []).filter(p => prevKind.get(p.ticker) && !sig.some(([e, s]) => e.ticker === p.ticker && s)) : [];
+// Every fundamental recommendation stays on the site (tab Empresas, filter "Com sinal").
+const siteSinais = cfg.site.replace(/\/?$/, "/") + "#empresas/sinais";
 // A company whose recent technical signals point both ways (a buy and a sell alert on the same chart)
 // is left out of every technical list: the signals cancel each other.
 const conflito = (e, f) => { const x = techEvents(e, f); return x.some(t => t.sinal === "alta") && x.some(t => t.sinal === "baixa"); };
-const convBuy = buys.filter(([e]) => e.tecnica?.[TF]?.vies === "alta" && !conflito(e, TF));
-const convSell = warns.filter(([e]) => e.tecnica?.[TF]?.vies === "baixa" && !conflito(e, TF));
+// Side the chart points to (mirrors techSide() in index.html): a recent buy or sell alert wins; with none,
+// the trend bias; nothing when the alerts point both ways.
+const ladoTec = (e, f) => { if (conflito(e, f)) return null; const x = techEvents(e, f); return x.length ? x[0].sinal : e.tecnica?.[f]?.vies; };
+// Part 3 uses every fundamental signal on file, changed today or not: buy signal + chart on the buy side,
+// or attention + chart on the sell side.
+const convBuy = buys.filter(([e]) => ladoTec(e, TF) === "alta");
+const convSell = warns.filter(([e]) => ladoTec(e, TF) === "baixa");
 const staleResearch = rep.pesquisa_data && rep.pesquisa_data !== rep.data;
 
 // Which period each analysis looks at, written out so the reader does not have to guess.
@@ -105,6 +126,8 @@ const datesBox = `<table width="100%" cellpadding="0" cellspacing="0" style="bor
 const h2 = t => `<h2 style="font-size:17px;margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid ${LINE}">${t}</h2>`;
 const hint = t => `<p style="margin:0 0 8px;color:${MUTED};font-size:13px">${t}</p>`;
 const link = (e) => `<a href="${esc(cfg.site)}" style="color:#0f766e;text-decoration:none;font-weight:700">${esc(e.ticker)}</a>`;
+const descLine = e => DESC[e.ticker] ? `<div style="font-size:12px;color:${MUTED}">${esc(DESC[e.ticker])}</div>` : "";
+const botao = (href, txt) => `<p style="margin:12px 0 4px"><a href="${esc(href)}" style="display:inline-block;background:#0f766e;color:#ffffff;padding:9px 16px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">${txt}</a></p>`;
 
 // Every list is split by market (B3 stocks, US stocks, crypto…), in this order.
 const MERCADOS = [
@@ -139,13 +162,13 @@ function justify(e, kind) {
   return out.join(" ");
 }
 function signalRows(list, kind) {
-  if (!list.length) return hint("Nenhum papel hoje.");
+  if (!list.length) return hint(prevRep ? "Nenhuma mudança desde o relatório anterior." : "Nenhum papel hoje.");
   return porMercado(list, ([e]) => e, l => signalTable(l, kind));
 }
 function signalTable(list, kind) {
   return `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px">${list.map(([e, s]) => `
     <tr><td style="padding:8px 0;border-bottom:1px solid ${LINE};vertical-align:top;width:70px">${link(e)}</td>
-      <td style="padding:8px 0 8px 8px;border-bottom:1px solid ${LINE}"><b>${esc(e.nome)}</b>
+      <td style="padding:8px 0 8px 8px;border-bottom:1px solid ${LINE}"><b>${esc(e.nome)}</b>${antes(e) ? ` <span style="font-size:11px;font-weight:700;color:#ffffff;background:${kind === "compra" ? GREEN : AMBER};border-radius:4px;padding:1px 6px">${esc(antes(e))}</span>` : ""}${descLine(e)}
         <div style="font-size:13px">Cotação de ontem: <b>${money(price(e), cur(e))}</b>${e.consenso?.preco_alvo_medio ? ` · preço-alvo médio das casas: <b>${money(e.consenso.preco_alvo_medio, e.consenso.moeda || cur(e))}</b> (<span style="color:${upside(e) >= 0 ? GREEN : RED}">${upside(e) >= 0 ? "potencial de alta" : "abaixo do preço atual"}: ${pct(upside(e))}</span>)` : ""}</div>
         <div style="color:${kind === "compra" ? GREEN : AMBER};font-size:13px;font-weight:700;margin-top:3px">${esc(s.why.join(" · "))}</div>
         <div style="color:#33414b;font-size:13px;margin-top:3px;line-height:1.45"><b>Por quê:</b> ${justify(e, kind)}</div></td></tr>`).join("")}</table>`;
@@ -186,7 +209,7 @@ function convRows(list, kind) {
 function convTable(list) {
   return `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px">${list.map(([e, s]) => { const t = e.tecnica[TF], ev = techEvents(e, TF); return `
     <tr><td style="padding:8px 0;border-bottom:1px solid ${LINE};vertical-align:top;width:70px">${link(e)}</td>
-      <td style="padding:8px 0 8px 8px;border-bottom:1px solid ${LINE}"><b>${esc(e.nome)}</b> · ${money(price(e), cur(e))}
+      <td style="padding:8px 0 8px 8px;border-bottom:1px solid ${LINE}"><b>${esc(e.nome)}</b> · ${money(price(e), cur(e))}${descLine(e)}
         <div style="font-size:13px"><span style="color:#0f766e">📊 ${esc(s.why[0])}</span><br><span style="color:#6d28d9">📈 tendência ${esc(t.tendencia)}${ev.length ? " · " + esc(ev.map(x => x.texto).join(" · ")) : ""}</span></div></td></tr>`; }).join("")}</table>`;
 }
 
@@ -212,7 +235,9 @@ function overviewTable() {
 }
 
 const dayLong = dateBR(rep.data, { weekday: "long", day: "2-digit", month: "long" });
-const subject = `Radar do Mercado · ${dateBR(rep.data, { day: "2-digit", month: "2-digit" })} · ${buys.length} sinais de compra, ${warns.length} de atenção`;
+const nMud = buysNew.length + warnsNew.length + sairam.length;
+const subject = `Radar do Mercado · ${dateBR(rep.data, { day: "2-digit", month: "2-digit" })} · ${prevRep ? `${nMud} ${nMud === 1 ? "mudança" : "mudanças"} nos sinais` : `${buys.length} sinais de compra, ${warns.length} de atenção`} · ${convBuy.length + convSell.length} onde as análises concordam`;
+const prevDia = prevRep ? dateBR(prevRep.data, { day: "2-digit", month: "2-digit" }) : null;
 const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(subject)}</title></head>
 <body style="margin:0;padding:0;background:#f4f6f8">
 <div style="max-width:680px;margin:0 auto;padding:20px 16px;font-family:Arial,Helvetica,sans-serif;color:#0f1b24;line-height:1.5;background:#ffffff">
@@ -244,13 +269,17 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   <div style="margin:26px 0 0;padding:10px 14px;border-radius:8px;background:#0f766e;color:#ffffff;font-weight:700;font-size:16px">📊 PARTE 1 · ANÁLISE FUNDAMENTALISTA</div>
   ${hint("Baseada nas recomendações publicadas pelas casas de análise (resumidas por IA, com links no site) e nos indicadores das empresas (Fundamentus).")}
 
-  ${h2(`🟢 Sinais de compra (${buys.length})`)}
-  ${hint(`A maioria das casas consultadas (mínimo ${C.min_casas}) recomenda compra <b>e</b> o papel passa nos critérios: P/L ≤ ${C.pl_max}, dividendos ≥ ${C.dy_min}%, ROE ≥ ${C.roe_min}%, dívida líq./patrimônio ≤ ${C.div_max}.`)}
-  ${signalRows(buys, "compra")}
+  ${prevRep ? `<p style="background:#e0f2ef;border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0 0">Aqui entram <b>só as mudanças</b> desde o relatório de ${prevDia}: empresas que ganharam um sinal ou trocaram de lado. Hoje há <b>${buys.length} sinais de compra</b> e <b>${warns.length} pontos de atenção</b> ao todo; ${buys.length + warns.length - buysNew.length - warnsNew.length} continuam iguais a ${prevDia} e estão no site.</p>${botao(siteSinais, `📋 Ver todas as recomendações (${buys.length + warns.length})`)}` : ""}
 
-  ${h2(`🟠 Pontos de atenção (${warns.length})`)}
+  ${h2(`🟢 ${prevRep ? "Novos sinais de compra" : "Sinais de compra"} (${buysNew.length})`)}
+  ${hint(`A maioria das casas consultadas (mínimo ${C.min_casas}) recomenda compra <b>e</b> o papel passa nos critérios: P/L ≤ ${C.pl_max}, dividendos ≥ ${C.dy_min}%, ROE ≥ ${C.roe_min}%, dívida líq./patrimônio ≤ ${C.div_max}.`)}
+  ${signalRows(buysNew, "compra")}
+
+  ${h2(`🟠 ${prevRep ? "Novos pontos de atenção" : "Pontos de atenção"} (${warnsNew.length})`)}
   ${hint("Recomendações de venda, rebaixamentos recentes ou notícias negativas com indicadores fracos.")}
-  ${signalRows(warns, "atencao")}
+  ${signalRows(warnsNew, "atencao")}
+
+  ${sairam.length ? `${h2(`⚪ Deixaram de ter sinal (${sairam.length})`)}${hint("Tinham sinal no relatório anterior e hoje não têm nenhum (mudou a recomendação de alguma casa, um indicador ou a notícia).")}<ul style="margin:0;padding-left:18px;font-size:14px">${sairam.map(p => `<li style="margin:4px 0">${link(p)} ${esc(p.nome)} — era ${KIND_TXT[prevKind.get(p.ticker)]}, agora sem sinal${sig.some(([e]) => e.ticker === p.ticker) ? "" : " (saiu do relatório)"}</li>`).join("")}</ul>` : ""}
 
   ${h2("📰 Mudanças recentes nas recomendações (7 dias)")}
   ${changesSection()}
@@ -260,7 +289,7 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   ${techSection(TF)}
 
   <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#b45309;color:#ffffff;font-weight:700;font-size:16px">🎯 PARTE 3 · ONDE AS DUAS ANÁLISES CONCORDAM</div>
-  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>: sinal de compra com tendência de alta, ou ponto de atenção com tendência de baixa. Cruza a fundamentalista (pesquisa das 6h de <b>${researchDay}</b>${closeDay ? `, preços de ${closeDay}` : ""}) com o gráfico ${FRAME_LABEL[TF].toLowerCase()} <b>${techDa}</b>.`)}
+  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>. Entram <b>todos</b> os sinais fundamentalistas em vigor (${buys.length} de compra, ${warns.length} de atenção), mesmo os que não mudaram desde ontem. Do lado técnico, vale um alerta recente de compra ou de venda; sem alerta, vale a tendência. Cruza a fundamentalista (pesquisa das 6h de <b>${researchDay}</b>${closeDay ? `, preços de ${closeDay}` : ""}) com o gráfico ${FRAME_LABEL[TF].toLowerCase()} <b>${techDa}</b>.`)}
   ${h2(`▲ Para o lado da compra (${convBuy.length})`)}
   ${convRows(convBuy)}
   ${h2(`▼ Para o lado da venda (${convSell.length})`)}
@@ -305,8 +334,10 @@ const weekText = [`Radar do Mercado — análise técnica da ${techPeriod} (grá
 
 const text = [
   `Radar do Mercado — relatório de ${dayLong}`, "", rep.resumo_mercado, "",
-  `Sinais de compra (${buys.length}): ${buys.map(([e]) => e.ticker).join(", ") || "nenhum"}`,
-  `Pontos de atenção (${warns.length}): ${warns.map(([e]) => e.ticker).join(", ") || "nenhum"}`, "",
+  `${prevRep ? "Novos sinais de compra" : "Sinais de compra"} (${buysNew.length}): ${buysNew.map(([e]) => e.ticker).join(", ") || "nenhum"}`,
+  `${prevRep ? "Novos pontos de atenção" : "Pontos de atenção"} (${warnsNew.length}): ${warnsNew.map(([e]) => e.ticker).join(", ") || "nenhum"}`,
+  ...(sairam.length ? [`Deixaram de ter sinal: ${sairam.map(p => p.ticker).join(", ")}`] : []),
+  `Todas as recomendações: ${siteSinais}`, "",
   `As duas análises concordam — compra: ${convBuy.map(([e]) => e.ticker).join(", ") || "nenhum"}; venda: ${convSell.map(([e]) => e.ticker).join(", ") || "nenhum"}`, "",
   `Painel completo: ${cfg.site}`,
 ].join("\n");
