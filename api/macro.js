@@ -29,6 +29,7 @@
 //        regulatory capital and Basel ratio of each one, summed for the share of the 5 largest, the system's
 //        Basel ratio (capital ÷ risk-weighted assets) and its return on equity. Net income is cumulative per
 //        semester, so the last two semesters (June and December) make 12 months. Quarterly, ~3 months late.
+//        SGS 1828: reserve requirements deposited in cash at the Central Bank (R$ thousand, end of month).
 
 import { json, bad } from "./_yahoo.js";
 
@@ -202,7 +203,7 @@ async function bancos() {
   const y = Math.floor(q / 100), s1 = q % 100 >= 12 ? q : q % 100 >= 6 ? y * 100 + 6 : (y - 1) * 100 + 12, s0 = trimAntes(s1, 2);
   const ll = s => s === q ? Promise.resolve(rows) : ifdata(s, "NomeColuna eq 'Lucro Líquido'", "CodInst,NomeColuna,Saldo");
   const ano = trimAntes(q, 4);
-  const [l1, l0, atAno, spread] = await Promise.all([ll(s1), ll(s0), ifdata(ano, "NomeColuna eq 'Ativo Total'", "CodInst,NomeColuna,Saldo").catch(() => []), sgs(20783)]);
+  const [l1, l0, atAno, spread, compuls] = await Promise.all([ll(s1), ll(s0), ifdata(ano, "NomeColuna eq 'Ativo Total'", "CodInst,NomeColuna,Saldo").catch(() => []), sgs(20783), sgs(1828).catch(() => [])]);
   const ativo = porInst(rows, "Ativo Total"), credito = porInst(rows, "Carteira de Crédito"), pl = porInst(rows, "Patrimônio Líquido"),
     pr = porInst(rows, "Patrimônio de Referência"), basileia = porInst(rows, "Índice de Basileia");
   const totAtivo = soma(ativo), totCred = soma(credito), maiores = top5(ativo);
@@ -221,7 +222,8 @@ async function bancos() {
     top5_ativo_ano: totA ? top5(atA).reduce((s, [, v]) => s + v, 0) / totA * 100 : null,
     top5_credito: top5(credito).reduce((s, [, v]) => s + v, 0) / totCred * 100,
     basileia: rwa ? prBas / rwa * 100 : null,
-    lucro_12m: lucro, patrimonio: soma(pl), roe: lucro / soma(pl) * 100,
+    lucro_12m: lucro, patrimonio: soma(pl), roe: lucro / soma(pl) * 100, capital: soma(pr),
+    compulsorio: compuls.slice(-13).map(([m, v]) => [m, v * 1000]),
     lucro_ate: `${Math.floor(s1 / 100)}-${String(s1 % 100).padStart(2, "0")}`,
     spread,
   };
