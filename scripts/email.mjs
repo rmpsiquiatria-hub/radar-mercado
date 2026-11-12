@@ -236,13 +236,14 @@ function overviewTable() {
 
 const dayLong = dateBR(rep.data, { weekday: "long", day: "2-digit", month: "long" });
 const nMud = buysNew.length + warnsNew.length + sairam.length;
-const subject = `Radar do Mercado · ${dateBR(rep.data, { day: "2-digit", month: "2-digit" })} · ${prevRep ? `${nMud} ${nMud === 1 ? "mudança" : "mudanças"} nos sinais` : `${buys.length} sinais de compra, ${warns.length} de atenção`} · ${convBuy.length + convSell.length} onde as análises concordam`;
+const subject = `📅 Análise DIÁRIA · ${dateBR(rep.data, { day: "2-digit", month: "2-digit" })} · ${prevRep ? `${nMud} ${nMud === 1 ? "mudança" : "mudanças"} nos sinais` : `${buys.length} sinais de compra, ${warns.length} de atenção`} · ${convBuy.length + convSell.length} onde as análises concordam`;
 const prevDia = prevRep ? dateBR(prevRep.data, { day: "2-digit", month: "2-digit" }) : null;
 const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(subject)}</title></head>
 <body style="margin:0;padding:0;background:#f4f6f8">
 <div style="max-width:680px;margin:0 auto;padding:20px 16px;font-family:Arial,Helvetica,sans-serif;color:#0f1b24;line-height:1.5;background:#ffffff">
-  <div style="font-size:12px;color:${MUTED};text-transform:uppercase;letter-spacing:.06em;font-weight:700">Radar do Mercado</div>
-  <h1 style="font-size:22px;margin:4px 0 2px">Relatório de ${esc(dayLong)}</h1>
+  <div style="font-size:12px;color:${MUTED};text-transform:uppercase;letter-spacing:.06em;font-weight:700">Radar do Mercado · 📅 análise diária</div>
+  <h1 style="font-size:22px;margin:4px 0 2px">Análise diária · ${esc(dayLong)}</h1>
+  <p style="background:#e0f2ef;border-left:4px solid #0f766e;border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0">Este é o e-mail <b>diário</b> (segunda a sexta): mostra como o mercado <b>fechou no último pregão</b>, com as recomendações das casas de análise (fundamentalista) e o <b>gráfico diário</b> (técnica, um candle por dia). Reage rápido e muda de um dia para o outro. Aos sábados chega o e-mail <b>semanal</b>, só com o gráfico semanal, que mostra o que a semana inteira deixou no preço.</p>
   ${hint(`${emps.length} empresas · Ibovespa + sua lista · análise técnica no gráfico ${FRAME_LABEL[TF].toLowerCase()}`)}
   ${staleResearch ? `<p style="background:#fff3dc;color:${AMBER};padding:10px 12px;border-radius:8px;font-size:14px"><b>Atenção:</b> a pesquisa de notícias de hoje não rodou; recomendações e notícias são de ${dateBR(rep.pesquisa_data)}. Preços, indicadores e análise técnica estão atualizados.</p>` : ""}
   ${h2("🌎 Resumo do mercado")}
@@ -306,11 +307,11 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
 /* ---------- Saturday e-mail: the week on the weekly chart ---------- */
 const weekRows = lado => emps.filter(e => e.tecnica?.semanal?.vies === lado).sort((a, b) => Math.abs(b.tecnica.semanal.pontuacao) - Math.abs(a.tecnica.semanal.pontuacao));
 const weekList = lado => { const l = weekRows(lado); return l.length ? porMercado(l, e => e, l => `<p style="margin:0 0 8px;font-size:14px">${l.map(e => `${link(e)}${e.origem?.includes("lista pessoal") ? " ★" : ""}`).join(" · ")}</p>`) : hint("Nenhuma."); };
-const weekSubject = `Radar do Mercado · análise técnica da ${techPeriod}`;
+const weekSubject = `🗓️ Análise SEMANAL · ${techPeriod} · gráfico semanal`;
 const weekHtml = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(weekSubject)}</title></head>
 <body style="margin:0;background:#f4f6f8"><div style="max-width:680px;margin:0 auto;padding:20px 16px;font-family:Arial,Helvetica,sans-serif;color:#0f1b24;line-height:1.5;background:#ffffff">
-  <div style="font-size:12px;color:${MUTED};text-transform:uppercase;letter-spacing:.06em;font-weight:700">Radar do Mercado · resumo da semana</div>
-  <h1 style="font-size:22px;margin:4px 0 2px">Análise técnica da ${techPeriod}</h1>
+  <div style="font-size:12px;color:${MUTED};text-transform:uppercase;letter-spacing:.06em;font-weight:700">Radar do Mercado · 🗓️ análise semanal</div>
+  <h1 style="font-size:22px;margin:4px 0 2px">Análise semanal · ${techPeriod}</h1>
   ${hint(`${emps.length} empresas · Ibovespa + sua lista · gráfico semanal: cada candle é uma semana de negociação, de segunda a sexta`)}
   <p style="background:#ede9fe;border-left:4px solid #6d28d9;border-radius:8px;padding:12px 14px;font-size:14px;margin:14px 0">
     Os e-mails de segunda a sexta olham o <b>gráfico diário</b>, que reage rápido e muda de um dia para o outro.
@@ -328,12 +329,12 @@ const weekHtml = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
   <p style="margin:28px 0 8px"><a href="${esc(cfg.site)}" style="display:inline-block;background:#0f766e;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700">Abrir o painel completo</a></p>
   <p style="font-size:12px;color:#8c99a3;margin-top:24px">Cotações e candles: Yahoo Finance. Análise técnica calculada por programa, sem IA. Não é recomendação de investimento.</p>
 </div></body></html>`;
-const weekText = [`Radar do Mercado — análise técnica da ${techPeriod} (gráfico semanal)`, "",
+const weekText = [`Radar do Mercado — análise SEMANAL da ${techPeriod} (gráfico semanal)`, "",
   `Viés de alta: ${weekRows("alta").map(e => e.ticker).join(", ") || "nenhuma"}`, `Viés de baixa: ${weekRows("baixa").map(e => e.ticker).join(", ") || "nenhuma"}`, "",
   `Painel completo: ${cfg.site}`].join("\n");
 
 const text = [
-  `Radar do Mercado — relatório de ${dayLong}`, "", rep.resumo_mercado, "",
+  `Radar do Mercado — análise DIÁRIA de ${dayLong}`, "", rep.resumo_mercado, "",
   `${prevRep ? "Novos sinais de compra" : "Sinais de compra"} (${buysNew.length}): ${buysNew.map(([e]) => e.ticker).join(", ") || "nenhum"}`,
   `${prevRep ? "Novos pontos de atenção" : "Pontos de atenção"} (${warnsNew.length}): ${warnsNew.map(([e]) => e.ticker).join(", ") || "nenhum"}`,
   ...(sairam.length ? [`Deixaram de ter sinal: ${sairam.map(p => p.ticker).join(", ")}`] : []),
