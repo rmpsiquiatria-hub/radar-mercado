@@ -24,6 +24,11 @@
 // Famílias: Central Bank SGS 29034 and 29035 (share of household income spent on bank debt service, seasonally
 //        adjusted, total and without mortgages); IPEA CNC12_PEICT12, CNC12_PEICA12 and CNC12_PEICSC12 (CNC's PEIC
 //        survey: families with debts, with debts in arrears and unable to pay them, as fractions turned into %).
+// Bancos: Central Bank SGS 20783 (average bank spread on all loans, p.p.) and IF.data (Olinda), report 1
+//        "Resumo" for prudential conglomerates and independent institutions: total assets, loans, equity,
+//        regulatory capital and Basel ratio of each one, summed for the share of the 5 largest, the system's
+//        Basel ratio (capital ÷ risk-weighted assets) and its return on equity. Net income is cumulative per
+//        semester, so the last two semesters (June and December) make 12 months. Quarterly, ~3 months late.
 
 import { json, bad } from "./_yahoo.js";
 
@@ -177,10 +182,55 @@ async function familias() {
   return { comprometimento: comp, sem_imovel: semImovel, endividadas: pct(endiv), atraso: pct(atraso), sem_pagar: pct(semPagar) };
 }
 
+const OLINDA = "https://olinda.bcb.gov.br/olinda/servico/IFDATA/versao/v1/odata";
+const ifdata = (q, filtro, campos) => getJson(`${OLINDA}/IfDataValores(AnoMes=${q},TipoInstituicao=1,Relatorio='1')?$filter=${encodeURIComponent(filtro)}&$select=${campos}&$format=json`).then(o => o.value);
+// Quarter AAAAMM moved back n quarters.
+const trimAntes = (q, n) => { let y = Math.floor(q / 100), m = q % 100 - 3 * n; while (m <= 0) { m += 12; y--; } return y * 100 + m; };
+// Sums one column per institution (the API sometimes repeats a row).
+const porInst = (rows, col) => { const o = {}; rows.forEach(r => { if (r.NomeColuna?.trim().startsWith(col) && !(r.CodInst in o)) o[r.CodInst] = r.Saldo || 0; }); return o; };
+const soma = o => Object.values(o).reduce((s, v) => s + v, 0);
+const top5 = o => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+async function bancos() {
+  const cols = ["Ativo Total", "Carteira de Crédito", "Patrimônio Líquido", "Lucro Líquido", "Índice de Basileia"];
+  const filtro = cols.map(c => `NomeColuna eq '${c}'`).join(" or ") + " or startswith(NomeColuna,'Patrimônio de Referência')";
+  const hoje = new Date();
+  let q = trimAntes(hoje.getUTCFullYear() * 100 + Math.floor(hoje.getUTCMonth() / 3) * 3 + 3, 1), rows = [];
+  for (let t = 0; t < 4 && !rows.length; t++) { if (t) q = trimAntes(q, 1); rows = await ifdata(q, filtro, "CodInst,NomeColuna,Saldo"); }
+  if (!rows.length) throw new Error("IF.data sem dados");
+  // last two semester ends (June/December) for 12 months of profit
+  const y = Math.floor(q / 100), s1 = q % 100 >= 12 ? q : q % 100 >= 6 ? y * 100 + 6 : (y - 1) * 100 + 12, s0 = trimAntes(s1, 2);
+  const ll = s => s === q ? Promise.resolve(rows) : ifdata(s, "NomeColuna eq 'Lucro Líquido'", "CodInst,NomeColuna,Saldo");
+  const ano = trimAntes(q, 4);
+  const [l1, l0, atAno, spread] = await Promise.all([ll(s1), ll(s0), ifdata(ano, "NomeColuna eq 'Ativo Total'", "CodInst,NomeColuna,Saldo").catch(() => []), sgs(20783)]);
+  const ativo = porInst(rows, "Ativo Total"), credito = porInst(rows, "Carteira de Crédito"), pl = porInst(rows, "Patrimônio Líquido"),
+    pr = porInst(rows, "Patrimônio de Referência"), basileia = porInst(rows, "Índice de Basileia");
+  const totAtivo = soma(ativo), totCred = soma(credito), maiores = top5(ativo);
+  let rwa = 0, prBas = 0; for (const k in pr) if (basileia[k] > 0 && pr[k] > 0) { prBas += pr[k]; rwa += pr[k] / basileia[k]; }
+  const lucro = soma(porInst(l1, "Lucro Líquido")) + soma(porInst(l0, "Lucro Líquido"));
+  const atA = porInst(atAno, "Ativo Total"), totA = soma(atA);
+  const filtroNome = maiores.map(([k]) => `CodInst eq '${k}'`).join(" or ");
+  const cad = await getJson(`${OLINDA}/IfDataCadastro(AnoMes=${q})?$filter=${encodeURIComponent(filtroNome)}&$select=CodInst,NomeInstituicao&$format=json`).then(o => o.value).catch(() => []);
+  const nome = k => (cad.find(c => c.CodInst === k)?.NomeInstituicao || k).replace(/\s*-\s*PRUDENCIAL$/i, "");
+  return {
+    trimestre: `${y}-${String(q % 100).padStart(2, "0")}`,
+    instituicoes: Object.keys(ativo).length,
+    ativo_total: totAtivo,
+    maiores: maiores.map(([k, v]) => ({ nome: nome(k), ativo: v / totAtivo * 100, credito: (credito[k] || 0) / totCred * 100 })),
+    top5_ativo: maiores.reduce((s, [, v]) => s + v, 0) / totAtivo * 100,
+    top5_ativo_ano: totA ? top5(atA).reduce((s, [, v]) => s + v, 0) / totA * 100 : null,
+    top5_credito: top5(credito).reduce((s, [, v]) => s + v, 0) / totCred * 100,
+    basileia: rwa ? prBas / rwa * 100 : null,
+    lucro_12m: lucro, patrimonio: soma(pl), roe: lucro / soma(pl) * 100,
+    lucro_ate: `${Math.floor(s1 / 100)}-${String(s1 % 100).padStart(2, "0")}`,
+    spread,
+  };
+}
+
 export async function GET(request) {
   const longo = new URL(request.url).searchParams.has("historico");
-  const [s, i, d, sm, ev, ih, pb, pc, rd, dv, fm] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh(), pib(), pibpc(), renda(), divida(), familias()]);
+  const [s, i, d, sm, ev, ih, pb, pc, rd, dv, fm, bc] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh(), pib(), pibpc(), renda(), divida(), familias(), bancos()]);
   if ([s, i, d].every(x => x.status === "rejected")) return bad("fontes indisponíveis", 502);
   const val = x => x.status === "fulfilled" ? x.value : { erro: String(x.reason?.message || x.reason) };
-  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih), pib: val(pb), pibpc: val(pc), renda: val(rd), divida: val(dv), familias: val(fm) }, 21600);
+  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih), pib: val(pb), pibpc: val(pc), renda: val(rd), divida: val(dv), familias: val(fm), bancos: val(bc) }, 21600);
 }
