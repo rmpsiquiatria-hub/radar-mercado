@@ -1,0 +1,333 @@
+{
+ "data": "2026-11-13",
+ "gerado_em": "2026-11-14T05:30:00-03:00",
+ "resumo": {
+  "federal": "No Diário Oficial da União, o destaque é a zeragem do imposto de importação de dois remédios (um para insônia e outro para hemofilia). Também saíram novas datas para a nota fiscal eletrônica do IBS/CBS (reforma tributária), a ratificação de um convênio do Confaz sobre perdão de juros e multas de ICMS, e uma consulta pública do SUS sobre um remédio para câncer de mama. A Lei 15.529 reforça o orçamento da Previdência e da Assistência Social.",
+  "estadual": "No Rio Grande do Sul, o governador alterou o regulamento do ICMS (substituição tributária em operações interestaduais), abriu créditos no orçamento e homologou situações de emergência em vários municípios. A Secretaria da Saúde habilitou Passo Fundo e Lagoa Vermelha no programa de atenção domiciliar e a Secretaria da Educação publicou regras de organização curricular.",
+  "municipal": "Não foi possível coletar o Diário Oficial de Lajeado neste dia: a fonte falhou (HTTP 500). Não dá para dizer se houve publicação."
+ },
+ "destaques": [
+  {
+   "id": "dou-744139384",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "tributos",
+    "importação"
+   ],
+   "o_que_muda": "Entram na lista de exceções à Tarifa Externa Comum dois medicamentos importados: um com lemborexante (insônia) e outro com fitusirana sódica (hemofilia). O imposto de importação desses produtos passa a ser 0%, ou seja, diminui.",
+   "quem_afeta": "Importadores, hospitais, farmácias e pacientes que usam esses remédios.",
+   "vigencia": "16/11/2026",
+   "imposto": {
+    "tributo": "Imposto de importação (medicamentos NCM 3004.90.69 e 3004.90.79)",
+    "antes": "7,2% (não confirmado)",
+    "depois": "0%",
+    "variacao_pct": -100,
+    "obs": "Valor anterior de sites de consulta de NCM, que citam a Res. Gecex 391/2022 (ex.: remessaonline.com.br e buscadorncm.com.br); não confirmado em fonte oficial. A queda seria de 7,2 pontos percentuais."
+   },
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO GECEX Nº 985, DE 12 DE NOVEMBRO DE 2026",
+   "orgao": "Presidência da República / Comitê-Executivo de Gestão",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-gecex-n-985-de-12-de-novembro-de-2026-744139384",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744158733",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "O Ministério da Saúde abriu consulta pública, com 20 dias para contribuições, sobre a proposta da Conitec de incluir no SUS o trastuzumabe deruxtecana, remédio para câncer de mama HER2-positivo metastático ou sem possibilidade de cirurgia. Ainda não é decisão final.",
+   "quem_afeta": "Oncologistas, pacientes com câncer de mama e serviços de saúde do SUS.",
+   "vigencia": "Prazo de 20 dias para enviar contribuições.",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "CONSULTA PÚBLICA SCTIE/MS Nº 110, DE 10 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Saúde / Secretaria de Ciência, Tecnologia e Inovação em Saúde",
+   "tipo": "Aviso de Consulta Pública",
+   "url": "https://www.in.gov.br/web/dou/-/consulta-publica-sctie/ms-n-110-de-10-de-novembro-de-2026-744158733",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744148934",
+   "relevancia": "alta",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "reforma tributária",
+    "nota fiscal"
+   ],
+   "o_que_muda": "Muda o calendário em que a nota fiscal eletrônica do IBS e da CBS passa a ser obrigatória. Plataformas digitais, serviços também sujeitos ao ISS e transporte de passageiros ficam para 1º/03/2027. Bens imateriais, condomínios, locações e demais serviços ficam para 1º/01/2027. NFGas e NFAg: 1º/01/2027.",
+   "quem_afeta": "Empresas, prestadores de serviço, plataformas digitais, condomínios e contadores.",
+   "vigencia": "Na publicação; datas de obrigatoriedade de 15/12/2026 a 1º/03/2027.",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "ATO CONJUNTO RFB/CGIBS Nº 7, DE 11 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "tipo": "Ato",
+   "url": "https://www.in.gov.br/web/dou/-/ato-conjunto-rfb/cgibs-n-7-de-11-de-novembro-de-2026-744148934",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744150524",
+   "relevancia": "alta",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS"
+   ],
+   "o_que_muda": "O Confaz ratificou o Convênio ICMS 125/26, que altera o Convênio 79/2020. Ele autoriza os estados a dispensar ou reduzir juros, multas e outros acréscimos em dívidas de ICMS quitadas ou parceladas.",
+   "quem_afeta": "Empresas com dívidas de ICMS.",
+   "vigencia": "Depende de lei ou decreto de cada estado.",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "ATO DECLARATÓRIO Nº 28, DE 12 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "tipo": "Ato Normativo",
+   "url": "https://www.in.gov.br/web/dou/-/ato-declaratorio-n-28-de-12-de-novembro-de-2026-744150524",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1505065",
+   "relevancia": "alta",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS"
+   ],
+   "o_que_muda": "O Decreto 59.076 muda o regulamento do ICMS do RS conforme protocolos e despachos do Confaz. Em operações interestaduais com certas mercadorias, o remetente de quase todos os estados (exceto BA, CE, SC e SP) fica responsável por recolher o imposto (substituição tributária). Também muda a lista de estados em outro artigo (AL, AP, MG, MT, PR e RJ).",
+   "quem_afeta": "Empresas e contadores que vendem ao RS.",
+   "vigencia": "Na publicação, com efeitos de 31/08 a 31/12/2026 (art. 1º) e de 1º/10 a 31/12/2026 (arts. 2º e 3º).",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.076, DE 12 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505065",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "dou-744140851",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "orçamento",
+    "previdência",
+    "assistência social"
+   ],
+   "o_que_muda": "Republicação da Lei 15.529, que abre crédito suplementar de R$ 149,4 bilhões no orçamento da Seguridade Social. O dinheiro reforça a Previdência e o BPC e outros programas do Ministério do Desenvolvimento e Assistência Social.",
+   "quem_afeta": "Beneficiários do INSS e do BPC.",
+   "vigencia": "Na publicação.",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "REPUBLICAÇÃO",
+   "orgao": "Atos do Poder Legislativo",
+   "tipo": "Lei",
+   "url": "https://www.in.gov.br/web/dou/-/republicacao-744140851",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744160994",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "previdência",
+    "INSS"
+   ],
+   "o_que_muda": "Fixa os índices de atualização de novembro de 2026 para salários de contribuição, benefícios pagos em atraso e pecúlios do INSS: 1,002200 para a maioria dos casos.",
+   "quem_afeta": "Segurados do INSS que pedem aposentadoria ou recebem atrasados.",
+   "vigencia": "Na publicação (mês de novembro/2026).",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA MPS Nº 1.624, DE 12 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Previdência Social / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mps-n-1.624-de-12-de-novembro-de-2026-744160994",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744154592",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "telecomunicações",
+    "consumidor"
+   ],
+   "o_que_muda": "A Anatel garante até 31/12/2030 a continuidade dos contratos de roaming nacional usados em conectividade de máquinas e internet das coisas (IoT), firmados até 08/09/2025. A operadora não pode cancelar o contrato por conta própria, salvo descumprimento grave.",
+   "quem_afeta": "Empresas que usam IoT e M2M (rastreadores, medidores) e operadoras.",
+   "vigencia": "Na publicação.",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO ANATEL Nº 795, DE 11 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério das Comunicações / Conselho Diretor",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-anatel-n-795-de-11-de-novembro-de-2026-744154592",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744147889",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "profissões"
+   ],
+   "o_que_muda": "O Conselho Federal de Nutrição reconhece e orienta a atuação de nutricionistas na assistência social (CRAS, abrigos e outras ofertas socioassistenciais).",
+   "quem_afeta": "Nutricionistas e serviços de assistência social.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO CFN Nº 868, DE 11 DE NOVEMBRO DE 2026",
+   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Nutrição",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-cfn-n-868-de-11-de-novembro-de-2026-744147889",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744158654",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "agrotóxicos",
+    "vigilância sanitária"
+   ],
+   "o_que_muda": "Anvisa abriu consulta pública, por 60 dias, sobre proposta que atualiza a monografia do ingrediente Pseudomonas chlororaphis na lista de ativos de agrotóxicos e saneantes.",
+   "quem_afeta": "Fabricantes de agrotóxicos e saneantes e o setor agrícola.",
+   "vigencia": "Prazo de 60 dias a partir de 3 dias úteis após a publicação.",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "CONSULTA PÚBLICA Nº 1.436, DE 12 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Saúde / Gerência-Geral de Toxicologia",
+   "tipo": "Aviso de Consulta Pública",
+   "url": "https://www.in.gov.br/web/dou/-/consulta-publica-n-1.436-de-12-de-novembro-de-2026-744158654",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744156846",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "consumidor",
+    "qualidade"
+   ],
+   "o_que_muda": "O Inmetro aprova o regulamento consolidado de qualidade e segurança dos aquecedores solares de água. Fornecedores precisam cumprir os requisitos e usar o selo de conformidade.",
+   "quem_afeta": "Fabricantes, importadores e vendedores de aquecedor solar.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA Nº 633, DE 5 DE NOVEMBRO DE 2026 (*)",
+   "orgao": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços / Instituto Nacional de Metrologia, Qualidade e Tecnologia",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-n-633-de-5-de-novembro-de-2026-*-744156846",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1505059",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "A Secretaria da Saúde habilita Passo Fundo (2 equipes EMAD I) e Lagoa Vermelha (1 equipe EMAD II) a receber recursos do programa estadual de atenção domiciliar, custeadas pelo Estado.",
+   "quem_afeta": "Pacientes em atendimento domiciliar e gestores de saúde nesses municípios.",
+   "vigencia": "Competência de novembro de 2026.",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 857/2026",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505059",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1505137",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "educação"
+   ],
+   "o_que_muda": "A Portaria SEDUC 1518/2026 trata da organização curricular do Ensino Fundamental e do Médio nas escolas da rede estadual. O texto coletado veio incompleto e não deu para detalhar as regras.",
+   "quem_afeta": "Alunos, famílias e professores da rede estadual.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "PORTARIA SEDUC/RS Nº 1518/2026",
+   "orgao": "Gabinete da Secretária",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505137",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1505041",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "saneamento",
+    "serviços públicos"
+   ],
+   "o_que_muda": "A AGERGS abre consulta pública (16/11 a 07/12/2026) e audiência pública on-line (07/12, 14h) sobre a agenda regulatória de saneamento 2027-2028.",
+   "quem_afeta": "Usuários e empresas de água e esgoto no RS.",
+   "vigencia": "Consulta de 16/11 a 07/12/2026.",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "Consulta Pública nº 10/2026 e Audiência Pública nº 10/2026",
+   "orgao": "Conselho-Superior",
+   "tipo": "Diversos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505041",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1505062",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "orçamento",
+    "segurança pública"
+   ],
+   "o_que_muda": "O Decreto 59.075 abre crédito especial de R$ 24,2 milhões, de convênio com o Ministério da Justiça, para câmeras corporais da Brigada Militar.",
+   "quem_afeta": "Brigada Militar e população.",
+   "vigencia": "Na publicação.",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.075, DE 12 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505062",
+   "fonte": "DOE-RS"
+  }
+ ],
+ "demais": {
+  "federal": "Cerca de 340 outros atos: portarias de transferência a municípios, autorizações de telecomunicações, 13 resoluções do Conter, decisões da Anvisa sobre empresas, liquidações do Banco Central, Ex-tarifários do Gecex, homologações do Inmetro e despachos individuais.",
+  "estadual": "Cerca de 75 outros atos: decreto de crédito suplementar de R$ 795 milhões (59.079), emergências em vários municípios, resoluções da CIB/RS sobre habilitações de saúde, portarias da Polícia Penal, repasses da Defesa Civil e atos de pessoal.",
+  "municipal": "Sem dados: a coleta de Lajeado falhou."
+ },
+ "fontes": {
+  "federal": {
+   "ok": true,
+   "atos": 359,
+   "lista": 2792
+  },
+  "estadual": {
+   "ok": true,
+   "atos": 91,
+   "lista": 353,
+   "publicados": 479
+  },
+  "municipal": {
+   "ok": false,
+   "erro": "HTTP 500"
+  }
+ },
+ "coletado_em": "2026-11-14T04:05:48.430Z",
+ "totais": {
+  "federal": 3151,
+  "estadual": 444,
+  "municipal": 0
+ }
+}
