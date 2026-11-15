@@ -30,8 +30,14 @@
 //        Basel ratio (capital ÷ risk-weighted assets) and its return on equity. Net income is cumulative per
 //        semester, so the last two semesters (June and December) make 12 months. Quarterly, ~3 months late.
 //        SGS 1828: reserve requirements deposited in cash at the Central Bank (R$ thousand, end of month).
+// Gastos federais: Treasury's Resultado do Tesouro Nacional, monthly historical spreadsheet (Tesouro
+//        Transparente CKAN dataset "resultado-do-tesouro-nacional"; the file name changes every month, so the
+//        current link comes from the CKAN API). Table 1.1 (R$ million, current prices) and 1.1-A (constant
+//        prices, IPCA) of the central government: total primary spending and its main groups, monthly.
+//        Interest on the debt is not in it; the yearly all-levels picture (COFOG) is typed into index.html.
 
 import { json, bad } from "./_yahoo.js";
+import { lerXlsx } from "../lib/xlsx.mjs";
 
 async function getJson(url) {
   const r = await fetch(url, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(20000) });
@@ -229,10 +235,36 @@ async function bancos() {
   };
 }
 
+async function gastos() {
+  const pkg = await getJson("https://www.tesourotransparente.gov.br/ckan/api/3/action/package_show?id=resultado-do-tesouro-nacional");
+  const rec = pkg.result.resources.find(r => /xlsx$/i.test(r.url) && /mensal/i.test(r.name));
+  if (!rec) throw new Error("planilha do RTN não encontrada");
+  const r = await fetch(rec.url, { signal: AbortSignal.timeout(40000) });
+  if (!r.ok) throw new Error(`RTN ${r.status}`);
+  const w = lerXlsx(Buffer.from(await r.arrayBuffer()), ["1.1", "1.1-A"]);
+  // Each sheet: a header row ("Discriminação" + Excel date serials), then one row per line item.
+  const ler = g => {
+    const h = g.find(l => l[0] === "Discriminação");
+    const meses = h.map(v => typeof v === "number" ? new Date(Date.UTC(1899, 11, 30) + v * 864e5).toISOString().slice(0, 7) : null);
+    const linha = ini => { const l = g.find(x => typeof x[0] === "string" && x[0].replace(/\s+/g, " ").trim().startsWith(ini)); if (!l) throw new Error("linha " + ini);
+      return meses.map((m, i) => m && typeof l[i] === "number" ? [m, l[i] * 1e6] : null).filter(Boolean); };
+    return { total: linha("4. DESPESA TOTAL"), prev: linha("4.1 Benefícios Previdenciários"), pessoal: linha("4.2 Pessoal"), obrig: linha("4.3 Outras Despesas Obrigatórias"),
+      bpc: linha("4.3.05 Benefícios de Prestação Continuada"), discr: linha("4.4.2 Despesas Discricionárias"), transf: linha("2. TRANSF. POR REPARTIÇÃO") };
+  };
+  const c = ler(w["1.1"]), k = ler(w["1.1-A"]);
+  const soma12 = (s, n = 0) => s.length >= 12 + n ? s.slice(s.length - 12 - n, s.length - n).reduce((a, x) => a + x[1], 0) : null;
+  const ult = c.total.at(-1)[0], grupo = s => ({ mes: s.at(-1)[1], m12: soma12(s) });
+  return {
+    mes: ult, total_12m: soma12(c.total), real_12m: soma12(k.total) / soma12(k.total, 12) * 100 - 100,
+    grupos: { prev: grupo(c.prev), pessoal: grupo(c.pessoal), obrig: grupo(c.obrig), bpc: grupo(c.bpc), discr: grupo(c.discr), transf: grupo(c.transf) },
+    mensal: c.total, prev: c.prev, pessoal: c.pessoal,
+  };
+}
+
 export async function GET(request) {
   const longo = new URL(request.url).searchParams.has("historico");
-  const [s, i, d, sm, ev, ih, pb, pc, rd, dv, fm, bc] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh(), pib(), pibpc(), renda(), divida(), familias(), bancos()]);
+  const [s, i, d, sm, ev, ih, pb, pc, rd, dv, fm, bc, gf] = await Promise.allSettled([selic(longo), ipca(longo), desemprego(longo), salmin(), expvida(), idh(), pib(), pibpc(), renda(), divida(), familias(), bancos(), gastos()]);
   if ([s, i, d].every(x => x.status === "rejected")) return bad("fontes indisponíveis", 502);
   const val = x => x.status === "fulfilled" ? x.value : { erro: String(x.reason?.message || x.reason) };
-  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih), pib: val(pb), pibpc: val(pc), renda: val(rd), divida: val(dv), familias: val(fm), bancos: val(bc) }, 21600);
+  return json({ selic: val(s), ipca: val(i), desemprego: val(d), salmin: val(sm), expvida: val(ev), idh: val(ih), pib: val(pb), pibpc: val(pc), renda: val(rd), divida: val(dv), familias: val(fm), bancos: val(bc), gastos: val(gf) }, 21600);
 }

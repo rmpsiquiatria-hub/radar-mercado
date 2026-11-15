@@ -1055,6 +1055,28 @@ function detentoresHTML() {
       <div class="dono-bar"><i style="width:${(p / max * 100).toFixed(1)}%"></i></div></div>`).join("")}</div>
     <p class="hint" style="margin-top:6px">Títulos do governo federal vendidos no Brasil (DPMFi): R$ ${nf(2).format(D.total / 1e12)} trilhões em ${mesCurto(D.mes)}. A parte devida em moeda estrangeira (${nf(1).format(D.dpfe_pct)}% da dívida federal) e as dívidas de estados e municípios ficam de fora.</p>`;
 }
+// All levels of government (União, states and municipalities), from the Treasury's yearly COFOG bulletin
+// (Despesa por Função do Governo Geral, R$ million). Typed in by hand once a year: it comes out in December
+// with the year before. Each level's figure is gross (it includes what it hands to the others, like the
+// FPM and SUS transfers); "consolidacao" removes those double counts. Per area: [name, total, União,
+// estados, municípios, what it covers]; interest is split out of "Serviços públicos gerais".
+const GOVERNO_GERAL = { ano: 2024, total: 5377521, pib_pct: 45.79, ant_pct: 45.31,
+  esferas: [["União", 3786079], ["Estados", 1581727], ["Municípios", 1303960]], consolidacao: -1294245,
+  areas: [
+    ["Proteção social", 1941604, 1518547, 301687, 151308, "aposentadorias e pensões (INSS e servidores), BPC, Bolsa Família, seguro-desemprego"],
+    ["Juros da dívida", 971991, 937681, 102522, 10409, "juros pagos a quem empresta ao governo"],
+    ["Educação", 599178, 250239, 226431, 309523, "escolas, universidades, merenda, transporte escolar"],
+    ["Saúde", 590982, 247715, 232654, 325058, "SUS: hospitais, postos de saúde, remédios, vacinas"],
+    ["Segurança e Justiça", 346997, 71717, 265416, 17616, "polícias, bombeiros, presídios e tribunais"],
+    ["Administração e outros", 329589, 616715, 297687, 166007, "funcionamento dos Três Poderes, repasses sem destino definido"],
+    ["Economia e infraestrutura", 265604, 74024, 107990, 97355, "transporte, estradas, energia, agricultura"],
+    ["Moradia e cidade", 159650, 6211, 21416, 137905, "habitação, água, iluminação e urbanismo"],
+    ["Meio ambiente", 65313, 3511, 9891, 52985, "coleta de lixo, esgoto, preservação"],
+    ["Defesa", 59397, 55845, 3661, 2826, "Forças Armadas"],
+    ["Cultura, esporte e lazer", 47214, 3872, 12371, 32967, ""],
+  ] };
+const ggPib = () => GOVERNO_GERAL.total / GOVERNO_GERAL.pib_pct * 100;   // GDP of that year, R$ million
+const tri = v => "R$ " + nf(2).format(v / 1e12) + " tri", biR = v => "R$ " + nf(0).format(v / 1e9) + " bi";
 // Social benefits that need no INSS contribution, typed in from official releases (MDS, MEC, ANEEL,
 // PLDO). Updated by hand, like DETENTORES. pessoas = people reached (null when only households are
 // counted); gasto = yearly cost in reais, an estimate or the budget as the "gastoNota" says.
@@ -1191,6 +1213,18 @@ function macroCards() {
       ${bc.capital ? `<span class="idx-sub" title="Capital próprio de todos os bancos somados (Patrimônio de Referência), que absorve prejuízos; o Índice de Basileia compara esse capital com o risco do que emprestaram; o compulsório é parte dos depósitos dos clientes que fica parada no Banco Central"><span>Capital e reservas · ${mesCurto(bc.trimestre)}</span><b class="num">R$ ${nf(2).format(bc.capital / 1e12)} tri</b><small class="num">de capital próprio</small>${bc.basileia != null ? `<small class="num">Basileia ${nf(1).format(bc.basileia)}% (mín. 10,5%)</small>` : ""}${bc.compulsorio?.length ? `<small class="num">R$ ${nf(0).format(bc.compulsorio.at(-1)[1] / 1e9)} bi de compulsório no BC (${mesCurto(bc.compulsorio.at(-1)[0])})</small>` : ""}</span>` : ""}
     </button>`);
   }
+  // Public spending card: all levels of government (hand-kept, yearly) on top, then who spends it, the largest
+  // areas, and the federal government's spending over the last 12 months (Treasury, monthly).
+  { const G = GOVERNO_GERAL, gf = macro.gastos, pibA = ggPib(), d = G.pib_pct - G.ant_pct, top = [...G.areas].sort((a, b) => b[1] - a[1]).slice(0, 4);
+    out.push(`<button class="card idx macro" data-open="MACRO:gastos" data-max="1" title="Tudo o que o setor público gasta, somando União, estados e municípios e os juros da dívida (Tesouro Nacional) · ver o gasto federal mês a mês">
+      <div class="lbl">Gasto público<span class="mk">${G.ano}</span></div>
+      <div class="px num">${nf(1).format(G.pib_pct)}% <span style="font-size:12px;font-weight:500">do PIB</span></div>
+      <div class="ch num flat">${d > 0 ? "+" : ""}${nf(1).format(d)} p.p. em 1 ano</div>
+      <div class="since">${tri(G.total * 1e6)} · União, estados e municípios, com juros</div>
+      <span class="idx-sub" title="Quanto cada esfera gastou, contando o que repassou às outras (por isso a soma passa do total)"><span>Quem gasta · ${G.ano}</span>${G.esferas.map(([n, v], i) => i ? `<small class="num">${n} ${tri(v * 1e6)}</small>` : `<b class="num">${n} ${tri(v * 1e6)}</b>`).join("")}</span>
+      <span class="idx-sub" title="As 4 áreas que mais gastam, somando as três esferas"><span>Maiores áreas · % do PIB</span>${top.map(([n, v], i) => i ? `<small class="num">${n} ${nf(1).format(v / pibA * 100)}%</small>` : `<b class="num">${n} ${nf(1).format(v / pibA * 100)}%</b>`).join("")}</span>
+      ${gf?.total_12m ? `<span class="idx-sub" title="Gasto do governo federal (Tesouro, Previdência e Banco Central) sem os juros da dívida, somado nos últimos 12 meses"><span>Governo federal · 12m até ${mesCurto(gf.mes)}</span><b class="num">${tri(gf.total_12m)}</b>${macro.pib?.valor_12m ? `<small class="num">${nf(1).format(gf.total_12m / macro.pib.valor_12m * 100)}% do PIB</small>` : ""}<small class="num">${gf.real_12m > 0 ? "+" : ""}${nf(1).format(gf.real_12m)}% acima da inflação</small><small class="num">${biR(gf.mensal.at(-1)[1])} em ${mesCurto(gf.mes)}</small></span>` : ""}
+    </button>`); }
   // Benefits card (hand-kept data): total yearly cost on top, then reach and cost of each benefit.
   { const B = BENEFICIOS, tot = B.itens.reduce((a, b) => a + b.gasto, 0), pib = macro.pib?.valor_12m;
     out.push(`<button class="card idx macro" data-edu="beneficios" title="Benefícios que não exigem contribuição ao INSS: quantos recebem, quanto vale e quanto custa por ano · ver a explicação">
@@ -1691,6 +1725,9 @@ Object.assign(MACRO_WIN, {
   "MACRO:divida": { titulo: "Dívida pública", sub: "Em % do PIB · linha principal: dívida bruta do governo geral; também a dívida líquida do setor público", edu: "divida", fonte: "Banco Central (bruta, método atual) e IPEA (líquida, série do Banco Central)", principal: "Bruta",
     serie: m => m.divida?.bruta, fmt: v => nf(1).format(v) + "% do PIB", dfmt: d => (d > 0 ? "+" : "") + nf(1).format(d) + " p.p.",
     extras: () => { const d = macro?.divida; return d?.bruta ? [{ nome: "Líquida", cor: "var(--warn)", v: d.bruta.map(([k]) => valAt(d.liquida, k)) }] : []; } },
+  "MACRO:gastos": { titulo: "Gasto do governo federal, mês a mês", sub: "Despesa total do governo federal em cada mês, em reais de cada época (sem descontar a inflação), sem os juros da dívida · também Previdência e salários dos servidores", edu: "gastos", fonte: "Tesouro Nacional (Resultado do Tesouro Nacional), desde 1997", principal: "Total",
+    serie: m => m.gastos?.mensal?.map(([k, v]) => [k, v / 1e9]), fmt: v => "R$ " + nf(1).format(v) + " bi", variacao: "pct",
+    extras: () => { const g = macro?.gastos; return g?.mensal?.length ? [{ nome: "Previdência", cor: "var(--warn)", v: g.mensal.map(([k]) => valAt(g.prev, k) / 1e9) }, { nome: "Servidores", cor: "var(--muted)", v: g.mensal.map(([k]) => valAt(g.pessoal, k) / 1e9) }] : []; } },
   "MACRO:pib": { titulo: "PIB", sub: "Crescimento real dos últimos 4 trimestres sobre os 4 anteriores, em % · dado trimestral", edu: "pib", fonte: "IBGE, Contas Nacionais Trimestrais, desde 1996",
     carregar: async () => { const q = macro?.pib?.quatro_tri_serie || (await loadMacroHist()).pib?.quatro_tri_serie; return degraus(q, q?.at(-1)?.[0]); }, fmt: v => pct(v), lagTxt: "em 12 meses" },
   "MACRO:pibpc": { titulo: "PIB per capita", sub: "PIB dividido pela população, em reais de cada ano (sem descontar a inflação) · dado anual", edu: "pibpc", fonte: "Banco Mundial (dados do IBGE), desde 1996",
@@ -2826,6 +2863,25 @@ function eduItems() {
       porque: "Com poucos bancos dividindo o mercado, fica mais fácil cobrar caro: o spread do Brasil está entre os maiores do mundo, e isso encarece o crédito de famílias e empresas. Ao mesmo tempo, bancos grandes e bem capitalizados quebram menos, o que protege o dinheiro de quem tem conta. Por isso vale olhar os números juntos: concentração e spread altos com lucro alto indicam poder de mercado; Basileia bem acima do mínimo indica que o sistema aguenta perdas. Novos concorrentes, como bancos digitais e o Pix, tendem a reduzir a concentração aos poucos.",
       horario: [["Concentração, lucro e Basileia", "Banco Central (IF.data), a cada 3 meses, cerca de 3 meses depois do fim do trimestre"], ["Spread", "Banco Central, todo mês, cerca de 2 meses depois do fim do mês"], ["Atualização aqui", "automática"]],
       nota: "Fonte: Banco Central. Os dados de cada instituição vêm do IF.data, contando cada grupo (conglomerado) uma vez só e incluindo bancos, cooperativas e financeiras. O BNDES, banco de fomento do governo, aparece logo depois dos 5 maiores. A Caixa e o Banco do Brasil são controlados pelo governo, por isso parte da concentração é pública. O lucro soma os dois últimos semestres; o Índice de Basileia do sistema é a soma do capital de todos dividida pela soma dos seus ativos ponderados pelo risco. O spread é a média de todas as operações de crédito: no cartão e no cheque especial ele é muito maior, e no crédito imobiliário e consignado, menor. Estes números servem como contexto, não como sinal de compra ou venda de ações de bancos." },
+    { id: "gastos", titulo: "Gasto público", sub: "Quanto o governo gasta, quem gasta (União, estados e municípios) e em quê",
+      valor: () => { const G = GOVERNO_GERAL, pibA = ggPib(), gf = macro?.gastos, mi = v => tri(v * 1e6), g = gf?.grupos;
+        const meses = gf?.mensal?.slice(-12).reverse() || [];
+        return `<b class="num">${nf(1).format(G.pib_pct)}% do PIB</b> <span class="hint">em ${G.ano}: ${mi(G.total)} somando União, estados e municípios, com juros</span>
+          <h4>Quem gasta (${G.ano})</h4>
+          <table class="edu-t"><tr><th></th><th>Gasto</th><th>% do PIB</th></tr>${G.esferas.map(([n, v]) => `<tr><td>${n}</td><td><b class="num">${mi(v)}</b></td><td class="num">${nf(1).format(v / pibA * 100)}%</td></tr>`).join("")}
+            <tr><td>Menos repasses entre eles<div class="hint">contados duas vezes acima</div></td><td class="num">− ${mi(-G.consolidacao)}</td><td class="num">−${nf(1).format(-G.consolidacao / pibA * 100)}%</td></tr>
+            <tr><td><b>Total do país</b></td><td><b class="num">${mi(G.total)}</b></td><td><b class="num">${nf(1).format(G.pib_pct)}%</b></td></tr></table>
+          <h4>Em quê (${G.ano})</h4>
+          <div style="overflow-x:auto"><table class="edu-t"><tr><th>Área</th><th>Total</th><th>% do PIB</th><th>União</th><th>Estados</th><th>Municípios</th></tr>${G.areas.map(([n, t, u, e, m, q]) => `<tr><td><b>${n}</b>${q ? `<div class="hint">${q}</div>` : ""}</td><td><b class="num">R$ ${nf(0).format(t / 1e3)} bi</b></td><td class="num">${nf(1).format(t / pibA * 100)}%</td><td class="num">${nf(0).format(u / 1e3)}</td><td class="num">${nf(0).format(e / 1e3)}</td><td class="num">${nf(0).format(m / 1e3)}</td></tr>`).join("")}</table></div>
+          <p class="hint" style="margin-top:4px">União, Estados e Municípios em R$ bilhões, contando o que cada um repassou aos outros. O total já tira essas duplicações.</p>
+          ${g ? `<h4>Governo federal, últimos 12 meses (até ${mesCurto(gf.mes)})</h4>
+          <table class="edu-t"><tr><td>Previdência (aposentadorias e pensões do INSS)</td><td><b class="num">${biR(g.prev.m12)}</b></td></tr><tr><td>Salários e aposentadorias dos servidores</td><td><b class="num">${biR(g.pessoal.m12)}</b></td></tr><tr><td>Outras obrigatórias (BPC ${biR(g.bpc.m12)}, abono, seguro-desemprego, complemento do Fundeb, precatórios)</td><td><b class="num">${biR(g.obrig.m12)}</b></td></tr><tr><td>Programas do Executivo (Bolsa Família, saúde, educação, obras), dos quais livres: ${biR(g.discr.m12)}</td><td><b class="num">${biR(gf.total_12m - g.prev.m12 - g.pessoal.m12 - g.obrig.m12)}</b></td></tr><tr><td><b>Total, sem juros</b></td><td><b class="num">${tri(gf.total_12m)}</b></td></tr><tr><td>Além disso: parte dos impostos repassada a estados e municípios (FPE, FPM)</td><td class="num">${biR(g.transf.m12)}</td></tr></table>
+          <h4>Governo federal, mês a mês</h4>
+          <table class="edu-t"><tr><th>Mês</th><th>Total</th><th>Previdência</th><th>Servidores</th></tr>${meses.map(([k, v]) => `<tr><td>${mesCurto(k)}</td><td><b class="num">${biR(v)}</b></td><td class="num">${biR(valAt(gf.prev, k))}</td><td class="num">${biR(valAt(gf.pessoal, k))}</td></tr>`).join("")}</table>` : ""}`; },
+      oque: "O <b>gasto do governo geral</b> soma tudo o que o setor público gasta no ano: União, os 27 estados e os mais de 5.500 municípios, incluindo os <b>juros da dívida</b>. É o padrão internacional (FMI e OCDE), que permite comparar países. O Tesouro separa esse gasto em 10 áreas (a classificação <b>COFOG</b> da ONU): proteção social, saúde, educação, segurança, e assim por diante. Cada esfera tem um papel: a <b>União</b> paga as aposentadorias do INSS, os juros e a maior parte dos programas sociais; os <b>estados</b> cuidam das polícias, presídios, ensino médio e hospitais maiores; os <b>municípios</b> cuidam de creches, ensino fundamental, postos de saúde, lixo e ruas. Muito dinheiro passa de uma esfera para outra (o FPM e os repasses do SUS, por exemplo), por isso a soma das três é maior que o total do país. O gasto do <b>governo federal mês a mês</b> vem de outra publicação do Tesouro, mais rápida: o Resultado do Tesouro Nacional, que não inclui os juros.",
+      porque: "Mostra o tamanho do Estado e as prioridades do país. O Brasil gasta cerca de 46% do PIB, mais do que arrecada (a carga tributária é de cerca de 32%): a diferença vira dívida, e os juros dessa dívida já são o segundo maior gasto, perto de 8% do PIB. Mais de um terço vai para proteção social, sobretudo aposentadorias, e boa parte do orçamento federal é <b>obrigatória</b> (o governo não pode cortar sem mudar a lei). Sobra pouco para os gastos livres, como investimentos. Quando o gasto federal cresce mais rápido que a economia, o mercado costuma cobrar juros mais altos, o que pesa sobre a bolsa e o dólar.",
+      horario: [["Governo geral por área", "Tesouro Nacional, uma vez por ano, em dezembro, com o ano anterior ao anterior (2024 saiu em dezembro de 2025)"], ["Governo federal mês a mês", "Tesouro Nacional, todo mês, cerca de 4 semanas depois do fim do mês"], ["Atualização aqui", "mês a mês automática; o governo geral, à mão uma vez por ano"]],
+      nota: "Fontes: Tesouro Nacional, Boletim de Despesa por Função do Governo Geral (dados de 2024, preliminares) e série histórica do Resultado do Tesouro Nacional. No governo geral, os juros são os da subfunção Transações da dívida pública; o restante de Serviços públicos gerais aparece como \"Administração e outros\". O gasto federal mensal é o do governo central (Tesouro, Previdência e Banco Central) pelo critério de caixa, sem juros e sem os repasses de impostos a estados e municípios; a variação acima da inflação compara os últimos 12 meses com os 12 anteriores, corrigidos pelo IPCA. Os valores mês a mês oscilam com o calendário: o 13º dos aposentados e dos servidores e o pagamento de precatórios fazem alguns meses pesarem bem mais que outros, por isso vale comparar com o mesmo mês do ano anterior ou olhar os 12 meses. Dados de gasto servem como contexto, não como sinal de compra ou venda." },
     { id: "beneficios", titulo: "Benefícios sociais", sub: "Quem recebe, quanto vale e quanto o país gasta com os benefícios que não exigem contribuição",
       valor: () => { const B = BENEFICIOS, tot = B.itens.reduce((a, b) => a + b.gasto, 0), pib = macro?.pib?.valor_12m;
         return `<b class="num">${benBi(tot)} por ano</b> <span class="hint">somando os 5${pib ? `, cerca de ${nf(1).format(tot / pib * 100)}% do PIB` : ""}</span>
