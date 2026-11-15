@@ -1055,6 +1055,25 @@ function detentoresHTML() {
       <div class="dono-bar"><i style="width:${(p / max * 100).toFixed(1)}%"></i></div></div>`).join("")}</div>
     <p class="hint" style="margin-top:6px">Títulos do governo federal vendidos no Brasil (DPMFi): R$ ${nf(2).format(D.total / 1e12)} trilhões em ${mesCurto(D.mes)}. A parte devida em moeda estrangeira (${nf(1).format(D.dpfe_pct)}% da dívida federal) e as dívidas de estados e municípios ficam de fora.</p>`;
 }
+// Social benefits that need no INSS contribution, typed in from official releases (MDS, MEC, ANEEL,
+// PLDO). Updated by hand, like DETENTORES. pessoas = people reached (null when only households are
+// counted); gasto = yearly cost in reais, an estimate or the budget as the "gastoNota" says.
+const BENEFICIOS = { atualizado: "2026-11", domicilios: 79.3e6, itens: [
+  { nome: "Bolsa Família", pessoas: 49.6e6, familias: 19.3e6, ref: "2026-10", valor: "R$ 783 por família/mês", valorNota: "média de out/26; piso de R$ 691, mais R$ 173 por criança até 6 anos e R$ 58 por gestante ou jovem de 7 a 18",
+    gasto: 162e9, gastoNota: "estimativa: R$ 131,9 bi pagos até outubro mais novembro e dezembro (cerca de R$ 15 bi cada)" },
+  { nome: "BPC/LOAS", pessoas: 6.7e6, ref: "2026", valor: "R$ 1.621 por pessoa/mês", valorNota: "1 salário mínimo, sem 13º; 2,7 mi idosos e 3,9 mi pessoas com deficiência",
+    gasto: 133e9, gastoNota: "previsto para 2026 (anexo da LDO)" },
+  { nome: "Pé-de-Meia", pessoas: 3.5e6, unidade: "estudantes", ref: "2026-10", quemNota: "estudantes na parcela de out/26", valor: "R$ 200 por mês de aula", valorNota: "mais R$ 1.000 por ano aprovado, sacados só ao terminar o ensino médio; até R$ 9.200 em 3 anos",
+    gasto: 12e9, gastoNota: "previsto para 2026" },
+  { nome: "Gás do Povo", pessoas: 45.2e6, familias: 15.05e6, ref: "2026-05", valor: "1 botijão de 13 kg grátis", valorNota: "a cada 2 meses (4 pessoas ou mais) ou a cada 3 meses (2 ou 3 pessoas)",
+    gasto: 4.72e9, gastoNota: "orçamento aprovado para 2026" },
+  { nome: "Tarifa Social de luz", pessoas: null, familias: 16.85e6, ref: "2026-09", valor: "R$ 51 por família/mês", valorNota: "desconto médio; luz grátis até 80 kWh por mês",
+    gasto: 9.92e9, gastoNota: "12 meses até set/26; pago por todos na conta de luz (CDE), não pelo Tesouro" },
+] };
+const benMi = v => nf(1).format(v / 1e6) + " mi";
+const benBi = v => "R$ " + nf(v < 10e9 ? 1 : 0).format(v / 1e9) + " bi";
+// Share of the population (people) or, when only households are counted, of all households.
+const benPct = b => b.pessoas ? b.pessoas / (macro?.divida?.populacao || 214e6) * 100 : b.familias / BENEFICIOS.domicilios * 100;
 const IDEB = {
   fonte: "INEP/MEC, Brasil (todas as redes)",
   anos: [[2005, 3.8, 3.5, 3.4], [2007, 4.2, 3.8, 3.5], [2009, 4.6, 4.0, 3.6], [2011, 5.0, 4.1, 3.7], [2013, 5.2, 4.2, 3.7], [2015, 5.5, 4.5, 3.7],
@@ -1172,6 +1191,15 @@ function macroCards() {
       ${bc.capital ? `<span class="idx-sub" title="Capital próprio de todos os bancos somados (Patrimônio de Referência), que absorve prejuízos; o Índice de Basileia compara esse capital com o risco do que emprestaram; o compulsório é parte dos depósitos dos clientes que fica parada no Banco Central"><span>Capital e reservas · ${mesCurto(bc.trimestre)}</span><b class="num">R$ ${nf(2).format(bc.capital / 1e12)} tri</b><small class="num">de capital próprio</small>${bc.basileia != null ? `<small class="num">Basileia ${nf(1).format(bc.basileia)}% (mín. 10,5%)</small>` : ""}${bc.compulsorio?.length ? `<small class="num">R$ ${nf(0).format(bc.compulsorio.at(-1)[1] / 1e9)} bi de compulsório no BC (${mesCurto(bc.compulsorio.at(-1)[0])})</small>` : ""}</span>` : ""}
     </button>`);
   }
+  // Benefits card (hand-kept data): total yearly cost on top, then reach and cost of each benefit.
+  { const B = BENEFICIOS, tot = B.itens.reduce((a, b) => a + b.gasto, 0), pib = macro.pib?.valor_12m;
+    out.push(`<button class="card idx macro" data-edu="beneficios" title="Benefícios que não exigem contribuição ao INSS: quantos recebem, quanto vale e quanto custa por ano · ver a explicação">
+      <div class="lbl">Benefícios sociais<span class="mk">${mesCurto(B.atualizado)}</span></div>
+      <div class="px num">${benBi(tot)} <span style="font-size:12px;font-weight:500">por ano</span></div>
+      <div class="ch num flat">${pib ? nf(1).format(tot / pib * 100) + "% do PIB" : "&nbsp;"}</div>
+      <div class="since">5 benefícios que não exigem contribuição</div>
+      ${B.itens.map(b => `<span class="idx-sub" title="${b.valor} (${b.valorNota}) · ${b.gastoNota}"><span>${b.nome}</span><b class="num">${b.pessoas ? benMi(b.pessoas) + " " + (b.unidade || "pessoas") : benMi(b.familias) + " famílias"}</b><small class="num">${nf(0).format(benPct(b))}% ${b.pessoas ? "da população" : "dos lares"}</small><small class="num">${benBi(b.gasto)}/ano</small></span>`).join("")}
+    </button>`); }
   const ev = macro.expvida?.anos, ih = macro.idh?.anos, id = IDEB.anos.at(-1), idp = IDEB.anos.at(-2);
   if (ev?.length > 1) { const [y, v] = ev.at(-1), d = v - ev.at(-2)[1];
     out.push(`<button class="card idx macro" data-open="MACRO:expvida" data-max="1" title="Quantos anos, em média, vive quem nasce hoje · ver o histórico">
@@ -2798,6 +2826,17 @@ function eduItems() {
       porque: "Com poucos bancos dividindo o mercado, fica mais fácil cobrar caro: o spread do Brasil está entre os maiores do mundo, e isso encarece o crédito de famílias e empresas. Ao mesmo tempo, bancos grandes e bem capitalizados quebram menos, o que protege o dinheiro de quem tem conta. Por isso vale olhar os números juntos: concentração e spread altos com lucro alto indicam poder de mercado; Basileia bem acima do mínimo indica que o sistema aguenta perdas. Novos concorrentes, como bancos digitais e o Pix, tendem a reduzir a concentração aos poucos.",
       horario: [["Concentração, lucro e Basileia", "Banco Central (IF.data), a cada 3 meses, cerca de 3 meses depois do fim do trimestre"], ["Spread", "Banco Central, todo mês, cerca de 2 meses depois do fim do mês"], ["Atualização aqui", "automática"]],
       nota: "Fonte: Banco Central. Os dados de cada instituição vêm do IF.data, contando cada grupo (conglomerado) uma vez só e incluindo bancos, cooperativas e financeiras. O BNDES, banco de fomento do governo, aparece logo depois dos 5 maiores. A Caixa e o Banco do Brasil são controlados pelo governo, por isso parte da concentração é pública. O lucro soma os dois últimos semestres; o Índice de Basileia do sistema é a soma do capital de todos dividida pela soma dos seus ativos ponderados pelo risco. O spread é a média de todas as operações de crédito: no cartão e no cheque especial ele é muito maior, e no crédito imobiliário e consignado, menor. Estes números servem como contexto, não como sinal de compra ou venda de ações de bancos." },
+    { id: "beneficios", titulo: "Benefícios sociais", sub: "Quem recebe, quanto vale e quanto o país gasta com os benefícios que não exigem contribuição",
+      valor: () => { const B = BENEFICIOS, tot = B.itens.reduce((a, b) => a + b.gasto, 0), pib = macro?.pib?.valor_12m;
+        return `<b class="num">${benBi(tot)} por ano</b> <span class="hint">somando os 5${pib ? `, cerca de ${nf(1).format(tot / pib * 100)}% do PIB` : ""}</span>
+          <div style="overflow-x:auto"><table class="edu-t" style="margin-top:8px"><tr><th>Benefício</th><th>Quem recebe</th><th>Valor</th><th>Gasto por ano</th></tr>${B.itens.map(b => `<tr><td><b>${b.nome}</b><div class="hint">${b.ref.length > 4 ? mesCurto(b.ref) : b.ref}</div></td>
+            <td><b class="num">${b.pessoas ? benMi(b.pessoas) + " " + (b.unidade || "pessoas") : benMi(b.familias) + " famílias"}</b><div class="hint">${nf(1).format(benPct(b))}% ${b.pessoas ? "da população" : "dos lares do país"}${b.familias && b.pessoas ? ` · ${benMi(b.familias)} famílias` : ""}${b.quemNota ? ` · ${b.quemNota}` : ""}</div></td>
+            <td><b>${b.valor}</b><div class="hint">${b.valorNota}</div></td>
+            <td><b class="num">${benBi(b.gasto)}</b><div class="hint">${b.gastoNota}</div></td></tr>`).join("")}</table></div>`; },
+      oque: "São os benefícios pagos a quem tem pouca renda <b>sem precisar ter contribuído para o INSS</b>. A porta de entrada de quase todos é o <b>CadÚnico</b>, o cadastro do governo para famílias de baixa renda, feito no CRAS da cidade. O <b>Bolsa Família</b> paga um valor mensal por família, com adicionais por criança, gestante e adolescente. O <b>BPC</b> (Benefício de Prestação Continuada) paga 1 salário mínimo a idosos a partir de 65 anos e a pessoas com deficiência de famílias com renda de até ¼ do salário mínimo por pessoa. O <b>Pé-de-Meia</b> é uma poupança para alunos de baixa renda do ensino médio público não abandonarem a escola. O <b>Gás do Povo</b> dá o botijão de graça. A <b>Tarifa Social</b> dá desconto, ou zera, a conta de luz de quem gasta pouca energia.",
+      porque: "São a principal rede de proteção contra a pobreza e chegam a uma parte grande do país: só o Bolsa Família alcança perto de 1 em cada 4 brasileiros. Também têm peso nas contas públicas: os dois maiores, Bolsa Família e BPC, custam juntos perto de R$ 300 bilhões por ano, e o BPC cresce rápido com o envelhecimento da população. Para a economia, esse dinheiro vira consumo quase todo, principalmente de alimentos, o que sustenta o varejo, sobretudo no Norte e no Nordeste. Reajustes e regras novas mexem com o déficit do governo e, por isso, com os juros.",
+      horario: [["Bolsa Família", "MDS, todo mês, no calendário de pagamento"], ["BPC", "INSS e MDS, todo mês; gasto previsto na LDO e no Orçamento"], ["Pé-de-Meia, Gás do Povo e Tarifa Social", "MEC, MDS e ANEEL, sem data fixa"], ["Atualização aqui", "à mão, de tempos em tempos"]],
+      nota: "Fontes: MDS (Bolsa Família e Gás do Povo), anexo da LDO 2026 (BPC), MEC e Caixa (Pé-de-Meia) e ANEEL (Tarifa Social), conforme divulgados até novembro de 2026. Os gastos misturam números já pagos, estimativas e orçamento previsto, como indicado em cada linha. <b>Não dá para somar as pessoas</b>: a mesma família costuma receber vários benefícios ao mesmo tempo (Bolsa Família, Gás do Povo e Tarifa Social, por exemplo). A porcentagem usa a população do IBGE ou, quando o programa conta famílias, os 79,3 milhões de lares da PNAD 2025. A Tarifa Social não sai do Orçamento federal: é paga por todos os consumidores, dentro da conta de luz. O Pé-de-Meia conta os alunos que receberam a parcela do mês; desde 2024, cerca de 6 milhões já passaram pelo programa. Seguro-desemprego, aposentadorias e auxílio-doença não entram aqui porque exigem contribuição." },
     { id: "divida", titulo: "Dívida pública", sub: "Quanto o governo deve, em relação ao tamanho da economia",
       valor: () => { const d = macro?.divida; if (!d?.bruta?.length) return ""; const b = d.bruta.at(-1), l = d.liquida.at(-1), pessoa = v => "R$ " + nf(0).format(v / d.populacao);
         return `<b class="num">${nf(1).format(b[1])}% do PIB</b> <span class="hint">dívida bruta em ${mesCurto(b[0])}</span>
