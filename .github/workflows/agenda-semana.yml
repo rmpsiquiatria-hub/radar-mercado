@@ -1,0 +1,28 @@
+# Monday e-mail at 07:15 (Brasília): the week's plenary agenda in the Câmara, Senado and STF,
+# medidas provisórias about to expire and vetoes waiting for the Congress
+# (scripts/agenda-semana.mjs). "Run workflow" by hand sends immediately (useful to test).
+name: Agenda da semana
+
+on:
+  schedule:
+    - cron: "15 10 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Enviar
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: node scripts/agenda-semana.mjs
