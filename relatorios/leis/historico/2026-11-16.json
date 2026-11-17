@@ -1,0 +1,300 @@
+{
+ "data": "2026-11-16",
+ "gerado_em": "2026-11-17T05:20:00-03:00",
+ "resumo": {
+  "federal": "Dia sem leis ou decretos novos no Diário Oficial da União; os destaques são normas de órgãos. O INSS mudou regras do processo de pedido de benefícios (inclusive por incapacidade). A ANS ampliou a cobertura obrigatória dos planos de saúde para câncer de pulmão. O Conselho Federal de Farmácia regulamentou o uso de equipamentos de rastreamento em saúde por farmacêuticos.",
+  "estadual": "O governo do RS alterou o regulamento do ICMS em dois decretos (açúcar e querosene de aviação). A AGERGS definiu a nova margem de distribuição da Sulgás e o Detran prorrogou por 5 anos o credenciamento das autoescolas (CFCs).",
+  "municipal": "Não foi possível coletar o Diário Oficial de Lajeado neste dia: a fonte falhou (HTTP 500). Não há análise municipal."
+ },
+ "destaques": [
+  {
+   "id": "dou-744711408",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "previdência",
+    "saúde",
+    "perícia médica"
+   ],
+   "o_que_muda": "O INSS alterou as regras do processo administrativo de benefícios. Pedidos sem representação legal válida, sem assinatura (no balcão) ou sem análise possível da incapacidade podem ser encerrados como desistência, por exemplo se o segurado faltar à perícia agendada ou se não for atendida a solicitação de informações ao médico assistente (SIMA). Durante a fase de exigência, os prazos do INSS ficam suspensos, e o falecimento do requerente não impede a conclusão da análise do benefício.",
+   "quem_afeta": "Segurados e dependentes que pedem benefícios ao INSS; médicos assistentes e peritos, que podem receber solicitações de informações (SIMA).",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "PORTARIA DIRBEN/INSS Nº 1.363, DE 13 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Previdência Social / Diretoria de Benefícios e Relacionamento com o Cidadão",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-dirben/inss-n-1.363-de-13-de-novembro-de-2026-744711408",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-744434009",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "planos de saúde",
+    "oncologia"
+   ],
+   "o_que_muda": "A ANS incluiu no Rol de cobertura obrigatória dos planos de saúde o exame de sequenciamento genético (NGS) para câncer de pulmão e o remédio oral tepotinibe, para pacientes adultos com câncer de pulmão avançado com mutação MET éxon 14, em primeira linha, conforme diretriz de utilização.",
+   "quem_afeta": "Pacientes com câncer de pulmão, oncologistas e operadoras de planos de saúde.",
+   "vigencia": "1º/02/2027.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO NORMATIVA ANS Nº 683, DE 13 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Saúde / Agência Nacional de Saúde Suplementar",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-normativa-ans-n-683-de-13-de-novembro-de-2026-744434009",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744429628",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "profissões da saúde"
+   ],
+   "o_que_muda": "O Conselho Federal de Farmácia definiu que farmacêuticos podem operar equipamentos para rastreamento e monitoramento em saúde, em apoio à equipe de saúde. A norma diz que os procedimentos são assistenciais e preventivos e não incluem diagnóstico, laudo diagnóstico ou relatório conclusivo.",
+   "quem_afeta": "Farmacêuticos, farmácias e demais profissionais da equipe de saúde.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO Nº 18, DE 22 DE OUTUBRO DE 2026",
+   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Farmácia",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-n-18-de-22-de-outubro-de-2026-744429628",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1505413",
+   "relevancia": "alta",
+   "area": "fazenda",
+   "temas": [
+    "tarifas",
+    "gás"
+   ],
+   "o_que_muda": "A AGERGS definiu a margem bruta da Sulgás (distribuição de gás canalizado) em R$ 0,5427 por m³, mais uma parcela compensatória de -R$ 0,0451/m³ (reduz a conta). A margem vale a partir da publicação; saldos de períodos anteriores serão acertados na próxima revisão.",
+   "quem_afeta": "Consumidores de gás canalizado da Sulgás (indústrias, comércio, residências e postos de GNV no RS).",
+   "vigencia": "Na publicação no Diário Oficial do Estado.",
+   "imposto": {
+    "tributo": "Margem de distribuição de gás canalizado (Sulgás)",
+    "antes": "não encontrado",
+    "depois": "R$ 0,5427 por m³ (com parcela compensatória de -R$ 0,0451/m³)",
+    "obs": "Tarifa regulada, não imposto. A busca na internet não trouxe com segurança a margem anterior; resultados divergentes (R$ 0,5014 em dez/2024, proposta de R$ 0,6081 em 2025 e uma citação de R$ 0,4976). Conferir nas deliberações da AGERGS."
+   },
+   "esfera": "estadual",
+   "titulo": "RESOLUÇÃO DECISÓRIA",
+   "orgao": "Conselho-Superior",
+   "tipo": "Resoluções",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505413",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "dou-744711668",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "seguros",
+    "sanções"
+   ],
+   "o_que_muda": "O CNSP fixou o regime de punição administrativa da Susep: infrações, sanções, dosimetria, inquérito, processo, termo de compromisso e medidas cautelares.",
+   "quem_afeta": "Seguradoras, corretores, previdência complementar e demais supervisionados pela Susep.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO CNSP Nº 498, DE 13 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Superintendência de Seguros Privados",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-cnsp-n-498-de-13-de-novembro-de-2026-744711668",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-744456141",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "Justiça",
+    "União"
+   ],
+   "o_que_muda": "A AGU definiu critérios para a União deixar de praticar atos e desistir de recursos em causas de baixo valor, e para procedimentos em execuções e cumprimentos de sentença contra a União.",
+   "quem_afeta": "Quem litiga contra a União e advogados.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "PORTARIA NORMATIVA PGU/AGU Nº 37, DE 21 DE OUTUBRO DE 2026",
+   "orgao": "Presidência da República / Procuradoria-Geral da União",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-normativa-pgu/agu-n-37-de-21-de-outubro-de-2026-744456141",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744452952",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "CSLL"
+   ],
+   "o_que_muda": "Solução de consulta da Receita: o bônus de adimplência fiscal da CSLL só pode ser gerado no período em que a base foi apurada. Não é possível constituí-lo retroativamente.",
+   "quem_afeta": "Empresas contribuintes da CSLL.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "SOLUÇÃO DE CONSULTA Nº 4.043 - SRRF04/DISIT, DE 10 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Divisão de Tributação",
+   "tipo": "Solução de Consulta",
+   "url": "https://www.in.gov.br/web/dou/-/solucao-de-consulta-n-4.043-srrf04/disit-de-10-de-novembro-de-2026-744452952",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744711082",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "transparência"
+   ],
+   "o_que_muda": "A Receita Federal passa a divulgar informações sobre incentivos, renúncias e benefícios tributários de pessoas jurídicas, atualizadas ao menos semestralmente, e cria uma subcomissão para isso.",
+   "quem_afeta": "Empresas com benefícios fiscais.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "PORTARIA RFB Nº 745, DE 28 DE OUTUBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-rfb-n-745-de-28-de-outubro-de-2026-744711082",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-744711645",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "vigilância sanitária"
+   ],
+   "o_que_muda": "O Ministério da Saúde instituiu para 2026 o repasse do Piso Variável de Vigilância Sanitária a estados, DF e municípios.",
+   "quem_afeta": "Secretarias de saúde e vigilâncias sanitárias.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "PORTARIA GM/MS Nº 12.455, DE 3 DE novembro DE 2026",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.455-de-3-de-novembro-de-2026-744711645",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-744448140",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "comércio exterior",
+    "importação"
+   ],
+   "o_que_muda": "A Gecex alterou prazos e incluiu itens em ex-tarifários de autopeças não produzidas no país (alíquota reduzida de importação). Não informa as alíquotas no texto.",
+   "quem_afeta": "Importadores e fabricantes de autopeças.",
+   "vigencia": "7 dias após a publicação.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO GECEX Nº 982, DE 13 DE NOVEMBRO DE 2026",
+   "orgao": "Presidência da República / Comitê-Executivo de Gestão",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-gecex-n-982-de-13-de-novembro-de-2026-744448140",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744718157",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "trânsito",
+    "pedágio"
+   ],
+   "o_que_muda": "A Senatran homologou os sistemas de pedágio sem cancela (free flow) do Rodoanel Norte.",
+   "quem_afeta": "Motoristas que usam o Rodoanel Norte.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "PORTARIA SENATRAN Nº 993, DE 13 DE novembro DE 2026",
+   "orgao": "Ministério dos Transportes / Secretaria Nacional de Trânsito",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-senatran-n-993-de-13-de-novembro-de-2026-744718157",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "rs-1505475",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS"
+   ],
+   "o_que_muda": "O decreto muda a redação das notas do regulamento do ICMS sobre a redução de base de cálculo nas saídas internas de açúcar para estabelecimento industrial (e a opção pelo regime normal de tributação). O texto publicado não traz o valor do imposto.",
+   "quem_afeta": "Indústrias e distribuidores de açúcar no RS.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.081, DE 13 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505475",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1505474",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS",
+    "combustíveis"
+   ],
+   "o_que_muda": "As regras de ICMS do querosene de aviação passam a valer também para o querosene de aviação coprocessado (com matéria-prima renovável, dentro dos limites da ANP). Não altera alíquota.",
+   "quem_afeta": "Distribuidores e companhias aéreas.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.080, DE 13 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505474",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1505217",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "trânsito",
+    "habilitação"
+   ],
+   "o_que_muda": "O Detran/RS prorrogou por 5 anos, contados de 31/03/2027, o credenciamento de todas as autoescolas (CFCs) do estado. A regularidade anual continua obrigatória. Revoga a Portaria 531/2026.",
+   "quem_afeta": "Autoescolas e candidatos à CNH no RS.",
+   "vigencia": "Na publicação; prorrogação conta de 31/03/2027.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA DETRAN/RS N.º 556, DE 12 DE NOVEMBRO DE 2026",
+   "orgao": "Diretoria Administrativa e Financeira",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505217",
+   "fonte": "DOE-RS"
+  }
+ ],
+ "demais": {
+  "federal": "Cerca de 40 decretos legislativos (acordos internacionais), muitas portarias de pessoal, outorgas de rádio e telecomunicações, zoneamento agrícola, repasses da Defesa Civil, resoluções individuais da Anvisa e decisões de conselhos profissionais.",
+  "estadual": "Portarias de pessoal e designações, aposentadorias, resoluções da CIB/RS, súmulas de termos de acordo, contratos e decreto de situação de emergência em Charrua.",
+  "municipal": "Fonte de Lajeado indisponível (HTTP 500)."
+ },
+ "fontes": {
+  "federal": {
+   "ok": true,
+   "atos": 577,
+   "lista": 3049
+  },
+  "estadual": {
+   "ok": true,
+   "atos": 126,
+   "lista": 274,
+   "publicados": 439
+  },
+  "municipal": {
+   "ok": false,
+   "erro": "HTTP 500"
+  }
+ },
+ "coletado_em": "2026-11-17T05:45:55.416Z",
+ "totais": {
+  "federal": 3626,
+  "estadual": 400,
+  "municipal": 0
+ }
+}
