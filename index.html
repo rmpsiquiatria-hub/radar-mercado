@@ -266,6 +266,13 @@ tr.detail-row td { white-space: normal; text-align: left; background: var(--pane
 .edu-t td { padding: 5px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
 .edu-t td:first-child { color: var(--muted); padding-right: 12px; width: 45%; }
 .edu-t tr:last-child td { border-bottom: 0; }
+/* country comparison: a narrower label column, numbers kept on one line */
+.comp-t { font-size: 13px; }
+.comp-t td:first-child { width: 28%; }
+.comp-t td + td { padding-right: 8px; }
+.comp-t tr.com-nota td { border-bottom: 0; }
+.comp-t td[colspan] { width: auto; }
+.comp-t th { text-align: left; }
 #wins { position: fixed; inset: 0; pointer-events: none; z-index: 40; }
 .win { position: fixed; pointer-events: auto; display: flex; flex-direction: column; min-width: 340px; min-height: 300px; resize: both; overflow: hidden; box-shadow: 0 12px 40px rgba(5,10,14,.28), 0 2px 6px rgba(5,10,14,.12); border-radius: 12px; }
 .win.front { border-color: var(--accent); }
@@ -1096,6 +1103,59 @@ const benMi = v => nf(1).format(v / 1e6) + " mi";
 const benBi = v => "R$ " + nf(v < 10e9 ? 1 : 0).format(v / 1e9) + " bi";
 // Share of the population (people) or, when only households are counted, of all households.
 const benPct = b => b.pessoas ? b.pessoas / (macro?.divida?.populacao || 214e6) * 100 : b.familias / BENEFICIOS.domicilios * 100;
+// Brazil × USA × China on the indicators of the Educação tab. Typed in by hand (like BENEFICIOS) from
+// the World Bank (annual, 2024–2025), the Fed, BLS, PBoC and China's NBS (latest month), UNDP (IDH),
+// OECD (taxes, PISA), IMF (public spending and debt) and BIS (household debt). "≈" marks rounded
+// estimates. Brazil's cell comes live from the site's own data when it has the number (compBR).
+// Each country cell: [value shown, reference]. melhor: which side is better, for the green mark.
+const COMPARA = { atualizado: "2026-11", secoes: [
+  ["Economia", [
+    { k: "juros", nome: "Juros básicos", melhor: null, us: ["3,75% a 4,00%", "Fed, out/26"], cn: ["1,40%", "taxa de 7 dias, PBoC"],
+      nota: "Brasil: Selic. EUA: faixa dos Fed Funds. China: taxa de recompra de 7 dias, a principal do banco central chinês (a de empréstimos de 1 ano, a LPR, está em 3,0%)." },
+    { k: "ipca", nome: "Inflação em 12 meses", melhor: null, us: ["3,7%", "set/26"], cn: ["0,7%", "out/26"],
+      nota: "Os EUA não publicaram a taxa de 12 meses de outubro: faltam os preços de out/25, não coletados na paralisação do governo." },
+    { k: "desemprego", nome: "Desemprego", melhor: "baixo", us: [4.1, "out/26"], cn: [5.1, "out/26, áreas urbanas"] },
+    { k: "pib", nome: "PIB (em dólares)", melhor: null, br: ["US$ 2,28 tri", "2025"], us: ["US$ 30,77 tri", "2025"], cn: ["US$ 19,50 tri", "2025"] },
+    { k: "cresc", nome: "Crescimento do PIB", melhor: "alto", br: [2.3, "2025"], us: [2.2, "2025"], cn: [5.0, "2025"], nota: "Em 2026 a China cresceu 4,6% até setembro." },
+    { k: "pibpc", nome: "PIB por pessoa", melhor: "alto", br: [10713, "2025"], us: [90027, "2025"], cn: [13862, "2025"], fmt: "usd" },
+    { k: "ppc", nome: "PIB por pessoa, pelo custo de vida", melhor: "alto", br: [23433, "2025"], us: [90027, "2025"], cn: [29333, "2025"], fmt: "usd",
+      nota: "Em paridade de poder de compra (PPC): corrige o dólar pelo preço das coisas em cada país. Mostra melhor o padrão de vida." },
+    { k: "salmin", nome: "Salário mínimo por mês", melhor: null, us: ["≈ US$ 1.257", "federal: US$ 7,25 por hora"], cn: ["≈ US$ 385", "Xangai: 2.740 yuans"],
+      nota: "Nos EUA, muitos estados pagam bem mais que o mínimo federal (Califórnia: US$ 16,90 por hora). Na China cada cidade tem o seu; Xangai é o maior." },
+    { k: "carga", nome: "Carga tributária", melhor: null, us: ["≈ 25%", "OCDE, 2023"], cn: ["≈ 20%", "OCDE, 2022"], nota: "Impostos e contribuições de todos os níveis de governo, em % do PIB." },
+    { k: "gasto", nome: "Gasto público", melhor: null, us: ["≈ 38%", "FMI, 2025"], cn: ["≈ 33%", "FMI, 2025"], nota: "Gasto de todos os níveis de governo, juros incluídos, em % do PIB." },
+    { k: "divida", nome: "Dívida do governo", melhor: null, us: ["≈ 122%", "FMI, 2025"], cn: ["≈ 96%", "FMI, 2025"],
+      nota: "Em % do PIB. O Brasil aparece pelo critério do Banco Central; pelo critério do FMI, que conta também os títulos na carteira do BC, fica perto de 92%." },
+    { k: "familias", nome: "Dívida das famílias", melhor: null, br: ["≈ 36%", "BIS, 2025"], us: ["≈ 69%", "BIS, 2025"], cn: ["≈ 60%", "BIS, 2025"],
+      nota: "Em % do PIB, para comparar países. O card do Brasil usa outra conta: quanto da renda das famílias vai para as dívidas." },
+  ]],
+  ["Social", [
+    { k: "expvida", nome: "Expectativa de vida", melhor: "alto", br: [76.0, "2024"], us: [78.9, "2024"], cn: [78.0, "2024"], fmt: "anos" },
+    { k: "idh", nome: "IDH", melhor: "alto", br: [0.786, "2023"], us: [0.938, "2023"], cn: [0.797, "2023"], fmt: "idh", nota: "Relatório mundial da ONU (2025), que usa as mesmas fontes para todos os países." },
+    { k: "gini", nome: "Desigualdade (Gini)", melhor: "baixo", br: [50.3, "2024"], us: [41.8, "2024"], cn: [36.0, "2022"], fmt: "num1", nota: "De 0 a 100: quanto maior, mais desigual a renda." },
+    { k: "pisa", nome: "Educação (PISA, matemática)", melhor: null, br: [379, "2022"], us: [465, "2022"], cn: ["—", "não participou como país"], fmt: "int",
+      nota: "O IDEB só existe no Brasil; para comparar países usa-se o PISA da OCDE. Em 2018, Pequim, Xangai, Jiangsu e Zhejiang tiveram 591, o maior resultado do mundo." },
+    { k: "pop", nome: "População", melhor: null, br: ["212,8 mi", "2025"], us: ["341,8 mi", "2025"], cn: ["1,41 bi", "2025"] },
+  ]],
+] };
+// Brazil's cell, live where the site already has the number.
+function compBR(r) {
+  const m = macro || {}, pct = v => nf(1).format(v) + "%", usd = quotes["USDBRL=X"]?.price;
+  switch (r.k) {
+    case "juros": return m.selic?.atual ? [nf(2).format(m.selic.atual.valor) + "%", "Selic, " + mesCurto(m.selic.atual.data.slice(0, 7))] : ["—", ""];
+    case "ipca": return m.ipca?.doze_meses_atual != null ? [pct(m.ipca.doze_meses_atual), mesCurto(m.ipca.mes)] : ["—", ""];
+    case "desemprego": return m.desemprego?.atual != null ? [m.desemprego.atual, "trimestre " + (m.desemprego.periodo || "")] : ["—", ""];
+    case "salmin": return [usd ? "≈ US$ " + nf(0).format(1621 / usd) : "R$ 1.621", "R$ 1.621, 2026"];
+    case "carga": { const c = CARGA.anos.at(-1); return [pct(c[1]), "Tesouro, " + c[0]]; }
+    case "gasto": return [pct(GOVERNO_GERAL.pib_pct), "IBGE e Tesouro, 2024"];
+    case "divida": { const b = m.divida?.bruta?.at(-1); return b ? [pct(b[1]), "Banco Central, " + mesCurto(b[0])] : ["—", ""]; }
+  }
+  return r.br;
+}
+function compCel([v, ref], fmt) {
+  const t = typeof v !== "number" ? v : fmt === "usd" ? "US$ " + nf(0).format(v) : fmt === "anos" ? nf(1).format(v) + " anos" : fmt === "idh" ? nf(3).format(v) : fmt === "int" ? nf(0).format(v) : fmt === "num1" ? nf(1).format(v) : nf(1).format(v) + "%";
+  return { t, ref, n: typeof v === "number" ? v : null };
+}
 const IDEB = {
   fonte: "INEP/MEC, Brasil (todas as redes)",
   anos: [[2005, 3.8, 3.5, 3.4], [2007, 4.2, 3.8, 3.5], [2009, 4.6, 4.0, 3.6], [2011, 5.0, 4.1, 3.7], [2013, 5.2, 4.2, 3.7], [2015, 5.5, 4.5, 3.7],
@@ -2922,6 +2982,21 @@ function eduItems() {
       porque: "É o principal termômetro da qualidade da educação pública no país. O ensino médio é historicamente o ponto mais fraco: ficou quase parado entre 2005 e 2017 e só começou a subir depois.",
       horario: [["Divulgação", "a cada 2 anos, cerca de 9 meses depois da prova (o de 2025 saiu em agosto de 2026)"], ["Próxima edição", "2027, com resultado previsto para 2028"]],
       nota: "Fonte: INEP/MEC, nota do Brasil somando todas as redes (públicas e privadas). Na rede pública as notas são um pouco menores." },
+    { id: "paises", titulo: "Brasil × EUA × China", sub: "Os mesmos índices econômicos e sociais lado a lado",
+      valor: () => {
+        // the best of the three in green, when "best" makes sense (lower unemployment, higher income…)
+        const linha = r => { const c = [compBR(r), r.us, r.cn].map(x => compCel(x, r.fmt)), ns = c.map(x => x.n).filter(n => n != null);
+          const top = r.melhor && ns.length === 3 ? (r.melhor === "alto" ? Math.max(...ns) : Math.min(...ns)) : null;
+          // the note goes on its own full-width line, so the three countries fit in a narrow window
+          return `<tr${r.nota ? ` class="com-nota"` : ""}><td><b>${r.nome}</b></td>${c.map(x => `<td><b class="num"${x.n != null && x.n === top ? ` style="color:var(--up)"` : ""}>${x.t}</b>${x.ref ? `<div class="hint">${esc(x.ref)}</div>` : ""}</td>`).join("")}</tr>`
+            + (r.nota ? `<tr><td colspan="4" class="hint" style="padding-top:0">${r.nota}</td></tr>` : ""); };
+        return `<div style="overflow-x:auto"><table class="edu-t comp-t"><tr><th></th><th>🇧🇷 Brasil</th><th>🇺🇸 EUA</th><th>🇨🇳 China</th></tr>
+          ${COMPARA.secoes.map(([s, rs]) => `<tr><td colspan="4" style="padding-top:14px;color:var(--text);font-weight:700">${s}</td></tr>` + rs.map(linha).join("")).join("")}</table></div>
+          <p class="hint" style="margin-top:6px">Em verde, o melhor dos três quando faz sentido dizer qual é melhor. Valores com "≈" são aproximados.</p>`; },
+      oque: "Põe lado a lado, para Brasil, Estados Unidos e China, os índices explicados nesta aba. Os EUA são a maior economia do mundo e a China a segunda; os dois são também os maiores parceiros comerciais do Brasil. Os números de PIB, renda e dados sociais vêm de fontes que medem todos os países do mesmo jeito (Banco Mundial, FMI, ONU, OCDE), por isso alguns diferem um pouco dos números oficiais brasileiros dos outros cards.",
+      porque: "Ajuda a pôr o Brasil em perspectiva. A China tem PIB grande mas renda por pessoa não tão distante da brasileira, porque tem quase 7 vezes mais gente. Os EUA têm renda por pessoa quase 4 vezes maior que a do Brasil mesmo corrigindo pelo custo de vida. Juros e inflação mostram o momento de cada banco central: no Brasil os juros ficam muito acima da inflação, nos EUA pouco acima, e na China a inflação está perto de zero.",
+      horario: [["Juros, inflação e desemprego", "Brasil ao vivo; EUA e China, último mês publicado (atualizado à mão)"], ["PIB, renda e dados sociais", "anuais, com 1 a 2 anos de atraso"], ["Atualização aqui", "à mão, de tempos em tempos"]],
+      nota: "Fontes: Banco Mundial (PIB, crescimento, renda por pessoa, expectativa de vida, Gini e população), Federal Reserve, BLS, Banco do Povo da China e Escritório Nacional de Estatísticas da China (juros, inflação e desemprego), Relatório de Desenvolvimento Humano da ONU de 2025 (IDH), OCDE (carga tributária e PISA), FMI (gasto e dívida dos governos) e BIS (dívida das famílias), conforme publicados até novembro de 2026. O desemprego da China conta só as áreas urbanas. Comparar países é sempre aproximado: cada um mede algumas coisas do seu jeito." },
     { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler o quadro de correlações",
       oque: "Mede se dois indicadores costumam se mover <b>na mesma direção</b>. Vai de <b>−1</b> a <b>+1</b>: +1 significa que, quando um tem um mês melhor, o outro também tem; −1, que um sobe quando o outro cai; 0, que não há relação. Diferente da correlação comum (Pearson), a de Spearman compara a <i>ordem</i> dos meses, do pior ao melhor, e por isso é menos afetada por meses extremos.",
       porque: "Ajuda a entender diversificação: ativos com correlação baixa ou negativa tendem a se compensar na carteira. Exemplo clássico: o dólar costuma ter correlação negativa com o Ibovespa.",
