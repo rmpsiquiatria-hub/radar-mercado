@@ -41,7 +41,9 @@ const filtroTxt = () => {
   const d = pref.destaques.length === Object.keys(AREAS).length ? "todos" : pref.destaques.map(k => AREAS[k].replace(/^\S+ /, "")).join(", ") || "nenhum";
   return `Seu filtro: destaques ${d === "todos" ? "de todas as áreas" : "de " + d}${pref.lista.length ? " · também listados: " + pref.lista.map(k => CATEGORIAS[k].replace(/^\S+ /, "")).join(", ") : ""}. Mude em Configurações → Radar de leis, no site.`;
 };
-const falhas = Object.entries(col.fontes).filter(([, f]) => !f.ok).map(([e, f]) => `${ESF[e]}: ${esc(f.erro)}`);
+// A gazette that could not be read: a short note inside its own section (the technical error stays in the run log).
+const NOME = { federal: "o Diário Oficial da União", estadual: "o Diário Oficial do RS", municipal: "o Diário Oficial de Lajeado" };
+const aviso = e => col.fontes[e]?.ok === false ? `<div style="background:#fdecea;border-radius:8px;padding:8px 12px;font-size:13px;margin:6px 0">Não foi possível ler ${NOME[e]} hoje. Confira direto no site oficial.</div>` : "";
 
 // Tax change: before → after and the change in %.
 function imposto(t) {
@@ -69,6 +71,7 @@ if (ok) {
   // one section per sphere: summary, highlights (most important first), then the rest of the day
   corpo = ["federal", "estadual", "municipal"].map(e => {
     const de = an.destaques.filter(d => d.esfera === e);
+    if (col.fontes[e]?.ok === false) return h2(ESF[e]) + aviso(e);
     return h2(`${ESF[e]} <span style="font-weight:400;color:${MUTED};font-size:13px">· ${cont(e)} publicações · ${de.length} destaques</span>`)
       + `<div style="background:#eef2ff;border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.5;margin:0 0 10px">${esc(an.resumo?.[e] || "")}</div>`
       + de.map(card).join("")
@@ -83,16 +86,16 @@ if (ok) {
   subject = `Radar de leis · ${dataBR(col.data, { day: "2-digit", month: "2-digit" })} · lista do dia (sem análise)`;
   corpo = `
   <div style="background:#fff7e6;border:1px solid #f0c36d;border-radius:8px;padding:10px 14px;font-size:14px">⚠️ A análise por IA deste dia não ficou pronta. Abaixo, a lista das leis, decretos, instruções normativas e resoluções publicados, sem comentários.</div>
-  ${["federal", "estadual", "municipal"].map(e => h2(`${ESF[e]} (${cont(e)} publicações)`) + `<ul style="padding-left:18px;margin:0">${lista(e)}</ul>` + listas(e)).join("")}`;
+  ${["federal", "estadual", "municipal"].map(e => col.fontes[e]?.ok === false ? h2(ESF[e]) + aviso(e) : h2(`${ESF[e]} (${cont(e)} publicações)`) + `<ul style="padding-left:18px;margin:0">${lista(e)}</ul>` + listas(e)).join("")}`;
 }
 
 const html = `<!doctype html><html><body style="margin:0;background:#f4f6f8;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#17212b">
 <div style="max-width:680px;margin:0 auto;background:#fff;padding:20px 22px">
   <div style="font-size:12px;color:${MUTED};text-transform:uppercase;letter-spacing:.06em">Radar de leis</div>
   <h1 style="font-size:22px;margin:4px 0 2px">⚖️ Publicado em ${esc(dataBR(col.data, { weekday: "long", day: "numeric", month: "long" }))}</h1>
-  ${hint(`Diário Oficial da União: ${normas("federal")} atos normativos (Seção 1) e ${cont("federal") - normas("federal")} de pessoal, contratos e empresas (Seções 2 e 3) · Diário Oficial do RS: ${normas("estadual")} atos normativos e ${cont("estadual") - normas("estadual")} de pessoal, contratos e licitações · Diário Oficial de Lajeado: ${cont("municipal")} atos`)}
+  ${hint(`Diário Oficial da União: ${normas("federal")} atos normativos (Seção 1) e ${cont("federal") - normas("federal")} de pessoal, contratos e empresas (Seções 2 e 3) · Diário Oficial do RS: ${normas("estadual")} atos normativos e ${cont("estadual") - normas("estadual")} de pessoal, contratos e licitações · Diário Oficial de Lajeado: ${col.fontes.municipal?.ok === false ? "não lido hoje" : cont("municipal") + " atos"}`)}
   ${hint(filtroTxt())}
-  ${falhas.length ? `<div style="background:#fdecea;border-radius:8px;padding:8px 12px;font-size:13px;margin:6px 0">Fonte que não pôde ser lida hoje: ${falhas.join(" · ")}</div>` : ""}
+
   ${corpo}
   <p style="margin-top:22px;font-size:14px">Lista completa e explicação de cada fonte: <a href="${esc(cfg.site)}" style="color:${NAVY}">Radar do Mercado → Educação → Direito</a></p>
   <p style="font-size:12px;color:#8c99a3;margin-top:18px">Coleta automática dos diários oficiais, sem IA. Resumos feitos por IA a partir do texto publicado: podem conter erros, confira sempre o link oficial. Não é orientação jurídica.</p>

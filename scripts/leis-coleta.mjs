@@ -124,7 +124,11 @@ async function lajeado() {
   // The service page is a launcher that posts itself into the gazette program.
   const start = GRP + "/erp/acessoexterno/programaAcessoExterno.faces?codigo=704084";
   let { r, url } = await req(start); let h = await r.text();
-  ({ r, url } = await post(action(h, url), { "form:j_id_17": "{codigo=704084}", "form:j_id_18": start, "form:acao": "acao", form_SUBMIT: "1", "javax.faces.ViewState": h.match(/name="javax.faces.ViewState" value="([^"]*)"/)[1] }));
+  // The two hidden fields are found by their class: their generated names (form:j_id_..) change
+  // whenever the city updates the system.
+  const campo = cls => h.match(new RegExp(`<input[^>]*name="([^"]+)"[^>]*class="${cls}"`))?.[1];
+  if (!campo("parametros") || !campo("urlOriginal")) throw new Error("formulário de entrada mudou");
+  ({ r, url } = await post(action(h, url), { [campo("parametros")]: "{codigo=704084}", [campo("urlOriginal")]: start, "form:acao": "acao", form_SUBMIT: "1", "javax.faces.ViewState": h.match(/name="javax.faces.ViewState" value="([^"]*)"/)[1] }));
   const lista = await r.text(), listaUrl = url;
   const eds = [...lista.matchAll(/id="(form:[^"]+)"[^>]*rel="diarioOficialEdicao"[\s\S]*?title="Edi[^"]{1,20}o (\d+)"[\s\S]*?>(\d\d)\/(\d\d)\/(\d{4})<[\s\S]*?class="badge[^"]*">([^<]*)</g)]
     .map(m => ({ link: m[1], numero: m[2], data: `${m[5]}-${m[4]}-${m[3]}`, tipo: m[6], registro: m[1].match(/:(\d+):/)[1] }));
