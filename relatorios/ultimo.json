@@ -1,39 +1,39 @@
 {
- "data": "2026-11-17",
- "gerado_em": "2026-11-17T17:43:58.296Z",
- "pesquisa_data": "2026-11-17",
+ "data": "2026-11-18",
+ "gerado_em": "2026-11-18T09:10:23.280Z",
+ "pesquisa_data": "2026-11-18",
  "indicadores_data": "2026-11-17",
- "resumo_mercado": "Na segunda (16/11), o Ibovespa caiu 1,83%, a 169.295 pontos, e o dólar subiu cerca de 2,2%, a R$ 5,78, maior valor desde abril de 2025; as fontes citam a incerteza fiscal, com o Senado ainda analisando destaques do projeto na terça. Em Nova York, Dow (-1,41%), S&P 500 (-1,92%) e Nasdaq (-2,49%) fecharam em queda, com a Nvidia puxando as techs para baixo. Os relatos apontam como foco do dia o balanço da Nvidia, esperado após o fechamento de terça, e a expectativa pelo IPO da Anthropic.",
+ "resumo_mercado": "O Ibovespa fechou a terça (17/11) em alta de 0,31%, aos 169.817 pontos, com foco no cenário fiscal; o dólar subiu 0,10%, a R$ 5,782, maior valor desde abril de 2025. Em Nova York, segundo CNBC e Motley Fool, o Dow caiu 1,64% (50.759), o S&P 500 1,03% (7.340) e o Nasdaq 0,74% (24.328), pressionados por chips de IA e tecnologia. A Nvidia divulgou balanço após o fechamento. Para hoje, uma fonte cita a ata do Fed e a inflação final da zona do euro.",
  "fontes_mercado": [
   {
-   "nome": "Canal Rural",
-   "titulo": "Ibovespa cai 1,83% e dólar comercial sobe para R$ 5,7777 no fechamento",
-   "url": "https://www.canalrural.com.br/economia/ibovespa-cai-183-e-dolar-comercial-sobe-para-r-57777-no-fechamento/",
-   "data": "2026-11-16"
+   "nome": "Metrópoles",
+   "titulo": "Dólar fecha em R$ 5,78 e renova maior alta em 19 meses; Bolsa sobe 0,31%",
+   "url": "https://www.metropoles.com/brasil/dolar-ibovespa-bolsa-17-novembro",
+   "data": "2026-11-17"
   },
   {
-   "nome": "Mix Vale",
-   "titulo": "Dólar fecha em alta de 2,15% a R$ 5,7767 e Ibovespa cai 1,83%",
-   "url": "https://www.mixvale.com.br/2026/11/16/dolar-fecha-em-alta-de-215-a-r-57767-e-ibovespa-cai-183/",
-   "data": "2026-11-16"
+   "nome": "Brasil 247",
+   "titulo": "Ibovespa fecha em alta de 0,31% e se aproxima dos 170 mil pontos",
+   "url": "https://www.brasil247.com/economia/ibovespa-fecha-em-alta-de-031-e-se-aproxima-dos-170-mil-pontos/",
+   "data": "2026-11-17"
   },
   {
-   "nome": "CNN",
-   "titulo": "Stocks slide to kick off major week for Wall Street",
-   "url": "https://www.cnn.com/2026/11/16/business/stocks-nvidia-ai-anthropic",
-   "data": "2026-11-16"
+   "nome": "Forbes Brasil",
+   "titulo": "Ibovespa Fecha em Alta, Mas Reduz o Fôlego com Receitas sobre Fiscal e Equipe de Lula",
+   "url": "https://forbes.com.br/forbes-money/2026/11/ibovespa-fecha-em-alta-mas-reduz-o-folego-com-receitas-sobre-fiscal-e-equipe-de-lula/",
+   "data": "2026-11-17"
   },
   {
-   "nome": "AP (via WPTF)",
-   "titulo": "THE CLOSING BELL: Stocks tumble on Wall Street as Nvidia leads another sell-off in technology companies",
-   "url": "https://www.wptf.com/2026/11/16/the-closing-bell-stocks-tumble-on-wall-street-as-nvidia-leads-another-sell-off-in-technology-companies/",
-   "data": "2026-11-16"
+   "nome": "Motley Fool",
+   "titulo": "Stock Market Today, Nov. 17: Stocks Slide on AI Chip and Tech Pressures, Salesforce Plummets 9%",
+   "url": "https://www.fool.com/coverage/stock-market-today/2026/11/17/stock-market-today-nov-17-stocks-slide-on-ai-chip-and-tech-pressures-salesforce-plummets-9/",
+   "data": "2026-11-17"
   },
   {
-   "nome": "Reuters (via MarketScreener)",
-   "titulo": "Wall Street ends sharply lower ahead of Nvidia results, Anthropic IPO",
-   "url": "https://www.marketscreener.com/news/wall-street-ends-sharply-lower-ahead-of-nvidia-results-anthropic-ipo-ce785edfdf89f22d",
-   "data": "2026-11-16"
+   "nome": "The Washington Post",
+   "titulo": "How major US stock indexes fared Tuesday 11/17/2026",
+   "url": "https://www.washingtonpost.com/business/2026/11/17/wall-street-stocks-dow-nasdaq/9f975f00-e2cf-11f1-a99e-b3e3805c6b8b_story.html",
+   "data": "2026-11-17"
   }
  ],
  "tecnica_data": "2026-11-17",
@@ -222,14 +222,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "rebaixamento",
-     "descricao": "Itaú BBA rebaixou VALE3 de compra para neutra e cortou o preço-alvo para R$ 77.",
-     "fonte": "Itaú",
-     "data": "2026-11-10"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Itaú",
@@ -432,11 +425,11 @@
      ]
     }
    },
-   "resumo": "Segundo o BTG Pactual (nota de 04/11/2026), o Itaú teve lucro recorrente gerencial de R$ 12,62 bilhões no 3T26, com ROE de 23,6%, resultado descrito como em linha com o mercado e um pouco abaixo do consenso Bloomberg de R$ 12,71 bilhões; o BTG manteve compra com alvo de R$ 53. A XP mantém o Itaú como principal escolha do setor, com alvo de R$ 50, e a Ágora o inclui com compra e alvo de R$ 40 na carteira de dividendos de novembro. A Rico retirou o Itaú de sua carteira de dividendos, citando menor dividend yield esperado. O Clube Acionista cita preço-alvo médio de R$ 50,23 entre 64 casas (51 compras, 7 neutros, 6 vendas). A Genial, em relatório sobre o 3T26, reitera compra com alvo de R$ 54,70 e trata o Itaú como sua preferida entre os bancos.",
+   "resumo": "Segundo o BTG Pactual (nota de 04/11/2026), o Itaú teve lucro recorrente gerencial de R$ 12,62 bilhões no 3T26, com ROE de 23,6%, resultado descrito como em linha com o mercado e um pouco abaixo do consenso Bloomberg de R$ 12,71 bilhões; o BTG manteve compra com alvo de R$ 53. A XP mantém o Itaú como principal escolha do setor, com alvo de R$ 50, e a Ágora o inclui com compra e alvo de R$ 40 na carteira de dividendos de novembro. A Rico retirou o Itaú de sua carteira de dividendos, citando menor dividend yield esperado. O Clube Acionista cita preço-alvo médio de R$ 50,23 entre 64 casas (51 compras, 7 neutros, 6 vendas). A Genial, em relatório sobre o 3T26, reitera compra com alvo de R$ 54,70 e trata o Itaú como sua preferida entre os bancos. O UBS BB reduziu o preço-alvo e manteve visão neutra após o 3T26, segundo a brapi (valor não informado no trecho consultado).",
    "sentimento": "positivo",
    "consenso": {
     "compra": 6,
-    "neutro": 0,
+    "neutro": 1,
     "venda": 0,
     "preco_alvo_medio": 48.62,
     "moeda": "BRL",
@@ -475,6 +468,12 @@
       "nome": "Genial",
       "recomendacao": "compra",
       "preco_alvo": 54.7,
+      "data": null
+     },
+     {
+      "nome": "UBS BB",
+      "recomendacao": "neutro",
+      "preco_alvo": null,
       "data": null
      }
     ]
@@ -516,9 +515,15 @@
      "titulo": "Itaú ITUB4 Resultado 3T26: Margem e Alíquota Compensam Serviços e Seguros Mais Fracos",
      "url": "https://analisa.genialinvestimentos.com.br/acoes/ITUB4/Itau-ITUB4--Resultado-3T26-Margem-e-Aliquota-Compensam-Servicos-e-Seguros-Mais-Fracos/",
      "data": null
+    },
+    {
+     "nome": "brapi",
+     "titulo": "UBS BB corta preço-alvo do Itaú e mantém visão neutra",
+     "url": "https://brapi.dev/news/ubs-bb-corta-preco-alvo-do-itau-e-mantem-visao-neutra-para-317870bb",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-11"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "PETR4",
@@ -869,7 +874,7 @@
      ]
     }
    },
-   "resumo": "PETR3 é a ação ordinária da Petrobras e as fontes tratam as recomendações em conjunto com a PETR4. Segundo o InfoMoney (abril), JPMorgan mantém compra (overweight) e o Citi, neutro; compilação da Reuters citada pelo InfoMoney apontava 6 de 8 casas com compra para PETR3. O Acionista relata preço-alvo de R$ 60 do Santander para as ordinárias, sem data clara. O lucro do 1º trimestre ficou abaixo do esperado, segundo o Acionista. Não encontrei recomendações com data dentro dos últimos 6 meses específicas para PETR3, então o consenso abaixo ficou zerado. Segundo o Bpmoney, a Petrobras divulga o balanço do 3T26 em 11/11 após o fechamento; BTG, XP, Itaú BBA e Safra projetam dividendos de US$ 3,1 a 4,2 bilhões, e o Safra cita preço-alvo de R$ 64 (referente principalmente à PETR4). Em 11/11 o balanço ainda não havia sido divulgado nas fontes encontradas.",
+   "resumo": "PETR3 é a ação ordinária da Petrobras e as fontes tratam as recomendações em conjunto com a PETR4. Segundo o Investidor10 e o Seu Dinheiro, a Petrobras divulgou o 3T26 em 10/11, com lucro líquido de cerca de R$ 39,7 bilhões, receita abaixo do consenso e dívida líquida de US$ 57,8 bilhões; os veículos divergem na base de comparação do lucro. O conselho aprovou R$ 15,3 bilhões em proventos (R$ 1,1873 por ação), abaixo do que Itaú BBA (US$ 4,2 bi), BTG e XP (US$ 3,6 bi) e Safra (US$ 3,1 bi) projetavam em parte; a Genial manteve recomendação de manter e viu o dividendo em linha com a política, porém ligeiramente abaixo da sua estimativa. Segundo a Genial e outras fontes, investimentos maiores e queda do Brent são pontos de atenção. Não há recomendações datadas dos últimos 6 meses específicas para PETR3, então o consenso segue zerado.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 0,
@@ -898,9 +903,21 @@
      "titulo": "Petrobras (PETR4) dividendos até US$ 4,2 bilhões no 3T26",
      "url": "https://bpmoney.com.br/negocios/empresas/petrobras-petr4-dividendos-ate-42-bilhoes-3t26/",
      "data": null
+    },
+    {
+     "nome": "Genial Investimentos",
+     "titulo": "Petrobras PETR4 Resultado 3T26: Operacional bom, mas com pontos de atenção",
+     "url": "https://analisa.genialinvestimentos.com.br/analises-e-resultados/Petrobras-PETR4--Resultado-3T26-Operacional-bom-Mas-com-pontos-de-atencao",
+     "data": "2026-11-11"
+    },
+    {
+     "nome": "Investidor10",
+     "titulo": "Petrobras (PETR4) lucra de R$ 39,8 bilhões no 3T26, salto de 21,5%",
+     "url": "https://investidor10.com.br/noticias/petrobras-petr4-lucra-de-r-39-8-bilhoes-no-3t26-salto-de-21-5-123814/",
+     "data": "2026-11-10"
     }
    ],
-   "atualizado_em": "2026-11-11"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "AXIA3",
@@ -2815,13 +2832,13 @@
      ]
     }
    },
-   "resumo": "Em junho de 2026 o JPMorgan elevou o BTG Pactual para overweight (alvo R$ 66) e o Itaú BBA revisou o alvo para R$ 63, segundo as fontes. A Ativa mantém compra com alvo de R$ 60 após o 2T26, quando as units caíram 5,6% com queda de 46% nas receitas de banco de investimento. Segundo uma busca com fontes de datas variadas, o balanço do 3T26 está previsto para 10/11 e há revisões posteriores ao 2T26 (Citi, BB Investimentos) ainda não verificadas individualmente.",
-   "sentimento": "positivo",
+   "resumo": "Segundo as fontes, o BTG Pactual divulgou o 3T26 com lucro ajustado de cerca de R$ 5,3 bilhões (+17% a/a), em linha com o consenso Bloomberg de R$ 5,23 bilhões, ROAE de 26,4% e novo programa de recompra de até R$ 2 bilhões em units; o Money Times e o Seu Dinheiro relatam queda das ações mesmo com o resultado. Segundo o Acionista, o Itaú BBA rebaixou para neutro com alvo de R$ 60 (de R$ 70) e o Bradesco BBI mantém compra com alvo de R$ 64; o JPMorgan tem compra com alvo de R$ 66 e a Ativa compra com R$ 60. Os alvos têm datas variadas e a XP aparece com corte de alvo das units de R$ 41 para R$ 36 sem data confirmada.",
+   "sentimento": "neutro",
    "consenso": {
     "compra": 3,
-    "neutro": 0,
+    "neutro": 1,
     "venda": 0,
-    "preco_alvo_medio": 63,
+    "preco_alvo_medio": 62.5,
     "moeda": "BRL",
     "casas": [
      {
@@ -2832,8 +2849,14 @@
      },
      {
       "nome": "Itaú BBA",
+      "recomendacao": "neutro",
+      "preco_alvo": 60,
+      "data": null
+     },
+     {
+      "nome": "Bradesco BBI",
       "recomendacao": "compra",
-      "preco_alvo": 63,
+      "preco_alvo": 64,
       "data": null
      },
      {
@@ -2844,7 +2867,14 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Lucro ajustado de cerca de R$ 5,3 bilhões no 3T26 (+17% a/a), em linha com o consenso; recompra de até R$ 2 bilhões em units.",
+     "fonte": "Seu Dinheiro",
+     "data": "2026-11-12"
+    }
+   ],
    "fontes": [
     {
      "nome": "Money Times",
@@ -2863,9 +2893,27 @@
      "titulo": "BTG Pactual (BPAC11): preço-alvo atrai, mas poucos estão vendo este detalhe",
      "url": "https://acionista.com.br/btg-pactual-bpac11-preco-alvo-atrai-mas-poucos-estao-vendo-este-detalhe/",
      "data": null
+    },
+    {
+     "nome": "Seu Dinheiro",
+     "titulo": "BTG Pactual (BPAC11) lucra bilhões e rentabilidade cai no 3T26",
+     "url": "https://www.seudinheiro.com/2026/empresas/btg-pactual-bpac11-lucra-bilhoes-e-rentabilidade-cai-no-3t26-o-que-esta-por-tras-da-maquina-de-resultados-do-banco-miql/",
+     "data": null
+    },
+    {
+     "nome": "Money Times",
+     "titulo": "BTG (BPAC11): por que a ação cai mesmo com bons resultados",
+     "url": "https://www.moneytimes.com.br/btg-bpac11-por-que-a-acao-cai-mesmo-com-bons-resultados/",
+     "data": null
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "BPAC11: por que o preço-alvo mudou agora?",
+     "url": "https://acionista.com.br/bpac11-por-que-o-preco-alvo-mudou-agora/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-09"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "ENEV3",
@@ -3393,13 +3441,13 @@
      ]
     }
    },
-   "resumo": "Segundo o Euqueroinvestir, a Copel reportou no 3T26 (12/11) lucro líquido de R$ 688,4 milhões (+89% a/a) e Ebitda de R$ 1,92 bilhão; a CNN Brasil cita lucro recorrente com alta de 79,7%. Segundo o Status Invest, a geração teve queda de Ebitda de 4,5% por curtailment eólico. Safra, BTG e J.P. Morgan aparecem com compra, com alvos de R$ 17,50, R$ 18 e R$ 18 (datas, exceto a do BTG de 23/10, não confirmadas); não foram encontradas revisões posteriores ao balanço.",
+   "resumo": "Segundo o Euqueroinvestir, a Copel reportou no 3T26 (12/11) lucro líquido de R$ 688,4 milhões (+89% a/a) e Ebitda de R$ 1,92 bilhão; a CNN Brasil cita lucro recorrente com alta de 79,7%. Segundo o Status Invest, a geração teve queda de Ebitda de 4,5% por curtailment eólico. Safra, BTG e J.P. Morgan aparecem com compra, com alvos de R$ 17,50, R$ 18 e R$ 18 (datas, exceto a do BTG de 23/10, não confirmadas); não foram encontradas revisões posteriores ao balanço. O Itaú BBA aparece com compra e alvo de R$ 17,50, segundo o Trademap (data não confirmada).",
    "sentimento": "positivo",
    "consenso": {
-    "compra": 3,
+    "compra": 4,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 17.83,
+    "preco_alvo_medio": 17.75,
     "moeda": "BRL",
     "casas": [
      {
@@ -3418,6 +3466,12 @@
       "nome": "J.P. Morgan",
       "recomendacao": "compra",
       "preco_alvo": 18,
+      "data": null
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "compra",
+      "preco_alvo": 17.5,
       "data": null
      }
     ]
@@ -3466,9 +3520,15 @@
      "titulo": "Lucro da Copel cresce 79,7% no 3º trimestre, para R$ 688,4 milhões",
      "url": "https://www.cnnbrasil.com.br/infra/lucro-da-copel-cresce-797-no-3o-trimestre-para-r-6884-milhoes/",
      "data": "2026-11-12"
+    },
+    {
+     "nome": "Trademap",
+     "titulo": "Copel: BBA vê combo proteção + qualidade + dividendos e mantém compra para ações",
+     "url": "https://trademap.com.br/noticias/news-8198613",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "BBAS3",
@@ -3662,6 +3722,12 @@
      "descricao": "BB reportou lucro ajustado de R$ 1,27 bi no 3T26 (-66,5% a/a), abaixo do consenso, e cortou o guidance de 2026 pela metade, segundo o Portal Tela.",
      "fonte": "Portal Tela",
      "data": "2026-11-11"
+    },
+    {
+     "tipo": "outro",
+     "descricao": "Genial retirou a recomendação de manter e colocou o preço-alvo (R$ 20,10) em revisão após o 3T26, segundo a própria Genial.",
+     "fonte": "Genial Investimentos",
+     "data": "2026-11-12"
     }
    ],
    "fontes": [
@@ -3726,7 +3792,7 @@
      "data": "2026-08-01"
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "EQTL3",
@@ -3863,7 +3929,7 @@
      "sinais": []
     }
    },
-   "resumo": "O Itaú BBA, segundo o Itaú Investimentos, atualizou em 24/08/2026 o preço-alvo da Equatorial para R$ 59,30 e reiterou a recomendação de compra; em maio já havia elevado o alvo de R$ 48,70 para R$ 53,30, citando criação de valor na distribuição e exposição indireta à Sabesp. Outras casas aparecem nas buscas sem data confiável. Não foram encontradas mudanças nos últimos 7 dias. O JPMorgan aparece com compra e alvo de R$ 50 (28/07/2026), segundo busca que cita o Investing.com. O BTG, em prévia operacional do 3T26 (29/10), mantém compra com alvo de R$ 69; o Bradesco BBI aparece com compra e alvo de R$ 57 para o fim de 2027 (data não confirmada).",
+   "resumo": "O Itaú BBA, segundo o Itaú Investimentos, atualizou em 24/08/2026 o preço-alvo da Equatorial para R$ 59,30 e reiterou a recomendação de compra; em maio já havia elevado o alvo de R$ 48,70 para R$ 53,30, citando criação de valor na distribuição e exposição indireta à Sabesp. Outras casas aparecem nas buscas sem data confiável. Não foram encontradas mudanças nos últimos 7 dias. O JPMorgan aparece com compra e alvo de R$ 50 (28/07/2026), segundo busca que cita o Investing.com. O BTG, em prévia operacional do 3T26 (29/10), mantém compra com alvo de R$ 69; o Bradesco BBI aparece com compra e alvo de R$ 57 para o fim de 2027 (data não confirmada). No 3T26, a Equatorial reportou lucro líquido de R$ 934 milhões (ajustado de R$ 535 milhões, -37,1% a/a), segundo o Visno Invest; o Itaú classificou o resultado como em linha em análise de 12/11 e apontou as revisões tarifárias como ponto de atenção.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 4,
@@ -3898,7 +3964,14 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Equatorial divulgou o 3T26: lucro líquido de R$ 934 mi (ajustado R$ 535 mi, -37,1%); Itaú vê resultado em linha.",
+     "fonte": "Itaú Investimentos",
+     "data": "2026-11-12"
+    }
+   ],
    "fontes": [
     {
      "nome": "Itaú Investimentos",
@@ -3935,9 +4008,21 @@
      "titulo": "Preço-alvo Equatorial Bradesco BBI",
      "url": "https://www.spacemoney.com.br/investimentos/acoes/preco-alvo-equatorial-bradesco-bbi/",
      "data": null
+    },
+    {
+     "nome": "Visno Invest",
+     "titulo": "Equatorial (EQTL3) registra lucro líquido de R$ 934 mi no 3T26",
+     "url": "https://visnoinvest.com.br/news/16426/equatorial-eqtl3-registra-lucro-liquido-de-r-934-mi-no-3t26",
+     "data": null
+    },
+    {
+     "nome": "Itaú Investimentos",
+     "titulo": "Equatorial (EQTL3) resultados 3T",
+     "url": "https://itau.com.br/investimentos/analises/equatorial-eqtl3-resultados-3t",
+     "data": "2026-11-12"
     }
    ],
-   "atualizado_em": "2026-11-11"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "VBBR3",
@@ -4329,7 +4414,7 @@
      ]
     }
    },
-   "resumo": "No 1º trimestre de 2026 a Rede D'Or teve receita líquida de R$ 16,8 bilhões (+11,3%), mas lucro pressionado por despesas financeiras maiores, abaixo do projetado pelo BTG, segundo as fontes. O BB-BI (relatório de 04/09/2026) mantém compra com preço-alvo de R$ 50 para 2027. Citi manteve compra reduzindo o alvo de R$ 51 para R$ 48 e o Bradesco BBI cortou o alvo para R$ 42, ambos após o 1º tri (datas exatas não confirmadas). A empresa aprovou R$ 400 milhões em JCP em 21/09/2026. Segundo o Suno, o BTG manteve compra com alvo de R$ 58 após o 2T26; o balanço do 3T26 está previsto para 11/11.",
+   "resumo": "No 1º trimestre de 2026 a Rede D'Or teve receita líquida de R$ 16,8 bilhões (+11,3%), mas lucro pressionado por despesas financeiras maiores, abaixo do projetado pelo BTG, segundo as fontes. O BB-BI (relatório de 04/09/2026) mantém compra com preço-alvo de R$ 50 para 2027. Citi manteve compra reduzindo o alvo de R$ 51 para R$ 48 e o Bradesco BBI cortou o alvo para R$ 42, ambos após o 1º tri (datas exatas não confirmadas). A empresa aprovou R$ 400 milhões em JCP em 21/09/2026. Segundo o Suno, o BTG manteve compra com alvo de R$ 58 após o 2T26; o balanço do 3T26 está previsto para 11/11. Segundo o Investidor10, a Rede D'Or teve lucro de R$ 1,45 bilhão no 3T26 (-0,1% a/a), Ebitda ajustado de R$ 3,6 bilhões (+11,6%) e sinistralidade consolidada de 77,7%; resultado financeiro negativo de R$ 715,9 milhões. Não foram achadas recomendações pós-balanço.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 2,
@@ -4377,9 +4462,15 @@
      "titulo": "Rede D'Or (RDOR3) pode subir 75%? BTG eleva preço-alvo após 2T26 forte",
      "url": "https://www.suno.com.br/noticias/?p=661801",
      "data": null
+    },
+    {
+     "nome": "Investidor10",
+     "titulo": "Rede D'Or São Luiz (RDOR3) lucra R$ 1,45 bilhão no 3T26, com melhora na sinistralidade",
+     "url": "https://investidor10.com.br/noticias/rede-d-or-sao-luiz-rdor3-lucra-r-1-45-bilhao-no-3t26-com-melhora-na-sinistralidade-123873/",
+     "data": "2026-11-12"
     }
    ],
-   "atualizado_em": "2026-11-09"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "UGPA3",
@@ -4531,9 +4622,9 @@
    "sentimento": "positivo",
    "consenso": {
     "compra": 5,
-    "neutro": 3,
+    "neutro": 4,
     "venda": 0,
-    "preco_alvo_medio": 38.34,
+    "preco_alvo_medio": 39.05,
     "moeda": "BRL",
     "casas": [
      {
@@ -4583,6 +4674,12 @@
       "recomendacao": "neutro",
       "preco_alvo": 29.4,
       "data": null
+     },
+     {
+      "nome": "Ativa Investimentos",
+      "recomendacao": "neutro",
+      "preco_alvo": 44,
+      "data": "2026-10-15"
      }
     ]
    },
@@ -4644,7 +4741,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "SUZB3",
@@ -5573,14 +5670,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Vivo reportou lucro líquido de R$ 2,46 bi no 3T26 (+30,1% a/a), acima da média LSEG de R$ 2,14 bi.",
-     "fonte": "Brapi",
-     "data": "2026-11-10"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Brapi",
@@ -8191,13 +8281,13 @@
      ]
     }
    },
-   "resumo": "Segundo o Visno Invest e o Times Brasil, a MBRF teve lucro de R$ 210 milhões no 3T26 (+123,5% a/a), com efeito positivo de R$ 529 milhões na linha de impostos e R$ 179 milhões de ganhos de sinergias; a alavancagem subiu a 3,45x Ebitda. As casas seguem divididas: Santander (R$ 25) e JPMorgan (R$ 21,50) com compra; XP (R$ 20,50), Bradesco BBI (R$ 22) e Itaú BBA (R$ 23) neutros. Não foram encontradas revisões datadas após o balanço.",
+   "resumo": "Segundo o Visno Invest e o Times Brasil, a MBRF teve lucro de R$ 210 milhões no 3T26 (+123,5% a/a), com efeito positivo de R$ 529 milhões na linha de impostos e R$ 179 milhões de ganhos de sinergias; a alavancagem subiu a 3,45x Ebitda. As casas seguem divididas: Santander (R$ 25) e JPMorgan (R$ 21,50) com compra; XP (R$ 20,50), Bradesco BBI (R$ 22) e Itaú BBA (R$ 23) neutros. Não foram encontradas revisões datadas após o balanço. O BB Investimentos manteve neutro com alvo de R$ 26,20 em 13/11, segundo o Clube Acionista.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 2,
-    "neutro": 3,
+    "neutro": 4,
     "venda": 0,
-    "preco_alvo_medio": 22.4,
+    "preco_alvo_medio": 23.03,
     "moeda": "BRL",
     "casas": [
      {
@@ -8229,6 +8319,12 @@
       "recomendacao": "neutro",
       "preco_alvo": 23,
       "data": null
+     },
+     {
+      "nome": "BB Investimentos",
+      "recomendacao": "neutro",
+      "preco_alvo": 26.2,
+      "data": "2026-11-13"
      }
     ]
    },
@@ -8237,6 +8333,12 @@
      "tipo": "resultado",
      "descricao": "Lucro de R$ 210 milhões no 3T26, alta de 123,5% a/a, com efeito positivo de impostos.",
      "fonte": "Visno Invest",
+     "data": "2026-11-13"
+    },
+    {
+     "tipo": "outro",
+     "descricao": "BB Investimentos manteve neutro com alvo de R$ 26,20 para dezembro de 2026 após o 3T26.",
+     "fonte": "Clube Acionista",
      "data": "2026-11-13"
     }
    ],
@@ -8282,9 +8384,15 @@
      "titulo": "MBRF balanço 3T26 lucro impostos",
      "url": "https://euqueroinvestir.com/mercados/mbrf-balanco-3t26-lucro-impostos",
      "data": null
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "MBRF3: lucro cresce, mas um indicador impede mudança na recomendação do BB",
+     "url": "https://acionista.com.br/mbrf3-resultados-3t26-recomendacao-neutra/",
+     "data": "2026-11-13"
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "CXSE3",
@@ -11363,7 +11471,7 @@
      ]
     }
    },
-   "resumo": "O BB Investimentos (BB-BI) reiterou em 23/04/2026 a recomendação de venda e reduziu o preço-alvo de R$ 5,50 para R$ 5,40 (fim de 2026), citando consumo de caixa, alavancagem, a compra de até 11,17% da MRS e exposição a frete spot. Outras casas citadas (Itaú BBA, Morgan Stanley, Rico) têm datas incertas ou antigas. Sem mudanças encontradas nos últimos 7 dias.",
+   "resumo": "Segundo a brapi e o Visão no Investimento, a CSN Mineração teve prejuízo líquido de R$ 356,3 milhões no 3T26 (contra lucro de R$ 219,4 milhões no 2T26), com consumo de caixa livre de R$ 212 milhões; a controladora CSN citou menores preços do minério e frete maior. Os papéis recuaram 4,15% para R$ 4,62 em 13/11. O BB Investimentos mantém venda com alvo de R$ 5,40 (relatório de abril), e a Ativa reduziu a projeção de produção de 2026. Não foram achadas recomendações pós-balanço.",
    "sentimento": "negativo",
    "consenso": {
     "compra": 0,
@@ -11393,9 +11501,15 @@
      "titulo": "CMIN3: BB corta preço-alvo (venda)",
      "url": "https://statusinvest.com.br/noticias/cmin3-bb-corta-preco-alvo-venda/",
      "data": null
+    },
+    {
+     "nome": "brapi",
+     "titulo": "Resultado fraco no 3T26 derruba CSN e CSN Mineração na B3",
+     "url": "https://brapi.dev/news/resultado-fraco-no-3t26-derruba-csn-e-csn-mineracao-na-b3-f7008329",
+     "data": "2026-11-13"
     }
    ],
-   "atualizado_em": "2026-10-25"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "CSAN3",
@@ -12804,7 +12918,7 @@
      ]
     }
    },
-   "resumo": "O tom das fontes é negativo: o lucro do 2T26 foi de R$ 35 milhões (-82% ano a ano) e o JPMorgan rebaixou para neutro, com alvo de R$ 8,50 para dez/2027. A XP mantém compra com alvo de R$ 13,50 (maio); Citi, Itaú BBA, Bradesco BBI e Goldman aparecem como neutros. O Citi rebaixou a ação de neutro para venda, com alvo cortado de R$ 10 para R$ 8, segundo o Seu Dinheiro (data não confirmada, citada como setembro); a XP reduziu projeções e preço-alvo, segundo o Suno. Não foram encontradas análises do 3T26 nas buscas.",
+   "resumo": "O tom das fontes segue negativo. No 3T26 (divulgado em 12/11), a Natura reportou lucro líquido de R$ 49 milhões, revertendo prejuízo de R$ 1,926 bilhão de um ano antes (nas atividades mantidas, de perda de R$ 119 milhões para lucro), com Ebitda de R$ 460 milhões; a receita no Brasil caiu 9%, e as ações recuaram cerca de 4,5%, a R$ 5,09, porque o novo CEO indicou recuperação mais lenta do que o previsto, segundo Seu Dinheiro, Clube Acionista e Brapi. Entre as casas: JPMorgan neutro (alvo R$ 8,50 para dez/2027), Citi rebaixou para venda (alvo R$ 8), XP compra (alvo R$ 13,50, maio), com Itaú BBA, Bradesco BBI e Goldman neutros; datas de parte das revisões não foram confirmadas.",
    "sentimento": "negativo",
    "consenso": {
     "compra": 1,
@@ -12851,7 +12965,14 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Natura reporta lucro líquido de R$ 49 mi no 3T26 (contra prejuízo de R$ 1,926 bi no 3T25); receita no Brasil cai 9% e ações recuam cerca de 4,5%.",
+     "fonte": "Seu Dinheiro",
+     "data": "2026-11-12"
+    }
+   ],
    "fontes": [
     {
      "nome": "BP Money",
@@ -12882,9 +13003,21 @@
      "titulo": "Citi está mais pessimista com Natura (NATU3) e rebaixa ação para venda",
      "url": "https://www.seudinheiro.com/2026/bolsa-dolar/citi-esta-mais-pessimista-com-natura-natu3-e-rebaixa-acao-para-venda-por-que-a-faxina-na-casa-nao-convence-o-banco-giov/",
      "data": null
+    },
+    {
+     "nome": "Seu Dinheiro",
+     "titulo": "Natura (NATU3) ainda tem gargalos a resolver e novo CEO destaca as prioridades; ações caem após 3T26",
+     "url": "https://www.seudinheiro.com/2026/empresas/natura-natu3-ainda-tem-gargalos-a-resolver-e-novo-ceo-destaca-as-prioridades-acoes-caem-apos-3t26-lmrs/",
+     "data": "2026-11-12"
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "Natura (NATU3) volta ao azul, mas queda de 9% nas vendas no Brasil preocupa",
+     "url": "https://acionista.com.br/resultado-natura-3t26/",
+     "data": "2026-11-12"
     }
    ],
-   "atualizado_em": "2026-11-16"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "BRAV3",
@@ -13043,7 +13176,7 @@
      ]
     }
    },
-   "resumo": "Itaú BBA aparece com compra e alvo de R$ 28 e o Rico com compra e alvo de R$ 26 (07/08/2026). Em 07/10/2026 a empresa divulgou produção preliminar do 3T26 de 82,4 mil boe/d, acima dos cerca de 76 mil do 1T26, com retomada gradual do Potiguar e novo poço em Papa-Terra. O alvo do Santander (R$ 29) é de setembro de 2025 e ficou fora da janela de 6 meses. Houve OPA com custo estimado de R$ 23 por ação e leilão em 25/06/2026. Segundo a Genial Investimentos, a Ecopetrol venceu o leilão da OPA em 05/08/2026 a R$ 23,00 por ação (cerca de 25% do capital), com liquidação prevista para 17/08 e participação de cerca de 51%; a perfuração de poços em Atlanta estava prevista para outubro de 2026. Segundo o Cenário Energia e o Visno Invest, no 3T26 (divulgado em 10/11/2026) a Brava teve prejuízo líquido de R$ 156 milhões (lucro de R$ 121 milhões no 3T25), por despesa financeira sem efeito caixa de R$ 1,197 bilhão ligada à marcação a mercado de hedge de petróleo; a receita líquida foi de R$ 3,39 bilhões (+11%), o Ebitda ajustado subiu 22% e o custo de extração caiu 18% sobre o 2T26. Não foram encontradas recomendações de casas publicadas após o balanço.",
+   "resumo": "Itaú BBA aparece com compra e alvo de R$ 28 e o Rico com compra e alvo de R$ 26 (07/08/2026). Em 07/10/2026 a empresa divulgou produção preliminar do 3T26 de 82,4 mil boe/d, acima dos cerca de 76 mil do 1T26, com retomada gradual do Potiguar e novo poço em Papa-Terra. O alvo do Santander (R$ 29) é de setembro de 2025 e ficou fora da janela de 6 meses. Houve OPA com custo estimado de R$ 23 por ação e leilão em 25/06/2026. Segundo a Genial Investimentos, a Ecopetrol venceu o leilão da OPA em 05/08/2026 a R$ 23,00 por ação (cerca de 25% do capital), com liquidação prevista para 17/08 e participação de cerca de 51%; a perfuração de poços em Atlanta estava prevista para outubro de 2026. Segundo o Cenário Energia e o Visno Invest, no 3T26 (divulgado em 10/11/2026) a Brava teve prejuízo líquido de R$ 156 milhões (lucro de R$ 121 milhões no 3T25), por despesa financeira sem efeito caixa de R$ 1,197 bilhão ligada à marcação a mercado de hedge de petróleo; a receita líquida foi de R$ 3,39 bilhões (+11%), o Ebitda ajustado subiu 22% e o custo de extração caiu 18% sobre o 2T26. Não foram encontradas recomendações de casas publicadas após o balanço. Segundo o Cenário Energia e outras fontes, o 3T26 (divulgado em 09/11) trouxe prejuízo de R$ 156 milhões por despesa contábil de R$ 1,20 bilhão com marcação a mercado de hedge, com Ebitda ajustado de R$ 1,58 bilhão (+22%) e receita líquida de R$ 3,39 bilhões (+11%).",
    "sentimento": "neutro",
    "consenso": {
     "compra": 2,
@@ -13110,9 +13243,15 @@
      "titulo": "Brava Energia (BRAV3): resultado 2T26 e Ecopetrol assume controle da Brava",
      "url": "https://analisa.genialinvestimentos.com.br/acoes/3r-petroleum/brava-energia-brav3-resultado-2t26-estoy-aqui-ecopetrol-assume-controle-da-brava",
      "data": "2026-08-31"
+    },
+    {
+     "nome": "Cenário Energia",
+     "titulo": "Brava Energia eleva Ebitda ajustado em 22% no 3T26, mas registra prejuízo de R$ 156 milhões",
+     "url": "https://cenarioenergia.com.br/2026/11/10/brava-energia-ebitda-3t26-prejuizo-hedge-atlanta-potiguar/",
+     "data": "2026-11-10"
     }
    ],
-   "atualizado_em": "2026-11-16"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "AURE3",
@@ -13516,14 +13655,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Direcional divulgou o 3T26: lucro líquido de R$ 201 mi (-12,6% a/a), margem bruta ajustada de 45,2%; Empiricus vê resultado positivo.",
-     "fonte": "Clube Acionista",
-     "data": "2026-11-10"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "InfoMoney",
@@ -13899,36 +14031,54 @@
      ]
     }
    },
-   "resumo": "Segundo o Visno Invest, a Magazine Luiza registrou prejuízo líquido contábil de R$ 10,7 milhões no 3T26 (lucro de R$ 84,6 milhões no 3T25); o lucro líquido ajustado foi de R$ 13,9 milhões, abaixo dos R$ 31 milhões do consenso Bloomberg citado, com lojas físicas em alta de 16% e dívida bruta em R$ 5,16 bilhões (-13,2%). Antes do balanço, a XP projetava prejuízo e incluía a ação entre as que poderiam decepcionar. O JPMorgan aparece com recomendação de venda, citando endividamento, e o Citi com neutro (alvo de R$ 6 a R$ 6,50, relatos divergem). Segundo a Brapi, a ação subiu 11,6% após o balanço e uma revisão do BofA para compra; o Bloomberg Línea relata aceleração das vendas após a crise da Casas Bahia, com juros e dívida preocupando analistas, e a Ágora segue neutra. A data e o alvo da revisão do BofA não foram confirmados.",
-   "sentimento": "neutro",
+   "resumo": "Segundo o Visno Invest, a Magazine Luiza registrou prejuízo líquido contábil de R$ 10,7 milhões no 3T26 (lucro de R$ 84,6 milhões no 3T25); o lucro líquido ajustado foi de R$ 13,9 milhões, abaixo dos R$ 31 milhões do consenso Bloomberg citado, com lojas físicas em alta de 16% e dívida bruta em R$ 5,16 bilhões (-13,2%). Antes do balanço, a XP projetava prejuízo e incluía a ação entre as que poderiam decepcionar. O JPMorgan aparece com recomendação de venda, citando endividamento, e o Citi com neutro (alvo de R$ 6 a R$ 6,50, relatos divergem). Segundo a Brapi, a ação subiu 11,6% após o balanço e uma revisão do BofA para compra; o Bloomberg Línea relata aceleração das vendas após a crise da Casas Bahia, com juros e dívida preocupando analistas, e a Ágora segue neutra. A data e o alvo da revisão do BofA não foram confirmados. Segundo resultados de busca (datas não confirmadas), BTG tem compra com alvo de R$ 12, Goldman Sachs elevou para compra com alvo de R$ 11,50 e o Itaú BBA aparece com compra e alvo de R$ 16 para o fim de 2027; o BofA mantém alvo de R$ 11.",
+   "sentimento": "positivo",
    "consenso": {
-    "compra": 1,
+    "compra": 4,
     "neutro": 2,
     "venda": 1,
-    "preco_alvo_medio": 6,
+    "preco_alvo_medio": 10.58,
     "moeda": "BRL",
     "casas": [
      {
-      "nome": "Citi",
-      "recomendacao": "neutro",
-      "preco_alvo": 6,
-      "data": null
-     },
-     {
-      "nome": "JPMorgan",
-      "recomendacao": "venda",
-      "preco_alvo": null,
+      "nome": "BTG Pactual",
+      "recomendacao": "compra",
+      "preco_alvo": 12,
       "data": null
      },
      {
       "nome": "Bank of America",
       "recomendacao": "compra",
-      "preco_alvo": null,
+      "preco_alvo": 11,
+      "data": null
+     },
+     {
+      "nome": "Goldman Sachs",
+      "recomendacao": "compra",
+      "preco_alvo": 11.5,
+      "data": null
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "compra",
+      "preco_alvo": 16,
+      "data": null
+     },
+     {
+      "nome": "Citi",
+      "recomendacao": "neutro",
+      "preco_alvo": 6.5,
       "data": null
      },
      {
       "nome": "Ágora",
       "recomendacao": "neutro",
+      "preco_alvo": 7,
+      "data": null
+     },
+     {
+      "nome": "JPMorgan",
+      "recomendacao": "venda",
       "preco_alvo": null,
       "data": null
      }
@@ -13983,9 +14133,21 @@
      "titulo": "Magazine Luiza (MGLU3) registra prejuízo de R$ 10,7 mi no 3T26",
      "url": "https://visnoinvest.com.br/news/16339/magazine-luiza-mglu3-registra-prejuizo-de-r-107-mi-no-3t26",
      "data": null
+    },
+    {
+     "nome": "BP Money",
+     "titulo": "Itaú BBA eleva Magazine Luiza (MGLU3) para compra; veja os motivos",
+     "url": "https://bpmoney.com.br/mercado/acoes/itau-bba-eleva-magazine-luiza-mglu3-para-compra-veja-os-motivos/",
+     "data": null
+    },
+    {
+     "nome": "BP Money",
+     "titulo": "Magazine Luiza (MGLU3): BofA eleva recomendação para compra e preço-alvo a R$ 8",
+     "url": "https://bpmoney.com.br/mercado/magazine-luiza-mglu3-bofa-eleva-recomendacao-para-compra-e-preco-alvo-a-r-8/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "POMO4",
@@ -14985,15 +15147,34 @@
      ]
     }
    },
-   "resumo": "As fontes relatam um conflito entre os controladores Alexandre Birman e Roberto Jatahy (maio de 2026), com contratação do Itaú BBA para assessorar negociações, e uma análise estratégica da Farm Rio com o Morgan Stanley. As recomendações encontradas (UBS BB rebaixou para neutro com alvo de R$ 25 em 23/04/2026; Citi e JPMorgan com cortes anteriores) estão fora da janela de 6 meses, por isso o consenso está zerado. Tom predominante negativo. Segundo o BPMoney, a companhia formalizou em setembro a divisão em duas empresas (Arezzo&Co e SOMA), ainda sujeita a aprovações, e o lucro recorrente do 2T26 caiu 62,5%.",
-   "sentimento": "negativo",
+   "resumo": "Segundo a brapi e o Seu Dinheiro, a Azzas 2154 teve no 3T26 lucro recorrente de R$ 190,6 milhões (-5,3% a/a; outra fonte cita R$ 163,8 milhões pro forma), receita líquida de R$ 2,84 bilhões (-4,2%), margem bruta de 56,8% e geração operacional de caixa de R$ 385,2 milhões (+39,6%); o Seu Dinheiro relata que o mercado reagiu bem ao balanço e à separação entre Arezzo&Co e Soma. O BTG mantém compra com alvo de R$ 40 para 12 meses; o Clube Acionista cita média de alvos entre R$ 34,28 e R$ 37,85 (números divergem), com Jefferies em compra (alvo R$ 30, setembro) e JPMorgan neutro (R$ 17,50, setembro). Persiste o contexto de conflito entre controladores e a divisão da companhia em duas.",
+   "sentimento": "neutro",
    "consenso": {
-    "compra": 0,
-    "neutro": 0,
+    "compra": 2,
+    "neutro": 1,
     "venda": 0,
-    "preco_alvo_medio": null,
+    "preco_alvo_medio": 29.17,
     "moeda": "BRL",
-    "casas": []
+    "casas": [
+     {
+      "nome": "BTG Pactual",
+      "recomendacao": "compra",
+      "preco_alvo": 40,
+      "data": null
+     },
+     {
+      "nome": "Jefferies",
+      "recomendacao": "compra",
+      "preco_alvo": 30,
+      "data": "2026-09-15"
+     },
+     {
+      "nome": "JPMorgan",
+      "recomendacao": "neutro",
+      "preco_alvo": 17.5,
+      "data": "2026-09-15"
+     }
+    ]
    },
    "mudancas": [],
    "fontes": [
@@ -15014,9 +15195,27 @@
      "titulo": "Tag Azzas (cobertura da separação Arezzo&Co e SOMA)",
      "url": "https://bpmoney.com.br/tag/azzas/",
      "data": null
+    },
+    {
+     "nome": "Seu Dinheiro",
+     "titulo": "Balanço melhor que o esperado e divórcio à vista: por que o mercado se animou com Azzas (AZZA3) após o 3T26?",
+     "url": "https://www.seudinheiro.com/2026/empresas/balanco-melhor-que-o-esperado-e-divorcio-a-vista-por-que-o-mercado-se-animou-com-azzas-azza3-apos-o-3t26-bdap/",
+     "data": null
+    },
+    {
+     "nome": "brapi",
+     "titulo": "Lucro recorrente da Azzas cai 5,3% no 3T para R$ 190 mi",
+     "url": "https://brapi.dev/news/lucro-recorrente-da-azzas-cai-5-3-no-3t-para-r-190-a5e9e139",
+     "data": null
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "AZZA3: consenso indica compra, mas há um alerta",
+     "url": "https://acionista.com.br/azza3-consenso-indica-compra-mas-ha-um-alerta/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-10-26"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "VIVA3",
@@ -16327,7 +16526,14 @@
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "resultado",
+     "descricao": "Minerva reporta prejuízo líquido de R$ 717,3 mi no 3T26, atribuído a hedge cambial e derivativos; receita líquida de R$ 14,5 bi (-6,4%) e alavancagem de 3,2x.",
+     "fonte": "Eu Quero Investir",
+     "data": "2026-11-11"
+    }
+   ],
    "fontes": [
     {
      "nome": "BP Money",
@@ -16358,9 +16564,15 @@
      "titulo": "Minerva (BEEF3) registra prejuízo de R$ 717,3 mi no 3T26",
      "url": "https://visnoinvest.com.br/news/16423/minerva-beef3-registra-prejuizo-de-r-7173-mi-no-3t26",
      "data": null
+    },
+    {
+     "nome": "Eu Quero Investir",
+     "titulo": "Minerva reverte lucro e tem prejuízo líquido de R$ 717,3 milhões no 3T26",
+     "url": "https://euqueroinvestir.com/acoes/minerva-reverte-lucro-e-tem-prejuizo-liquido-de-r-7173-milhoes-no-3t26",
+     "data": "2026-11-11"
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-18"
   },
   {
    "ticker": "VAMO3",
@@ -16950,7 +17162,7 @@
      ]
     }
    },
-   "resumo": "Após o balanço de 27/08, a CNBC descreveu analistas ainda mais otimistas: Rosenblatt elevou o alvo para US$ 390 (reiterado em setembro), Wedbush para US$ 345, Morgan Stanley para US$ 300 (mantido em outubro) e a BofA manteve compra com US$ 350. O price-target.com cita mediana de US$ 315 entre 27 analistas, com faixa de US$ 270 a US$ 515. Riscos citados incluem pressão de margem por custo de memória. Segundo o FN2 (agregador, 05/11/2026), a ação estava perto de US$ 200 e alvos recentes incluem BNP Paribas US$ 345 (05/10), Wells Fargo US$ 210 (02/10) e Piper Sandler US$ 300 (09/09), sem recomendação informada. Uma fonte indica o próximo balanço por volta de 17/11/2026. Segundo o getquin, o preço-alvo médio dos analistas estava perto de US$ 327 em 05/11/2026, após queda de 9,26% das ações no dia; o balanço do 3T do ano fiscal 2027 é citado para 17/11 (data a confirmar no site de RI).",
+   "resumo": "Após o balanço de 27/08, a CNBC descreveu analistas ainda mais otimistas: Rosenblatt elevou o alvo para US$ 390 (reiterado em setembro), Wedbush para US$ 345, Morgan Stanley para US$ 300 (mantido em outubro) e a BofA manteve compra com US$ 350. O price-target.com cita mediana de US$ 315 entre 27 analistas, com faixa de US$ 270 a US$ 515. Riscos citados incluem pressão de margem por custo de memória. Segundo o FN2 (agregador, 05/11/2026), a ação estava perto de US$ 200 e alvos recentes incluem BNP Paribas US$ 345 (05/10), Wells Fargo US$ 210 (02/10) e Piper Sandler US$ 300 (09/09), sem recomendação informada. Uma fonte indica o próximo balanço por volta de 17/11/2026. Segundo o getquin, o preço-alvo médio dos analistas estava perto de US$ 327 em 05/11/2026, após queda de 9,26% das ações no dia; o balanço do 3T do ano fiscal 2027 é citado para 17/11 (data a confirmar no site de RI). Em 18/11/2026 não localizei publicação do resultado do 3T do ano fiscal 2027 (previsto por uma prévia para 17/11 após o fechamento; outra fonte projeta 18/11, sem confirmação); dados mantidos como na pesquisa anterior.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 4,
