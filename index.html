@@ -735,6 +735,7 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
       <button role="tab" data-esec="mercados">📈 Mercados e horários</button>
       <button role="tab" data-esec="economia">🏦 Juros, inflação e emprego</button>
       <button role="tab" data-esec="governo">🏛️ Governo</button>
+      <button role="tab" data-esec="paises">🌎 Brasil × EUA × China</button>
       <button role="tab" data-esec="estatisticas">📐 Estatísticas</button>
       <button role="tab" data-esec="simulacao">🎚️ Simulação</button>
       <button role="tab" data-esec="fundamentos">📊 Análise fundamentalista</button>
@@ -752,6 +753,10 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
     <div data-esec-panel="governo" hidden id="edu-governo">
       <p class="hint">Como cada indicador do painel se comportou nos governos desde o Plano Real: presidente, partido e período. Os mercados dependem muito de fatores de fora do país (crises mundiais, juros nos EUA, preço das commodities) e de decisões que não são só do governo, como a Selic, definida pelo Banco Central. Os mandatos têm durações diferentes e começaram em situações diferentes. Os números mostram <b>o que aconteceu</b> em cada período, não provam que o governo foi a causa. Os textos foram escritos por IA (Claude) com base nos dados do painel e em fatos amplamente documentados, e podem conter imprecisões; a tabela é calculada ao vivo.</p>
       <div id="govBox"></div>
+    </div>
+    <div data-esec-panel="paises" hidden>
+      <p class="note">Os mesmos índices econômicos e sociais do painel, lado a lado para Brasil, Estados Unidos e China.</p>
+      <div id="eduPaises" style="max-width:980px"></div>
     </div>
     <div data-esec-panel="estatisticas" hidden>
       <p class="note">Como os indicadores do topo da tela se movem juntos: a <b>correlação</b> de cada par e o <b>R²</b>, que diz quanto um indicador explica do outro. Em "📐 R² com várias variáveis" dá para montar um modelo com até 8 indicadores e ver quanto, juntos, explicam o escolhido.</p>
@@ -3076,7 +3081,8 @@ function renderEdu() {
   const items = eduItems();
   box.innerHTML = items.filter(it => it.s).map(card).join("");
   const ESTAT = ["spearman", "r2"];
-  $("#eduEco").innerHTML = items.filter(it => !it.s && !ESTAT.includes(it.id)).map(card).join("");
+  $("#eduEco").innerHTML = items.filter(it => !it.s && !ESTAT.includes(it.id) && it.id !== "paises").map(card).join("");
+  $("#eduPaises").innerHTML = items.filter(it => it.id === "paises").map(card).join("");
   $("#eduStat").innerHTML = ESTAT.map(id => items.find(it => it.id === id)).filter(Boolean).map(card).join("");
 }
 const eduOpen = new Set();   // "Saiba mais" boxes the user opened (the cards re-render with the quotes)
