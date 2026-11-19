@@ -46,7 +46,7 @@ Radar do Mercado (radar-mercado-xi.vercel.app). O site só lê arquivos JSON des
 {
   "data": "2026-10-26",
   "gerado_em": "2026-10-26T07:12:00-03:00",
-  "resumo_mercado": "3 a 4 frases curtas (máximo 600 caracteres) sobre o que move a bolsa brasileira e a americana hoje, segundo as fontes.",
+  "resumo_mercado": "4 a 5 frases curtas (máximo 800 caracteres) sobre o que move a bolsa brasileira e a americana hoje e, na última frase, a principal notícia econômica da China (dados, banco central, governo, comércio), segundo as fontes.",
   "empresas": [
     {
       "ticker": "PETR4",

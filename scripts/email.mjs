@@ -216,7 +216,7 @@ function convTable(list) {
 function changesSection() {
   const all = emps.flatMap(e => (e.mudancas || []).map(m => [e, m])).sort((a, b) => b[1].data.localeCompare(a[1].data));
   if (!all.length) return hint("Nenhuma mudança relevante noticiada nos últimos 7 dias.");
-  return porMercado(all, ([e]) => e, all => `<ul style="margin:0;padding-left:18px;font-size:14px">${all.map(([e, m]) => `<li style="margin:4px 0">${link(e)} — ${esc(m.descricao)} <span style="color:${MUTED}">(${esc(m.fonte)}, ${dateBR(m.data, { day: "2-digit", month: "2-digit" })})</span></li>`).join("")}</ul>`);
+  return porMercado(all, ([e]) => e, all => `<ul style="margin:0;padding-left:18px;font-size:14px">${all.map(([e, m]) => `<li style="margin:4px 0">${link(e)}${DESC[e.ticker] ? ` <span style="color:${MUTED};font-size:12px">(${esc(DESC[e.ticker])})</span>` : ""} — ${esc(m.descricao)} <span style="color:${MUTED}">(${esc(m.fonte)}, ${dateBR(m.data, { day: "2-digit", month: "2-digit" })})</span></li>`).join("")}</ul>`);
 }
 
 function overviewTable() {
@@ -243,29 +243,10 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
 <div style="max-width:680px;margin:0 auto;padding:20px 16px;font-family:Arial,Helvetica,sans-serif;color:#0f1b24;line-height:1.5;background:#ffffff">
   <div style="font-size:12px;color:${MUTED};text-transform:uppercase;letter-spacing:.06em;font-weight:700">Radar do Mercado · 📅 análise diária</div>
   <h1 style="font-size:22px;margin:4px 0 2px">Análise diária · ${esc(dayLong)}</h1>
-  <p style="background:#e0f2ef;border-left:4px solid #0f766e;border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0">Este é o e-mail <b>diário</b> (segunda a sexta): mostra como o mercado <b>fechou no último pregão</b>, com as recomendações das casas de análise (fundamentalista) e o <b>gráfico diário</b> (técnica, um candle por dia). Reage rápido e muda de um dia para o outro. Aos sábados chega o e-mail <b>semanal</b>, só com o gráfico semanal, que mostra o que a semana inteira deixou no preço.</p>
   ${hint(`${emps.length} empresas · Ibovespa + sua lista · análise técnica no gráfico ${FRAME_LABEL[TF].toLowerCase()}`)}
   ${staleResearch ? `<p style="background:#fff3dc;color:${AMBER};padding:10px 12px;border-radius:8px;font-size:14px"><b>Atenção:</b> a pesquisa de notícias de hoje não rodou; recomendações e notícias são de ${dateBR(rep.pesquisa_data)}. Preços, indicadores e análise técnica estão atualizados.</p>` : ""}
   ${h2("🌎 Resumo do mercado")}
   <p style="font-size:15px;margin:0 0 14px">${esc(rep.resumo_mercado)}</p>
-
-  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0 8px;font-size:14px;margin-top:6px">
-    <tr><td style="background:#f4f6f8;border-radius:8px;padding:12px 14px">
-      <b style="font-size:15px">Como ler este e-mail: duas formas diferentes de analisar uma ação</b>
-    </td></tr>
-    <tr><td style="background:#e0f2ef;border-left:4px solid #0f766e;border-radius:8px;padding:12px 14px">
-      <b style="color:#0f766e">📊 Análise fundamentalista (Parte 1)</b><br>
-      Olha para a <b>empresa</b>: lucro, dívida, dividendos, quanto o preço da ação representa em relação ao que a empresa ganha, e o que as casas de análise (bancos e corretoras) recomendam.
-      Responde à pergunta <i>"esta empresa é boa e está barata?"</i>. Pensa em <b>meses a anos</b>.
-    </td></tr>
-    <tr><td style="background:#ede9fe;border-left:4px solid #6d28d9;border-radius:8px;padding:12px 14px">
-      <b style="color:#6d28d9">📈 Análise técnica (Parte 2)</b><br>
-      Olha só para o <b>gráfico de preços</b>: tendência, médias móveis, candles, suporte e resistência. Não diz se a empresa é boa —
-      diz <i>"como o preço está se comportando agora?"</i> e ajuda a escolher o <b>momento</b> de entrar ou sair. Pensa em <b>dias a semanas</b>${TF === "semanal" ? " (no gráfico semanal, semanas a meses)" : TF === "mensal" ? " (no gráfico mensal, meses)" : ""}.
-    </td></tr>
-    <tr><td>${datesBox}</td></tr>
-    <tr><td style="font-size:13px;color:${MUTED};padding:0 4px">As duas se complementam: uma empresa pode ser boa (fundamentalista positiva) e o preço ainda estar caindo (técnica negativa), ou o contrário. A <b>Parte 3</b> mostra só os ativos em que as duas apontam para o mesmo lado.</td></tr>
-  </table>
 
   <div style="margin:26px 0 0;padding:10px 14px;border-radius:8px;background:#0f766e;color:#ffffff;font-weight:700;font-size:16px">📊 PARTE 1 · ANÁLISE FUNDAMENTALISTA</div>
   ${hint("Baseada nas recomendações publicadas pelas casas de análise (resumidas por IA, com links no site) e nos indicadores das empresas (Fundamentus).")}
@@ -299,6 +280,24 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
 
   ${h2("📋 Anexo: onde as duas análises concordam, lado a lado")}
   ${overviewTable()}
+
+  ${h2("ℹ️ Como ler este e-mail")}
+  <p style="background:#e0f2ef;border-left:4px solid #0f766e;border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0">Este é o e-mail <b>diário</b> (segunda a sexta): mostra como o mercado <b>fechou no último pregão</b>, com as recomendações das casas de análise (fundamentalista) e o <b>gráfico diário</b> (técnica, um candle por dia). Reage rápido e muda de um dia para o outro. Aos sábados chega o e-mail <b>semanal</b>, só com o gráfico semanal, que mostra o que a semana inteira deixou no preço.</p>
+  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0 8px;font-size:14px;margin-top:6px">
+    <tr><td style="padding:0 4px"><b style="font-size:15px">Duas formas diferentes de analisar uma ação</b></td></tr>
+    <tr><td style="background:#e0f2ef;border-left:4px solid #0f766e;border-radius:8px;padding:12px 14px">
+      <b style="color:#0f766e">📊 Análise fundamentalista (Parte 1)</b><br>
+      Olha para a <b>empresa</b>: lucro, dívida, dividendos, quanto o preço da ação representa em relação ao que a empresa ganha, e o que as casas de análise (bancos e corretoras) recomendam.
+      Responde à pergunta <i>"esta empresa é boa e está barata?"</i>. Pensa em <b>meses a anos</b>.
+    </td></tr>
+    <tr><td style="background:#ede9fe;border-left:4px solid #6d28d9;border-radius:8px;padding:12px 14px">
+      <b style="color:#6d28d9">📈 Análise técnica (Parte 2)</b><br>
+      Olha só para o <b>gráfico de preços</b>: tendência, médias móveis, candles, suporte e resistência. Não diz se a empresa é boa —
+      diz <i>"como o preço está se comportando agora?"</i> e ajuda a escolher o <b>momento</b> de entrar ou sair. Pensa em <b>dias a semanas</b>${TF === "semanal" ? " (no gráfico semanal, semanas a meses)" : TF === "mensal" ? " (no gráfico mensal, meses)" : ""}.
+    </td></tr>
+    <tr><td>${datesBox}</td></tr>
+    <tr><td style="font-size:13px;color:${MUTED};padding:0 4px">As duas se complementam: uma empresa pode ser boa (fundamentalista positiva) e o preço ainda estar caindo (técnica negativa), ou o contrário. A <b>Parte 3</b> mostra só os ativos em que as duas apontam para o mesmo lado.</td></tr>
+  </table>
 
   <p style="margin:28px 0 8px"><a href="${esc(cfg.site)}" style="display:inline-block;background:#0f766e;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700">Abrir o painel completo</a></p>
   <p style="font-size:12px;color:#8c99a3;margin-top:24px">Resumo automático do que fontes publicadas dizem, feito por IA (pode conter erros — confira os links no site). Indicadores: Fundamentus. Cotações e candles: Yahoo Finance. Análise técnica calculada por programa, sem IA. Não é recomendação de investimento.</p>

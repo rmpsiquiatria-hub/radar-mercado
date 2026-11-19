@@ -12,7 +12,7 @@ const err = (where, msg) => errors.push(`${where}: ${msg}`);
 
 if (!DATE.test(rep.data)) err("data", "formato AAAA-MM-DD");
 if (typeof rep.resumo_mercado !== "string" || rep.resumo_mercado.length < 40) err("resumo_mercado", "faltando ou curto demais");
-if ((rep.resumo_mercado || "").length > 700) err("resumo_mercado", "longo demais (máx. ~600 caracteres)");
+if ((rep.resumo_mercado || "").length > 950) err("resumo_mercado", "longo demais (máx. ~800 caracteres)");
 if (!Array.isArray(rep.empresas)) err("empresas", "não é lista");
 
 const got = new Set((rep.empresas || []).map(e => e.ticker));
