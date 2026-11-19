@@ -12,6 +12,14 @@ const dir = new URL("../relatorios/leis/", import.meta.url);
 const col = JSON.parse(await readFile(new URL("coleta.json", dir), "utf8"));
 const an = await readFile(new URL("ultimo.json", dir), "utf8").then(JSON.parse).catch(() => null);
 const cfg = JSON.parse(await readFile(new URL("../config.json", dir), "utf8"));
+// Calls for public exams and selections, and convocations (of candidates, assemblies, companies) stay out
+// of the e-mail. A law or rule that changes how exams work is still a rule and stays in.
+const NORMA = /^(lei|decreto|medida provis|emenda|instru[çc][ãa]o normativa|resolu|portaria (normativa|interministerial|conjunta))/i;
+const SELECAO = /concurso p[úu]blico|concurso para|processo seletivo|sele[çc][ãa]o (p[úu]blica|simplificada)|exame de sele|convoca[çc][ãa]o|convoca(m|dos?|das?)?|edital de convoca/i;
+const foraEmail = i => !NORMA.test(i.titulo || "") && SELECAO.test(`${i.tipo || ""} ${i.titulo || ""} ${(i.ementa || "").slice(0, 200)}`);
+const fora = new Set(col.itens.filter(foraEmail).map(i => i.id));
+col.itens = col.itens.filter(i => !fora.has(i.id));
+if (an?.destaques) an.destaques = an.destaques.filter(d => !fora.has(d.id) && !foraEmail({ titulo: d.titulo, ementa: d.o_que_muda }));
 const ok = an && an.data === col.data;
 const pref = { destaques: Object.keys(AREAS), lista: [], ...(cfg.leis || {}) };
 const area = d => d.area || "outros";

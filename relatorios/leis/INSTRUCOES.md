@@ -16,7 +16,7 @@ Leia `relatorios/leis/textos/triagem.txt` (uma linha por ato: id | tipo | órgã
 
 Marque como **candidato a destaque** todo ato que **cria, muda ou revoga regras** que valem para pessoas, empresas, profissionais, contribuintes, servidores em geral ou para o funcionamento de serviços públicos. Exemplos: leis, medidas provisórias, decretos regulamentares, instruções normativas, resoluções de agências e conselhos, portarias que mudam procedimentos, atos que mudam impostos, preços públicos, benefícios ou prazos.
 
-**Não** são destaque (só entram na contagem): nomeações, comissões, pautas, atas, despachos e decisões sobre um caso individual (uma empresa, um servidor, um processo), autos de infração e notificações individuais, licenças e registros individuais, contratos, convênios, repasses pontuais a um município, retificações de erro de digitação.
+**Não** são destaque (só entram na contagem): nomeações, comissões, pautas, atas, despachos e decisões sobre um caso individual (uma empresa, um servidor, um processo), autos de infração e notificações individuais, licenças e registros individuais, contratos, convênios, repasses pontuais a um município, retificações de erro de digitação. Também **não** são destaque, nem aparecem no `resumo` ou em `demais`: editais de concurso público e de processo seletivo (abertura, resultado, retificação, homologação) e convocações (de candidatos aprovados, assembleias, empresas). Uma lei ou norma que muda as regras dos concursos em geral continua sendo destaque.
 
 **Lajeado:** todos os atos da prefeitura entram como destaque, mesmo os simples (créditos suplementares podem ser descritos numa frase).
 
