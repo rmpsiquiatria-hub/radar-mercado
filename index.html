@@ -1115,6 +1115,8 @@ const benPct = b => b.pessoas ? b.pessoas / (macro?.divida?.populacao || 214e6) 
 // Each country cell: [value shown, reference]. melhor: which side is better, for the green mark.
 const COMPARA = { atualizado: "2026-11", secoes: [
   ["Economia", [
+    { k: "ranking", nome: "Posição entre as maiores economias", melhor: null, br: ["10º", "FMI, previsão 2026"], us: ["1º", "FMI, 2026"], cn: ["2º", "FMI, 2026"],
+      nota: "Pelo tamanho do PIB em dólares. O Brasil foi 11º em 2025, quando a Rússia passou à frente, e volta a 10º em 2026 pela previsão do FMI de outubro. Pelo custo de vida (PPC), a China é a 1ª, os EUA o 2º e o Brasil o 8º." },
     { k: "juros", nome: "Juros básicos", melhor: null, us: ["3,75% a 4,00%", "Fed, out/26"], cn: ["1,40%", "taxa de 7 dias, PBoC"],
       nota: "Brasil: Selic. EUA: faixa dos Fed Funds. China: taxa de recompra de 7 dias, a principal do banco central chinês (a de empréstimos de 1 ano, a LPR, está em 3,0%)." },
     { k: "ipca", nome: "Inflação em 12 meses", melhor: null, us: ["3,7%", "set/26"], cn: ["0,7%", "out/26"],
