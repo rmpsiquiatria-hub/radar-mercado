@@ -1,481 +1,449 @@
 {
- "data": "2026-11-17",
- "gerado_em": "2026-11-18T05:30:00-03:00",
+ "data": "2026-11-18",
+ "gerado_em": "2026-11-19T08:10:23.289Z",
  "resumo": {
-  "federal": "O destaque é a Instrução Normativa da Receita que zera o IR retido na fonte em remessas de instituições de ensino e fomento para acessar periódicos científicos. O Ministério da Saúde publicou várias portarias: rede de saúde bucal, registro mínimo de dados de atendimentos, oncologia no SUS e consultas públicas de parcerias para vacinas e INCA. Saíram também cinco decretos (satélites e acordos internacionais) e regras da ANAC sobre emissões.",
-  "estadual": "Não houve leis ou decretos no Diário do RS. Destacam-se duas resoluções da AGERGS sobre saneamento (soluções alternativas e matriz de riscos), uma resolução do Consema sobre licenciamento ambiental e portarias da Saúde.",
-  "municipal": "A coleta do Diário Oficial de Lajeado falhou (erro HTTP 500); não foi possível analisar a publicação do município neste dia."
+  "federal": "O CONFAZ aprovou o Convênio ICMS 133, que prorroga até 31/12/2027 benefícios fiscais de ICMS, como a isenção na importação de bens para ensino, pesquisa e serviços médico-hospitalares. A Receita Federal mudou regras de importação de combustíveis a granel, de portos secos e da CSLL de multinacionais. A Anvisa abriu consulta pública sobre as regras de risco do glifosato e do 2,4-D.",
+  "estadual": "O governador alterou as regras do transporte escolar estadual (PEATE/RS), com repasse extra por acompanhante e vagas para professores. A Receita Estadual fixou a UIF-RS de dezembro (R$ 38,83) e criou suspensão de ICMS em remessas de petróleo para exportação. A Secretaria da Saúde destinou repasses emergenciais a hospitais de Torres e Tramandaí.",
+  "municipal": "Lajeado publicou 7 editais de pessoal: convocações de professores, de educador social e uma homologação de concurso. Nenhum muda regras gerais."
  },
  "destaques": [
   {
-   "id": "dou-744958349",
+   "id": "dou-744976425",
    "relevancia": "alta",
    "area": "fazenda",
    "temas": [
     "tributos",
-    "educação",
-    "ciência"
+    "ICMS",
+    "saúde"
    ],
-   "o_que_muda": "O imposto de renda retido na fonte deixa de incidir sobre remessas ao exterior feitas por órgãos públicos de fomento ou instituições de ensino para contratar acesso a periódicos e bases de dados científicos, desde que haja acesso de estudantes e pesquisadores e não haja exploração comercial. O imposto diminui para esses casos.",
-   "quem_afeta": "Universidades, instituições de ensino e pesquisa e órgãos de fomento à pesquisa; pesquisadores e estudantes.",
-   "vigencia": "Na publicação (17/11/2026).",
-   "imposto": {
-    "tributo": "IRRF sobre remessas ao exterior para periódicos e bases científicas",
-    "antes": "25% (entendimento da Receita na Solução de Consulta Cosit nº 248/2023; não confirmado para todos os casos)",
-    "depois": "0% (sem retenção)",
-    "variacao_pct": -100,
-    "obs": "Valor anterior segundo a Solução de Consulta Cosit nº 248/2023, localizada em busca na internet (tributodevido.com.br); a SC Cosit nº 102/2019 já admitia isenção para instituição pública de ensino, então a regra anterior variava conforme o caso (não confirmado). A mudança foi de 25 pontos percentuais."
-   },
+   "o_que_muda": "O CONFAZ aprovou o Convênio ICMS 133, que prorroga até 31/12/2027 benefícios fiscais de ICMS. Entre eles estão a isenção na importação de bens para ensino, pesquisa e serviços médico-hospitalares e a isenção para veículos de bombeiros voluntários. O Convênio 132 trata de condições de PIS/Cofins e IPI desses benefícios.",
+   "quem_afeta": "Empresas e instituições que usam esses benefícios, hospitais, clínicas e bombeiros voluntários.",
+   "vigencia": "Prorrogação até 31/12/2027.",
    "esfera": "federal",
-   "titulo": "INSTRUÇÃO NORMATIVA RFB Nº 2.350, DE 16 DE NOVEMBRO DE 2026",
+   "titulo": "DESPACHO Nº 54, DE 17 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "tipo": "Ato Normativo",
+   "url": "https://www.in.gov.br/web/dou/-/despacho-n-54-de-17-de-novembro-de-2026-744976425",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745179353",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "empresas"
+   ],
+   "o_que_muda": "A Receita ajustou as regras da CSLL adicional para grandes grupos multinacionais, no padrão do imposto mínimo global. Mexeu em conversão de moeda, joint ventures e multas por falta de entrega de informações. O texto diz que as mudanças são interpretativas, sem criar imposto novo.",
+   "quem_afeta": "Grupos multinacionais sujeitos ao imposto mínimo global e seus contadores.",
+   "vigencia": "Na publicação, com efeitos retroativos a 1º/01/2025.",
+   "esfera": "federal",
+   "titulo": "INSTRUÇÃO NORMATIVA RFB Nº 2.351, DE 17 DE NOVEMBRO DE 2026",
    "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
    "tipo": "Instrução Normativa",
-   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-rfb-n-2.350-de-16-de-novembro-de-2026-744958349",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-rfb-n-2.351-de-17-de-novembro-de-2026-745179353",
    "fonte": "DOU (extra)"
   },
   {
-   "id": "dou-744958846",
-   "relevancia": "alta",
+   "id": "dou-744968012",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "importação",
+    "combustíveis"
+   ],
+   "o_que_muda": "A autorização para despachar combustíveis importados a granel sem descarregar antes passa a ser dada caso a caso, só em situação excepcional e com anuência da Receita. As autorizações antigas perdem a validade em 30 dias.",
+   "quem_afeta": "Importadores de petróleo, derivados, etanol e metanol.",
+   "vigencia": "Na publicação; autorizações antigas valem por mais 30 dias.",
+   "esfera": "federal",
+   "titulo": "PORTARIA RFB Nº 750, DE 3 DE NOVEMbRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-rfb-n-750-de-3-de-novembro-de-2026-744968012",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745254238",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "importação",
+    "logística"
+   ],
+   "o_que_muda": "A Receita criou requisitos para pedir a licitação de novos portos secos e para pedir a prorrogação de contratos. A prorrogação exige nota de desempenho mínima 7 e tarifas mantidas ou menores.",
+   "quem_afeta": "Operadores de portos secos e empresas interessadas em instalar novos.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "INSTRUÇÃO NORMATIVA RFB Nº 2.348, DE 9 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "tipo": "Instrução Normativa",
+   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-rfb-n-2.348-de-9-de-novembro-de-2026-745254238",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-744961550",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "seguros",
+    "CNPJ"
+   ],
+   "o_que_muda": "A Receita e a Susep definiram como inscrever no CNPJ as operações com Letras de Risco de Seguro, feitas por seguradoras de propósito específico.",
+   "quem_afeta": "Seguradoras de propósito específico e investidores nesses títulos.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "PORTARIA CONJUNTA RFB/SUSEP Nº 748, DE 9 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "tipo": "Portaria Conjunta",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-conjunta-rfb/susep-n-748-de-9-de-novembro-de-2026-744961550",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745179057",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "municípios",
+    "repasses"
+   ],
+   "o_que_muda": "O Tesouro divulgou o calendário de 2027 dos repasses do FPE, FPM e IPI-exportação. É dele que vêm parte das receitas de municípios como Lajeado.",
+   "quem_afeta": "Prefeituras e governos estaduais.",
+   "vigencia": "Exercício de 2027.",
+   "esfera": "federal",
+   "titulo": "PORTARIA STN/MF Nº 3.380, DE 17 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria do Tesouro Nacional",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-stn/mf-n-3.380-de-17-de-novembro-de-2026-745179057",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-744957865",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "profissões",
+    "anuidade"
+   ],
+   "o_que_muda": "O Conselho Federal de Relações Públicas fixou as anuidades de 2027: R$ 593,00 para pessoa física e R$ 296,50 para recém-formado. Para empresas, vão de R$ 916,50 a R$ 7.306,25 conforme o capital social. Os emolumentos de registro são de R$ 120,00 (pessoa física) e R$ 240,00 (pessoa jurídica).",
+   "quem_afeta": "Profissionais e empresas de relações públicas.",
+   "vigencia": "Efeitos a partir de 1º/01/2027.",
+   "imposto": {
+    "tributo": "Anuidade do CONFERP (pessoa física)",
+    "antes": "não encontrado",
+    "depois": "R$ 593,00 em 2027",
+    "obs": "Não achei o valor de 2026 em busca na internet. O texto só diz que os valores de 2027 substituem os da RN 137/2026."
+   },
+   "esfera": "federal",
+   "titulo": "Resolução Normativa CONFERP Nº 140, de 21 de outubro de 2026",
+   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Profissionais de Relações Públicas",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-normativa-conferp-n-140-de-21-de-outubro-de-2026-744957865",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-744968185",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "agrotóxicos",
+    "saúde",
+    "consulta pública"
+   ],
+   "o_que_muda": "A Anvisa abriu consulta pública de 60 dias sobre mudar as medidas de redução de risco do glifosato e do 2,4-D. É só uma proposta, ainda não vale.",
+   "quem_afeta": "Agricultores, fabricantes de agrotóxicos e quem quiser opinar.",
+   "vigencia": "Prazo de 60 dias contados 3 dias após a publicação.",
+   "esfera": "federal",
+   "titulo": "Consulta Pública nº 1.437, DE 16 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Saúde / Gerência-Geral de Toxicologia",
+   "tipo": "Aviso de Consulta Pública",
+   "url": "https://www.in.gov.br/web/dou/-/consulta-publica-n-1.437-de-16-de-novembro-de-2026-744968185",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745179376",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "consumidor",
+    "SAC"
+   ],
+   "o_que_muda": "A Senacon criou um grupo de trabalho para orientar a aplicação do decreto de 9/10/2026 sobre o atendimento ao consumidor (SAC). Ainda não muda a regra.",
+   "quem_afeta": "Empresas com SAC e consumidores.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "Portaria Nº 86, DE 17 de novembro DE 2026",
+   "orgao": "Ministério da Justiça e Segurança Pública / Secretaria Nacional do Consumidor",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-n-86-de-17-de-novembro-de-2026-745179376",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "rs-1506723",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "educação",
+    "transporte escolar"
+   ],
+   "o_que_muda": "O governo mudou o programa estadual de transporte escolar (PEATE/RS). O georreferenciamento das rotas passa a ser obrigatório. Acompanhantes autorizados dos alunos dão ao município um repasse a mais. Professores da rede pública podem usar assentos vagos, sem mudar o trajeto.",
+   "quem_afeta": "Prefeituras, motoristas e famílias que usam transporte escolar.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.085, DE 17 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1506723",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1505754",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "ICMS",
+    "combustíveis"
+   ],
+   "o_que_muda": "A Receita Estadual passou a suspender o ICMS nas remessas de petróleo e derivados para formar lote de exportação, conforme os Protocolos ICMS 64/15 e 90/26. O imposto é adiado, não é cobrado nessa etapa.",
+   "quem_afeta": "Empresas do setor de petróleo e combustíveis.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA RE Nº 093/26",
+   "orgao": "Receita Estadual",
+   "tipo": "Instruções Normativas",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505754",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1506884",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "multas"
+   ],
+   "o_que_muda": "A Receita Estadual publicou o valor da UIF-RS de dezembro de 2026: R$ 38,83. A unidade serve para corrigir multas e valores fixos cobrados pelo Estado.",
+   "quem_afeta": "Quem paga ou deve ao Estado do RS.",
+   "vigencia": "Dezembro de 2026.",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA RE Nº 092/26",
+   "orgao": "Receita Estadual",
+   "tipo": "Instruções Normativas",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1506884",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1507354",
+   "relevancia": "media",
    "area": "saude",
    "temas": [
     "saúde",
     "SUS",
-    "saúde bucal"
+    "hospitais"
    ],
-   "o_que_muda": "O Ministério da Saúde reorganiza a Rede de Atenção à Saúde Bucal no SUS, com novo anexo na Portaria de Consolidação nº 3 e revogação do anexo anterior.",
-   "quem_afeta": "Dentistas, equipes de saúde bucal, gestores municipais e estaduais do SUS e pacientes atendidos pelo SUS.",
+   "o_que_muda": "A Secretaria da Saúde fixou um repasse excepcional e temporário do Tesouro estadual ao Hospital Nossa Senhora dos Navegantes, em Torres, para manter os serviços do SUS.",
+   "quem_afeta": "Usuários do SUS e o hospital, no Litoral Norte.",
    "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "Portaria GM/MS Nº 12.503, DE 13 DE novembro DE 2026",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.503-de-13-de-novembro-de-2026-744958846",
-   "fonte": "DOU (extra)"
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 852/2026",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1507354",
+   "fonte": "DOE-RS"
   },
   {
-   "id": "dou-744958665",
-   "relevancia": "alta",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "dados",
-    "SUS"
-   ],
-   "o_que_muda": "Cria o Conjunto Mínimo de Dados da Atenção à Saúde: registro padronizado dos dados de todos os estabelecimentos de saúde do país a cada contato assistencial, integrado à Rede Nacional de Dados em Saúde.",
-   "quem_afeta": "Hospitais, clínicas, consultórios e médicos que registram atendimentos, e gestores de saúde.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "PORTARIA GM/MS Nº 12.511, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.511-de-16-de-novembro-de-2026-744958665",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-744958428",
-   "relevancia": "alta",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "oncologia",
-    "medicamentos"
-   ],
-   "o_que_muda": "Reorganiza o componente de assistência farmacêutica em oncologia do SUS: define medicamento oncológico, determina a inclusão dos medicamentos já financiados na Rename e dá prazo de 12 meses para os de uso consagrado ainda não listados.",
-   "quem_afeta": "Pacientes com câncer, oncologistas, hospitais habilitados e gestores do SUS.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "Portaria GM/MS Nº 12.053, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.053-de-16-de-novembro-de-2026-744958428",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-744724127",
-   "relevancia": "alta",
-   "area": "fazenda",
-   "temas": [
-    "tributos",
-    "saúde"
-   ],
-   "o_que_muda": "A Receita esclarece que serviços de vacinação e imunização humana prestados por ambulatório a empresas privadas não sofrem retenção na fonte de IR, CSLL, PIS/Pasep e Cofins.",
-   "quem_afeta": "Clínicas e ambulatórios de vacinação e as empresas que os contratam.",
-   "vigencia": "Vale como orientação da Receita desde a publicação.",
-   "esfera": "federal",
-   "titulo": "SOLUÇÃO DE CONSULTA Nº 224, DE 11 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Coordenação-Geral de Tributação",
-   "tipo": "Solução de Consulta",
-   "url": "https://www.in.gov.br/web/dou/-/solucao-de-consulta-n-224-de-11-de-novembro-de-2026-744724127",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-744735918",
+   "id": "rs-1506144",
    "relevancia": "media",
    "area": "saude",
    "temas": [
     "saúde",
-    "vigilância em saúde"
+    "SUS",
+    "hospitais"
    ],
-   "o_que_muda": "Atualiza, com base na população estimada do IBGE para 2026, os valores do Piso Fixo de Vigilância em Saúde repassados em 12 parcelas mensais a estados e municípios.",
-   "quem_afeta": "Secretarias estaduais e municipais de saúde.",
+   "o_que_muda": "O Estado vai custear 12 novos leitos de cuidado intermediário no Hospital de Tramandaí, em caráter emergencial e temporário.",
+   "quem_afeta": "Pacientes do SUS e o hospital, em Tramandaí.",
    "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "PORTARIA GM/MS Nº 12.510, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.510-de-16-de-novembro-de-2026-744735918",
-   "fonte": "DOU"
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 842/2026",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1506144",
+   "fonte": "DOE-RS"
   },
   {
-   "id": "dou-744957365",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "regulação"
-   ],
-   "o_que_muda": "O Ministério da Saúde institui sua Agenda Regulatória e as agendas de avaliação de resultado regulatório, com uma comissão permanente para melhoria das normas.",
-   "quem_afeta": "Setor de saúde que acompanha novas normas do Ministério.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "PORTARIA GM/MS Nº 12.504, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.504-de-16-de-novembro-de-2026-744957365",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-744958265",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "vacinas",
-    "consulta pública"
-   ],
-   "o_que_muda": "Abre consulta pública sobre parceria público-privada para operar o Complexo Industrial de Biotecnologia em Saúde (Santa Cruz, RJ), de produção de vacinas e imunobiológicos. Contratos de 30 e 20 anos.",
-   "quem_afeta": "Indústria farmacêutica, empresas interessadas e quem acompanha a produção nacional de vacinas.",
-   "vigencia": "Contribuições até 18/01/2027.",
-   "esfera": "federal",
-   "titulo": "Aviso de Consulta Pública N° 2/2026",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Aviso de Consulta Pública",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-consulta-publica-n-2/2026-744958265",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-744958586",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "câncer",
-    "consulta pública"
-   ],
-   "o_que_muda": "Abre consulta pública sobre parceria público-privada de 30 anos para reformar, construir e operar serviços de apoio do Campus Integrado do INCA.",
-   "quem_afeta": "Pacientes e profissionais do INCA e empresas interessadas.",
-   "vigencia": "Contribuições até 18/01/2027.",
-   "esfera": "federal",
-   "titulo": "AVISO DE CONSULTA PÚBLICA N° 1/2026",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Aviso de Consulta Pública",
-   "url": "https://www.in.gov.br/web/dou/-/aviso-de-consulta-publica-n-1/2026-744958586",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-744733387",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "sistema financeiro",
-    "pagamentos"
-   ],
-   "o_que_muda": "O Banco Central muda os documentos exigidos nos pedidos de autorização de sistemas do mercado financeiro, incluindo roteiro e relatório de testes funcionais.",
-   "quem_afeta": "Instituições que operam infraestruturas do mercado financeiro.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "INSTRUÇÃO NORMATIVA BCB Nº 788, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Banco Central do Brasil / Departamento de Organização do Sistema Financeiro",
-   "tipo": "Instrução Normativa",
-   "url": "https://www.in.gov.br/web/dou/-/instrucao-normativa-bcb-n-788-de-16-de-novembro-de-2026-744733387",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-744718624",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "aviação",
-    "meio ambiente"
-   ],
-   "o_que_muda": "A ANAC define como as companhias aéreas devem monitorar e reportar a redução de emissões de gases de efeito estufa nos voos domésticos (combustível sustentável de aviação). Vale para operadores que emitem mais de 10 mil toneladas de CO2 por ano.",
-   "quem_afeta": "Companhias aéreas e operadores de táxi aéreo de maior porte.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO Nº 820, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério de Portos e Aeroportos / Agência Nacional de Aviação Civil",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-n-820-de-16-de-novembro-de-2026-744718624",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-744721216",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "defesa",
-    "comunicações"
-   ],
-   "o_que_muda": "Decreto institui o Sistema de Satélites de Defesa e Comunicações Estratégicas, para atender a defesa e expandir a infraestrutura de satélites do governo.",
-   "quem_afeta": "Órgãos de defesa e governo; sem efeito direto para o cidadão.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "DECRETO Nº 13.167, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Atos do Poder Executivo",
-   "tipo": "Decreto numerado",
-   "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.167-de-16-de-novembro-de-2026-744721216",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-744722285",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "comércio",
-    "cosméticos"
-   ],
-   "o_que_muda": "Decreto manda cumprir o acordo do Mercosul e países vizinhos para eliminar barreiras técnicas no comércio de cosméticos.",
-   "quem_afeta": "Indústria e importadores de cosméticos.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "DECRETO Nº 13.169, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Atos do Poder Executivo",
-   "tipo": "Decreto numerado",
-   "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.169-de-16-de-novembro-de-2026-744722285",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-744726056",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "meio ambiente"
-   ],
-   "o_que_muda": "Decreto manda cumprir os ajustes ao Protocolo de Montreal sobre gases HCFC que destroem a camada de ozônio.",
-   "quem_afeta": "Indústria de refrigeração e climatização.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "DECRETO Nº 13.170, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Atos do Poder Executivo",
-   "tipo": "Decreto numerado",
-   "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.170-de-16-de-novembro-de-2026-744726056",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-744723526",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "transporte"
-   ],
-   "o_que_muda": "Decreto manda cumprir o Sétimo Protocolo do acordo sobre transporte terrestre internacional entre Brasil e vizinhos.",
-   "quem_afeta": "Transportadores internacionais de cargas e passageiros.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "DECRETO Nº 13.171, DE 16 DE novembro DE 2026",
-   "orgao": "Atos do Poder Executivo",
-   "tipo": "Decreto numerado",
-   "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.171-de-16-de-novembro-de-2026-744723526",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-744958551",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "educação"
-   ],
-   "o_que_muda": "O Enade das Licenciaturas de 2024 (avaliação teórica) passa a ser apenas experimental e não entra no cálculo dos indicadores de qualidade dos cursos.",
-   "quem_afeta": "Cursos de licenciatura e instituições de ensino superior.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "PORTARIA Nº 587, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Educação / Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-n-587-de-16-de-novembro-de-2026-744958551",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-744747179",
+   "id": "rs-1506483",
    "relevancia": "media",
    "area": "outros",
    "temas": [
     "meio ambiente",
-    "pesca"
+    "eventos"
    ],
-   "o_que_muda": "Define o planejamento da pesca de subsistência no Refúgio de Vida Silvestre de Santa Cruz: quem pode pescar, cadastro, embarcações e petrechos permitidos.",
-   "quem_afeta": "Pescadores de subsistência da região.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "PORTARIA ICMBIO Nº 5.055, DE 28 DE OUTUBRO DE 2026",
-   "orgao": "Ministério do Meio Ambiente e Mudança do Clima / Instituto Chico Mendes de Conservação da Biodiversidade",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-icmbio-n-5.055-de-28-de-outubro-de-2026-744747179",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-744958744",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "administração pública",
-    "direitos"
-   ],
-   "o_que_muda": "Institui no Ministério do Desenvolvimento e Assistência Social um protocolo obrigatório para identificar e combater o racismo institucional.",
-   "quem_afeta": "Servidores e unidades do ministério.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "PORTARIA MDS Nº 1.225, de 16 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-mds-n-1.225-de-16-de-novembro-de-2026-744958744",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "rs-1505912",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "saneamento",
-    "água"
-   ],
-   "o_que_muda": "A AGERGS regula soluções alternativas de abastecimento de água e esgoto (poços, fossas e similares) e como elas contam para as metas de universalização do saneamento.",
-   "quem_afeta": "Concessionárias de saneamento, municípios e moradores de áreas sem rede.",
-   "vigencia": "Texto completo não disponível na coleta.",
-   "esfera": "estadual",
-   "titulo": "RESOLUÇÃO NORMATIVA",
-   "orgao": "Conselho-Superior",
-   "tipo": "Resoluções",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505912",
-   "fonte": "DOE-RS"
-  },
-  {
-   "id": "rs-1505888",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "saneamento",
-    "contratos"
-   ],
-   "o_que_muda": "A AGERGS aprova a matriz de riscos obrigatória para contratos de concessão e parcerias de água e esgoto no RS, dividindo responsabilidades entre poder público e empresa.",
-   "quem_afeta": "Concessionárias de água e esgoto e municípios.",
+   "o_que_muda": "O Consema recomendou cuidado com eventos motorizados fora de estrada em áreas de proteção ambiental. É uma recomendação, não uma proibição.",
+   "quem_afeta": "Organizadores de eventos de off-road e municípios turísticos.",
    "vigencia": "",
    "esfera": "estadual",
-   "titulo": "RESOLUÇÃO NORMATIVA",
-   "orgao": "Conselho-Superior",
-   "tipo": "Resoluções",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505888",
-   "fonte": "DOE-RS"
-  },
-  {
-   "id": "rs-1505803",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "meio ambiente",
-    "licenciamento"
-   ],
-   "o_que_muda": "O Consema altera a lista de atividades sujeitas a licenciamento ambiental no RS e as de impacto local, de competência dos municípios.",
-   "quem_afeta": "Empresas e empreendedores que precisam de licença ambiental; prefeituras.",
-   "vigencia": "Texto completo não disponível na coleta.",
-   "esfera": "estadual",
-   "titulo": "Resolução CONSEMA nº 559/2026",
+   "titulo": "atribuições conferidas pela Lei Estadual nº 10.330, de 27 de dezembro de 1994:",
    "orgao": "Gabinete",
    "tipo": "Atos Administrativos",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505803",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1506483",
    "fonte": "DOE-RS"
   },
   {
-   "id": "rs-1505903",
+   "id": "laj-2690-1",
    "relevancia": "media",
-   "area": "saude",
+   "area": "outros",
    "temas": [
-    "saúde",
-    "enfermagem"
+    "servidores",
+    "educação"
    ],
-   "o_que_muda": "A Secretaria da Saúde altera o repasse da verba federal para o piso salarial de enfermeiros, técnicos e auxiliares em estabelecimentos sob gestão estadual e gerência municipal.",
-   "quem_afeta": "Profissionais de enfermagem e hospitais.",
+   "o_que_muda": "Convoca dois candidatos a professor de anos iniciais para contratação temporária, em substituição a servidoras em licença-maternidade.",
+   "quem_afeta": "Candidatos do concurso e escolas municipais.",
+   "vigencia": "Prazo até 23/11/2026 para comparecer.",
+   "esfera": "municipal",
+   "titulo": "EDITAL N.º 433-02/2026, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "EDITAL",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2690"
+  },
+  {
+   "id": "laj-2690-2",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "servidores",
+    "educação"
+   ],
+   "o_que_muda": "Convoca três candidatas a professor de educação infantil para contratação temporária, em vagas de licença-maternidade, licença-saúde e redução de carga horária.",
+   "quem_afeta": "Candidatas do concurso e escolas infantis.",
+   "vigencia": "Prazo até 23/11/2026 para comparecer.",
+   "esfera": "municipal",
+   "titulo": "EDITAL N.º 434-02/2026, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "EDITAL",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2690"
+  },
+  {
+   "id": "laj-2690-3",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "servidores",
+    "educação"
+   ],
+   "o_que_muda": "Convoca uma candidata aprovada em processo seletivo para professora de educação física dos anos finais.",
+   "quem_afeta": "Candidata e escolas municipais.",
+   "vigencia": "Prazo até 23/11/2026 para comparecer.",
+   "esfera": "municipal",
+   "titulo": "EDITAL N.º 435-02/2026, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "EDITAL",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2690"
+  },
+  {
+   "id": "laj-2690-4",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "servidores",
+    "educação"
+   ],
+   "o_que_muda": "Convoca uma candidata para contratação temporária, em vaga de servidora em licença-maternidade.",
+   "quem_afeta": "Candidata do concurso.",
+   "vigencia": "Prazo até 23/11/2026 para comparecer.",
+   "esfera": "municipal",
+   "titulo": "EDITAL N.º 436-02/2026, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "EDITAL",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2690"
+  },
+  {
+   "id": "laj-2690-5",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "servidores",
+    "concursos"
+   ],
+   "o_que_muda": "Homologa resultado de concurso para agente socioeducativo e trata de candidata que não compareceu no prazo.",
+   "quem_afeta": "Candidatos ao cargo de agente socioeducativo.",
    "vigencia": "",
-   "esfera": "estadual",
-   "titulo": "PORTARIA SES Nº 855/2026",
-   "orgao": "Gabinete",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505903",
-   "fonte": "DOE-RS"
+   "esfera": "municipal",
+   "titulo": "Edital de Homologação n.º 531-01/2025.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "Edital de Homologação n.º 531-01/2025.",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2690"
   },
   {
-   "id": "rs-1505882",
+   "id": "laj-2690-6",
    "relevancia": "media",
-   "area": "saude",
+   "area": "outros",
    "temas": [
-    "saúde",
-    "primeira infância"
+    "servidores",
+    "educação"
    ],
-   "o_que_muda": "Reduz a meta de atendimentos de um município no programa Primeira Infância Melhor, que deixa de receber parte do incentivo estadual desde outubro de 2026.",
-   "quem_afeta": "Município citado e famílias atendidas pelo programa.",
-   "vigencia": "Efeito desde a competência de outubro/2026.",
-   "esfera": "estadual",
-   "titulo": "PORTARIA SES N° 838/2026",
-   "orgao": "Gabinete",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505882",
-   "fonte": "DOE-RS"
+   "o_que_muda": "Convoca uma candidata aprovada para educador social, no lugar de uma contratada desligada.",
+   "quem_afeta": "Candidata e serviços sociais do município.",
+   "vigencia": "Prazo até 23/11/2026 para comparecer.",
+   "esfera": "municipal",
+   "titulo": "EDITAL N.º 437-02/2026, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "EDITAL",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2690"
   },
   {
-   "id": "rs-1505722",
+   "id": "laj-2690-7",
    "relevancia": "media",
-   "area": "fazenda",
+   "area": "outros",
    "temas": [
-    "tributos",
-    "Nota Fiscal Gaúcha"
+    "servidores",
+    "educação"
    ],
-   "o_que_muda": "Homologa a Etapa 88 da Nota Fiscal Gaúcha (3º trimestre de 2026), liberando repasses a entidades participantes.",
-   "quem_afeta": "Entidades beneficiárias do programa.",
-   "vigencia": "Na publicação.",
-   "esfera": "estadual",
-   "titulo": "Portaria 060 ACT_RE - NFG segmento entidades",
-   "orgao": "Receita Estadual",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1505722",
-   "fonte": "DOE-RS"
+   "o_que_muda": "Convoca um candidato aprovado para professor de matemática dos anos finais, após pedido de exoneração.",
+   "quem_afeta": "Candidato e escolas municipais.",
+   "vigencia": "Prazo até 23/11/2026 para comparecer.",
+   "esfera": "municipal",
+   "titulo": "EDITAL N.º 438-02/2026, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "EDITAL",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2690"
   }
  ],
  "demais": {
-  "federal": "Dos 345 atos normativos, a maioria é de portarias de pessoal, radiodifusão, cultura, habilitações da Receita e Susep, decisões individuais e pautas; além de outros 2.654 atos de pessoal e contratos só na lista.",
-  "estadual": "Dos 103 atos, a maior parte é de nomeações de comissões, portarias de designação, notificações da AGERGS, aposentadorias e súmulas de contratos e acordos.",
-  "municipal": "Sem dados por falha na fonte."
+  "federal": "Os demais atos são na maioria pautas do Carf, despachos e decisões individuais (ANP, ANM, Anatel, DNIT), autorizações de repasses da Saúde, portarias de pessoal e atos da Receita sobre benefícios individuais.",
+  "estadual": "Os demais atos do RS são portarias de pessoal, súmulas de contratos, delegações do governador e notificações individuais.",
+  "municipal": "Todos os atos de Lajeado entraram nos destaques."
  },
  "fontes": {
   "federal": {
    "ok": true,
-   "atos": 345,
-   "lista": 2654
+   "atos": 311,
+   "lista": 3423
   },
   "estadual": {
    "ok": true,
-   "atos": 103,
-   "lista": 333,
-   "publicados": 473
+   "atos": 82,
+   "lista": 556,
+   "publicados": 689
   },
   "municipal": {
-   "ok": false,
-   "erro": "HTTP 500"
+   "ok": true,
+   "atos": 7,
+   "lista": 0,
+   "edicoes": [
+    "2690 (Normal)"
+   ]
   }
  },
- "coletado_em": "2026-11-18T05:10:32.078Z",
+ "coletado_em": "2026-11-19T05:04:35.484Z",
  "totais": {
-  "federal": 2999,
-  "estadual": 436,
-  "municipal": 0
+  "federal": 3734,
+  "estadual": 638,
+  "municipal": 7
  }
 }
