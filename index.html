@@ -1116,7 +1116,7 @@ const benPct = b => b.pessoas ? b.pessoas / (macro?.divida?.populacao || 214e6) 
 const COMPARA = { atualizado: "2026-11", secoes: [
   ["Economia", [
     { k: "ranking", nome: "Posição entre as maiores economias", melhor: null, br: ["10º", "FMI, previsão 2026"], us: ["1º", "FMI, 2026"], cn: ["2º", "FMI, 2026"],
-      nota: "Pelo tamanho do PIB em dólares. O Brasil foi 11º em 2025, quando a Rússia passou à frente, e volta a 10º em 2026 pela previsão do FMI de outubro. Pelo custo de vida (PPC), a China é a 1ª, os EUA o 2º e o Brasil o 8º." },
+      nota: "Pelo tamanho do PIB em dólares. O Brasil foi 11º em 2025, quando a Rússia passou à frente, e volta a 10º em 2026 pela previsão do FMI de outubro." },
     { k: "juros", nome: "Juros básicos", melhor: null, us: ["3,75% a 4,00%", "Fed, out/26"], cn: ["1,40%", "taxa de 7 dias, PBoC"],
       nota: "Brasil: Selic. EUA: faixa dos Fed Funds. China: taxa de recompra de 7 dias, a principal do banco central chinês (a de empréstimos de 1 ano, a LPR, está em 3,0%)." },
     { k: "ipca", nome: "Inflação em 12 meses", melhor: null, us: ["3,7%", "set/26"], cn: ["0,7%", "out/26"],
@@ -1125,8 +1125,6 @@ const COMPARA = { atualizado: "2026-11", secoes: [
     { k: "pib", nome: "PIB (em dólares)", melhor: null, br: ["US$ 2,28 tri", "2025"], us: ["US$ 30,77 tri", "2025"], cn: ["US$ 19,50 tri", "2025"] },
     { k: "cresc", nome: "Crescimento do PIB", melhor: "alto", br: [2.3, "2025"], us: [2.2, "2025"], cn: [5.0, "2025"], nota: "Em 2026 a China cresceu 4,6% até setembro." },
     { k: "pibpc", nome: "PIB por pessoa", melhor: "alto", br: [10713, "2025"], us: [90027, "2025"], cn: [13862, "2025"], fmt: "usd" },
-    { k: "ppc", nome: "PIB por pessoa, pelo custo de vida", melhor: "alto", br: [23433, "2025"], us: [90027, "2025"], cn: [29333, "2025"], fmt: "usd",
-      nota: "Em paridade de poder de compra (PPC): corrige o dólar pelo preço das coisas em cada país. Mostra melhor o padrão de vida." },
     { k: "salmin", nome: "Salário mínimo por mês", melhor: null, us: ["≈ US$ 1.257", "federal: US$ 7,25 por hora"], cn: ["≈ US$ 385", "Xangai: 2.740 yuans"],
       nota: "Nos EUA, muitos estados pagam bem mais que o mínimo federal (Califórnia: US$ 16,90 por hora). Na China cada cidade tem o seu; Xangai é o maior." },
     { k: "carga", nome: "Carga tributária", melhor: null, us: ["≈ 25%", "OCDE, 2023"], cn: ["≈ 20%", "OCDE, 2022"], nota: "Impostos e contribuições de todos os níveis de governo, em % do PIB." },
@@ -3001,7 +2999,7 @@ function eduItems() {
           ${COMPARA.secoes.map(([s, rs]) => `<tr><td colspan="4" style="padding-top:14px;color:var(--text);font-weight:700">${s}</td></tr>` + rs.map(linha).join("")).join("")}</table></div>
           <p class="hint" style="margin-top:6px">Em verde, o melhor dos três quando faz sentido dizer qual é melhor. Valores com "≈" são aproximados.</p>`; },
       oque: "Põe lado a lado, para Brasil, Estados Unidos e China, os índices explicados nesta aba. Os EUA são a maior economia do mundo e a China a segunda; os dois são também os maiores parceiros comerciais do Brasil. Os números de PIB, renda e dados sociais vêm de fontes que medem todos os países do mesmo jeito (Banco Mundial, FMI, ONU, OCDE), por isso alguns diferem um pouco dos números oficiais brasileiros dos outros cards.",
-      porque: "Ajuda a pôr o Brasil em perspectiva. A China tem PIB grande mas renda por pessoa não tão distante da brasileira, porque tem quase 7 vezes mais gente. Os EUA têm renda por pessoa quase 4 vezes maior que a do Brasil mesmo corrigindo pelo custo de vida. Juros e inflação mostram o momento de cada banco central: no Brasil os juros ficam muito acima da inflação, nos EUA pouco acima, e na China a inflação está perto de zero.",
+      porque: "Ajuda a pôr o Brasil em perspectiva. A China tem PIB grande mas renda por pessoa não tão distante da brasileira, porque tem quase 7 vezes mais gente. Os EUA têm renda por pessoa mais de 8 vezes maior que a do Brasil. Juros e inflação mostram o momento de cada banco central: no Brasil os juros ficam muito acima da inflação, nos EUA pouco acima, e na China a inflação está perto de zero.",
       horario: [["Juros, inflação e desemprego", "Brasil ao vivo; EUA e China, último mês publicado (atualizado à mão)"], ["PIB, renda e dados sociais", "anuais, com 1 a 2 anos de atraso"], ["Atualização aqui", "à mão, de tempos em tempos"]],
       nota: "Fontes: Banco Mundial (PIB, crescimento, renda por pessoa, expectativa de vida, Gini e população), Federal Reserve, BLS, Banco do Povo da China e Escritório Nacional de Estatísticas da China (juros, inflação e desemprego), Relatório de Desenvolvimento Humano da ONU de 2025 (IDH), OCDE (carga tributária e PISA), FMI (gasto e dívida dos governos) e BIS (dívida das famílias), conforme publicados até novembro de 2026. O desemprego da China conta só as áreas urbanas. Comparar países é sempre aproximado: cada um mede algumas coisas do seu jeito." },
     { id: "spearman", titulo: "Correlação de Spearman", sub: "Como ler o quadro de correlações",
