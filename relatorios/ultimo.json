@@ -1,10 +1,16 @@
 {
- "data": "2026-11-19",
- "gerado_em": "2026-11-19T17:30:30.033Z",
- "pesquisa_data": "2026-11-19",
+ "data": "2026-11-20",
+ "gerado_em": "2026-11-20T09:11:00.130Z",
+ "pesquisa_data": "2026-11-20",
  "indicadores_data": "2026-11-19",
- "resumo_mercado": "Segundo o InfoMoney, o Ibovespa fechou em queda de 1,34%, aos 167.538 pontos, em meio a receios com o cenário fiscal e a falas do Fed por juros maiores nos EUA. O Money Times e a Exame relatam dólar à vista em alta de 1,45%, a R$ 5,87, o maior fechamento desde abril de 2025. Em Nova York, o Money Times aponta pregão misto: Dow em queda de cerca de 1,1% com a ata do Fed, e Nasdaq em alta de 0,4% com o balanço da Nvidia.",
+ "resumo_mercado": "Segundo o Money Times, o Ibovespa fechou quinta (19) em queda de 0,69%, a 166.376 pontos, com dólar a R$ 5,93 e alta dos juros futuros; hoje a B3 não abre (feriado). Nos EUA, Yahoo Finance e Motley Fool citam S&P 500 a 7.176 (-2,02%) e Nasdaq a 23.879 (-2,25%), com Nvidia em queda e a estreia da Anthropic na Nasdaq. As fontes destacam incerteza sobre a equipe econômica no Brasil e nervosismo com ações de IA. Não achei notícia econômica chinesa relevante nas últimas 24 horas; a mais recente, de 16/11 (CNBC), mostrou produção industrial de outubro em 4,8% e varejo em 0,4%, abaixo do esperado.",
  "fontes_mercado": [
+  {
+   "nome": "Money Times",
+   "titulo": "Tempo real: Ibovespa cai e dólar ultrapassa os R$ 5,90; veja os destaques desta quinta-feira (19)",
+   "url": "https://www.moneytimes.com.br/tempo-real-19-11-2026-davs/",
+   "data": "2026-11-19"
+  },
   {
    "nome": "InfoMoney",
    "titulo": "Ibovespa tem novo dia de baixa ampla e dólar dispara mais uma vez, a R$ 5,86",
@@ -12,22 +18,22 @@
    "data": "2026-11-18"
   },
   {
-   "nome": "Money Times",
-   "titulo": "Tempo real: Ibovespa perde os 168 mil pontos e dólar passa os R$ 5,85; veja o fechamento desta quarta-feira (18)",
-   "url": "https://www.moneytimes.com.br/tempo-real-17-11-2026-davs/",
-   "data": "2026-11-18"
+   "nome": "Motley Fool",
+   "titulo": "Stock Market Today, Nov. 19: Nvidia Slides as Investors Weigh CEO Transition Fallout Despite Strong Q3 Results",
+   "url": "https://www.fool.com/coverage/stock-market-today/2026/11/19/stock-market-today-nov-19-nvidia-slides-as-investors-weigh-ceo-transition-fallout-despite-strong-q3-results/",
+   "data": "2026-11-19"
   },
   {
-   "nome": "Exame",
-   "titulo": "Ibovespa cai 1,3% e perde os 168 mil pontos com pressão fiscal e cenário externo",
-   "url": "https://exame.com/invest/mercados/ibovespa-perde-forca-e-dolar-avanca-para-r-580-com-ajuste-fiscal-no-radar/",
-   "data": "2026-11-18"
+   "nome": "Yahoo Finance",
+   "titulo": "Stock market today: Dow sinks 1,100 points, S&P 500 and Nasdaq tank 2% as Anthropic IPO grabs spotlight",
+   "url": "https://finance.yahoo.com/markets/live/stock-market-today-thursday-november-19-dow-sp-500-nasdaq-anthropic-ipo-live-141306032.html",
+   "data": "2026-11-19"
   },
   {
-   "nome": "Money Times",
-   "titulo": "Bolsas de NY fecham sem direção única com balanço da Nvidia e ata do Fed",
-   "url": "https://www.moneytimes.com.br/bolsas-de-ny-fecham-sem-direcao-unica-com-balanco-da-nvidia-e-ata-do-fed-davs/",
-   "data": "2026-11-18"
+   "nome": "CNBC",
+   "titulo": "China's slowdown deepens in October as industrial output, retail sales, investment miss estimates",
+   "url": "https://www.cnbc.com/amp/2026/11/16/china-retail-sales-october-industrial-output-investment.html",
+   "data": "2026-11-16"
   }
  ],
  "tecnica_data": "2026-11-19",
@@ -668,7 +674,7 @@
      ]
     }
    },
-   "resumo": "Segundo as fontes, a Petrobras divulgou o 3T26 em 10 ou 11 de novembro (as fontes divergem na data) com lucro líquido de R$ 39,8 bilhões, segundo o Investidor10 (a brapi cita queda de 24% e o Investidor10 alta de 21,5% a/a; as bases de comparação divergem). O Conselho aprovou R$ 15,3 bilhões em dividendos (R$ 1,1873 por ação), em duas parcelas previstas para 22/02/2027 e 22/03/2027; a forma (dividendos e/ou JCP) será definida até 10/12/2026. A brapi diz que o valor ficou um pouco abaixo do esperado (Itaú BBA projetava US$ 4,2 bi; BTG e XP US$ 3,6 bi; Safra US$ 3,1 bi) e as ações operavam em queda de cerca de 3%, a R$ 43,60. A companhia elevou a projeção de produção de 2026 para 3,3 a 3,4 milhões de boe/d. Seguem de pé a antecipação de R$ 17,4 bilhões já aprovada (pagamentos em 23/11 e 21/12) e as recomendações de compra de XP (alvo R$ 63), Itaú BBA (R$ 63) e BTG, segundo as fontes.",
+   "resumo": "Segundo as fontes, a Petrobras divulgou o 3T26 em 10 ou 11 de novembro (as fontes divergem na data) com lucro líquido de R$ 39,8 bilhões, segundo o Investidor10 (a brapi cita queda de 24% e o Investidor10 alta de 21,5% a/a; as bases de comparação divergem). O Conselho aprovou R$ 15,3 bilhões em dividendos (R$ 1,1873 por ação), em duas parcelas previstas para 22/02/2027 e 22/03/2027; a forma (dividendos e/ou JCP) será definida até 10/12/2026. A brapi diz que o valor ficou um pouco abaixo do esperado (Itaú BBA projetava US$ 4,2 bi; BTG e XP US$ 3,6 bi; Safra US$ 3,1 bi) e as ações operavam em queda de cerca de 3%, a R$ 43,60. A companhia elevou a projeção de produção de 2026 para 3,3 a 3,4 milhões de boe/d. Seguem de pé a antecipação de R$ 17,4 bilhões já aprovada (pagamentos em 23/11 e 21/12) e as recomendações de compra de XP (alvo R$ 63), Itaú BBA (R$ 63) e BTG, segundo as fontes. O Money Times, segundo o Clube Acionista, relata que 12 de 15 instituições consultadas indicaram a Petrobras entre as recomendações de novembro, antes do Plano Estratégico previsto para 23 de novembro.",
    "sentimento": "neutro",
    "consenso": {
     "compra": 3,
@@ -746,9 +752,15 @@
      "titulo": "Petrobras tem lucro 24% menor no 3T26 e anuncia R$ 15,3 bi",
      "url": "https://brapi.dev/news/petrobras-tem-lucro-24-menor-no-3t26-e-anuncia-r-15-3-2d5a73e7",
      "data": null
+    },
+    {
+     "nome": "Clube Acionista",
+     "titulo": "PETR4 domina as recomendações de novembro e tem data decisiva no radar",
+     "url": "https://acionista.com.br/petr4-domina-as-recomendacoes-de-novembro-e-tem-data-decisiva-no-radar/",
+     "data": "2026-11-09"
     }
    ],
-   "atualizado_em": "2026-11-16"
+   "atualizado_em": "2026-11-20"
   },
   {
    "ticker": "PETR3",
@@ -1069,13 +1081,13 @@
      ]
     }
    },
-   "resumo": "Segundo as fontes, o resultado do 1T26 veio abaixo das projeções e as ações caíram cerca de 5%, com analistas citando frustração com a remuneração. Para o 3T26, o Acionista relata lucro ajustado de R$ 1,759 bilhão (-19,1% a/a) e o BP Money lucro líquido de R$ 1,11 bilhão, abaixo dos R$ 1,5 bilhão projetados pela LSEG; as fontes divergem por critério (ajustado x reportado). O Acionista cita média de alvos de R$ 67,20 e mediana de R$ 70, com faixa de R$ 42,19 a R$ 79; a maioria das casas aparece com compra (Itaú BBA aparece com alvo de R$ 75,20 e Genial com R$ 70 em notas de datas não confirmadas; JPMorgan cortou o alvo de R$ 67,50 para R$ 63, mantendo recomendação equivalente a compra). As datas de várias revisões não constam nas páginas consultadas.",
+   "resumo": "Segundo as fontes, o resultado do 1T26 veio abaixo das projeções e as ações caíram cerca de 5%, com analistas citando frustração com a remuneração. Para o 3T26, o Acionista relata lucro ajustado de R$ 1,759 bilhão (-19,1% a/a) e o BP Money lucro líquido de R$ 1,11 bilhão, abaixo dos R$ 1,5 bilhão projetados pela LSEG; as fontes divergem por critério (ajustado x reportado). O Acionista cita média de alvos de R$ 67,20 e mediana de R$ 70, com faixa de R$ 42,19 a R$ 79; a maioria das casas aparece com compra (Itaú BBA aparece com alvo de R$ 75,20 e Genial com compra e alvo de R$ 69 desde 04/11/2026, segundo nota de 16/11, que cita como riscos queda nos preços da energia e risco político; JPMorgan cortou o alvo de R$ 67,50 para R$ 63, mantendo recomendação equivalente a compra). As datas de várias revisões não constam nas páginas consultadas.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 10,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 71.65,
+    "preco_alvo_medio": 71.55,
     "moeda": "BRL",
     "casas": [
      {
@@ -1117,8 +1129,8 @@
      {
       "nome": "Genial",
       "recomendacao": "compra",
-      "preco_alvo": 70,
-      "data": null
+      "preco_alvo": 69,
+      "data": "2026-11-04"
      },
      {
       "nome": "BTG Pactual",
@@ -1189,9 +1201,15 @@
      "titulo": "Axia (AXIA3) resultado 3T26",
      "url": "https://bpmoney.com.br/?p=434266",
      "data": null
+    },
+    {
+     "nome": "Genial Investimentos",
+     "titulo": "Sua informAÇÃO chegou - segunda-feira, 16 de novembro de 2026",
+     "url": "https://analisa.genialinvestimentos.com.br/noticias/acoes/Sua-informACAO-chegou-Segundafeira-16-de-novembro-de-2026",
+     "data": "2026-11-16"
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-20"
   },
   {
    "ticker": "SBSP3",
@@ -2912,14 +2930,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Lucro ajustado de cerca de R$ 5,3 bilhões no 3T26 (+17% a/a), em linha com o consenso; recompra de até R$ 2 bilhões em units.",
-     "fonte": "Seu Dinheiro",
-     "data": "2026-11-12"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Money Times",
@@ -3527,14 +3538,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Copel divulgou o 3T26: lucro líquido de R$ 688,4 mi (+89% a/a).",
-     "fonte": "Euqueroinvestir",
-     "data": "2026-11-12"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Safra - O Especialista",
@@ -3762,14 +3766,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Equatorial divulgou o 3T26: lucro líquido de R$ 934 mi (ajustado R$ 535 mi, -37,1%); Itaú vê resultado em linha.",
-     "fonte": "Itaú Investimentos",
-     "data": "2026-11-12"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Itaú Investimentos",
@@ -4002,14 +3999,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "outro",
-     "descricao": "Genial retirou a recomendação de manter e colocou o preço-alvo (R$ 20,10) em revisão após o 3T26, segundo a própria Genial.",
-     "fonte": "Genial Investimentos",
-     "data": "2026-11-12"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Portal Tela",
@@ -4954,14 +4944,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Lucro de cerca de R$ 2,7 bilhões no 3T26, com créditos fiscais extraordinários na Ipiranga, segundo as fontes.",
-     "fonte": "Cenário Energia",
-     "data": "2026-11-12"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Clube Acionista",
@@ -6317,14 +6300,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "fato_relevante",
-     "descricao": "Conselho elegeu Paulo Roberto Belém Júnior como diretor financeiro e de RI, com mandato desde 11/11/2026.",
-     "fonte": "Visno Invest",
-     "data": "2026-11-10"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Visno Invest",
@@ -8939,13 +8915,13 @@
      ]
     }
    },
-   "resumo": "A cobertura está dividida. Em 15/10/2026 a XP reiterou compra e elevou o alvo de R$ 20 para R$ 25 (fim de 2027), após alta de cerca de 30% no ano, e projeta lucro do 3º tri estável em torno de R$ 1,16 bilhão. Em 24/07/2026 o JPMorgan rebaixou para underweight com alvo de R$ 22 para dezembro de 2027, citando espaço limitado para crescimento de lucro. Itaú BBA e Citi aparecem como neutros em matérias sem data clara. Segundo o Acionista, a divulgação do 3T26 estava prevista para 9 de novembro e, até esta busca, não havia números oficiais nem reações de analistas. Segundo o Visno Invest, o 3T26 trouxe lucro gerencial de R$ 1,18 bilhão (+3,7% sobre o 3T25), o maior da história da empresa, com receitas de R$ 1,53 bilhão; número de fonte única.",
+   "resumo": "Segundo o Visno Invest, a Caixa Seguridade teve no 3T26 lucro gerencial de R$ 1,18 bilhão (+3,7% a/a), o maior da sua história, e aprovou R$ 1,08 bilhão em dividendos intercalares (R$ 0,36 por ação, data-ex em 05/01/2027), segundo a Brapi; o Money Times descreve o lucro como abaixo do previsto. A cobertura segue dividida: XP mantém compra (alvo R$ 25), JPMorgan tem underweight (alvo R$ 22) e o Itaú BBA aparece com outperform e alvo de R$ 18 após o balanço (data não confirmada), segundo o Eu Quero Investir; o Bradesco BBI mantém cautela.",
    "sentimento": "neutro",
    "consenso": {
-    "compra": 1,
+    "compra": 2,
     "neutro": 0,
     "venda": 1,
-    "preco_alvo_medio": 23.5,
+    "preco_alvo_medio": 21.67,
     "moeda": "BRL",
     "casas": [
      {
@@ -8953,6 +8929,12 @@
       "recomendacao": "compra",
       "preco_alvo": 25,
       "data": "2026-10-15"
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "compra",
+      "preco_alvo": 18,
+      "data": null
      },
      {
       "nome": "JPMorgan",
@@ -8981,9 +8963,27 @@
      "titulo": "Caixa Seguridade (CXSE3) registra lucro de R$ 1,18 bi no 3T26",
      "url": "https://visnoinvest.com.br/news/16343/caixa-seguridade-cxse3-registra-lucro-de-r-118-bi-no-3t26",
      "data": "2026-11-09"
+    },
+    {
+     "nome": "Money Times",
+     "titulo": "Caixa Seguridade (CXSE3): lucro cresce, mas fica aquém do previsto e pressiona papéis",
+     "url": "https://www.moneytimes.com.br/caixa-seguridade-cxse3-lucro-cresce-mas-fica-aquem-do-previsto-e-pressiona-papeis-confira/",
+     "data": null
+    },
+    {
+     "nome": "Brapi",
+     "titulo": "Com lucro de R$ 1,2 bi no 3T, Caixa Seguridade aprova dividendos",
+     "url": "https://brapi.dev/news/com-lucro-de-r-1-2-bi-no-3t-caixa-seguridade-aprova-d73de4df",
+     "data": null
+    },
+    {
+     "nome": "Eu Quero Investir",
+     "titulo": "Caixa Seguridade (CXSE3): BTG vê potencial, mas Bradesco mantém cautela",
+     "url": "https://euqueroinvestir.com/acoes/caixa-seguridade-cxse3-btg-ve-potencial-mas-bradesco-mantem-cautela",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-11"
+   "atualizado_em": "2026-11-20"
   },
   {
    "ticker": "ISAE4",
@@ -10639,14 +10639,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Taesa divulgou lucro regulatório de R$ 363,8 milhões no 3T26 (+12,5% a/a); Genial manteve recomendação neutra.",
-     "fonte": "Cenário Energia",
-     "data": "2026-11-12"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Cenário Energia",
@@ -12923,14 +12916,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Natura reporta lucro líquido de R$ 49 mi no 3T26 (contra prejuízo de R$ 1,926 bi no 3T25); receita no Brasil cai 9% e ações recuam cerca de 4,5%.",
-     "fonte": "Seu Dinheiro",
-     "data": "2026-11-12"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "BP Money",
@@ -13166,14 +13152,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Lucro de R$ 150,4 milhões no 3T26, revertendo prejuízo do ano anterior.",
-     "fonte": "Cenário Energia",
-     "data": "2026-11-11"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Safra",
@@ -13429,12 +13408,6 @@
      "titulo": "Brava Energia (BRAV3): resultado 2T26 e Ecopetrol assume controle da Brava",
      "url": "https://analisa.genialinvestimentos.com.br/acoes/3r-petroleum/brava-energia-brav3-resultado-2t26-estoy-aqui-ecopetrol-assume-controle-da-brava",
      "data": "2026-08-31"
-    },
-    {
-     "nome": "Cenário Energia",
-     "titulo": "Brava Energia eleva Ebitda ajustado em 22% no 3T26, mas registra prejuízo de R$ 156 milhões",
-     "url": "https://cenarioenergia.com.br/2026/11/10/brava-energia-ebitda-3t26-prejuizo-hedge-atlanta-potiguar/",
-     "data": "2026-11-10"
     }
    ],
    "atualizado_em": "2026-11-18"
@@ -14031,38 +14004,44 @@
      ]
     }
    },
-   "resumo": "Após a prévia operacional do 2T26, o Itaú BBA manteve a Direcional como Top Pick em baixa renda (outperform), avaliando números sólidos mas lançamentos e vendas líquidas abaixo do esperado por causa da Riva. Segundo o InfoMoney, Bradesco BBI e XP também mantiveram visão positiva; a ação caiu cerca de 0,7% no dia, cotada a R$ 12,49. A prévia operacional do 3T26 foi vista como fraca por analistas (vendas e lançamentos em queda), segundo Genial e Empiricus; a Genial reiterou compra com alvo de R$ 19 em 14/10. No balanço do 3T26 (10/11), segundo o Clube Acionista, a Direcional teve receita líquida de R$ 1,159 bilhão, margem bruta ajustada de 45,2% e lucro líquido de R$ 201 milhões (-12,6% a/a); a Empiricus avaliou o resultado como positivo pela expansão de margens, ressaltando ambiente comercial desafiador no segmento econômico.",
+   "resumo": "No balanço do 3T26 (10/11), segundo o Clube Acionista, a Direcional teve receita líquida de R$ 1,159 bilhão, margem bruta ajustada de 45,2% e lucro líquido de R$ 201 milhões (-12,6% a/a); a Empiricus viu margens em expansão em ambiente comercial desafiador. Após o resultado, segundo o BP Money e o Eu Quero Investir, o Itaú BBA cortou o alvo de R$ 18 para R$ 15 e manteve compra (outperform), e a Genial reduziu de R$ 19 para R$ 15, também com compra, citando custo de capital maior. O BB Investimentos mantém compra com alvo de R$ 20 e o Safra, compra com alvo de R$ 15,40 (datas não confirmadas); o tom das fontes segue positivo na recomendação, com alvos menores e foco em vendas e distratos.",
    "sentimento": "positivo",
    "consenso": {
-    "compra": 4,
+    "compra": 5,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 19,
+    "preco_alvo_medio": 16.28,
     "moeda": "BRL",
     "casas": [
      {
       "nome": "Itaú BBA",
       "recomendacao": "compra",
-      "preco_alvo": null,
-      "data": "2026-10-09"
-     },
-     {
-      "nome": "Bradesco BBI",
-      "recomendacao": "compra",
-      "preco_alvo": null,
-      "data": "2026-10-09"
-     },
-     {
-      "nome": "XP",
-      "recomendacao": "compra",
-      "preco_alvo": null,
-      "data": "2026-10-09"
+      "preco_alvo": 15,
+      "data": null
      },
      {
       "nome": "Genial",
       "recomendacao": "compra",
-      "preco_alvo": 19,
-      "data": "2026-10-14"
+      "preco_alvo": 15,
+      "data": null
+     },
+     {
+      "nome": "BB Investimentos",
+      "recomendacao": "compra",
+      "preco_alvo": 20,
+      "data": null
+     },
+     {
+      "nome": "Safra",
+      "recomendacao": "compra",
+      "preco_alvo": 15.4,
+      "data": null
+     },
+     {
+      "nome": "BTG Pactual",
+      "recomendacao": "compra",
+      "preco_alvo": 16,
+      "data": "2026-10-16"
      }
     ]
    },
@@ -14097,9 +14076,27 @@
      "titulo": "Direcional (DIRR3): margem recorde e destaque nos resultados do 3T26",
      "url": "https://www.empiricus.com.br/artigos/investimentos/direcional-dirr3-margem-recorde-e-destaque-nos-resultados-do-3t26-da-incorporadora-hora-de-comprar-jdnm/",
      "data": null
+    },
+    {
+     "nome": "BP Money",
+     "titulo": "Itaú BBA reduz preço-alvo da Direcional (DIRR3) e mantém compra",
+     "url": "https://bpmoney.com.br/mercado/acoes/itau-bba-reduz-preco-alvo-direcional-dirr3-mantem-compra/",
+     "data": null
+    },
+    {
+     "nome": "Genial Investimentos",
+     "titulo": "Ações Imobiliário DIRR3: 3T26 Review",
+     "url": "https://analisa.genialinvestimentos.com.br/acoes/DIRR3/Acoes-Imobiliario-DIRR3-3T26-Review/",
+     "data": null
+    },
+    {
+     "nome": "Safra - O Especialista",
+     "titulo": "Direcional: queda e assimetria positiva",
+     "url": "https://oespecialista.safra.com.br/analise/direcional-queda-assimetria-positiva-safra/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-16"
+   "atualizado_em": "2026-11-20"
   },
   {
    "ticker": "POMO4",
@@ -15781,10 +15778,10 @@
      ]
     }
    },
-   "resumo": "Em 05/11/2026 a Tenda divulgou o 3T26 e os números variam por métrica: lucro consolidado ex-Swap e SOP de R$ 117,9 milhões (+6,6%) segundo o release resumido pelo Clube Acionista, R$ 57,3 milhões com o efeito do Swap segundo o Visno Invest, e lucro recorrente de R$ 106 milhões, 40% abaixo do consenso, segundo o BP Money, que relata queda de 17,72% da ação no dia. A companhia manteve o guidance de lucro ex-Swap de R$ 600 a R$ 660 milhões em 2026 (R$ 419,9 milhões até setembro). BTG (alvo R$ 44) e Safra (R$ 46) têm compra em relatos de julho, anteriores ao balanço.",
+   "resumo": "Em 05/11/2026 a Tenda divulgou o 3T26 e os números variam por métrica: lucro consolidado ex-Swap e SOP de R$ 117,9 milhões (+6,6%) segundo o release resumido pelo Clube Acionista, R$ 57,3 milhões com o efeito do Swap segundo o Visno Invest, e lucro recorrente de R$ 106 milhões, 40% abaixo do consenso, segundo o BP Money, que relata queda de 17,72% da ação no dia. A companhia manteve o guidance de lucro ex-Swap de R$ 600 a R$ 660 milhões em 2026 (R$ 419,9 milhões até setembro). Segundo o Eu Quero Investir, o Itaú BBA reduziu o alvo de R$ 58 para R$ 41 mantendo compra (outperform). BTG (R$ 44) e Genial (R$ 49) aparecem com compra em relatórios de outubro, e o Safra (R$ 46) em relato anterior, todos antes do balanço; as fontes divergem sobre a posição do JPMorgan.",
    "sentimento": "negativo",
    "consenso": {
-    "compra": 2,
+    "compra": 4,
     "neutro": 0,
     "venda": 0,
     "preco_alvo_medio": 45,
@@ -15800,6 +15797,18 @@
       "nome": "BTG Pactual",
       "recomendacao": "compra",
       "preco_alvo": 44,
+      "data": null
+     },
+     {
+      "nome": "Genial",
+      "recomendacao": "compra",
+      "preco_alvo": 49,
+      "data": null
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "compra",
+      "preco_alvo": 41,
       "data": null
      }
     ]
@@ -15847,9 +15856,21 @@
      "titulo": "Tenda (TEND3): resultados do 3T26 revelam crescimento e inovação",
      "url": "https://acionista.com.br/tenda-tend3-resultados-3t26-revelam-crescimento-e-inovacao/",
      "data": "2026-11-05"
+    },
+    {
+     "nome": "Eu Quero Investir",
+     "titulo": "Tenda: Itaú BBA vê potencial de alta e mantém recomendação de compra após queda das ações",
+     "url": "https://euqueroinvestir.com/acoes/tenda-itau-bba-ve-potencial-de-alta-de-138-e-mantem-recomendacao-de-compra-apos-queda-das-acoes",
+     "data": null
+    },
+    {
+     "nome": "Genial Investimentos",
+     "titulo": "Tenda (TEND3) Prévia Operacional 3T26",
+     "url": "https://analisa.genialinvestimentos.com.br/acoes/TEND3/Tenda-TEND3--Previa-Operacional-3T26-Demanda-Firme-Conversao-Mais-Lenta/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-09"
+   "atualizado_em": "2026-11-20"
   },
   {
    "ticker": "HAPV3",
@@ -16020,14 +16041,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Hapvida divulgou o 3T26: receita de R$ 8,08 bi (+3,9%) e lucro líquido ajustado de R$ 107 mi (-68,3%).",
-     "fonte": "Seu Dinheiro",
-     "data": "2026-11-12"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Seu Dinheiro",
@@ -16953,12 +16967,6 @@
      "data": "2026-11-09"
     },
     {
-     "nome": "24/7 Wall St.",
-     "titulo": "Bank of America Is Doubling Down on Apple While Tech Sells Off. Here's Its Price Target",
-     "url": "https://247wallst.com/investing/2026/11/09/bank-of-america-is-doubling-down-on-apple-while-tech-sells-off-heres-its-price-target/",
-     "data": "2026-11-09"
-    },
-    {
      "nome": "MacDailyNews",
      "titulo": "China Renaissance upgrades Apple to 'Buy,' ups price target to $425",
      "url": "https://macdailynews.com/2026/11/11/china-renaissance-upgrades-apple-to-buy-ups-price-target-to-425/",
@@ -17327,13 +17335,13 @@
      ]
     }
    },
-   "resumo": "A Microsoft reportou em 28/10/2026 o 1º trimestre fiscal de 2027: receita de US$ 92,3 bilhões (+19%), Microsoft Cloud de US$ 63,9 bilhões (+30%) e Azure com alta de cerca de 48%, acima dos 44% a 45% projetados, segundo veículos como SiliconANGLE e Stocktwits. A empresa projeta receita de US$ 96 bilhões a US$ 97,1 bilhões no 2º trimestre fiscal e crescimento do Azure de ao menos 49%. As ações subiram cerca de 4% a 5% no after-hours; o fluxo de caixa livre caiu para cerca de US$ 18,6 bilhões (de US$ 25,7 bilhões), por causa dos gastos com infraestrutura de IA. Antes do balanço, Bernstein (US$ 662, Outperform), UBS (US$ 675), BMO (US$ 600) e Guggenheim (US$ 586) tinham alvos acima de US$ 580, segundo textos de estilo Benzinga; o consenso atualizado pós-balanço não foi localizado. Agregadores citados pela Tickeron (08/11) mostram alvo médio perto de US$ 634 entre cerca de 58 analistas, em faixa de US$ 500 a US$ 750; a ação fechou a US$ 530,61 em 06/11. Segundo a 24/7 Wall St. (13/11), o consenso de analistas reunia 12 strong buy, 40 buy e 5 hold, sem recomendação de venda, com alvo médio de US$ 636,12.",
+   "resumo": "A Microsoft reportou em 28/10/2026 o 1º trimestre fiscal de 2027: receita de US$ 92,3 bilhões (+19%), Microsoft Cloud de US$ 63,9 bilhões (+30%) e Azure com alta de cerca de 48%, acima dos 44% a 45% projetados, segundo veículos como SiliconANGLE e Stocktwits. A empresa projeta receita de US$ 96 bilhões a US$ 97,1 bilhões no 2º trimestre fiscal e crescimento do Azure de ao menos 49%. As ações subiram cerca de 4% a 5% no after-hours; o fluxo de caixa livre caiu para cerca de US$ 18,6 bilhões (de US$ 25,7 bilhões), por causa dos gastos com infraestrutura de IA. Antes do balanço, Bernstein (US$ 662, Outperform), UBS (US$ 675), BMO (US$ 600) e Guggenheim (US$ 586) tinham alvos acima de US$ 580, segundo textos de estilo Benzinga; o consenso atualizado pós-balanço não foi localizado. Agregadores citados pela Tickeron (08/11) mostram alvo médio perto de US$ 634 entre cerca de 58 analistas, em faixa de US$ 500 a US$ 750; a ação fechou a US$ 530,61 em 06/11. Segundo a 24/7 Wall St. (13/11), o consenso de analistas reunia 12 strong buy, 40 buy e 5 hold, sem recomendação de venda, com alvo médio de US$ 636,12. Segundo busca em veículos como o 24/7 Wall St., o Citi manteve compra com alvo de US$ 680 em 12/11/2026.",
    "sentimento": "positivo",
    "consenso": {
-    "compra": 7,
+    "compra": 8,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 624.71,
+    "preco_alvo_medio": 631.62,
     "moeda": "USD",
     "casas": [
      {
@@ -17377,6 +17385,12 @@
       "recomendacao": "compra",
       "preco_alvo": 600,
       "data": null
+     },
+     {
+      "nome": "Citi",
+      "recomendacao": "compra",
+      "preco_alvo": 680,
+      "data": "2026-11-12"
      }
     ]
    },
@@ -17435,9 +17449,15 @@
      "titulo": "Microsoft (MSFT) eyes $630 target, 18.7% upside in focus",
      "url": "https://tickeron.com/blogs/microsoft-msft-eyes-630-target-18-7-upside-in-focus-32107/",
      "data": "2026-11-08"
+    },
+    {
+     "nome": "24/7 Wall St.",
+     "titulo": "Microsoft Just Overtook NVIDIA. Our Model Sees $650+",
+     "url": "https://247wallst.com/investing/2026/11/13/microsoft-just-overtook-nvidia-our-model-sees-650/",
+     "data": "2026-11-13"
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-20"
   }
  ]
 }
