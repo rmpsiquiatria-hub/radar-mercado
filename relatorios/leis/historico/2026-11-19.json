@@ -1,0 +1,304 @@
+{
+ "data": "2026-11-19",
+ "gerado_em": "2026-11-20T08:20:00-03:00",
+ "resumo": {
+  "federal": "O Diário Oficial da União trouxe mudanças em regras da reforma tributária (dispensa de CNPJ para produtor rural e caminhoneiro autônomo), a ratificação de convênios do ICMS sobre combustíveis e um novo Regulamento Consular. Também saíram leis que só mexem no orçamento de 2026 e na LDO, regras de pesca de lula no Sul e novos requisitos de certificação de produtos do Inmetro.",
+  "estadual": "No Rio Grande do Sul, o Detran mudou as regras para instrutores de trânsito autônomos (credenciamento, limite de município, preços por escrito). A AGERGS decidiu sobre a cobrança de esgoto em imóveis abaixo do nível da rede (Corsan) e sobre as tarifas dos aeroportos de Passo Fundo e Santo Ângelo. O governo estadual também criou um protocolo de proteção a mulheres em risco de violência doméstica.",
+  "municipal": "Não foi possível ler o Diário Oficial de Lajeado neste dia: a coleta dessa fonte falhou (erro de leitura da página). Não há como dizer se houve publicações da prefeitura."
+ },
+ "destaques": [
+  {
+   "id": "rs-1508380",
+   "relevancia": "alta",
+   "area": "outros",
+   "temas": [
+    "trânsito",
+    "habilitação"
+   ],
+   "o_que_muda": "O Detran/RS fixou novas regras para instrutores de trânsito autônomos: credenciamento anual no Detran, aulas só no município de cadastro (com exceção para cidades com menos de 10 mil habitantes), registro de cada aula com geolocalização, faixa \"AUTOESCOLA\" no carro e preço da hora-aula informado por escrito ao aluno antes de começar.",
+   "quem_afeta": "Instrutores autônomos, candidatos à primeira habilitação ou adição de categoria e autoescolas no RS.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "PORTARIA DETRAN/RS N.º 566, DE 19 DE NOVEMBRO DE 2026.",
+   "orgao": "Gabinete da Diretora-Geral",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508380",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "dou-745538930",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "reforma tributária"
+   ],
+   "o_que_muda": "Produtores rurais pessoa física e transportadores autônomos de carga que não optaram pelo regime regular do IBS/CBS ficam dispensados de se inscrever no CNPJ até 31/12/2028.",
+   "quem_afeta": "Produtores rurais pessoa física e caminhoneiros autônomos.",
+   "vigencia": "Na publicação (dispensa vale até 31/12/2028).",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "ATO CONJUNTO RFB/CGIBS Nº 8, DE 13 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "tipo": "Ato",
+   "url": "https://www.in.gov.br/web/dou/-/ato-conjunto-rfb/cgibs-n-8-de-13-de-novembro-de-2026-745538930",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-745273961",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "ICMS",
+    "combustíveis"
+   ],
+   "o_que_muda": "O Confaz ratificou três convênios de ICMS: dois mudam as regras da tributação única (monofásica) de gasolina, etanol anidro e outros combustíveis, e um prorroga benefícios fiscais. A publicação não traz valores de alíquota.",
+   "quem_afeta": "Distribuidoras, postos e empresas que usam benefícios de ICMS.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "ATO DECLARATÓRIO Nº 29, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Nacional de Política Fazendária",
+   "tipo": "Ato Normativo",
+   "url": "https://www.in.gov.br/web/dou/-/ato-declaratorio-n-29-de-18-de-novembro-de-2026-745273961",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745539341",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "consumidor",
+    "indústria"
+   ],
+   "o_que_muda": "O Inmetro consolidou em um só texto os Requisitos Gerais de Certificação de Produtos, que valem para todos os produtos com certificação obrigatória.",
+   "quem_afeta": "Fabricantes, importadores e organismos de certificação.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA Nº 711, DE 17 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços / Instituto Nacional de Metrologia, Qualidade e Tecnologia",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-n-711-de-17-de-novembro-de-2026-745539341",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-745538851",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "cidadania",
+    "exterior"
+   ],
+   "o_que_muda": "O Itamaraty aprovou um novo Regulamento Consular Brasileiro, que reúne as regras do atendimento de brasileiros no exterior (documentos, CPF, apostilamento, assistência) e revoga as portarias anteriores.",
+   "quem_afeta": "Brasileiros que vivem ou viajam ao exterior.",
+   "vigencia": "15/12/2026.",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA MRE Nº 707, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério das Relações Exteriores / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mre-n-707-de-18-de-novembro-de-2026-745538851",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-745538606",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "trabalho",
+    "crédito"
+   ],
+   "o_que_muda": "O Ministério do Trabalho definiu os documentos e passos para entidades se cadastrarem no Programa Nacional de Microcrédito Produtivo Orientado.",
+   "quem_afeta": "Instituições de microcrédito, cooperativas e correspondentes.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA MTE Nº 2.031, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério do Trabalho e Emprego / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mte-n-2.031-de-18-de-novembro-de-2026-745538606",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-745538471",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "meio ambiente",
+    "pesca"
+   ],
+   "o_que_muda": "Ficou permitida a pesca artesanal de lulas no mar territorial do Sudeste e do Sul, de 1º de novembro a 31 de março de cada ano, com regras sobre barcos, licenças e petrechos (arrasto de fundo tem limites).",
+   "quem_afeta": "Pescadores profissionais artesanais do litoral gaúcho.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA INTERMINISTERIAL MPA/MMA Nº 76, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Pesca e Aquicultura / Gabinete do Ministro",
+   "tipo": "Portaria Interministerial",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-interministerial-mpa/mma-n-76-de-18-de-novembro-de-2026-745538471",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-745270700",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "orçamento"
+   ],
+   "o_que_muda": "A Lei 15.534 altera a lei de diretrizes orçamentárias de 2026: libera medidas para a Copa do Mundo Feminina de 2027 e dispensa uma exigência de funcionamento contínuo para repasses ao Primeiro Hospital Inteligente do Brasil.",
+   "quem_afeta": "Gestores públicos e entidades que recebem repasses da União.",
+   "vigencia": "Na publicação.",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "LEI Nº 15.534, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Atos do Poder Legislativo",
+   "tipo": "Lei",
+   "url": "https://www.in.gov.br/web/dou/-/lei-n-15.534-de-18-de-novembro-de-2026-745270700",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745307674",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "assistência social",
+    "orçamento"
+   ],
+   "o_que_muda": "O Ministério do Desenvolvimento Social definiu critérios para usar em 2027 as emendas parlamentares (individuais, de bancada e de comissão) em ações de assistência social.",
+   "quem_afeta": "Prefeituras e entidades que recebem emendas na área social.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA MDS Nº 1.226, de 18 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mds-n-1.226-de-18-de-novembro-de-2026-745307674",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745539088",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "educação"
+   ],
+   "o_que_muda": "O MEC criou o comitê e a rede técnica que organizam União, estados e municípios no Pacto Nacional pela Recomposição das Aprendizagens.",
+   "quem_afeta": "Secretarias de educação e redes de ensino.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA MEC Nº 815, DE 17 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Educação / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mec-n-815-de-17-de-novembro-de-2026-745539088",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-745539159",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "previdência",
+    "educação"
+   ],
+   "o_que_muda": "O Ministério da Previdência instituiu o projeto Poupadores do Futuro, de educação financeira e previdenciária para crianças, adolescentes e jovens.",
+   "quem_afeta": "Escolas, entidades de previdência e estudantes.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "federal",
+   "titulo": "PORTARIA MPS Nº 1.538, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Previdência Social / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-mps-n-1.538-de-18-de-novembro-de-2026-745539159",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "rs-1507635",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "saneamento",
+    "consumidor"
+   ],
+   "o_que_muda": "A AGERGS autorizou a Corsan a retomar a conexão à rede de esgoto de imóveis abaixo do nível da rede (soleira negativa), informando ao morador as alternativas e o custo de cada uma. Quando a solução for fossa séptica, a limpeza programada será feita sem cobrar do usuário.",
+   "quem_afeta": "Moradores de imóveis com soleira negativa atendidos pela Corsan nos municípios que delegaram a regulação à AGERGS.",
+   "vigencia": "Na publicação.",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "RESOLUÇÃO DECISÓRIA",
+   "orgao": "Conselho-Superior",
+   "tipo": "Resoluções",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1507635",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1507645",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tarifas",
+    "transporte aéreo"
+   ],
+   "o_que_muda": "A AGERGS validou a tabela inicial de tarifas aeroportuárias dos aeroportos de Passo Fundo e Santo Ângelo (concessionária ECB), válida desde 28/08/2026. Mudanças futuras precisam ser avisadas com 30 dias de antecedência. O texto não traz os valores.",
+   "quem_afeta": "Empresas aéreas, operadores e passageiros nesses aeroportos.",
+   "vigencia": "Tarifas valem desde 28/08/2026.",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "DECISÃO MONOCRÁTICA Nº 4/2026",
+   "orgao": "Conselho-Superior",
+   "tipo": "Diversos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1507645",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1507659",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "segurança",
+    "violência doméstica"
+   ],
+   "o_que_muda": "O governo do RS criou um protocolo para órgãos estaduais e municípios que aderirem usarem o módulo \"EmFrente, Mulher\", que estima o risco de a mulher sofrer violência doméstica grave de novo e ajuda a priorizar os casos.",
+   "quem_afeta": "Polícia, Justiça, serviços de proteção e mulheres em situação de violência.",
+   "vigencia": "",
+   "imposto": null,
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.090, DE 18 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1507659",
+   "fonte": "DOE-RS"
+  }
+ ],
+ "demais": {
+  "federal": "Saíram ainda 13 leis só de abertura de créditos ou ajustes no orçamento de 2026, dezenas de repasses da Saúde a municípios, portarias de pessoal, decisões individuais da Anvisa e atos de aduana.",
+  "estadual": "Houve decretos de emergência para cidades afetadas por temporais, créditos orçamentários, leis que dão nome a rodovias e rótula, a lei da Rota do Surf, portarias de pessoal e aposentadorias, repasses a hospitais e municípios da Saúde e licenças ambientais.",
+  "municipal": "Sem dados: a fonte de Lajeado falhou nesta coleta."
+ },
+ "fontes": {
+  "federal": {
+   "ok": true,
+   "atos": 397,
+   "lista": 3196
+  },
+  "estadual": {
+   "ok": true,
+   "atos": 80,
+   "lista": 788,
+   "publicados": 915
+  },
+  "municipal": {
+   "ok": false,
+   "erro": "Cannot read properties of null (reading '1')"
+  }
+ },
+ "coletado_em": "2026-11-20T04:54:49.438Z",
+ "totais": {
+  "federal": 3593,
+  "estadual": 868,
+  "municipal": 0
+ }
+}
