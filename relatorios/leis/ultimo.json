@@ -1,48 +1,28 @@
 {
- "data": "2026-11-21",
- "gerado_em": "2026-11-22T08:07:33Z",
+ "data": "2026-11-22",
+ "gerado_em": "2026-11-23T08:10:00Z",
  "resumo": {
-  "federal": "Dia calmo no Diário Oficial da União: só saiu um ato normativo, que reconhece oficialmente o estado de calamidade pública em Tupanciretã (RS) por causa de um vendaval.",
-  "estadual": "O governo gaúcho criou o Programa Volta por Cima Novembro de 2026, com auxílio de R$ 2.500 por família atingida pelo temporal em Tupanciretã. Também homologou situações de emergência e calamidade em vários municípios e abriu crédito de R$ 5 milhões para custear o auxílio.",
+  "federal": "Não houve atos normativos na Seção 1 do Diário Oficial da União neste dia (domingo).",
+  "estadual": "O Diário Oficial do RS trouxe só três portarias de repasse de recursos (Defesa Civil e educação), sem mudança de regras gerais.",
   "municipal": "Não houve publicação em Lajeado neste dia."
  },
- "destaques": [
-  {
-   "id": "rs-1508448",
-   "relevancia": "alta",
-   "area": "outros",
-   "temas": [
-    "assistência social",
-    "calamidade",
-    "benefícios"
-   ],
-   "o_que_muda": "Cria o Programa Volta por Cima Novembro de 2026: cada família pobre ou em extrema pobreza, inscrita no CadÚnico e com moradia danificada pelo temporal de 19 e 20 de novembro em Tupanciretã, recebe R$ 2.500 em parcela única, paga no Cartão Cidadão do Banrisul. O Estado separa até R$ 5 milhões para isso.",
-   "quem_afeta": "Famílias de baixa renda de Tupanciretã atingidas pelo temporal e a prefeitura do município, que ajuda a identificar as famílias.",
-   "vigencia": "Na data da publicação (21/11/2026).",
-   "esfera": "estadual",
-   "titulo": "DECRETO Nº 59.094, DE 21 DE NOVEMBRO DE 2026.",
-   "orgao": "Atos do Governador",
-   "tipo": "Decretos",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508448",
-   "fonte": "DOE-RS"
-  }
- ],
+ "destaques": [],
  "demais": {
-  "federal": "Nenhum outro ato normativo; a única portaria do dia é o reconhecimento federal da calamidade em Tupanciretã (RS), um ato sobre um caso específico.",
-  "estadual": "Três decretos sobre casos específicos: homologação de calamidade pública em Tupanciretã (vendaval), homologação de situação de emergência em dez municípios gaúchos (chuvas, granizo e vendaval; válida por 180 dias) e abertura de crédito suplementar de R$ 5 milhões para o auxílio emergencial.",
-  "municipal": ""
+  "federal": "Nenhum ato.",
+  "estadual": "Duas portarias da Defesa Civil autorizam repasses a municípios afetados por vendaval e granizo, e uma portaria da Educação retifica a lista de escolas que recebem repasse por eventos climáticos. São atos pontuais.",
+  "municipal": "Nenhum ato."
  },
  "fontes": {
   "federal": {
    "ok": true,
-   "atos": 1,
+   "atos": 0,
    "lista": 0
   },
   "estadual": {
    "ok": true,
-   "atos": 4,
+   "atos": 3,
    "lista": 0,
-   "publicados": 4
+   "publicados": 3
   },
   "municipal": {
    "ok": true,
@@ -51,10 +31,10 @@
    "edicoes": []
   }
  },
- "coletado_em": "2026-11-22T04:05:58.101Z",
+ "coletado_em": "2026-11-23T04:47:02.338Z",
  "totais": {
-  "federal": 1,
-  "estadual": 4,
+  "federal": 0,
+  "estadual": 3,
   "municipal": 0
  }
 }
