@@ -52,6 +52,8 @@ const ORC = [
   ["Empréstimos", [0, 0, 0, 0, 0, 0], "Dívida de consumo: crédito pessoal, cheque especial, parcelamento de fatura. O financiamento da casa entra em Moradia e o do carro em Transporte. O ideal aqui é zero. Se houver, a soma das parcelas não deve passar de 15% da renda, e o dinheiro sai da parte de Previdência até a dívida acabar."],
   ["Cartão de crédito", [0, 0, 0, 0, 0, 0], "É forma de pagamento, não um gasto. As compras do cartão entram nas categorias acima, e a fatura é paga sempre inteira: o rotativo cobra mais de 100% ao ano."],
 ];
+// Ordem: maior fatia da classe A primeiro; empate decide pela B1.
+ORC.sort((x, y) => y[1][0] - x[1][0] || y[1][1] - x[1][1]);
 const COLS = CLASSES.map(x => x.c);
 ORC.forEach(([n, p]) => p.length !== 6 && console.warn("orçamento: linha incompleta", n));
 COLS.forEach((c, i) => { const s = ORC.reduce((a, [, p]) => a + p[i], 0); if (s !== 100) console.warn("orçamento: classe", c, "soma", s); });
