@@ -736,6 +736,7 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
       <button role="tab" data-esec="economia">🏦 Juros, inflação e emprego</button>
       <button role="tab" data-esec="governo">🏛️ Governo</button>
       <button role="tab" data-esec="paises">🌎 Brasil × EUA × China</button>
+      <button role="tab" data-esec="orcamento">👨‍👩‍👧 Orçamento familiar</button>
       <button role="tab" data-esec="estatisticas">📐 Estatísticas</button>
       <button role="tab" data-esec="simulacao">🎚️ Simulação</button>
       <button role="tab" data-esec="fundamentos">📊 Análise fundamentalista</button>
@@ -758,6 +759,7 @@ dialog.vdlg.bot-gdlg { width: min(900px, calc(100vw - 20px)); }
       <p class="note">Os mesmos índices econômicos e sociais do painel, lado a lado para Brasil, Estados Unidos e China.</p>
       <div id="eduPaises" style="max-width:980px"></div>
     </div>
+    <div data-esec-panel="orcamento" hidden id="orcBox"></div>
     <div data-esec-panel="estatisticas" hidden>
       <p class="note">Como os indicadores do topo da tela se movem juntos: a <b>correlação</b> de cada par e o <b>R²</b>, que diz quanto um indicador explica do outro. Em "📐 R² com várias variáveis" dá para montar um modelo com até 8 indicadores e ver quanto, juntos, explicam o escolhido.</p>
       <section class="card corr" id="corr" aria-label="Correlações entre os indicadores"></section>
@@ -3233,6 +3235,7 @@ function showEduSec(name) {
   setTimeout(revealSelectedTabs, 30);
   if (name === "simulacao") setTimeout(renderSim);
   if (name === "direito") setTimeout(() => window.renderDireito?.());
+  if (name === "orcamento") setTimeout(() => window.renderOrcamento?.());
   document.querySelectorAll("[data-esec]").forEach(b => b.setAttribute("aria-selected", b.dataset.esec === name));
   document.querySelectorAll("[data-esec-panel]").forEach(p => p.hidden = p.dataset.esecPanel !== name);
   try { localStorage.setItem(KEY + ".edu", name); } catch {}
@@ -4854,6 +4857,7 @@ $("#cgal").innerHTML = Object.entries(CANDLE_EDU).map(([nome, i]) => `<details c
 migrarVirtuais(); renderNotif(); renderAll(); refresh(); renderCorr(); loadCorrData(); setTimeout(tecLoad, 6000);
 </script>
 <script src="direito.js" defer></script>
+<script src="orcamento.js" defer></script>
 <script src="bot.js" defer></script>
 </body>
 </html>
