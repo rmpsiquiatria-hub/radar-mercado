@@ -1,17 +1,17 @@
 {
- "data": "2026-11-21",
- "coletado_em": "2026-11-22T04:05:58.101Z",
+ "data": "2026-11-22",
+ "coletado_em": "2026-11-23T04:47:02.338Z",
  "fontes": {
   "federal": {
    "ok": true,
-   "atos": 1,
+   "atos": 0,
    "lista": 0
   },
   "estadual": {
    "ok": true,
-   "atos": 4,
+   "atos": 3,
    "lista": 0,
-   "publicados": 4
+   "publicados": 3
   },
   "municipal": {
    "ok": true,
@@ -22,76 +22,49 @@
  },
  "itens": [
   {
-   "id": "dou-745539488",
-   "esfera": "federal",
-   "fonte": "DOU (extra)",
-   "tipo": "Portaria",
-   "orgao": "Ministério da Integração e do Desenvolvimento Regional",
-   "unidade": "Ministério da Integração e do Desenvolvimento Regional / Secretaria Nacional de Proteção e Defesa Civil",
-   "titulo": "PORTARIA Nº 4.066, DE 21 DE NOVEMBRO DE 2026",
-   "ementa": "O SECRETÁRIO NACIONAL DE PROTEÇÃO E DEFESA CIVIL, no uso da competência que lhe foi delegada pela Portaria Ministerial nº 2.212, de 04 de julho de 2023, publicada no Diário Oficial da União, Seção 1, de 05 de julho de 2023, resolve: Art. 1º Reconhecer o Estado de Calamidade Pública nas áreas descritas no Formulário de Informações do Desastre - FIDE, con...",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-n-4.066-de-21-de-novembro-de-2026-745539488",
-   "pagina": "1",
+   "id": "rs-1508453",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Casa Militar",
+   "unidade": "Gabinete",
+   "titulo": "PORTARIA Nº 053/SPDC/2026",
+   "ementa": "Autoriza o repasse e disciplina a aplicação de recursos financeiros do Fundo Estadual de Defesa Civil aos Municípios habilitados em conformidade com o Art. 6º da Res. 014/FUNDEC/2026 - Vendaval e Granizo SEI n.º 26/0804-9001594-8 O SUBCHEFE DE PROTEÇÃO E DEFESA CIVIL , no uso das atribuições que lhe confere o Art. 16 do Decreto Estadual n.º 57.292, de 1º de novembro de 2023;",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508453",
    "cats": [
     "outros"
    ],
-   "tamanho": 762
+   "tamanho": 3089
   },
   {
-   "id": "rs-1508448",
+   "id": "rs-1508452",
    "esfera": "estadual",
    "fonte": "DOE-RS",
-   "tipo": "Decretos",
-   "orgao": "Atos do Governador",
-   "titulo": "DECRETO Nº 59.094, DE 21 DE NOVEMBRO DE 2026.",
-   "ementa": "Cria o Programa Volta por Cima Novembro de 2026, com fundamento na Lei nº 15.977, de 12 de julho de 2023, e institui auxílio financeiro destinado à população vítima das contingências decorrentes do evento climático extremo ocorrido no município de Tupanciretã, no período de 19 a 20 de novembro de 2026. O GOVERNADOR DO ESTADO DO RIO GRANDE DO SUL , no uso das atribuições que lhe confere o art. 82, ",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508448",
+   "tipo": "Portarias",
+   "orgao": "Casa Militar",
+   "unidade": "Gabinete",
+   "titulo": "PORTARIA Nº 052/SPDC/2026",
+   "ementa": "Autoriza o repasse e disciplina a aplicação de recursos financeiros do Fundo Estadual de Defesa Civil aos Municípios habilitados em conformidade com o Art. 6º da Res. 016/FUNDEC/2026 - Vendaval SEI n.º 26/0804-9001590-5. O SUBCHEFE DE PROTEÇÃO E DEFESA CIVIL , no uso das atribuições que lhe confere o Art. 16 do Decreto Estadual n.º 57.292, de 1º de novembro de 2023;",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508452",
    "cats": [
     "outros"
    ],
-   "tamanho": 9565
+   "tamanho": 2862
   },
   {
-   "id": "rs-1508447",
+   "id": "rs-1508451",
    "esfera": "estadual",
    "fonte": "DOE-RS",
-   "tipo": "Decretos",
-   "orgao": "Atos do Governador",
-   "titulo": "DECRETO Nº 59.093, DE 21 DE NOVEMBRO DE 2026.",
-   "ementa": "Homologa Situação de Emergência nos Municípios de Cerro Branco, São José do Ouro, Pontão, Dois Lajeados, Doutor Ricardo, Porto Vera Cruz, Dilermando de Aguiar, Sinimbu, Lagoa Vermelha e Vista Gaúcha - RS. O GOVERNADOR DO ESTADO DO RIO GRANDE DO SUL , no uso da atribuição que lhe confere o art. 82, inciso V, da Constituição do Estado, e em conformidade com o art. 7º, inciso VII, da Lei Federal nº 1",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508447",
+   "tipo": "Portarias",
+   "orgao": "Secretaria da Educação",
+   "unidade": "Gabinete da Secretária",
+   "titulo": "Portaria nº 1540/2026",
+   "ementa": "Retifica a Portaria nº 1520/2026, que classificou as unidades escolares que receberão repasse financeiro, para acrescentar unidades escolares contempladas pela parcela de Eventos Climáticos, regulamentadas pelo Decreto nº 58.550, de 26 de dezembro de 2025, que alterou o Decreto nº 57.641, de 29 de maio de 2024 e pela Lei nº 16.088, de 10 de janeiro de 2024, que dispõe sobre a Gestão Democrática do",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508451",
    "cats": [
     "outros"
    ],
-   "tamanho": 3053
-  },
-  {
-   "id": "rs-1508446",
-   "esfera": "estadual",
-   "fonte": "DOE-RS",
-   "tipo": "Decretos",
-   "orgao": "Atos do Governador",
-   "titulo": "DECRETO Nº 59.092, DE 21 DE NOVEMBRO DE 2026.",
-   "ementa": "Homologa sumariamente Estado de Calamidade Pública no Município de Tupanciretã - RS. O GOVERNADOR DO ESTADO DO RIO GRANDE DO SUL , no uso das atribuições que lhe conferem o art. 82, inciso V, da Constituição do Estado, o art. 7º, inciso VII, da Lei Federal nº 12.608, de 10 de abril de 2012, e os arts. 45 e 49 do Decreto nº 58.486, de 27 de novembro de 2025, bem como o constante no processo adminis",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508446",
-   "cats": [
-    "outros"
-   ],
-   "tamanho": 2190
-  },
-  {
-   "id": "rs-1508445",
-   "esfera": "estadual",
-   "fonte": "DOE-RS",
-   "tipo": "Decretos",
-   "orgao": "Atos do Governador",
-   "titulo": "DECRETO Nº 59.091, DE 21 DE NOVEMBRO DE 2026.",
-   "ementa": "Abre crédito no Orçamento do Estado. O GOVERNADOR DO ESTADO DO RIO GRANDE DO SUL, no uso da atribuição que lhe confere o artigo 82, inciso V, da Constituição do Estado e de acordo com a Lei n° 16.318, de 17 de julho de 2025, e Lei nº 16.402, de 10 de dezembro de 2025, DECRETA:",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508445",
-   "cats": [
-    "fazenda"
-   ],
-   "tamanho": 1433
+   "tamanho": 2421
   }
  ]
 }
