@@ -33,10 +33,10 @@ const faixa = x => { const i = CLASSES.indexOf(x); return i === 0 ? `${x.min} a 
 
 // Reference budget, % of the family's monthly income, in the order A, B1, B2, C1, C2, DE.
 const ORC = [
-  ["Moradia", [20, 24, 26, 28, 30, 32], "Aluguel ou prestação da casa, condomínio, luz, água, gás, internet e IPTU. O limite saudável é perto de 30% da renda."],
+  ["Moradia", [20, 24, 26, 28, 30, 32], "Aluguel ou prestação do financiamento da casa, condomínio, luz, água, gás, internet e IPTU. O limite saudável é perto de 30% da renda."],
   ["Alimentação", [7, 11, 15, 20, 26, 32], "Mercado, feira e açougue. Pesa mais quanto menor a renda."],
   ["Restaurantes", [5, 5, 4, 3, 2, 1], "Comer fora, delivery e lanches."],
-  ["Transporte", [8, 10, 12, 12, 12, 11], "Ônibus, aplicativo, combustível, manutenção, IPVA, seguro obrigatório e estacionamento."],
+  ["Transporte", [8, 10, 12, 12, 12, 11], "Ônibus, aplicativo, combustível, manutenção, IPVA e estacionamento. A prestação do carro financiado também entra aqui: se ela não couber junto com o resto, o carro está caro para a renda."],
   ["Saúde", [6, 7, 7, 5, 3, 2], "Plano de saúde, consultas, exames e dentista. Nas classes C2 e DE o SUS cobre a maior parte."],
   ["Farmácia", [1, 1, 2, 2, 3, 4], "Remédios e itens de higiene."],
   ["Educação", [8, 8, 7, 5, 4, 3], "Escola, faculdade, cursos, material e livros. É o gasto que mais ajuda a subir de classe."],
@@ -49,7 +49,7 @@ const ORC = [
   ["Empregado doméstico", [6, 1, 0, 0, 0, 0], "Na classe A, um mensalista com carteira e encargos (INSS e FGTS). Na B1, uma diarista. Nas demais, o serviço é feito pela família."],
   ["Contador", [1, 0, 0, 0, 0, 0], "Faz sentido para quem é autônomo, tem empresa ou declaração de imposto de renda complexa."],
   ["Banco", [0, 0, 0, 0, 0, 0], "Ideal é zero: há contas digitais gratuitas. Pagar tarifa é dinheiro que não volta."],
-  ["Empréstimos", [0, 0, 0, 0, 0, 0], "Ideal é zero para consumo. Se houver, a soma das parcelas não deve passar de 15% da renda, e o dinheiro sai da parte de Previdência até a dívida acabar."],
+  ["Empréstimos", [0, 0, 0, 0, 0, 0], "Dívida de consumo: crédito pessoal, cheque especial, parcelamento de fatura. O financiamento da casa entra em Moradia e o do carro em Transporte. O ideal aqui é zero. Se houver, a soma das parcelas não deve passar de 15% da renda, e o dinheiro sai da parte de Previdência até a dívida acabar."],
   ["Cartão de crédito", [0, 0, 0, 0, 0, 0], "É forma de pagamento, não um gasto. As compras do cartão entram nas categorias acima, e a fatura é paga sempre inteira: o rotativo cobra mais de 100% ao ano."],
 ];
 const COLS = CLASSES.map(x => x.c);
