@@ -2,131 +2,6 @@
  "data": "2026-11-24",
  "fonte": "Yahoo Finance (candles)",
  "ativos": {
-  "SBSP3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 27.7,
-    "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 27.3184,
-     "mms21": 26.8967,
-     "mms50": 28.3162,
-     "mms200": 28.9833
-    },
-    "ifr14": 50.5,
-    "macd": {
-     "macd": -0.3122,
-     "sinal": -0.4917,
-     "histograma": 0.1795
-    },
-    "suporte": 23.83,
-    "resistencia": 32.43,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "alta",
-      "data": "2026-11-19"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 19/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 27.35,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 27.9533,
-     "mms21": 27.92,
-     "mms50": 28.6567,
-     "mms200": 19.5774
-    },
-    "ifr14": 48,
-    "macd": {
-     "macd": -0.1313,
-     "sinal": -0.055,
-     "histograma": -0.0763
-    },
-    "suporte": 23.17,
-    "resistencia": 34.17,
-    "candles": [
-     {
-      "nome": "Martelo invertido",
-      "sinal": "alta",
-      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
-     }
-    ],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-09"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MACD × linha de sinal para baixa em 09/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 24.7,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 3,
-    "medias": {
-     "mme9": 27.1153,
-     "mms21": 25.8339,
-     "mms50": 18.734,
-     "mms200": 8.9931
-    },
-    "ifr14": 51.2,
-    "macd": {
-     "macd": 2.5395,
-     "sinal": 3.2819,
-     "histograma": -0.7424
-    },
-    "suporte": 18.0257,
-    "resistencia": 35.318,
-    "candles": [
-     {
-      "nome": "Martelo invertido",
-      "sinal": "alta",
-      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
-     }
-    ],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
-      "sinal": "alta"
-     },
-     {
-      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
-      "sinal": "alta"
-     }
-    ]
-   }
-  },
   "VALE3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -249,126 +124,6 @@
     ]
    }
   },
-  "ITUB4": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 39.73,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 40.6804,
-     "mms21": 41.27,
-     "mms50": 43.675,
-     "mms200": 42.7758
-    },
-    "ifr14": 37.2,
-    "macd": {
-     "macd": -1.075,
-     "sinal": -1.039,
-     "histograma": -0.0359
-    },
-    "suporte": 38.11,
-    "resistencia": 48.59,
-    "candles": [
-     {
-      "nome": "Doji",
-      "sinal": "neutro",
-      "descricao": "Indecisão (abertura ≈ fechamento) depois de queda: pode anteceder reversão."
-     }
-    ],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-19"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MACD × linha de sinal para baixa em 19/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "Candle: Doji — Indecisão (abertura ≈ fechamento) depois de queda: pode anteceder reversão.",
-      "sinal": "neutro"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 40.07,
-    "tendencia": "lateral",
-    "vies": "baixa",
-    "pontuacao": -2,
-    "medias": {
-     "mme9": 42.5296,
-     "mms21": 42.5662,
-     "mms50": 42.4442,
-     "mms200": 32.6947
-    },
-    "ifr14": 45.6,
-    "macd": {
-     "macd": 0.1742,
-     "sinal": 0.5227,
-     "histograma": -0.3485
-    },
-    "suporte": 37.35,
-    "resistencia": 50.85,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-11-16"
-     },
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-02"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 16/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 38.69,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 2,
-    "medias": {
-     "mme9": 41.1943,
-     "mms21": 39.018,
-     "mms50": 31.8562,
-     "mms200": 22.8346
-    },
-    "ifr14": 51.7,
-    "macd": {
-     "macd": 2.9489,
-     "sinal": 3.4428,
-     "histograma": -0.4939
-    },
-    "suporte": 28.1906,
-    "resistencia": 50.85,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
-      "sinal": "alta"
-     }
-    ]
-   }
-  },
   "PETR3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -472,57 +227,73 @@
     ]
    }
   },
-  "PETR4": {
+  "SBSP3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 41.3,
-    "tendencia": "lateral",
+    "fechamento": 27.7,
+    "tendencia": "baixa",
     "vies": "neutro",
-    "pontuacao": 1,
+    "pontuacao": -1,
     "medias": {
-     "mme9": 43.9375,
-     "mms21": 48.0243,
-     "mms50": 50.4796,
-     "mms200": 44.8723
+     "mme9": 27.3184,
+     "mms21": 26.8967,
+     "mms50": 28.3162,
+     "mms200": 28.9833
     },
-    "ifr14": 25.4,
+    "ifr14": 50.5,
     "macd": {
-     "macd": -2.7139,
-     "sinal": -2.1241,
-     "histograma": -0.5897
+     "macd": -0.3122,
+     "sinal": -0.4917,
+     "histograma": 0.1795
     },
-    "suporte": 41.27,
-    "resistencia": 59.79,
+    "suporte": 23.83,
+    "resistencia": 32.43,
     "candles": [],
-    "cruzamentos": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "alta",
+      "data": "2026-11-19"
+     }
+    ],
     "sinais": [
      {
-      "texto": "IFR(14) em 25: sobrevendido",
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 19/11/2026",
       "sinal": "alta"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 42.67,
+    "fechamento": 27.35,
     "tendencia": "lateral",
     "vies": "neutro",
-    "pontuacao": -1,
+    "pontuacao": 0,
     "medias": {
-     "mme9": 48.4669,
-     "mms21": 46.6395,
-     "mms50": 42.9446,
-     "mms200": 36.033
+     "mme9": 27.9533,
+     "mms21": 27.92,
+     "mms50": 28.6567,
+     "mms200": 19.5774
     },
-    "ifr14": 43.8,
+    "ifr14": 48,
     "macd": {
-     "macd": 1.8086,
-     "sinal": 2.6168,
-     "histograma": -0.8083
+     "macd": -0.1313,
+     "sinal": -0.055,
+     "histograma": -0.0763
     },
-    "suporte": 37.61,
-    "resistencia": 59.79,
-    "candles": [],
+    "suporte": 23.17,
+    "resistencia": 34.17,
+    "candles": [
+     {
+      "nome": "Martelo invertido",
+      "sinal": "alta",
+      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
+     }
+    ],
     "cruzamentos": [
      {
       "nome": "MACD × linha de sinal",
@@ -534,34 +305,48 @@
      {
       "texto": "MACD × linha de sinal para baixa em 09/11/2026",
       "sinal": "baixa"
+     },
+     {
+      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
+      "sinal": "alta"
      }
     ]
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 52.71,
+    "fechamento": 24.7,
     "tendencia": "alta",
     "vies": "alta",
-    "pontuacao": 2,
+    "pontuacao": 3,
     "medias": {
-     "mme9": 44.8314,
-     "mms21": 37.9919,
-     "mms50": 35.3378,
-     "mms200": 24.2365
+     "mme9": 27.1153,
+     "mms21": 25.8339,
+     "mms50": 18.734,
+     "mms200": 8.9931
     },
-    "ifr14": 66.4,
+    "ifr14": 51.2,
     "macd": {
-     "macd": 3.7622,
-     "sinal": 2.3173,
-     "histograma": 1.4449
+     "macd": 2.5395,
+     "sinal": 3.2819,
+     "histograma": -0.7424
     },
-    "suporte": 28.86,
-    "resistencia": 59.79,
-    "candles": [],
+    "suporte": 18.0257,
+    "resistencia": 35.318,
+    "candles": [
+     {
+      "nome": "Martelo invertido",
+      "sinal": "alta",
+      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
+     }
+    ],
     "cruzamentos": [],
     "sinais": [
      {
       "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
+      "sinal": "alta"
+     },
+     {
+      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
       "sinal": "alta"
      }
     ]
@@ -689,95 +474,91 @@
     ]
    }
   },
-  "WEGE3": {
+  "PETR4": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 49.91,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 2,
+    "fechamento": 41.3,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 1,
     "medias": {
-     "mme9": 50.5849,
-     "mms21": 48.9619,
-     "mms50": 49.8188,
-     "mms200": 47.897
+     "mme9": 43.9375,
+     "mms21": 48.0243,
+     "mms50": 50.4796,
+     "mms200": 44.8723
     },
-    "ifr14": 50.5,
+    "ifr14": 25.4,
     "macd": {
-     "macd": 0.5706,
-     "sinal": 0.4083,
-     "histograma": 0.1623
+     "macd": -2.7139,
+     "sinal": -2.1241,
+     "histograma": -0.5897
     },
-    "suporte": 41.15,
-    "resistencia": 52.5,
+    "suporte": 41.27,
+    "resistencia": 59.79,
     "candles": [],
     "cruzamentos": [],
     "sinais": [
      {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 pregões",
+      "texto": "IFR(14) em 25: sobrevendido",
       "sinal": "alta"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 51.13,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 3,
+    "fechamento": 42.67,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": -1,
     "medias": {
-     "mme9": 49.4282,
-     "mms21": 48.7329,
-     "mms50": 48.0858,
-     "mms200": 43.6509
+     "mme9": 48.4669,
+     "mms21": 46.6395,
+     "mms50": 42.9446,
+     "mms200": 36.033
     },
-    "ifr14": 56,
+    "ifr14": 43.8,
     "macd": {
-     "macd": 0.7631,
-     "sinal": 0.7482,
-     "histograma": 0.0149
+     "macd": 1.8086,
+     "sinal": 2.6168,
+     "histograma": -0.8083
     },
-    "suporte": 41.15,
-    "resistencia": 52.99,
+    "suporte": 37.61,
+    "resistencia": 59.79,
     "candles": [],
     "cruzamentos": [
      {
       "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-16"
+      "sinal": "baixa",
+      "data": "2026-11-09"
      }
     ],
     "sinais": [
      {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
-      "sinal": "alta"
-     },
-     {
-      "texto": "MACD × linha de sinal para alta em 16/11/2026",
-      "sinal": "alta"
+      "texto": "MACD × linha de sinal para baixa em 09/11/2026",
+      "sinal": "baixa"
      }
     ]
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 48.36,
+    "fechamento": 52.71,
     "tendencia": "alta",
     "vies": "alta",
     "pontuacao": 2,
     "medias": {
-     "mme9": 47.7945,
-     "mms21": 45.3886,
-     "mms50": 43.1056,
-     "mms200": 19.2637
+     "mme9": 44.8314,
+     "mms21": 37.9919,
+     "mms50": 35.3378,
+     "mms200": 24.2365
     },
-    "ifr14": 54.4,
+    "ifr14": 66.4,
     "macd": {
-     "macd": 1.5931,
-     "sinal": 1.4999,
-     "histograma": 0.0931
+     "macd": 3.7622,
+     "sinal": 2.3173,
+     "histograma": 1.4449
     },
-    "suporte": 35.25,
-    "resistencia": 54.53,
+    "suporte": 28.86,
+    "resistencia": 59.79,
     "candles": [],
     "cruzamentos": [],
     "sinais": [
@@ -788,51 +569,72 @@
     ]
    }
   },
-  "ITSA4": {
+  "ITUB4": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 12.91,
+    "fechamento": 39.73,
     "tendencia": "lateral",
     "vies": "neutro",
-    "pontuacao": 0,
+    "pontuacao": -1,
     "medias": {
-     "mme9": 13.2304,
-     "mms21": 13.3348,
-     "mms50": 14.251,
-     "mms200": 13.7219
+     "mme9": 40.6804,
+     "mms21": 41.27,
+     "mms50": 43.675,
+     "mms200": 42.7758
     },
-    "ifr14": 36.5,
+    "ifr14": 37.2,
     "macd": {
-     "macd": -0.3325,
-     "sinal": -0.3484,
-     "histograma": 0.0159
+     "macd": -1.075,
+     "sinal": -1.039,
+     "histograma": -0.0359
     },
-    "suporte": 12.26,
-    "resistencia": 15.42,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
+    "suporte": 38.11,
+    "resistencia": 48.59,
+    "candles": [
+     {
+      "nome": "Doji",
+      "sinal": "neutro",
+      "descricao": "Indecisão (abertura ≈ fechamento) depois de queda: pode anteceder reversão."
+     }
+    ],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-19"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MACD × linha de sinal para baixa em 19/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "Candle: Doji — Indecisão (abertura ≈ fechamento) depois de queda: pode anteceder reversão.",
+      "sinal": "neutro"
+     }
+    ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 13.17,
+    "fechamento": 40.07,
     "tendencia": "lateral",
     "vies": "baixa",
     "pontuacao": -2,
     "medias": {
-     "mme9": 13.7761,
-     "mms21": 13.8048,
-     "mms50": 13.478,
-     "mms200": 10.3468
+     "mme9": 42.5296,
+     "mms21": 42.5662,
+     "mms50": 42.4442,
+     "mms200": 32.6947
     },
-    "ifr14": 46.8,
+    "ifr14": 45.6,
     "macd": {
-     "macd": 0.1122,
-     "sinal": 0.2574,
-     "histograma": -0.1452
+     "macd": 0.1742,
+     "sinal": 0.5227,
+     "histograma": -0.3485
     },
-    "suporte": 12.12,
-    "resistencia": 16.63,
+    "suporte": 37.35,
+    "resistencia": 50.85,
     "candles": [],
     "cruzamentos": [
      {
@@ -859,40 +661,30 @@
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 12.45,
+    "fechamento": 38.69,
     "tendencia": "alta",
-    "vies": "neutro",
-    "pontuacao": 1,
+    "vies": "alta",
+    "pontuacao": 2,
     "medias": {
-     "mme9": 13.2093,
-     "mms21": 12.0782,
-     "mms50": 10.0995,
-     "mms200": 7.3138
+     "mme9": 41.1943,
+     "mms21": 39.018,
+     "mms50": 31.8562,
+     "mms200": 22.8346
     },
-    "ifr14": 53,
+    "ifr14": 51.7,
     "macd": {
-     "macd": 1.0636,
-     "sinal": 1.0969,
-     "histograma": -0.0333
+     "macd": 2.9489,
+     "sinal": 3.4428,
+     "histograma": -0.4939
     },
-    "suporte": 8.6078,
-    "resistencia": 16.63,
+    "suporte": 28.1906,
+    "resistencia": 50.85,
     "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-10-01"
-     }
-    ],
+    "cruzamentos": [],
     "sinais": [
      {
       "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
       "sinal": "alta"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 01/10/2026",
-      "sinal": "baixa"
      }
     ]
    }
@@ -1020,107 +812,101 @@
     ]
    }
   },
-  "BBDC4": {
+  "WEGE3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 13.71,
-    "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
+    "fechamento": 49.91,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 2,
     "medias": {
-     "mme9": 14.1959,
-     "mms21": 14.9157,
-     "mms50": 17.5536,
-     "mms200": 18.4047
+     "mme9": 50.5849,
+     "mms21": 48.9619,
+     "mms50": 49.8188,
+     "mms200": 47.897
     },
-    "ifr14": 30.8,
+    "ifr14": 50.5,
     "macd": {
-     "macd": -1.1407,
-     "sinal": -1.1986,
-     "histograma": 0.0579
+     "macd": 0.5706,
+     "sinal": 0.4083,
+     "histograma": 0.1623
     },
-    "suporte": 13.44,
-    "resistencia": 20.54,
+    "suporte": 41.15,
+    "resistencia": 52.5,
     "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-17"
-     }
-    ],
+    "cruzamentos": [],
     "sinais": [
      {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para alta em 17/11/2026",
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 pregões",
       "sinal": "alta"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 13.83,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": -1,
+    "fechamento": 51.13,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 3,
     "medias": {
-     "mme9": 16.2548,
-     "mms21": 17.6094,
-     "mms50": 18.5066,
-     "mms200": 15.6314
+     "mme9": 49.4282,
+     "mms21": 48.7329,
+     "mms50": 48.0858,
+     "mms200": 43.6509
     },
-    "ifr14": 35.8,
+    "ifr14": 56,
     "macd": {
-     "macd": -0.8145,
-     "sinal": -0.3011,
-     "histograma": -0.5134
+     "macd": 0.7631,
+     "sinal": 0.7482,
+     "histograma": 0.0149
     },
-    "suporte": 13.44,
-    "resistencia": 23,
+    "suporte": 41.15,
+    "resistencia": 52.99,
     "candles": [],
     "cruzamentos": [
      {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-11-02"
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-16"
      }
     ],
     "sinais": [
      {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 02/11/2026",
-      "sinal": "baixa"
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
+      "sinal": "alta"
+     },
+     {
+      "texto": "MACD × linha de sinal para alta em 16/11/2026",
+      "sinal": "alta"
      }
     ]
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 13.86,
-    "tendencia": "baixa",
-    "vies": "baixa",
-    "pontuacao": -2,
+    "fechamento": 48.36,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 2,
     "medias": {
-     "mme9": 17.39,
-     "mms21": 17.2109,
-     "mms50": 15.7406,
-     "mms200": 15.9236
+     "mme9": 47.7945,
+     "mms21": 45.3886,
+     "mms50": 43.1056,
+     "mms200": 19.2637
     },
-    "ifr14": 41.3,
+    "ifr14": 54.4,
     "macd": {
-     "macd": 0.4613,
-     "sinal": 0.8387,
-     "histograma": -0.3774
+     "macd": 1.5931,
+     "sinal": 1.4999,
+     "histograma": 0.0931
     },
-    "suporte": 11.24,
-    "resistencia": 23,
+    "suporte": 35.25,
+    "resistencia": 54.53,
     "candles": [],
     "cruzamentos": [],
     "sinais": [
      {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 meses",
-      "sinal": "baixa"
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
+      "sinal": "alta"
      }
     ]
    }
@@ -1245,6 +1031,220 @@
     ]
    }
   },
+  "ITSA4": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 12.91,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 13.2304,
+     "mms21": 13.3348,
+     "mms50": 14.251,
+     "mms200": 13.7219
+    },
+    "ifr14": 36.5,
+    "macd": {
+     "macd": -0.3325,
+     "sinal": -0.3484,
+     "histograma": 0.0159
+    },
+    "suporte": 12.26,
+    "resistencia": 15.42,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 13.17,
+    "tendencia": "lateral",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 13.7761,
+     "mms21": 13.8048,
+     "mms50": 13.478,
+     "mms200": 10.3468
+    },
+    "ifr14": 46.8,
+    "macd": {
+     "macd": 0.1122,
+     "sinal": 0.2574,
+     "histograma": -0.1452
+    },
+    "suporte": 12.12,
+    "resistencia": 16.63,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-16"
+     },
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 16/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 12.45,
+    "tendencia": "alta",
+    "vies": "neutro",
+    "pontuacao": 1,
+    "medias": {
+     "mme9": 13.2093,
+     "mms21": 12.0782,
+     "mms50": 10.0995,
+     "mms200": 7.3138
+    },
+    "ifr14": 53,
+    "macd": {
+     "macd": 1.0636,
+     "sinal": 1.0969,
+     "histograma": -0.0333
+    },
+    "suporte": 8.6078,
+    "resistencia": 16.63,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-10-01"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
+      "sinal": "alta"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 01/10/2026",
+      "sinal": "baixa"
+     }
+    ]
+   }
+  },
+  "BBDC4": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 13.71,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 14.1959,
+     "mms21": 14.9157,
+     "mms50": 17.5536,
+     "mms200": 18.4047
+    },
+    "ifr14": 30.8,
+    "macd": {
+     "macd": -1.1407,
+     "sinal": -1.1986,
+     "histograma": 0.0579
+    },
+    "suporte": 13.44,
+    "resistencia": 20.54,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-17"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para alta em 17/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 13.83,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 16.2548,
+     "mms21": 17.6094,
+     "mms50": 18.5066,
+     "mms200": 15.6314
+    },
+    "ifr14": 35.8,
+    "macd": {
+     "macd": -0.8145,
+     "sinal": -0.3011,
+     "histograma": -0.5134
+    },
+    "suporte": 13.44,
+    "resistencia": 23,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 02/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 13.86,
+    "tendencia": "baixa",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 17.39,
+     "mms21": 17.2109,
+     "mms50": 15.7406,
+     "mms200": 15.9236
+    },
+    "ifr14": 41.3,
+    "macd": {
+     "macd": 0.4613,
+     "sinal": 0.8387,
+     "histograma": -0.3774
+    },
+    "suporte": 11.24,
+    "resistencia": 23,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 meses",
+      "sinal": "baixa"
+     }
+    ]
+   }
+  },
   "ABEV3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -1347,6 +1347,106 @@
     "candles": [],
     "cruzamentos": [],
     "sinais": []
+   }
+  },
+  "ENEV3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 26.07,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 26.5071,
+     "mms21": 26.9867,
+     "mms50": 28.1724,
+     "mms200": 25.7152
+    },
+    "ifr14": 38.9,
+    "macd": {
+     "macd": -0.6463,
+     "sinal": -0.5976,
+     "histograma": -0.0487
+    },
+    "suporte": 24.56,
+    "resistencia": 32.11,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 26.22,
+    "tendencia": "alta",
+    "vies": "neutro",
+    "pontuacao": 1,
+    "medias": {
+     "mme9": 27.5707,
+     "mms21": 27.2148,
+     "mms50": 24.976,
+     "mms200": 15.9928
+    },
+    "ifr14": 48.4,
+    "macd": {
+     "macd": 0.8102,
+     "sinal": 1.1757,
+     "histograma": -0.3655
+    },
+    "suporte": 23.65,
+    "resistencia": 32.4,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
+      "sinal": "alta"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 25.7,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 25.0487,
+     "mms21": 20.0376,
+     "mms50": 15.5874,
+     "mms200": 37.0603
+    },
+    "ifr14": 68.5,
+    "macd": {
+     "macd": 3.5951,
+     "sinal": 3.0775,
+     "histograma": 0.5176
+    },
+    "suporte": 11.48,
+    "resistencia": 32.4,
+    "candles": [
+     {
+      "nome": "Engolfo de baixa",
+      "sinal": "baixa",
+      "descricao": "Candle de baixa engoliu o corpo do candle de alta anterior, depois de alta."
+     }
+    ],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Candle: Engolfo de baixa — Candle de baixa engoliu o corpo do candle de alta anterior, depois de alta.",
+      "sinal": "baixa"
+     }
+    ]
    }
   },
   "BPAC11": {
@@ -1454,211 +1554,6 @@
      {
       "texto": "MACD × linha de sinal para baixa em 01/10/2026",
       "sinal": "baixa"
-     }
-    ]
-   }
-  },
-  "ENEV3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 26.07,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 26.5071,
-     "mms21": 26.9867,
-     "mms50": 28.1724,
-     "mms200": 25.7152
-    },
-    "ifr14": 38.9,
-    "macd": {
-     "macd": -0.6463,
-     "sinal": -0.5976,
-     "histograma": -0.0487
-    },
-    "suporte": 24.56,
-    "resistencia": 32.11,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 26.22,
-    "tendencia": "alta",
-    "vies": "neutro",
-    "pontuacao": 1,
-    "medias": {
-     "mme9": 27.5707,
-     "mms21": 27.2148,
-     "mms50": 24.976,
-     "mms200": 15.9928
-    },
-    "ifr14": 48.4,
-    "macd": {
-     "macd": 0.8102,
-     "sinal": 1.1757,
-     "histograma": -0.3655
-    },
-    "suporte": 23.65,
-    "resistencia": 32.4,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-02"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
-      "sinal": "alta"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 25.7,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 25.0487,
-     "mms21": 20.0376,
-     "mms50": 15.5874,
-     "mms200": 37.0603
-    },
-    "ifr14": 68.5,
-    "macd": {
-     "macd": 3.5951,
-     "sinal": 3.0775,
-     "histograma": 0.5176
-    },
-    "suporte": 11.48,
-    "resistencia": 32.4,
-    "candles": [
-     {
-      "nome": "Engolfo de baixa",
-      "sinal": "baixa",
-      "descricao": "Candle de baixa engoliu o corpo do candle de alta anterior, depois de alta."
-     }
-    ],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Candle: Engolfo de baixa — Candle de baixa engoliu o corpo do candle de alta anterior, depois de alta.",
-      "sinal": "baixa"
-     }
-    ]
-   }
-  },
-  "PRIO3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 58.22,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 1,
-    "medias": {
-     "mme9": 61.6034,
-     "mms21": 65.1552,
-     "mms50": 64.6088,
-     "mms200": 61.4983
-    },
-    "ifr14": 34.8,
-    "macd": {
-     "macd": -1.5735,
-     "sinal": -0.9492,
-     "histograma": -0.6243
-    },
-    "suporte": 56.9,
-    "resistencia": 74.6,
-    "candles": [
-     {
-      "nome": "Martelo invertido",
-      "sinal": "alta",
-      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
-     }
-    ],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 60.2,
-    "tendencia": "alta",
-    "vies": "neutro",
-    "pontuacao": 1,
-    "medias": {
-     "mme9": 64.0905,
-     "mms21": 61.8667,
-     "mms50": 58.7186,
-     "mms200": 45.9558
-    },
-    "ifr14": 48,
-    "macd": {
-     "macd": 1.8074,
-     "sinal": 2.2229,
-     "histograma": -0.4155
-    },
-    "suporte": 52.75,
-    "resistencia": 74.6,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-16"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
-      "sinal": "alta"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 16/11/2026",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 71.49,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 2,
-    "medias": {
-     "mme9": 60.3063,
-     "mms21": 49.2524,
-     "mms50": 44.6496,
-     "mms200": null
-    },
-    "ifr14": 67.9,
-    "macd": {
-     "macd": 6.7701,
-     "sinal": 4.9848,
-     "histograma": 1.7853
-    },
-    "suporte": 32.68,
-    "resistencia": 74.6,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 21 e 50 meses",
-      "sinal": "alta"
      }
     ]
    }
@@ -1778,109 +1673,109 @@
     ]
    }
   },
-  "EQTL3": {
+  "PRIO3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 32.74,
+    "fechamento": 58.22,
     "tendencia": "lateral",
     "vies": "neutro",
     "pontuacao": 1,
     "medias": {
-     "mme9": 33.7408,
-     "mms21": 35.1533,
-     "mms50": 40.094,
-     "mms200": 39.8768
+     "mme9": 61.6034,
+     "mms21": 65.1552,
+     "mms50": 64.6088,
+     "mms200": 61.4983
     },
-    "ifr14": 32.9,
+    "ifr14": 34.8,
     "macd": {
-     "macd": -2.2577,
-     "sinal": -2.3225,
-     "histograma": 0.0648
+     "macd": -1.5735,
+     "sinal": -0.9492,
+     "histograma": -0.6243
     },
-    "suporte": 31.36,
-    "resistencia": 49.03,
-    "candles": [],
-    "cruzamentos": [
+    "suporte": 56.9,
+    "resistencia": 74.6,
+    "candles": [
      {
-      "nome": "MACD × linha de sinal",
+      "nome": "Martelo invertido",
       "sinal": "alta",
-      "data": "2026-11-18"
+      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
      }
     ],
+    "cruzamentos": [],
     "sinais": [
      {
-      "texto": "MACD × linha de sinal para alta em 18/11/2026",
+      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
       "sinal": "alta"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 32.9,
-    "tendencia": "lateral",
-    "vies": "baixa",
-    "pontuacao": -2,
+    "fechamento": 60.2,
+    "tendencia": "alta",
+    "vies": "neutro",
+    "pontuacao": 1,
     "medias": {
-     "mme9": 37.8628,
-     "mms21": 39.2181,
-     "mms50": 39.8162,
-     "mms200": 34.3271
+     "mme9": 64.0905,
+     "mms21": 61.8667,
+     "mms50": 58.7186,
+     "mms200": 45.9558
     },
-    "ifr14": 39.8,
+    "ifr14": 48,
     "macd": {
-     "macd": -0.741,
-     "sinal": 0.1798,
-     "histograma": -0.9208
+     "macd": 1.8074,
+     "sinal": 2.2229,
+     "histograma": -0.4155
     },
-    "suporte": 31.36,
-    "resistencia": 51.26,
+    "suporte": 52.75,
+    "resistencia": 74.6,
     "candles": [],
     "cruzamentos": [
      {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-11-09"
-     },
-     {
       "nome": "MACD × linha de sinal",
       "sinal": "baixa",
-      "data": "2026-11-02"
+      "data": "2026-11-16"
      }
     ],
     "sinais": [
      {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 09/11/2026",
-      "sinal": "baixa"
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
+      "sinal": "alta"
      },
      {
-      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
+      "texto": "MACD × linha de sinal para baixa em 16/11/2026",
       "sinal": "baixa"
      }
     ]
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 32.6,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
+    "fechamento": 71.49,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 2,
     "medias": {
-     "mme9": 37.7602,
-     "mms21": 37.4338,
-     "mms50": 33.5051,
-     "mms200": 16.6785
+     "mme9": 60.3063,
+     "mms21": 49.2524,
+     "mms50": 44.6496,
+     "mms200": null
     },
-    "ifr14": 43.5,
+    "ifr14": 67.9,
     "macd": {
-     "macd": 1.3548,
-     "sinal": 2.053,
-     "histograma": -0.6982
+     "macd": 6.7701,
+     "sinal": 4.9848,
+     "histograma": 1.7853
     },
-    "suporte": 29.44,
-    "resistencia": 51.26,
+    "suporte": 32.68,
+    "resistencia": 74.6,
     "candles": [],
     "cruzamentos": [],
-    "sinais": []
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 21 e 50 meses",
+      "sinal": "alta"
+     }
+    ]
    }
   },
   "BBAS3": {
@@ -2127,6 +2022,111 @@
       "sinal": "baixa"
      }
     ]
+   }
+  },
+  "EQTL3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 32.74,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 1,
+    "medias": {
+     "mme9": 33.7408,
+     "mms21": 35.1533,
+     "mms50": 40.094,
+     "mms200": 39.8768
+    },
+    "ifr14": 32.9,
+    "macd": {
+     "macd": -2.2577,
+     "sinal": -2.3225,
+     "histograma": 0.0648
+    },
+    "suporte": 31.36,
+    "resistencia": 49.03,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-18"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MACD × linha de sinal para alta em 18/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 32.9,
+    "tendencia": "lateral",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 37.8628,
+     "mms21": 39.2181,
+     "mms50": 39.8162,
+     "mms200": 34.3271
+    },
+    "ifr14": 39.8,
+    "macd": {
+     "macd": -0.741,
+     "sinal": 0.1798,
+     "histograma": -0.9208
+    },
+    "suporte": 31.36,
+    "resistencia": 51.26,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-09"
+     },
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 09/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 32.6,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 37.7602,
+     "mms21": 37.4338,
+     "mms50": 33.5051,
+     "mms200": 16.6785
+    },
+    "ifr14": 43.5,
+    "macd": {
+     "macd": 1.3548,
+     "sinal": 2.053,
+     "histograma": -0.6982
+    },
+    "suporte": 29.44,
+    "resistencia": 51.26,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
    }
   },
   "VBBR3": {
@@ -2432,144 +2432,6 @@
      {
       "texto": "Candle: Engolfo de baixa — Candle de baixa engoliu o corpo do candle de alta anterior, depois de alta.",
       "sinal": "baixa"
-     }
-    ]
-   }
-  },
-  "RENT3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 28.74,
-    "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 29.654,
-     "mms21": 31.7119,
-     "mms50": 38.4684,
-     "mms200": 41.971
-    },
-    "ifr14": 33.4,
-    "macd": {
-     "macd": -3.2229,
-     "sinal": -3.3663,
-     "histograma": 0.1434
-    },
-    "suporte": 26.21,
-    "resistencia": 52.86,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-18"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para alta em 18/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 28.86,
-    "tendencia": "baixa",
-    "vies": "baixa",
-    "pontuacao": -3,
-    "medias": {
-     "mme9": 35.6562,
-     "mms21": 37.9762,
-     "mms50": 42.4746,
-     "mms200": 46.4752
-    },
-    "ifr14": 39.4,
-    "macd": {
-     "macd": -2.2002,
-     "sinal": -1.1078,
-     "histograma": -1.0924
-    },
-    "suporte": 26.21,
-    "resistencia": 54.87,
-    "candles": [
-     {
-      "nome": "Martelo invertido",
-      "sinal": "alta",
-      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
-     }
-    ],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-11-09"
-     },
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-02"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 semanas",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 09/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 27.85,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 38.2764,
-     "mms21": 40.14,
-     "mms50": 47.4023,
-     "mms200": 29.0397
-    },
-    "ifr14": 36.7,
-    "macd": {
-     "macd": -2.4083,
-     "sinal": -1.6077,
-     "histograma": -0.8007
-    },
-    "suporte": 26.21,
-    "resistencia": 54.87,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-10-01"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 01/10/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "Fechou abaixo da banda de Bollinger inferior (esticado)",
-      "sinal": "neutro"
      }
     ]
    }
@@ -2931,6 +2793,105 @@
     ]
    }
   },
+  "CSMG3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 56.68,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 55.0423,
+     "mms21": 53.29,
+     "mms50": 56.6996,
+     "mms200": 57.0332
+    },
+    "ifr14": 55.2,
+    "macd": {
+     "macd": -0.3043,
+     "sinal": -1.0418,
+     "histograma": 0.7376
+    },
+    "suporte": 47.09,
+    "resistencia": 65.05,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "alta",
+      "data": "2026-11-18"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 18/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 56.09,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 2,
+    "medias": {
+     "mme9": 56.1351,
+     "mms21": 58.5419,
+     "mms50": 55.1216,
+     "mms200": 30.5942
+    },
+    "ifr14": 49.7,
+    "macd": {
+     "macd": 0.0681,
+     "sinal": 0.9424,
+     "histograma": -0.8743
+    },
+    "suporte": 47.09,
+    "resistencia": 67.82,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 48.11,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 2,
+    "medias": {
+     "mme9": 52.756,
+     "mms21": 42.0919,
+     "mms50": 28.8416,
+     "mms200": 16.9258
+    },
+    "ifr14": 56.7,
+    "macd": {
+     "macd": 8.6828,
+     "sinal": 8.5568,
+     "histograma": 0.126
+    },
+    "suporte": 19.06,
+    "resistencia": 67.82,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
+      "sinal": "alta"
+     }
+    ]
+   }
+  },
   "BBSE3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -3030,31 +2991,31 @@
     ]
    }
   },
-  "CSMG3": {
+  "RENT3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 56.68,
+    "fechamento": 28.74,
     "tendencia": "baixa",
     "vies": "neutro",
     "pontuacao": -1,
     "medias": {
-     "mme9": 55.0423,
-     "mms21": 53.29,
-     "mms50": 56.6996,
-     "mms200": 57.0332
+     "mme9": 29.654,
+     "mms21": 31.7119,
+     "mms50": 38.4684,
+     "mms200": 41.971
     },
-    "ifr14": 55.2,
+    "ifr14": 33.4,
     "macd": {
-     "macd": -0.3043,
-     "sinal": -1.0418,
-     "histograma": 0.7376
+     "macd": -3.2229,
+     "sinal": -3.3663,
+     "histograma": 0.1434
     },
-    "suporte": 47.09,
-    "resistencia": 65.05,
+    "suporte": 26.21,
+    "resistencia": 52.86,
     "candles": [],
     "cruzamentos": [
      {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "nome": "MACD × linha de sinal",
       "sinal": "alta",
       "data": "2026-11-18"
      }
@@ -3065,66 +3026,105 @@
       "sinal": "baixa"
      },
      {
-      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 18/11/2026",
+      "texto": "MACD × linha de sinal para alta em 18/11/2026",
       "sinal": "alta"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 56.09,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 2,
+    "fechamento": 28.86,
+    "tendencia": "baixa",
+    "vies": "baixa",
+    "pontuacao": -3,
     "medias": {
-     "mme9": 56.1351,
-     "mms21": 58.5419,
-     "mms50": 55.1216,
-     "mms200": 30.5942
+     "mme9": 35.6562,
+     "mms21": 37.9762,
+     "mms50": 42.4746,
+     "mms200": 46.4752
     },
-    "ifr14": 49.7,
+    "ifr14": 39.4,
     "macd": {
-     "macd": 0.0681,
-     "sinal": 0.9424,
-     "histograma": -0.8743
+     "macd": -2.2002,
+     "sinal": -1.1078,
+     "histograma": -1.0924
     },
-    "suporte": 47.09,
-    "resistencia": 67.82,
-    "candles": [],
-    "cruzamentos": [],
+    "suporte": 26.21,
+    "resistencia": 54.87,
+    "candles": [
+     {
+      "nome": "Martelo invertido",
+      "sinal": "alta",
+      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
+     }
+    ],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-09"
+     },
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     }
+    ],
     "sinais": [
      {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 semanas",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 09/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
       "sinal": "alta"
      }
     ]
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 48.11,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 2,
+    "fechamento": 27.85,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": -1,
     "medias": {
-     "mme9": 52.756,
-     "mms21": 42.0919,
-     "mms50": 28.8416,
-     "mms200": 16.9258
+     "mme9": 38.2764,
+     "mms21": 40.14,
+     "mms50": 47.4023,
+     "mms200": 29.0397
     },
-    "ifr14": 56.7,
+    "ifr14": 36.7,
     "macd": {
-     "macd": 8.6828,
-     "sinal": 8.5568,
-     "histograma": 0.126
+     "macd": -2.4083,
+     "sinal": -1.6077,
+     "histograma": -0.8007
     },
-    "suporte": 19.06,
-    "resistencia": 67.82,
+    "suporte": 26.21,
+    "resistencia": 54.87,
     "candles": [],
-    "cruzamentos": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-10-01"
+     }
+    ],
     "sinais": [
      {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
-      "sinal": "alta"
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 01/10/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "Fechou abaixo da banda de Bollinger inferior (esticado)",
+      "sinal": "neutro"
      }
     ]
    }
@@ -3388,6 +3388,115 @@
     ]
    }
   },
+  "BBDC3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 12.59,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 13.0315,
+     "mms21": 13.6076,
+     "mms50": 15.6596,
+     "mms200": 16.1032
+    },
+    "ifr14": 31.2,
+    "macd": {
+     "macd": -0.899,
+     "sinal": -0.9323,
+     "histograma": 0.0333
+    },
+    "suporte": 12.4,
+    "resistencia": 18.19,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-17"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para alta em 17/11/2026",
+      "sinal": "alta"
+     },
+     {
+      "texto": "Perto da mínima de 52 semanas",
+      "sinal": "neutro"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 12.74,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 14.6491,
+     "mms21": 15.5634,
+     "mms50": 16.1452,
+     "mms200": 13.7639
+    },
+    "ifr14": 37.8,
+    "macd": {
+     "macd": -0.5302,
+     "sinal": -0.1432,
+     "histograma": -0.3869
+    },
+    "suporte": 12.4,
+    "resistencia": 20.24,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 02/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 12.71,
+    "tendencia": "baixa",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 15.2853,
+     "mms21": 14.9887,
+     "mms50": 13.8338,
+     "mms200": 14.5008
+    },
+    "ifr14": 42.4,
+    "macd": {
+     "macd": 0.432,
+     "sinal": 0.691,
+     "histograma": -0.259
+    },
+    "suporte": 10.36,
+    "resistencia": 20.24,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 meses",
+      "sinal": "baixa"
+     }
+    ]
+   }
+  },
   "ENGI11": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -3499,111 +3608,303 @@
     ]
    }
   },
-  "BBDC3": {
+  "TIMS3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 12.59,
-    "tendencia": "baixa",
+    "fechamento": 21.92,
+    "tendencia": "lateral",
     "vies": "neutro",
     "pontuacao": -1,
     "medias": {
-     "mme9": 13.0315,
-     "mms21": 13.6076,
-     "mms50": 15.6596,
-     "mms200": 16.1032
+     "mme9": 21.6342,
+     "mms21": 20.4438,
+     "mms50": 19.5726,
+     "mms200": 22.4473
     },
-    "ifr14": 31.2,
+    "ifr14": 67.1,
     "macd": {
-     "macd": -0.899,
-     "sinal": -0.9323,
-     "histograma": 0.0333
+     "macd": 0.8249,
+     "sinal": 0.6682,
+     "histograma": 0.1567
     },
-    "suporte": 12.4,
-    "resistencia": 18.19,
-    "candles": [],
-    "cruzamentos": [
+    "suporte": 16.7,
+    "resistencia": 22.75,
+    "candles": [
      {
-      "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-17"
+      "nome": "Estrela cadente",
+      "sinal": "baixa",
+      "descricao": "Sombra superior longa depois de alta: vendedores rejeitaram preços mais altos."
      }
     ],
+    "cruzamentos": [],
     "sinais": [
      {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "texto": "Candle: Estrela cadente — Sombra superior longa depois de alta: vendedores rejeitaram preços mais altos.",
       "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para alta em 17/11/2026",
-      "sinal": "alta"
-     },
-     {
-      "texto": "Perto da mínima de 52 semanas",
-      "sinal": "neutro"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 12.74,
+    "fechamento": 22,
     "tendencia": "lateral",
     "vies": "neutro",
-    "pontuacao": -1,
+    "pontuacao": 1,
     "medias": {
-     "mme9": 14.6491,
-     "mms21": 15.5634,
-     "mms50": 16.1452,
-     "mms200": 13.7639
+     "mme9": 20.1383,
+     "mms21": 19.8271,
+     "mms50": 22.5106,
+     "mms200": 18.5819
     },
-    "ifr14": 37.8,
+    "ifr14": 58.5,
     "macd": {
-     "macd": -0.5302,
-     "sinal": -0.1432,
-     "histograma": -0.3869
+     "macd": -0.5388,
+     "sinal": -1.0242,
+     "histograma": 0.4854
     },
-    "suporte": 12.4,
-    "resistencia": 20.24,
+    "suporte": 16.7,
+    "resistencia": 23.17,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "alta",
+      "data": "2026-11-16"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 16/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 19.17,
+    "tendencia": "alta",
+    "vies": "neutro",
+    "pontuacao": 1,
+    "medias": {
+     "mme9": 20.8121,
+     "mms21": 21.7867,
+     "mms50": 18.0128,
+     "mms200": 12.5374
+    },
+    "ifr14": 46.4,
+    "macd": {
+     "macd": 0.5467,
+     "sinal": 1.4603,
+     "histograma": -0.9136
+    },
+    "suporte": 16.11,
+    "resistencia": 28.74,
     "candles": [],
     "cruzamentos": [
      {
       "nome": "MME 9 × MMS 21 (curto prazo)",
       "sinal": "baixa",
-      "data": "2026-11-02"
+      "data": "2026-09-01"
      }
     ],
     "sinais": [
      {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 02/11/2026",
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
+      "sinal": "alta"
+     },
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 01/09/2026",
+      "sinal": "baixa"
+     }
+    ]
+   }
+  },
+  "TOTS3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 31.08,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 1,
+    "medias": {
+     "mme9": 31.8795,
+     "mms21": 33.8581,
+     "mms50": 35.6614,
+     "mms200": 33.5958
+    },
+    "ifr14": 36.1,
+    "macd": {
+     "macd": -1.5596,
+     "sinal": -1.3741,
+     "histograma": -0.1855
+    },
+    "suporte": 26.5,
+    "resistencia": 44.79,
+    "candles": [
+     {
+      "nome": "Martelo invertido",
+      "sinal": "alta",
+      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
+     }
+    ],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 31.11,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 34.313,
+     "mms21": 33.4886,
+     "mms50": 35.2926,
+     "mms200": 33.2111
+    },
+    "ifr14": 44.8,
+    "macd": {
+     "macd": 0.064,
+     "sinal": 0.2917,
+     "histograma": -0.2277
+    },
+    "suporte": 26.5,
+    "resistencia": 44.79,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-16"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MACD × linha de sinal para baixa em 16/11/2026",
       "sinal": "baixa"
      }
     ]
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 12.71,
-    "tendencia": "baixa",
-    "vies": "baixa",
-    "pontuacao": -2,
+    "fechamento": 32,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
     "medias": {
-     "mme9": 15.2853,
-     "mms21": 14.9887,
-     "mms50": 13.8338,
-     "mms200": 14.5008
+     "mme9": 34.0402,
+     "mms21": 37.8657,
+     "mms50": 32.8876,
+     "mms200": 19.532
     },
-    "ifr14": 42.4,
+    "ifr14": 45.5,
     "macd": {
-     "macd": 0.432,
-     "sinal": 0.691,
-     "histograma": -0.259
+     "macd": -0.3512,
+     "sinal": 0.8203,
+     "histograma": -1.1715
     },
-    "suporte": 10.36,
-    "resistencia": 20.24,
+    "suporte": 26.5,
+    "resistencia": 48.4,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   }
+  },
+  "MBRF3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 18.16,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 17.9531,
+     "mms21": 17.2119,
+     "mms50": 17.4378,
+     "mms200": 17.5706
+    },
+    "ifr14": 55.3,
+    "macd": {
+     "macd": 0.2364,
+     "sinal": 0.0446,
+     "histograma": 0.1918
+    },
+    "suporte": 15.29,
+    "resistencia": 18.99,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 18.39,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 3,
+    "medias": {
+     "mme9": 17.5245,
+     "mms21": 17.1224,
+     "mms50": 17.881,
+     "mms200": 14.3651
+    },
+    "ifr14": 53.5,
+    "macd": {
+     "macd": 0.0082,
+     "sinal": -0.1144,
+     "histograma": 0.1226
+    },
+    "suporte": 14.49,
+    "resistencia": 19.61,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-09"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
+      "sinal": "alta"
+     },
+     {
+      "texto": "MACD × linha de sinal para alta em 09/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 15.61,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 2,
+    "medias": {
+     "mme9": 17.6123,
+     "mms21": 19.2838,
+     "mms50": 14.0212,
+     "mms200": 11.0325
+    },
+    "ifr14": 46.1,
+    "macd": {
+     "macd": 0.3926,
+     "sinal": 1.119,
+     "histograma": -0.7264
+    },
+    "suporte": 13.63,
+    "resistencia": 27.66,
     "candles": [],
     "cruzamentos": [],
     "sinais": [
      {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 meses",
-      "sinal": "baixa"
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
+      "sinal": "alta"
      }
     ]
    }
@@ -3736,307 +4037,6 @@
       "sinal": "baixa"
      }
     ]
-   }
-  },
-  "TIMS3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 21.92,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 21.6342,
-     "mms21": 20.4438,
-     "mms50": 19.5726,
-     "mms200": 22.4473
-    },
-    "ifr14": 67.1,
-    "macd": {
-     "macd": 0.8249,
-     "sinal": 0.6682,
-     "histograma": 0.1567
-    },
-    "suporte": 16.7,
-    "resistencia": 22.75,
-    "candles": [
-     {
-      "nome": "Estrela cadente",
-      "sinal": "baixa",
-      "descricao": "Sombra superior longa depois de alta: vendedores rejeitaram preços mais altos."
-     }
-    ],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Candle: Estrela cadente — Sombra superior longa depois de alta: vendedores rejeitaram preços mais altos.",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 22,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 1,
-    "medias": {
-     "mme9": 20.1383,
-     "mms21": 19.8271,
-     "mms50": 22.5106,
-     "mms200": 18.5819
-    },
-    "ifr14": 58.5,
-    "macd": {
-     "macd": -0.5388,
-     "sinal": -1.0242,
-     "histograma": 0.4854
-    },
-    "suporte": 16.7,
-    "resistencia": 23.17,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "alta",
-      "data": "2026-11-16"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 16/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 19.17,
-    "tendencia": "alta",
-    "vies": "neutro",
-    "pontuacao": 1,
-    "medias": {
-     "mme9": 20.8121,
-     "mms21": 21.7867,
-     "mms50": 18.0128,
-     "mms200": 12.5374
-    },
-    "ifr14": 46.4,
-    "macd": {
-     "macd": 0.5467,
-     "sinal": 1.4603,
-     "histograma": -0.9136
-    },
-    "suporte": 16.11,
-    "resistencia": 28.74,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-09-01"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
-      "sinal": "alta"
-     },
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 01/09/2026",
-      "sinal": "baixa"
-     }
-    ]
-   }
-  },
-  "MBRF3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 18.16,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 17.9531,
-     "mms21": 17.2119,
-     "mms50": 17.4378,
-     "mms200": 17.5706
-    },
-    "ifr14": 55.3,
-    "macd": {
-     "macd": 0.2364,
-     "sinal": 0.0446,
-     "histograma": 0.1918
-    },
-    "suporte": 15.29,
-    "resistencia": 18.99,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 18.39,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 3,
-    "medias": {
-     "mme9": 17.5245,
-     "mms21": 17.1224,
-     "mms50": 17.881,
-     "mms200": 14.3651
-    },
-    "ifr14": 53.5,
-    "macd": {
-     "macd": 0.0082,
-     "sinal": -0.1144,
-     "histograma": 0.1226
-    },
-    "suporte": 14.49,
-    "resistencia": 19.61,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-09"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
-      "sinal": "alta"
-     },
-     {
-      "texto": "MACD × linha de sinal para alta em 09/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 15.61,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 2,
-    "medias": {
-     "mme9": 17.6123,
-     "mms21": 19.2838,
-     "mms50": 14.0212,
-     "mms200": 11.0325
-    },
-    "ifr14": 46.1,
-    "macd": {
-     "macd": 0.3926,
-     "sinal": 1.119,
-     "histograma": -0.7264
-    },
-    "suporte": 13.63,
-    "resistencia": 27.66,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 meses",
-      "sinal": "alta"
-     }
-    ]
-   }
-  },
-  "TOTS3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 31.08,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 1,
-    "medias": {
-     "mme9": 31.8795,
-     "mms21": 33.8581,
-     "mms50": 35.6614,
-     "mms200": 33.5958
-    },
-    "ifr14": 36.1,
-    "macd": {
-     "macd": -1.5596,
-     "sinal": -1.3741,
-     "histograma": -0.1855
-    },
-    "suporte": 26.5,
-    "resistencia": 44.79,
-    "candles": [
-     {
-      "nome": "Martelo invertido",
-      "sinal": "alta",
-      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
-     }
-    ],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 31.11,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 34.313,
-     "mms21": 33.4886,
-     "mms50": 35.2926,
-     "mms200": 33.2111
-    },
-    "ifr14": 44.8,
-    "macd": {
-     "macd": 0.064,
-     "sinal": 0.2917,
-     "histograma": -0.2277
-    },
-    "suporte": 26.5,
-    "resistencia": 44.79,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-16"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MACD × linha de sinal para baixa em 16/11/2026",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 32,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 34.0402,
-     "mms21": 37.8657,
-     "mms50": 32.8876,
-     "mms200": 19.532
-    },
-    "ifr14": 45.5,
-    "macd": {
-     "macd": -0.3512,
-     "sinal": 0.8203,
-     "histograma": -1.1715
-    },
-    "suporte": 26.5,
-    "resistencia": 48.4,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
    }
   },
   "KLBN11": {
@@ -4704,91 +4704,6 @@
     ]
    }
   },
-  "SANB11": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 28.25,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 27.9235,
-     "mms21": 26.7976,
-     "mms50": 28.2004,
-     "mms200": 29.1832
-    },
-    "ifr14": 55.9,
-    "macd": {
-     "macd": 0.1658,
-     "sinal": -0.1387,
-     "histograma": 0.3045
-    },
-    "suporte": 23.77,
-    "resistencia": 29,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 28.15,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 27.6622,
-     "mms21": 28.2943,
-     "mms50": 29.9034,
-     "mms200": 28.6838
-    },
-    "ifr14": 49.1,
-    "macd": {
-     "macd": -0.5554,
-     "sinal": -0.4643,
-     "histograma": -0.0911
-    },
-    "suporte": 23.77,
-    "resistencia": 30.75,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 23.94,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 28.2788,
-     "mms21": 29.4586,
-     "mms50": 28.7356,
-     "mms200": 25.504
-    },
-    "ifr14": 39.1,
-    "macd": {
-     "macd": -0.4391,
-     "sinal": 0.1509,
-     "histograma": -0.59
-    },
-    "suporte": 23.77,
-    "resistencia": 37.83,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-09-01"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 01/09/2026",
-      "sinal": "baixa"
-     }
-    ]
-   }
-  },
   "SMFT3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -5057,6 +4972,120 @@
     ]
    }
   },
+  "GOAU4": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 11.42,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 4,
+    "medias": {
+     "mme9": 11.2043,
+     "mms21": 11.1329,
+     "mms50": 11.3298,
+     "mms200": 10.2184
+    },
+    "ifr14": 54.1,
+    "macd": {
+     "macd": -0.0157,
+     "sinal": -0.0606,
+     "histograma": 0.0449
+    },
+    "suporte": 10,
+    "resistencia": 13.3,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "alta",
+      "data": "2026-11-23"
+     },
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-19"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 pregões",
+      "sinal": "alta"
+     },
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 23/11/2026",
+      "sinal": "alta"
+     },
+     {
+      "texto": "MACD × linha de sinal para alta em 19/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 11.5,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 2,
+    "medias": {
+     "mme9": 11.1806,
+     "mms21": 10.94,
+     "mms50": 10.0692,
+     "mms200": 8.4596
+    },
+    "ifr14": 58.5,
+    "macd": {
+     "macd": 0.3795,
+     "sinal": 0.4483,
+     "histograma": -0.0688
+    },
+    "suporte": 9.38,
+    "resistencia": 13.3,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 11.11,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 10.1104,
+     "mms21": 8.5594,
+     "mms50": 8.4876,
+     "mms200": 9.3471
+    },
+    "ifr14": 64.2,
+    "macd": {
+     "macd": 0.7873,
+     "sinal": 0.491,
+     "histograma": 0.2963
+    },
+    "suporte": 5.7526,
+    "resistencia": 13.3,
+    "candles": [
+     {
+      "nome": "Doji",
+      "sinal": "neutro",
+      "descricao": "Indecisão (abertura ≈ fechamento) depois de alta: pode anteceder reversão."
+     }
+    ],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Candle: Doji — Indecisão (abertura ≈ fechamento) depois de alta: pode anteceder reversão.",
+      "sinal": "neutro"
+     }
+    ]
+   }
+  },
   "LREN3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -5281,116 +5310,87 @@
     ]
    }
   },
-  "GOAU4": {
+  "SANB11": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 11.42,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 4,
-    "medias": {
-     "mme9": 11.2043,
-     "mms21": 11.1329,
-     "mms50": 11.3298,
-     "mms200": 10.2184
-    },
-    "ifr14": 54.1,
-    "macd": {
-     "macd": -0.0157,
-     "sinal": -0.0606,
-     "histograma": 0.0449
-    },
-    "suporte": 10,
-    "resistencia": 13.3,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "alta",
-      "data": "2026-11-23"
-     },
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-19"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 pregões",
-      "sinal": "alta"
-     },
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 23/11/2026",
-      "sinal": "alta"
-     },
-     {
-      "texto": "MACD × linha de sinal para alta em 19/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 11.5,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 2,
-    "medias": {
-     "mme9": 11.1806,
-     "mms21": 10.94,
-     "mms50": 10.0692,
-     "mms200": 8.4596
-    },
-    "ifr14": 58.5,
-    "macd": {
-     "macd": 0.3795,
-     "sinal": 0.4483,
-     "histograma": -0.0688
-    },
-    "suporte": 9.38,
-    "resistencia": 13.3,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 semanas",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 11.11,
+    "fechamento": 28.25,
     "tendencia": "lateral",
     "vies": "neutro",
     "pontuacao": 0,
     "medias": {
-     "mme9": 10.1104,
-     "mms21": 8.5594,
-     "mms50": 8.4876,
-     "mms200": 9.3471
+     "mme9": 27.9235,
+     "mms21": 26.7976,
+     "mms50": 28.2004,
+     "mms200": 29.1832
     },
-    "ifr14": 64.2,
+    "ifr14": 55.9,
     "macd": {
-     "macd": 0.7873,
-     "sinal": 0.491,
-     "histograma": 0.2963
+     "macd": 0.1658,
+     "sinal": -0.1387,
+     "histograma": 0.3045
     },
-    "suporte": 5.7526,
-    "resistencia": 13.3,
-    "candles": [
+    "suporte": 23.77,
+    "resistencia": 29,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 28.15,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 27.6622,
+     "mms21": 28.2943,
+     "mms50": 29.9034,
+     "mms200": 28.6838
+    },
+    "ifr14": 49.1,
+    "macd": {
+     "macd": -0.5554,
+     "sinal": -0.4643,
+     "histograma": -0.0911
+    },
+    "suporte": 23.77,
+    "resistencia": 30.75,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 23.94,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 28.2788,
+     "mms21": 29.4586,
+     "mms50": 28.7356,
+     "mms200": 25.504
+    },
+    "ifr14": 39.1,
+    "macd": {
+     "macd": -0.4391,
+     "sinal": 0.1509,
+     "histograma": -0.59
+    },
+    "suporte": 23.77,
+    "resistencia": 37.83,
+    "candles": [],
+    "cruzamentos": [
      {
-      "nome": "Doji",
-      "sinal": "neutro",
-      "descricao": "Indecisão (abertura ≈ fechamento) depois de alta: pode anteceder reversão."
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-09-01"
      }
     ],
-    "cruzamentos": [],
     "sinais": [
      {
-      "texto": "Candle: Doji — Indecisão (abertura ≈ fechamento) depois de alta: pode anteceder reversão.",
-      "sinal": "neutro"
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 01/09/2026",
+      "sinal": "baixa"
      }
     ]
    }
@@ -5519,6 +5519,111 @@
     ]
    }
   },
+  "MULT3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 26.1,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 1,
+    "medias": {
+     "mme9": 26.8585,
+     "mms21": 27.7181,
+     "mms50": 31.1442,
+     "mms200": 30.5788
+    },
+    "ifr14": 34.5,
+    "macd": {
+     "macd": -1.5156,
+     "sinal": -1.5499,
+     "histograma": 0.0343
+    },
+    "suporte": 22.51,
+    "resistencia": 37.59,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-18"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MACD × linha de sinal para alta em 18/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 26.4,
+    "tendencia": "lateral",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 29.6017,
+     "mms21": 29.8981,
+     "mms50": 30.3676,
+     "mms200": 26.7043
+    },
+    "ifr14": 42.2,
+    "macd": {
+     "macd": -0.2139,
+     "sinal": 0.3413,
+     "histograma": -0.5552
+    },
+    "suporte": 22.51,
+    "resistencia": 39.38,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-16"
+     },
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 16/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 25.19,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 28.9031,
+     "mms21": 28.2952,
+     "mms50": 26.3086,
+     "mms200": 20.8772
+    },
+    "ifr14": 45.1,
+    "macd": {
+     "macd": 0.9113,
+     "sinal": 1.3351,
+     "histograma": -0.4239
+    },
+    "suporte": 20.52,
+    "resistencia": 39.38,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   }
+  },
   "CPFE3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -5631,111 +5736,6 @@
       "sinal": "alta"
      }
     ]
-   }
-  },
-  "MULT3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 26.1,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 1,
-    "medias": {
-     "mme9": 26.8585,
-     "mms21": 27.7181,
-     "mms50": 31.1442,
-     "mms200": 30.5788
-    },
-    "ifr14": 34.5,
-    "macd": {
-     "macd": -1.5156,
-     "sinal": -1.5499,
-     "histograma": 0.0343
-    },
-    "suporte": 22.51,
-    "resistencia": 37.59,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-18"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MACD × linha de sinal para alta em 18/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 26.4,
-    "tendencia": "lateral",
-    "vies": "baixa",
-    "pontuacao": -2,
-    "medias": {
-     "mme9": 29.6017,
-     "mms21": 29.8981,
-     "mms50": 30.3676,
-     "mms200": 26.7043
-    },
-    "ifr14": 42.2,
-    "macd": {
-     "macd": -0.2139,
-     "sinal": 0.3413,
-     "histograma": -0.5552
-    },
-    "suporte": 22.51,
-    "resistencia": 39.38,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-11-16"
-     },
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-02"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 16/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 25.19,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 28.9031,
-     "mms21": 28.2952,
-     "mms50": 26.3086,
-     "mms200": 20.8772
-    },
-    "ifr14": 45.1,
-    "macd": {
-     "macd": 0.9113,
-     "sinal": 1.3351,
-     "histograma": -0.4239
-    },
-    "suporte": 20.52,
-    "resistencia": 39.38,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
    }
   },
   "PSSA3": {
@@ -5968,6 +5968,212 @@
     ]
    }
   },
+  "IGTI11": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 21.77,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 22.3479,
+     "mms21": 23.5581,
+     "mms50": 26.568,
+     "mms200": 26.4807
+    },
+    "ifr14": 32.9,
+    "macd": {
+     "macd": -1.5459,
+     "sinal": -1.5101,
+     "histograma": -0.0358
+    },
+    "suporte": 18.5,
+    "resistencia": 32.25,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 21.85,
+    "tendencia": "lateral",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 25.1254,
+     "mms21": 25.8481,
+     "mms50": 26.487,
+     "mms200": 22.6649
+    },
+    "ifr14": 40.5,
+    "macd": {
+     "macd": -0.4344,
+     "sinal": 0.1498,
+     "histograma": -0.5842
+    },
+    "suporte": 18.5,
+    "resistencia": 33.6,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-09"
+     },
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 09/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 21.79,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 25.0293,
+     "mms21": 24.2914,
+     "mms50": 22.3086,
+     "mms200": null
+    },
+    "ifr14": 44.4,
+    "macd": {
+     "macd": 0.9573,
+     "sinal": 1.3531,
+     "histograma": -0.3958
+    },
+    "suporte": 17.22,
+    "resistencia": 33.6,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   }
+  },
+  "BRAP4": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 16.5,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 17.4599,
+     "mms21": 18.2895,
+     "mms50": 19.7272,
+     "mms200": 21.9685
+    },
+    "ifr14": 28.6,
+    "macd": {
+     "macd": -0.8071,
+     "sinal": -0.6257,
+     "histograma": -0.1814
+    },
+    "suporte": 16.33,
+    "resistencia": 20.15,
+    "candles": [
+     {
+      "nome": "Martelo invertido",
+      "sinal": "alta",
+      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
+     }
+    ],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-16"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 16/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "IFR(14) em 29: sobrevendido",
+      "sinal": "alta"
+     },
+     {
+      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
+      "sinal": "alta"
+     },
+     {
+      "texto": "Perto da mínima de 52 semanas",
+      "sinal": "neutro"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 16.58,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 18.9803,
+     "mms21": 20.6157,
+     "mms50": 21.8462,
+     "mms200": 20.6843
+    },
+    "ifr14": 30.3,
+    "macd": {
+     "macd": -1.051,
+     "sinal": -0.6115,
+     "histograma": -0.4395
+    },
+    "suporte": 16.44,
+    "resistencia": 23.42,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Fechou abaixo da banda de Bollinger inferior (esticado)",
+      "sinal": "neutro"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 18.27,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 20.8703,
+     "mms21": 19.59,
+     "mms50": 21.2724,
+     "mms200": 16.356
+    },
+    "ifr14": 41.6,
+    "macd": {
+     "macd": 0.2511,
+     "sinal": 0.2409,
+     "histograma": 0.0102
+    },
+    "suporte": 14.94,
+    "resistencia": 25.63,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   }
+  },
   "HYPE3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -6063,100 +6269,6 @@
     },
     "suporte": 18.32,
     "resistencia": 30,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
-   }
-  },
-  "IGTI11": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 21.77,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 22.3479,
-     "mms21": 23.5581,
-     "mms50": 26.568,
-     "mms200": 26.4807
-    },
-    "ifr14": 32.9,
-    "macd": {
-     "macd": -1.5459,
-     "sinal": -1.5101,
-     "histograma": -0.0358
-    },
-    "suporte": 18.5,
-    "resistencia": 32.25,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 21.85,
-    "tendencia": "lateral",
-    "vies": "baixa",
-    "pontuacao": -2,
-    "medias": {
-     "mme9": 25.1254,
-     "mms21": 25.8481,
-     "mms50": 26.487,
-     "mms200": 22.6649
-    },
-    "ifr14": 40.5,
-    "macd": {
-     "macd": -0.4344,
-     "sinal": 0.1498,
-     "histograma": -0.5842
-    },
-    "suporte": 18.5,
-    "resistencia": 33.6,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-11-09"
-     },
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-02"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 09/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 21.79,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 25.0293,
-     "mms21": 24.2914,
-     "mms50": 22.3086,
-     "mms200": null
-    },
-    "ifr14": 44.4,
-    "macd": {
-     "macd": 0.9573,
-     "sinal": 1.3531,
-     "histograma": -0.3958
-    },
-    "suporte": 17.22,
-    "resistencia": 33.6,
     "candles": [],
     "cruzamentos": [],
     "sinais": []
@@ -6270,118 +6382,6 @@
       "sinal": "neutro"
      }
     ]
-   }
-  },
-  "BRAP4": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 16.5,
-    "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 17.4599,
-     "mms21": 18.2895,
-     "mms50": 19.7272,
-     "mms200": 21.9685
-    },
-    "ifr14": 28.6,
-    "macd": {
-     "macd": -0.8071,
-     "sinal": -0.6257,
-     "histograma": -0.1814
-    },
-    "suporte": 16.33,
-    "resistencia": 20.15,
-    "candles": [
-     {
-      "nome": "Martelo invertido",
-      "sinal": "alta",
-      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
-     }
-    ],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-16"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 16/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "IFR(14) em 29: sobrevendido",
-      "sinal": "alta"
-     },
-     {
-      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
-      "sinal": "alta"
-     },
-     {
-      "texto": "Perto da mínima de 52 semanas",
-      "sinal": "neutro"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 16.58,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 18.9803,
-     "mms21": 20.6157,
-     "mms50": 21.8462,
-     "mms200": 20.6843
-    },
-    "ifr14": 30.3,
-    "macd": {
-     "macd": -1.051,
-     "sinal": -0.6115,
-     "histograma": -0.4395
-    },
-    "suporte": 16.44,
-    "resistencia": 23.42,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Fechou abaixo da banda de Bollinger inferior (esticado)",
-      "sinal": "neutro"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 18.27,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 20.8703,
-     "mms21": 19.59,
-     "mms50": 21.2724,
-     "mms200": 16.356
-    },
-    "ifr14": 41.6,
-    "macd": {
-     "macd": 0.2511,
-     "sinal": 0.2409,
-     "histograma": 0.0102
-    },
-    "suporte": 14.94,
-    "resistencia": 25.63,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
    }
   },
   "CURY3": {
@@ -6707,110 +6707,6 @@
     ]
    }
   },
-  "MGLU3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 8.99,
-    "tendencia": "alta",
-    "vies": "alta",
-    "pontuacao": 3,
-    "medias": {
-     "mme9": 7.8573,
-     "mms21": 7.1286,
-     "mms50": 7.8028,
-     "mms200": 7.1007
-    },
-    "ifr14": 58.4,
-    "macd": {
-     "macd": 0.0443,
-     "sinal": -0.2365,
-     "histograma": 0.2808
-    },
-    "suporte": 4.9,
-    "resistencia": 13,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "alta",
-      "data": "2026-11-19"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de alta: preço acima das médias de 50 e 200 pregões",
-      "sinal": "alta"
-     },
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 19/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 8.2,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 7.8116,
-     "mms21": 6.4819,
-     "mms50": 7.4914,
-     "mms200": 13.8052
-    },
-    "ifr14": 53,
-    "macd": {
-     "macd": 0.4209,
-     "sinal": 0.2318,
-     "histograma": 0.1891
-    },
-    "suporte": 3.76,
-    "resistencia": 13.93,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 5.35,
-    "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 6.4928,
-     "mms21": 7.7823,
-     "mms50": 15.3902,
-     "mms200": null
-    },
-    "ifr14": 37.5,
-    "macd": {
-     "macd": -3.6314,
-     "sinal": -4.4962,
-     "histograma": 0.8648
-    },
-    "suporte": 3.76,
-    "resistencia": 13.93,
-    "candles": [
-     {
-      "nome": "Martelo invertido",
-      "sinal": "alta",
-      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
-     }
-    ],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 21 e 50 meses",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
-      "sinal": "alta"
-     }
-    ]
-   }
-  },
   "BRAV3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -6936,6 +6832,110 @@
      },
      {
       "texto": "MME 9 × MMS 21 (curto prazo) para alta em 01/10/2026",
+      "sinal": "alta"
+     }
+    ]
+   }
+  },
+  "MGLU3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 8.99,
+    "tendencia": "alta",
+    "vies": "alta",
+    "pontuacao": 3,
+    "medias": {
+     "mme9": 7.8573,
+     "mms21": 7.1286,
+     "mms50": 7.8028,
+     "mms200": 7.1007
+    },
+    "ifr14": 58.4,
+    "macd": {
+     "macd": 0.0443,
+     "sinal": -0.2365,
+     "histograma": 0.2808
+    },
+    "suporte": 4.9,
+    "resistencia": 13,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "alta",
+      "data": "2026-11-19"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de alta: preço acima das médias de 50 e 200 pregões",
+      "sinal": "alta"
+     },
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 19/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 8.2,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 7.8116,
+     "mms21": 6.4819,
+     "mms50": 7.4914,
+     "mms200": 13.8052
+    },
+    "ifr14": 53,
+    "macd": {
+     "macd": 0.4209,
+     "sinal": 0.2318,
+     "histograma": 0.1891
+    },
+    "suporte": 3.76,
+    "resistencia": 13.93,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 5.35,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 6.4928,
+     "mms21": 7.7823,
+     "mms50": 15.3902,
+     "mms200": null
+    },
+    "ifr14": 37.5,
+    "macd": {
+     "macd": -3.6314,
+     "sinal": -4.4962,
+     "histograma": 0.8648
+    },
+    "suporte": 3.76,
+    "resistencia": 13.93,
+    "candles": [
+     {
+      "nome": "Martelo invertido",
+      "sinal": "alta",
+      "descricao": "Sombra superior longa depois de queda: primeira tentativa de reação."
+     }
+    ],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 21 e 50 meses",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "Candle: Martelo invertido — Sombra superior longa depois de queda: primeira tentativa de reação.",
       "sinal": "alta"
      }
     ]
@@ -7165,68 +7165,63 @@
     ]
    }
   },
-  "POMO4": {
+  "CSNA3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 3.6,
+    "fechamento": 3.48,
     "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
+    "vies": "baixa",
+    "pontuacao": -2,
     "medias": {
-     "mme9": 3.7235,
-     "mms21": 3.8467,
-     "mms50": 4.213,
-     "mms200": 5.4115
+     "mme9": 3.7988,
+     "mms21": 4.2619,
+     "mms50": 5.3674,
+     "mms200": 6.0238
     },
-    "ifr14": 35.5,
+    "ifr14": 31.7,
     "macd": {
-     "macd": -0.1776,
-     "sinal": -0.1872,
-     "histograma": 0.0096
+     "macd": -0.5169,
+     "sinal": -0.4795,
+     "histograma": -0.0374
     },
-    "suporte": 3.36,
-    "resistencia": 4.85,
+    "suporte": 3.28,
+    "resistencia": 6.08,
     "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-16"
-     }
-    ],
+    "cruzamentos": [],
     "sinais": [
      {
       "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
       "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para alta em 16/11/2026",
-      "sinal": "alta"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 3.62,
+    "fechamento": 3.43,
     "tendencia": "baixa",
     "vies": "baixa",
-    "pontuacao": -3,
+    "pontuacao": -4,
     "medias": {
-     "mme9": 4.0714,
-     "mms21": 4.5681,
-     "mms50": 5.4998,
-     "mms200": 5.7622
+     "mme9": 4.6788,
+     "mms21": 5.1995,
+     "mms50": 6.5406,
+     "mms200": 10.6687
     },
-    "ifr14": 33.7,
+    "ifr14": 35.4,
     "macd": {
-     "macd": -0.5222,
-     "sinal": -0.4806,
-     "histograma": -0.0416
+     "macd": -0.5618,
+     "sinal": -0.3896,
+     "histograma": -0.1722
     },
-    "suporte": 3.36,
-    "resistencia": 5.94,
+    "suporte": 3.43,
+    "resistencia": 7.26,
     "candles": [],
     "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     },
      {
       "nome": "MACD × linha de sinal",
       "sinal": "baixa",
@@ -7239,6 +7234,10 @@
       "sinal": "baixa"
      },
      {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 02/11/2026",
+      "sinal": "baixa"
+     },
+     {
       "texto": "MACD × linha de sinal para baixa em 02/11/2026",
       "sinal": "baixa"
      }
@@ -7246,30 +7245,30 @@
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 3.7,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
+    "fechamento": 3.88,
+    "tendencia": "baixa",
+    "vies": "baixa",
+    "pontuacao": -2,
     "medias": {
-     "mme9": 5.1395,
-     "mms21": 6.2468,
-     "mms50": 5.4015,
-     "mms200": 3.3916
+     "mme9": 5.787,
+     "mms21": 7.4152,
+     "mms50": 11.0494,
+     "mms200": 13.927
     },
-    "ifr14": 34.8,
+    "ifr14": 33.4,
     "macd": {
-     "macd": -0.3637,
-     "sinal": 0.0635,
-     "histograma": -0.4272
+     "macd": -1.9494,
+     "sinal": -1.8574,
+     "histograma": -0.092
     },
-    "suporte": 3.7,
-    "resistencia": 9.0182,
+    "suporte": 3.88,
+    "resistencia": 11.32,
     "candles": [],
     "cruzamentos": [],
     "sinais": [
      {
-      "texto": "Fechou abaixo da banda de Bollinger inferior (esticado)",
-      "sinal": "neutro"
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 meses",
+      "sinal": "baixa"
      }
     ]
    }
@@ -7389,63 +7388,173 @@
     ]
    }
   },
-  "CSNA3": {
+  "YDUQ3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 3.48,
-    "tendencia": "baixa",
-    "vies": "baixa",
-    "pontuacao": -2,
+    "fechamento": 9.42,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 1,
     "medias": {
-     "mme9": 3.7988,
-     "mms21": 4.2619,
-     "mms50": 5.3674,
-     "mms200": 6.0238
+     "mme9": 9.5616,
+     "mms21": 9.7733,
+     "mms50": 10.9878,
+     "mms200": 10.2642
     },
-    "ifr14": 31.7,
+    "ifr14": 40.4,
     "macd": {
-     "macd": -0.5169,
-     "sinal": -0.4795,
-     "histograma": -0.0374
+     "macd": -0.4921,
+     "sinal": -0.5274,
+     "histograma": 0.0354
     },
-    "suporte": 3.28,
-    "resistencia": 6.08,
+    "suporte": 8.27,
+    "resistencia": 14.09,
     "candles": [],
-    "cruzamentos": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-18"
+     }
+    ],
     "sinais": [
      {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
-      "sinal": "baixa"
+      "texto": "MACD × linha de sinal para alta em 18/11/2026",
+      "sinal": "alta"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 3.43,
+    "fechamento": 9.54,
     "tendencia": "baixa",
     "vies": "baixa",
-    "pontuacao": -4,
+    "pontuacao": -3,
     "medias": {
-     "mme9": 4.6788,
-     "mms21": 5.1995,
-     "mms50": 6.5406,
-     "mms200": 10.6687
+     "mme9": 10.4052,
+     "mms21": 9.83,
+     "mms50": 10.7046,
+     "mms200": 13.246
     },
-    "ifr14": 35.4,
+    "ifr14": 46.5,
     "macd": {
-     "macd": -0.5618,
-     "sinal": -0.3896,
-     "histograma": -0.1722
+     "macd": 0.078,
+     "sinal": 0.1159,
+     "histograma": -0.038
     },
-    "suporte": 3.43,
-    "resistencia": 7.26,
+    "suporte": 7.02,
+    "resistencia": 14.86,
     "candles": [],
     "cruzamentos": [
      {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "nome": "MACD × linha de sinal",
       "sinal": "baixa",
-      "data": "2026-11-02"
+      "data": "2026-11-16"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 semanas",
+      "sinal": "baixa"
      },
+     {
+      "texto": "MACD × linha de sinal para baixa em 16/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 8.91,
+    "tendencia": "baixa",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 10.1572,
+     "mms21": 12.0448,
+     "mms50": 13.156,
+     "mms200": 18.3449
+    },
+    "ifr14": 42,
+    "macd": {
+     "macd": -1.3076,
+     "sinal": -1.0969,
+     "histograma": -0.2107
+    },
+    "suporte": 7.02,
+    "resistencia": 17.8,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 meses",
+      "sinal": "baixa"
+     }
+    ]
+   }
+  },
+  "POMO4": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 3.6,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 3.7235,
+     "mms21": 3.8467,
+     "mms50": 4.213,
+     "mms200": 5.4115
+    },
+    "ifr14": 35.5,
+    "macd": {
+     "macd": -0.1776,
+     "sinal": -0.1872,
+     "histograma": 0.0096
+    },
+    "suporte": 3.36,
+    "resistencia": 4.85,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-16"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para alta em 16/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 3.62,
+    "tendencia": "baixa",
+    "vies": "baixa",
+    "pontuacao": -3,
+    "medias": {
+     "mme9": 4.0714,
+     "mms21": 4.5681,
+     "mms50": 5.4998,
+     "mms200": 5.7622
+    },
+    "ifr14": 33.7,
+    "macd": {
+     "macd": -0.5222,
+     "sinal": -0.4806,
+     "histograma": -0.0416
+    },
+    "suporte": 3.36,
+    "resistencia": 5.94,
+    "candles": [],
+    "cruzamentos": [
      {
       "nome": "MACD × linha de sinal",
       "sinal": "baixa",
@@ -7458,10 +7567,6 @@
       "sinal": "baixa"
      },
      {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 02/11/2026",
-      "sinal": "baixa"
-     },
-     {
       "texto": "MACD × linha de sinal para baixa em 02/11/2026",
       "sinal": "baixa"
      }
@@ -7469,30 +7574,30 @@
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 3.88,
-    "tendencia": "baixa",
-    "vies": "baixa",
-    "pontuacao": -2,
+    "fechamento": 3.7,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
     "medias": {
-     "mme9": 5.787,
-     "mms21": 7.4152,
-     "mms50": 11.0494,
-     "mms200": 13.927
+     "mme9": 5.1395,
+     "mms21": 6.2468,
+     "mms50": 5.4015,
+     "mms200": 3.3916
     },
-    "ifr14": 33.4,
+    "ifr14": 34.8,
     "macd": {
-     "macd": -1.9494,
-     "sinal": -1.8574,
-     "histograma": -0.092
+     "macd": -0.3637,
+     "sinal": 0.0635,
+     "histograma": -0.4272
     },
-    "suporte": 3.88,
-    "resistencia": 11.32,
+    "suporte": 3.7,
+    "resistencia": 9.0182,
     "candles": [],
     "cruzamentos": [],
     "sinais": [
      {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 meses",
-      "sinal": "baixa"
+      "texto": "Fechou abaixo da banda de Bollinger inferior (esticado)",
+      "sinal": "neutro"
      }
     ]
    }
@@ -7765,68 +7870,192 @@
     ]
    }
   },
-  "YDUQ3": {
+  "CEAB3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
-    "fechamento": 9.42,
+    "fechamento": 7.44,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 7.7778,
+     "mms21": 8.0819,
+     "mms50": 9.7088,
+     "mms200": 10.6161
+    },
+    "ifr14": 38.1,
+    "macd": {
+     "macd": -0.6917,
+     "sinal": -0.737,
+     "histograma": 0.0453
+    },
+    "suporte": 6.31,
+    "resistencia": 14.19,
+    "candles": [
+     {
+      "nome": "Doji",
+      "sinal": "neutro",
+      "descricao": "Indecisão (abertura ≈ fechamento) depois de queda: pode anteceder reversão."
+     }
+    ],
+    "cruzamentos": [
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "alta",
+      "data": "2026-11-16"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para alta em 16/11/2026",
+      "sinal": "alta"
+     },
+     {
+      "texto": "Candle: Doji — Indecisão (abertura ≈ fechamento) depois de queda: pode anteceder reversão.",
+      "sinal": "neutro"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 7.5,
+    "tendencia": "lateral",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 9.1434,
+     "mms21": 9.55,
+     "mms50": 10.8926,
+     "mms200": 10.0687
+    },
+    "ifr14": 41.8,
+    "macd": {
+     "macd": -0.6426,
+     "sinal": -0.4974,
+     "histograma": -0.1452
+    },
+    "suporte": 6.31,
+    "resistencia": 14.57,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-09"
+     },
+     {
+      "nome": "MACD × linha de sinal",
+      "sinal": "baixa",
+      "data": "2026-11-09"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 09/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 09/11/2026",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 6.55,
+    "tendencia": "lateral",
+    "vies": "neutro",
+    "pontuacao": 0,
+    "medias": {
+     "mme9": 10.0698,
+     "mms21": 12.9848,
+     "mms50": 9.3948,
+     "mms200": null
+    },
+    "ifr14": 37.9,
+    "macd": {
+     "macd": -0.5695,
+     "sinal": 0.4123,
+     "histograma": -0.9817
+    },
+    "suporte": 6.31,
+    "resistencia": 21.3,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": []
+   }
+  },
+  "BEEF3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 3.75,
     "tendencia": "lateral",
     "vies": "neutro",
     "pontuacao": 1,
     "medias": {
-     "mme9": 9.5616,
-     "mms21": 9.7733,
-     "mms50": 10.9878,
-     "mms200": 10.2642
+     "mme9": 3.4536,
+     "mms21": 3.1767,
+     "mms50": 3.7294,
+     "mms200": 4.0018
     },
-    "ifr14": 40.4,
+    "ifr14": 59.8,
     "macd": {
-     "macd": -0.4921,
-     "sinal": -0.5274,
-     "histograma": 0.0354
+     "macd": -0.0275,
+     "sinal": -0.1661,
+     "histograma": 0.1387
     },
-    "suporte": 8.27,
-    "resistencia": 14.09,
+    "suporte": 2.41,
+    "resistencia": 4.29,
     "candles": [],
     "cruzamentos": [
      {
-      "nome": "MACD × linha de sinal",
+      "nome": "MME 9 × MMS 21 (curto prazo)",
       "sinal": "alta",
       "data": "2026-11-18"
      }
     ],
     "sinais": [
      {
-      "texto": "MACD × linha de sinal para alta em 18/11/2026",
+      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 18/11/2026",
       "sinal": "alta"
      }
     ]
    },
    "semanal": {
     "data_ultimo_candle": "2026-11-16",
-    "fechamento": 9.54,
+    "fechamento": 3.73,
     "tendencia": "baixa",
     "vies": "baixa",
-    "pontuacao": -3,
+    "pontuacao": -4,
     "medias": {
-     "mme9": 10.4052,
-     "mms21": 9.83,
-     "mms50": 10.7046,
-     "mms200": 13.246
+     "mme9": 3.5609,
+     "mms21": 3.6976,
+     "mms50": 4.2788,
+     "mms200": 6.4981
     },
-    "ifr14": 46.5,
+    "ifr14": 48.8,
     "macd": {
-     "macd": 0.078,
-     "sinal": 0.1159,
-     "histograma": -0.038
+     "macd": -0.2088,
+     "sinal": -0.1925,
+     "histograma": -0.0162
     },
-    "suporte": 7.02,
-    "resistencia": 14.86,
+    "suporte": 2.41,
+    "resistencia": 4.74,
     "candles": [],
     "cruzamentos": [
      {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "baixa",
+      "data": "2026-11-02"
+     },
+     {
       "nome": "MACD × linha de sinal",
       "sinal": "baixa",
-      "data": "2026-11-16"
+      "data": "2026-11-02"
      }
     ],
     "sinais": [
@@ -7835,31 +8064,35 @@
       "sinal": "baixa"
      },
      {
-      "texto": "MACD × linha de sinal para baixa em 16/11/2026",
+      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 02/11/2026",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
       "sinal": "baixa"
      }
     ]
    },
    "mensal": {
     "data_ultimo_candle": "2026-10-01",
-    "fechamento": 8.91,
+    "fechamento": 2.55,
     "tendencia": "baixa",
     "vies": "baixa",
     "pontuacao": -2,
     "medias": {
-     "mme9": 10.1572,
-     "mms21": 12.0448,
-     "mms50": 13.156,
-     "mms200": 18.3449
+     "mme9": 3.915,
+     "mms21": 4.9671,
+     "mms50": 7.0248,
+     "mms200": 8.9043
     },
-    "ifr14": 42,
+    "ifr14": 31.7,
     "macd": {
-     "macd": -1.3076,
-     "sinal": -1.0969,
-     "histograma": -0.2107
+     "macd": -0.9844,
+     "sinal": -0.8669,
+     "histograma": -0.1174
     },
-    "suporte": 7.02,
-    "resistencia": 17.8,
+    "suporte": 2.53,
+    "resistencia": 7.8,
     "candles": [],
     "cruzamentos": [],
     "sinais": [
@@ -7981,6 +8214,109 @@
     ]
    }
   },
+  "HAPV3": {
+   "diario": {
+    "data_ultimo_candle": "2026-11-23",
+    "fechamento": 5.8,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 5.6645,
+     "mms21": 5.2152,
+     "mms50": 6.56,
+     "mms200": 9.5123
+    },
+    "ifr14": 49.3,
+    "macd": {
+     "macd": -0.248,
+     "sinal": -0.4994,
+     "histograma": 0.2513
+    },
+    "suporte": 3.95,
+    "resistencia": 8.93,
+    "candles": [],
+    "cruzamentos": [
+     {
+      "nome": "MME 9 × MMS 21 (curto prazo)",
+      "sinal": "alta",
+      "data": "2026-11-19"
+     }
+    ],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 19/11/2026",
+      "sinal": "alta"
+     }
+    ]
+   },
+   "semanal": {
+    "data_ultimo_candle": "2026-11-16",
+    "fechamento": 6.16,
+    "tendencia": "baixa",
+    "vies": "baixa",
+    "pontuacao": -2,
+    "medias": {
+     "mme9": 6.4502,
+     "mms21": 7.8619,
+     "mms50": 10.2428,
+     "mms200": 40.257
+    },
+    "ifr14": 40.9,
+    "macd": {
+     "macd": -1.6839,
+     "sinal": -1.7535,
+     "histograma": 0.0696
+    },
+    "suporte": 3.95,
+    "resistencia": 12.2,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 semanas",
+      "sinal": "baixa"
+     }
+    ]
+   },
+   "mensal": {
+    "data_ultimo_candle": "2026-10-01",
+    "fechamento": 4.2,
+    "tendencia": "baixa",
+    "vies": "neutro",
+    "pontuacao": -1,
+    "medias": {
+     "mme9": 10.4346,
+     "mms21": 21.2948,
+     "mms50": 45.3188,
+     "mms200": null
+    },
+    "ifr14": 28.4,
+    "macd": {
+     "macd": -13.2441,
+     "sinal": -13.8457,
+     "histograma": 0.6016
+    },
+    "suporte": 3.95,
+    "resistencia": 44.85,
+    "candles": [],
+    "cruzamentos": [],
+    "sinais": [
+     {
+      "texto": "Tendência de baixa: preço abaixo das médias de 21 e 50 meses",
+      "sinal": "baixa"
+     },
+     {
+      "texto": "IFR(14) em 28: sobrevendido",
+      "sinal": "alta"
+     }
+    ]
+   }
+  },
   "MRVE3": {
    "diario": {
     "data_ultimo_candle": "2026-11-23",
@@ -8098,342 +8434,6 @@
       "sinal": "alta"
      }
     ]
-   }
-  },
-  "BEEF3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 3.75,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 1,
-    "medias": {
-     "mme9": 3.4536,
-     "mms21": 3.1767,
-     "mms50": 3.7294,
-     "mms200": 4.0018
-    },
-    "ifr14": 59.8,
-    "macd": {
-     "macd": -0.0275,
-     "sinal": -0.1661,
-     "histograma": 0.1387
-    },
-    "suporte": 2.41,
-    "resistencia": 4.29,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "alta",
-      "data": "2026-11-18"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 18/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 3.73,
-    "tendencia": "baixa",
-    "vies": "baixa",
-    "pontuacao": -4,
-    "medias": {
-     "mme9": 3.5609,
-     "mms21": 3.6976,
-     "mms50": 4.2788,
-     "mms200": 6.4981
-    },
-    "ifr14": 48.8,
-    "macd": {
-     "macd": -0.2088,
-     "sinal": -0.1925,
-     "histograma": -0.0162
-    },
-    "suporte": 2.41,
-    "resistencia": 4.74,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-11-02"
-     },
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-02"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 semanas",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 02/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 02/11/2026",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 2.55,
-    "tendencia": "baixa",
-    "vies": "baixa",
-    "pontuacao": -2,
-    "medias": {
-     "mme9": 3.915,
-     "mms21": 4.9671,
-     "mms50": 7.0248,
-     "mms200": 8.9043
-    },
-    "ifr14": 31.7,
-    "macd": {
-     "macd": -0.9844,
-     "sinal": -0.8669,
-     "histograma": -0.1174
-    },
-    "suporte": 2.53,
-    "resistencia": 7.8,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 meses",
-      "sinal": "baixa"
-     }
-    ]
-   }
-  },
-  "HAPV3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 5.8,
-    "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 5.6645,
-     "mms21": 5.2152,
-     "mms50": 6.56,
-     "mms200": 9.5123
-    },
-    "ifr14": 49.3,
-    "macd": {
-     "macd": -0.248,
-     "sinal": -0.4994,
-     "histograma": 0.2513
-    },
-    "suporte": 3.95,
-    "resistencia": 8.93,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "alta",
-      "data": "2026-11-19"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para alta em 19/11/2026",
-      "sinal": "alta"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 6.16,
-    "tendencia": "baixa",
-    "vies": "baixa",
-    "pontuacao": -2,
-    "medias": {
-     "mme9": 6.4502,
-     "mms21": 7.8619,
-     "mms50": 10.2428,
-     "mms200": 40.257
-    },
-    "ifr14": 40.9,
-    "macd": {
-     "macd": -1.6839,
-     "sinal": -1.7535,
-     "histograma": 0.0696
-    },
-    "suporte": 3.95,
-    "resistencia": 12.2,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 semanas",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 4.2,
-    "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 10.4346,
-     "mms21": 21.2948,
-     "mms50": 45.3188,
-     "mms200": null
-    },
-    "ifr14": 28.4,
-    "macd": {
-     "macd": -13.2441,
-     "sinal": -13.8457,
-     "histograma": 0.6016
-    },
-    "suporte": 3.95,
-    "resistencia": 44.85,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 21 e 50 meses",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "IFR(14) em 28: sobrevendido",
-      "sinal": "alta"
-     }
-    ]
-   }
-  },
-  "CEAB3": {
-   "diario": {
-    "data_ultimo_candle": "2026-11-23",
-    "fechamento": 7.44,
-    "tendencia": "baixa",
-    "vies": "neutro",
-    "pontuacao": -1,
-    "medias": {
-     "mme9": 7.7778,
-     "mms21": 8.0819,
-     "mms50": 9.7088,
-     "mms200": 10.6161
-    },
-    "ifr14": 38.1,
-    "macd": {
-     "macd": -0.6917,
-     "sinal": -0.737,
-     "histograma": 0.0453
-    },
-    "suporte": 6.31,
-    "resistencia": 14.19,
-    "candles": [
-     {
-      "nome": "Doji",
-      "sinal": "neutro",
-      "descricao": "Indecisão (abertura ≈ fechamento) depois de queda: pode anteceder reversão."
-     }
-    ],
-    "cruzamentos": [
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "alta",
-      "data": "2026-11-16"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "Tendência de baixa: preço abaixo das médias de 50 e 200 pregões",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para alta em 16/11/2026",
-      "sinal": "alta"
-     },
-     {
-      "texto": "Candle: Doji — Indecisão (abertura ≈ fechamento) depois de queda: pode anteceder reversão.",
-      "sinal": "neutro"
-     }
-    ]
-   },
-   "semanal": {
-    "data_ultimo_candle": "2026-11-16",
-    "fechamento": 7.5,
-    "tendencia": "lateral",
-    "vies": "baixa",
-    "pontuacao": -2,
-    "medias": {
-     "mme9": 9.1434,
-     "mms21": 9.55,
-     "mms50": 10.8926,
-     "mms200": 10.0687
-    },
-    "ifr14": 41.8,
-    "macd": {
-     "macd": -0.6426,
-     "sinal": -0.4974,
-     "histograma": -0.1452
-    },
-    "suporte": 6.31,
-    "resistencia": 14.57,
-    "candles": [],
-    "cruzamentos": [
-     {
-      "nome": "MME 9 × MMS 21 (curto prazo)",
-      "sinal": "baixa",
-      "data": "2026-11-09"
-     },
-     {
-      "nome": "MACD × linha de sinal",
-      "sinal": "baixa",
-      "data": "2026-11-09"
-     }
-    ],
-    "sinais": [
-     {
-      "texto": "MME 9 × MMS 21 (curto prazo) para baixa em 09/11/2026",
-      "sinal": "baixa"
-     },
-     {
-      "texto": "MACD × linha de sinal para baixa em 09/11/2026",
-      "sinal": "baixa"
-     }
-    ]
-   },
-   "mensal": {
-    "data_ultimo_candle": "2026-10-01",
-    "fechamento": 6.55,
-    "tendencia": "lateral",
-    "vies": "neutro",
-    "pontuacao": 0,
-    "medias": {
-     "mme9": 10.0698,
-     "mms21": 12.9848,
-     "mms50": 9.3948,
-     "mms200": null
-    },
-    "ifr14": 37.9,
-    "macd": {
-     "macd": -0.5695,
-     "sinal": 0.4123,
-     "histograma": -0.9817
-    },
-    "suporte": 6.31,
-    "resistencia": 21.3,
-    "candles": [],
-    "cruzamentos": [],
-    "sinais": []
    }
   },
   "VAMO3": {
