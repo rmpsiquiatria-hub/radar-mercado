@@ -1,40 +1,202 @@
 {
- "data": "2026-11-22",
- "gerado_em": "2026-11-23T08:10:00Z",
+ "data": "2026-11-23",
+ "coletado_em": "2026-11-24T07:48:38.666Z",
+ "gerado_em": "2026-11-24T08:20:00Z",
  "resumo": {
-  "federal": "Não houve atos normativos na Seção 1 do Diário Oficial da União neste dia (domingo).",
-  "estadual": "O Diário Oficial do RS trouxe só três portarias de repasse de recursos (Defesa Civil e educação), sem mudança de regras gerais.",
-  "municipal": "Não houve publicação em Lajeado neste dia."
+  "federal": "A Aneel definiu como o Encargo Complementar de Recursos (ECR) vai aparecer e ser cobrado na conta de luz de quem recebe certos benefícios, como a geração própria de energia (placas solares). A Receita Federal abriu o Piloto da CBS, que deixa qualquer empresa testar o novo tributo sobre o consumo. O Banco Central mudou regras de operações com bancos. Também saíram leis que abrem créditos no orçamento, incluindo verbas para a Saúde.",
+  "estadual": "O Conselho Estadual de Trânsito (Cetran-RS) fixou diretrizes para bicicletas elétricas e patinetes elétricos: idade mínima de 16 anos e velocidades máximas. A Secretaria de Planejamento listou os serviços de tecnologia que o governo contrata de forma centralizada.",
+  "municipal": "Não foi possível ler o Diário Oficial de Lajeado neste dia: a fonte falhou (erro HTTP 403). Os atos de Lajeado não foram analisados."
  },
- "destaques": [],
+ "destaques": [
+  {
+   "id": "dou-745566480",
+   "relevancia": "alta",
+   "area": "outros",
+   "temas": [
+    "energia",
+    "conta de luz"
+   ],
+   "o_que_muda": "A Aneel definiu como o Encargo Complementar de Recursos (ECR) entra no faturamento. Ele reduz o benefício tarifário pago pela CDE a quem tem geração distribuída (como placas solares) e a outros beneficiários. De janeiro a junho de 2027 as distribuidoras podem só reduzir o percentual do benefício e avisar na fatura por mensagem. Depois disso a fatura deve mostrar separadamente o benefício bruto, o fator ECR e o valor do encargo.",
+   "quem_afeta": "Consumidores com geração própria de energia e outros beneficiários da CDE, distribuidoras de energia e o ONS.",
+   "vigencia": "Na publicação. O período transitório de faturamento vai de janeiro a junho de 2027.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO NORMATIVA Nº 1.176, DE 17 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério de Minas e Energia / Diretoria Colegiada",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-normativa-n-1.176-de-17-de-novembro-de-2026-745566480",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1508244",
+   "relevancia": "alta",
+   "area": "outros",
+   "temas": [
+    "trânsito",
+    "mobilidade"
+   ],
+   "o_que_muda": "O Cetran-RS definiu diretrizes para os municípios regularem bicicletas elétricas e patinetes elétricos. Em ciclovias a velocidade máxima é de até 20 km/h. Em áreas de pedestres é de 6 km/h, e só onde o órgão de trânsito autorizar. Em vias de até 40 km/h a circulação é permitida. Fica proibido circular em vias rápidas, vias acima de 40 km/h, faixas exclusivas de ônibus, rodovias e calçadas, salvo autorização e sinalização. A idade mínima para conduzir é de 16 anos, e os pais respondem pelos danos causados por menores. O capacete é recomendado.",
+   "quem_afeta": "Usuários de bicicletas elétricas e patinetes elétricos, seus responsáveis e as prefeituras, inclusive a de Lajeado, que fiscalizam e regulamentam o trânsito local.",
+   "vigencia": "Na publicação (resolução de 19/11/2026).",
+   "esfera": "estadual",
+   "titulo": "RESOLUÇÃO N.165/2026",
+   "orgao": "Conselho Estadual de Trânsito",
+   "tipo": "Resoluções",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508244",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "dou-745573207",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "reforma tributária"
+   ],
+   "o_que_muda": "A Receita criou o Piloto RTC-CBS, um ambiente de testes da nova contribuição sobre bens e serviços (CBS). Qualquer empresa com CNPJ pode participar, sem convite. A Receita pode limitar, suspender ou bloquear o acesso em caso de uso indevido.",
+   "quem_afeta": "Empresas e contadores que querem se preparar para a CBS.",
+   "vigencia": "Na publicação. Até 31/12/2026 o piloto é conduzido pelo programa de implementação da reforma, e a partir de 1º/01/2027 pela Cotec.",
+   "esfera": "federal",
+   "titulo": "PORTARIA RFB Nº 763, DE 19 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-rfb-n-763-de-19-de-novembro-de-2026-745573207",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745574417",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "sistema financeiro",
+    "política monetária"
+   ],
+   "o_que_muda": "O Banco Central ajustou regras do Selic e de operações compromissadas. Criou um procedimento de adesão facultativa para readequar valores dessas operações e regulou depósitos voluntários a prazo de instituições financeiras para fins de política monetária.",
+   "quem_afeta": "Bancos e demais instituições financeiras. Não afeta diretamente o cidadão.",
+   "vigencia": "",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO BCB Nº 606, DE 19 DE NOVEMBRO DE 2026",
+   "orgao": "Banco Central do Brasil / Diretoria Colegiada",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-bcb-n-606-de-19-de-novembro-de-2026-745574417",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745550914",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "orçamento"
+   ],
+   "o_que_muda": "A Lei 15.546 abre crédito especial de R$ 3 milhões no orçamento da Seguridade Social em favor do Ministério da Saúde. Isso só libera a verba, sem criar regra nova.",
+   "quem_afeta": "Ministério da Saúde.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "LEI Nº 15.546, DE 19 DE NOVEMBRO DE 2026",
+   "orgao": "Atos do Poder Legislativo",
+   "tipo": "Lei",
+   "url": "https://www.in.gov.br/web/dou/-/lei-n-15.546-de-19-de-novembro-de-2026-745550914",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745550835",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "educação",
+    "orçamento"
+   ],
+   "o_que_muda": "A Lei 15.549 abre crédito especial de R$ 115 milhões nos orçamentos fiscal e da Seguridade Social para os ministérios da Educação, da Justiça e Segurança Pública e da Saúde. Isso só libera a verba, sem criar regra nova.",
+   "quem_afeta": "Ministérios da Educação, da Justiça e da Saúde.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "LEI Nº 15.549, DE 19 DE NOVEMBRO DE 2026",
+   "orgao": "Atos do Poder Legislativo",
+   "tipo": "Lei",
+   "url": "https://www.in.gov.br/web/dou/-/lei-n-15.549-de-19-de-novembro-de-2026-745550835",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745611207",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "energia",
+    "tarifas"
+   ],
+   "o_que_muda": "A Aneel aprovou nova versão (4.0) da metodologia que calcula a cobertura tarifária do fundo de descomissionamento de Angra 1 e Angra 2, a desativação futura das usinas. É regra técnica de cálculo, e o texto não diz o valor em reais.",
+   "quem_afeta": "Setor elétrico e, indiretamente, consumidores de energia.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO NORMATIVA DA ANEEL Nº 1.177, DE 17 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério de Minas e Energia / Diretoria Colegiada",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-normativa-da-aneel-n-1.177-de-17-de-novembro-de-2026-745611207",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745563630",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "servidores",
+    "assédio"
+   ],
+   "o_que_muda": "A Procuradoria-Geral Federal criou um programa para ajudar autarquias e fundações federais a prevenir e enfrentar assédio sexual, assédio moral e discriminação. Ele funciona por meio de orientações e assessoria jurídica.",
+   "quem_afeta": "Servidores e dirigentes de autarquias e fundações públicas federais.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "PORTARIA NORMATIVA PGF/AGU Nº 102, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Presidência da República / Procuradoria-Geral Federal",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-normativa-pgf/agu-n-102-de-18-de-novembro-de-2026-745563630",
+   "fonte": "DOU"
+  },
+  {
+   "id": "rs-1507986",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "administração pública",
+    "tecnologia"
+   ],
+   "o_que_muda": "A Secretaria de Planejamento do RS listou os serviços de tecnologia da informação que o Estado contrata de forma centralizada. Entre eles estão PROA, SEI, internet, segurança cibernética, Microsoft 365 e desenvolvimento de sistemas. Também listou os órgãos e entidades atendidos.",
+   "quem_afeta": "Órgãos e entidades da administração estadual do RS.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SPGG N° 300/2026",
+   "orgao": "Gabinete da Secretária",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1507986",
+   "fonte": "DOE-RS"
+  }
+ ],
  "demais": {
-  "federal": "Nenhum ato.",
-  "estadual": "Duas portarias da Defesa Civil autorizam repasses a municípios afetados por vendaval e granizo, e uma portaria da Educação retifica a lista de escolas que recebem repasse por eventos climáticos. São atos pontuais.",
-  "municipal": "Nenhum ato."
+  "federal": "Sem destaque: seis outras leis de crédito orçamentário (15.547, 15.548, 15.550, 15.551, 15.552 e 15.553), dezenas de resoluções da Anvisa sobre empresas e produtos específicos (certificações, registros), portarias de habilitação de hospitais para hemodiálise no programa Agora Tem Especialistas, atos individuais da Anatel e da Aneel, circulares de defesa comercial (antidumping), anuidades de conselhos profissionais (CREF1 e CRBio-05), portarias de pessoal e pautas de julgamento.",
+  "estadual": "Sem destaque: portarias de pessoal e de designação de gestores e fiscais de contratos, editais de notificação do IPE Saúde, atos de aposentadoria, extratos de permissão de uso do DAER e a Resolução 164 do Cetran, que só prorroga as Câmaras Especiais de Julgamento.",
+  "municipal": "Fonte indisponível neste dia."
  },
  "fontes": {
   "federal": {
    "ok": true,
-   "atos": 0,
-   "lista": 0
+   "atos": 467,
+   "lista": 2541
   },
   "estadual": {
    "ok": true,
-   "atos": 3,
-   "lista": 0,
-   "publicados": 3
+   "atos": 76,
+   "lista": 615,
+   "publicados": 720
   },
   "municipal": {
-   "ok": true,
-   "atos": 0,
-   "lista": 0,
-   "edicoes": []
+   "ok": false,
+   "erro": "HTTP 403"
   }
  },
- "coletado_em": "2026-11-23T04:47:02.338Z",
  "totais": {
-  "federal": 0,
-  "estadual": 3,
+  "federal": 3008,
+  "estadual": 691,
   "municipal": 0
  }
 }
