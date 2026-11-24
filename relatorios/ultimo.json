@@ -1,33 +1,33 @@
 {
- "data": "2026-11-23",
- "gerado_em": "2026-11-23T20:25:31.848Z",
- "pesquisa_data": "2026-11-23",
+ "data": "2026-11-24",
+ "gerado_em": "2026-11-24T09:10:07.882Z",
+ "pesquisa_data": "2026-11-24",
  "indicadores_data": "2026-11-23",
- "resumo_mercado": "A B3 não abriu na sexta (20) pelo feriado da Consciência Negra; o último pregão foi na quinta (19), com o Ibovespa em queda de 0,69%, a 166.376 pontos, e o dólar a cerca de R$ 5,93, maior valor desde abril de 2025, segundo a Agência Brasil. Na semana, o Ibovespa recuou 3,53% e o dólar subiu 4,95%. Em Nova York, na sexta (20), S&P 500 e Dow entraram em correção e o Nasdaq caiu cerca de 5%, com liquidação de ações de IA e chips, segundo Stockinvest.us e FINCHANNEL. Hoje (23) a B3 volta a operar após o feriado e reage a esse movimento externo. Sobre a China, não encontrei nas fontes consultadas notícia econômica relevante das últimas 24h.",
+ "resumo_mercado": "Na segunda (23), o Ibovespa caiu 0,95%, a 164.796 pontos, pressionado por incertezas fiscais e pela votação do pacote de medidas na Câmara, segundo Money Times; o dólar fechou a R$ 5,926 (-0,15%) após passar de R$ 6 no dia. Em Nova York, o S&P 500 subiu 4,73%, a 7.237, o Nasdaq 6,51% e o Dow 3,01%, recuperando parte da correção da semana anterior, segundo Washington Post/AP e Fox Business. Para hoje (24), a CNBC apontava futuros do Nasdaq-100 em queda de cerca de 0,9% no fim do pregão de segunda, e o foco local segue no desfecho fiscal em Brasília. Sobre a China, não encontrei nas fontes consultadas notícia econômica relevante das últimas 24 horas.",
  "fontes_mercado": [
   {
-   "nome": "Agência Brasil",
-   "titulo": "Dólar supera R$ 5,93 e fecha no maior valor desde abril de 2025",
-   "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/dolar-supera-r-593-e-fecha-no-maior-valor-desde-abril-de-2025",
-   "data": "2026-11-19"
+   "nome": "Money Times",
+   "titulo": "Ibovespa perde os 165 mil pontos e fecha no vermelho com incertezas fiscais",
+   "url": "https://www.moneytimes.com.br/ibovespa-23-11-2026-davs/",
+   "data": "2026-11-23"
   },
   {
-   "nome": "Diário do Sudoeste",
-   "titulo": "Ibovespa cai 0,69% e dólar sobe a R$ 5,93 antes do feriado",
-   "url": "https://diariodosudoeste.com.br/ibovespa-cai-069-e-dolar-sobe-a-r-593-antes-do-feriado/",
-   "data": "2026-11-19"
+   "nome": "The Washington Post (AP)",
+   "titulo": "How major US stock indexes fared Monday 11/23/2026",
+   "url": "https://www.washingtonpost.com/business/2026/11/23/wall-street-stocks-dow-nasdaq/5a7bcea0-e785-11f1-8db0-6f1e3c389e7c_story.html",
+   "data": "2026-11-23"
   },
   {
-   "nome": "Stockinvest.us",
-   "titulo": "S&P 500 Enters Correction and Nasdaq Falls 5.3% as Chip Stocks Slide",
-   "url": "https://stockinvest.us/digest/digest-us-market-close-2026-11-20",
-   "data": "2026-11-20"
+   "nome": "Fox Business",
+   "titulo": "US stocks rebound as battered AI and chip stocks rally after correction",
+   "url": "https://www.foxbusiness.com/markets/stocks-november-23-2026",
+   "data": "2026-11-23"
   },
   {
-   "nome": "FINCHANNEL",
-   "titulo": "Nasdaq falls 5.3% as S&P 500 and Dow enter corrections",
-   "url": "https://finchannel.com/nasdaq-falls-5-3-as-sp-500-and-dow-enter-corrections/142573/american-business-trends/stock-prices/2026/11/",
-   "data": "2026-11-20"
+   "nome": "CNBC",
+   "titulo": "Nasdaq futures turn lower after Nvidia rally as Jensen Huang returns: Live updates",
+   "url": "https://www.cnbc.com/2026/11/23/stock-market-today-live-updates.html",
+   "data": "2026-11-23"
   }
  ],
  "tecnica_data": "2026-11-23",
@@ -11377,13 +11377,13 @@
      ]
     }
    },
-   "resumo": "Segundo a brapi e o Visão no Investimento, a CSN Mineração teve prejuízo líquido de R$ 356,3 milhões no 3T26 (contra lucro de R$ 219,4 milhões no 2T26), com consumo de caixa livre de R$ 212 milhões; a controladora CSN citou menores preços do minério e frete maior. Os papéis recuaram 4,15% para R$ 4,62 em 13/11. O BB Investimentos mantém venda com alvo de R$ 5,40 (relatório de abril), e a Ativa reduziu a projeção de produção de 2026. Não foram achadas recomendações pós-balanço.",
+   "resumo": "Segundo a brapi e o Visão no Investimento, a CSN Mineração teve prejuízo líquido de R$ 356,3 milhões no 3T26 (contra lucro de R$ 219,4 milhões no 2T26), com consumo de caixa livre de R$ 212 milhões; a controladora CSN citou menores preços do minério e frete maior. Os papéis recuaram 4,15% para R$ 4,62 em 13/11. O BB Investimentos mantém venda com alvo de R$ 5,40 (relatório de abril), e a Ativa reduziu a projeção de produção de 2026. Não foram achadas recomendações pós-balanço. Segundo o Money Times e o Safra, o Safra mantém venda (alvo de R$ 5,80 para R$ 5,40) e o Itaú BBA, neutro, tem alvo de R$ 5,50; as datas dessas revisões não foram confirmadas e são anteriores ao balanço.",
    "sentimento": "negativo",
    "consenso": {
     "compra": 0,
-    "neutro": 0,
-    "venda": 1,
-    "preco_alvo_medio": 5.4,
+    "neutro": 1,
+    "venda": 2,
+    "preco_alvo_medio": 5.43,
     "moeda": "BRL",
     "casas": [
      {
@@ -11391,6 +11391,18 @@
       "recomendacao": "venda",
       "preco_alvo": 5.4,
       "data": "2026-04-23"
+     },
+     {
+      "nome": "Safra",
+      "recomendacao": "venda",
+      "preco_alvo": 5.4,
+      "data": null
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "neutro",
+      "preco_alvo": 5.5,
+      "data": null
      }
     ]
    },
@@ -11413,9 +11425,21 @@
      "titulo": "Resultado fraco no 3T26 derruba CSN e CSN Mineração na B3",
      "url": "https://brapi.dev/news/resultado-fraco-no-3t26-derruba-csn-e-csn-mineracao-na-b3-f7008329",
      "data": "2026-11-13"
+    },
+    {
+     "nome": "Money Times",
+     "titulo": "Enferrujou: Itaú BBA corta preços-alvo de CSN (CSNA3) e CSN Mineração (CMIN3)",
+     "url": "https://www.moneytimes.com.br/enferrujou-itau-bba-corta-precos-alvo-de-csn-csna3-e-csn-mineracao-cmin3-outro-banco-tambem-reduz-preco-da-mineradora/",
+     "data": null
+    },
+    {
+     "nome": "Safra",
+     "titulo": "CMIN3 - análise Safra",
+     "url": "https://oespecialista.safra.com.br/analise-safra/cmin3/",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-18"
+   "atualizado_em": "2026-11-24"
   },
   {
    "ticker": "PSSA3",
@@ -16608,13 +16632,13 @@
      "sinais": []
     }
    },
-   "resumo": "Casas citadas mantêm compra, mas com cortes de alvo ao longo de 2026: UBS BB de R$ 23 para R$ 20 (07/01), Citi de R$ 22 para R$ 18, Safra de R$ 22,50 para R$ 17,50 (março), Morgan Stanley elevou para overweight com alvo de R$ 19,50; XP e J.P. Morgan têm R$ 23 e R$ 22. No 2T26 o lucro ajustado foi de R$ 130,1 milhões (+4,3%) e as ações caíram em agosto; a XP vê 3T26 desafiador, com melhora esperada a partir de meados de setembro. Ação cotada perto de R$ 9 em agosto, bem abaixo dos alvos. Fontes também citam corte do alvo do Bradesco de R$ 24 para R$ 18 (data não informada). Segundo o Clube Acionista, o Citi mantém compra com alvo de R$ 16 (antes R$ 18), esperando um 3T26 mais fraco, e a administração relatou melhora nas vendas de setembro frente a julho e agosto. Em 3T26 a C&A reportou lucro líquido de R$ 170,3 milhões (+145% a/a), impulsionado por créditos fiscais de PIS/Cofins; o lucro ajustado caiu 23,3%, para R$ 56,5 milhões, e o Ebitda ajustado foi de R$ 317,6 milhões (-4,7%). Segundo o Seu Dinheiro, as ações subiram até 10% por o trimestre ter sido melhor que o temido.",
+   "resumo": "Casas citadas mantêm compra, mas com cortes de alvo ao longo de 2026: UBS BB de R$ 23 para R$ 20 (07/01), Citi de R$ 22 para R$ 18, Safra de R$ 22,50 para R$ 17,50 (março), Morgan Stanley elevou para overweight com alvo de R$ 19,50; XP e J.P. Morgan têm R$ 23 e R$ 22. No 2T26 o lucro ajustado foi de R$ 130,1 milhões (+4,3%) e as ações caíram em agosto; a XP vê 3T26 desafiador, com melhora esperada a partir de meados de setembro. Ação cotada perto de R$ 9 em agosto, bem abaixo dos alvos. Fontes também citam corte do alvo do Bradesco de R$ 24 para R$ 18 (data não informada). Segundo o Clube Acionista, o Citi mantém compra com alvo de R$ 16 (antes R$ 18), esperando um 3T26 mais fraco, e a administração relatou melhora nas vendas de setembro frente a julho e agosto. Em 3T26 a C&A reportou lucro líquido de R$ 170,3 milhões (+145% a/a), impulsionado por créditos fiscais de PIS/Cofins; o lucro ajustado caiu 23,3%, para R$ 56,5 milhões, e o Ebitda ajustado foi de R$ 317,6 milhões (-4,7%). Segundo o Seu Dinheiro, as ações subiram até 10% por o trimestre ter sido melhor que o temido. Segundo o Itaú (notícia de 05/11/2026), o Itaú BBA reiterou compra após o resultado, cortando o preço-alvo de R$ 18 para R$ 17.",
    "sentimento": "neutro",
    "consenso": {
-    "compra": 6,
+    "compra": 7,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 19.67,
+    "preco_alvo_medio": 19.29,
     "moeda": "BRL",
     "casas": [
      {
@@ -16652,6 +16676,12 @@
       "recomendacao": "compra",
       "preco_alvo": 22,
       "data": "2026-04-29"
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "compra",
+      "preco_alvo": 17,
+      "data": "2026-11-05"
      }
     ]
    },
@@ -16692,9 +16722,15 @@
      "titulo": "CEAB3: 3T26 deve ser pressionado, mas Citi mantém visão construtiva",
      "url": "https://acionista.com.br/ceab3-3t26-deve-ser-pressionado-mas-citi-mantem-visao-construtiva/",
      "data": null
+    },
+    {
+     "nome": "Itaú",
+     "titulo": "C&A: resultado, Itaú BBA recomendação de compra",
+     "url": "https://itau.com.br/investimentos/noticias/cea-resultado-itau-bba-recomendacao-compra-05-11-26",
+     "data": "2026-11-05"
     }
    ],
-   "atualizado_em": "2026-11-09"
+   "atualizado_em": "2026-11-24"
   },
   {
    "ticker": "VAMO3",
@@ -17321,7 +17357,7 @@
      ]
     }
    },
-   "resumo": "Após o balanço do 3T do ano fiscal 2027 (divulgado em 17/11/2026, o primeiro após a renúncia de Jensen Huang como CEO em 12/11), resumos de mercado citam Barclays (overweight, US$ 210), Goldman Sachs (compra, US$ 220), Citi (compra, US$ 225), Cantor (US$ 250), Jefferies (compra, US$ 250), Wedbush (elevou de US$ 275 para US$ 293), JPMorgan (elevou de US$ 215 para US$ 230), BofA (compra, US$ 280), TD Cowen (compra, US$ 200) e Melius (elevou de US$ 300 para US$ 320). A Newsquawk descreve os alvos como em grande parte reduzidos apesar do resultado e da projeção fortes, e a Barclays diz que a sucessão na liderança segue indefinida. Os números divergem entre as fontes (por exemplo, Jefferies aparece com alta e com corte para US$ 250), e as datas exatas das revisões não foram confirmadas; a data usada (18/11) é aproximada.",
+   "resumo": "Após o balanço do 3T do ano fiscal 2027 (divulgado em 17/11/2026, o primeiro após a renúncia de Jensen Huang como CEO em 12/11), resumos de mercado citam Barclays (overweight, US$ 210), Goldman Sachs (compra, US$ 220), Citi (compra, US$ 225), Cantor (US$ 250), Jefferies (compra, US$ 250), Wedbush (elevou de US$ 275 para US$ 293), JPMorgan (elevou de US$ 215 para US$ 230), BofA (compra, US$ 280), TD Cowen (compra, US$ 200) e Melius (elevou de US$ 300 para US$ 320). A Newsquawk descreve os alvos como em grande parte reduzidos apesar do resultado e da projeção fortes, e a Barclays diz que a sucessão na liderança segue indefinida. Os números divergem entre as fontes (por exemplo, Jefferies aparece com alta e com corte para US$ 250), e as datas exatas das revisões não foram confirmadas; a data usada (18/11) é aproximada. Segundo a Gotrade (citando a Reuters) e o Star-Advertiser, a ação caiu cerca de 2,9% em 18/11, para cerca de US$ 151, com investidores preocupados com a sucessão de Huang, e Colette Kress é citada como CEO interina.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 10,
@@ -17466,9 +17502,21 @@
      "titulo": "Wall Street is rushing to raise price targets on Nvidia after spectacular earnings",
      "url": "https://finance.yahoo.com/news/wall-street-rushing-raise-price-042348753.html",
      "data": "2026-11-18"
+    },
+    {
+     "nome": "Gotrade",
+     "titulo": "Nvidia Stock (NVDA) Falls 2.9% on CEO Succession Concerns (Nov 18)",
+     "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-19-2026/",
+     "data": "2026-11-19"
+    },
+    {
+     "nome": "Star-Advertiser",
+     "titulo": "Nvidia retreats as strong outlook fails to dispel uncertainty",
+     "url": "https://www.staradvertiser.com/2026/11/18/breaking-news/nvidia-retreats-as-strong-outlook-fails-to-dispel-uncertainty/",
+     "data": "2026-11-18"
     }
    ],
-   "atualizado_em": "2026-11-23"
+   "atualizado_em": "2026-11-24"
   },
   {
    "ticker": "MSFT",
