@@ -1,33 +1,33 @@
 {
- "data": "2026-11-24",
- "gerado_em": "2026-11-24T19:37:10.386Z",
- "pesquisa_data": "2026-11-24",
+ "data": "2026-11-25",
+ "gerado_em": "2026-11-25T09:19:49.143Z",
+ "pesquisa_data": "2026-11-25",
  "indicadores_data": "2026-11-24",
- "resumo_mercado": "Na segunda (23), o Ibovespa caiu 0,95%, a 164.796 pontos, pressionado por incertezas fiscais e pela votação do pacote de medidas na Câmara, segundo Money Times; o dólar fechou a R$ 5,926 (-0,15%) após passar de R$ 6 no dia. Em Nova York, o S&P 500 subiu 4,73%, a 7.237, o Nasdaq 6,51% e o Dow 3,01%, recuperando parte da correção da semana anterior, segundo Washington Post/AP e Fox Business. Para hoje (24), a CNBC apontava futuros do Nasdaq-100 em queda de cerca de 0,9% no fim do pregão de segunda, e o foco local segue no desfecho fiscal em Brasília. Sobre a China, não encontrei nas fontes consultadas notícia econômica relevante das últimas 24 horas.",
+ "resumo_mercado": "Na terça (24), o Ibovespa caiu 0,43%, a 164.089,81 pontos, após a presidente da Petrobras não garantir dividendos extraordinários, e o dólar recuou para perto de R$ 5,90, segundo Money Times. Segundo o InfoMoney, o índice chegou a subir cerca de 1,7% pela manhã e virou à tarde, com a Vale em queda de 5,51%. Em Nova York, o Dow subiu 0,85%, a 50.018,70, mas o S&P 500 recuou 0,50%, a 7.201,09, e o Nasdaq perdeu 1,48%, a 23.733,54, com a Nvidia em baixa de 5,9% após a alta da véspera, segundo a Startup Fortune. Para hoje (25), a FXStreet noticiava queda de cerca de 1% nos futuros do Nasdaq na Ásia. Sobre a China, não encontrei nas fontes consultadas notícia econômica relevante das últimas 24 horas.",
  "fontes_mercado": [
   {
    "nome": "Money Times",
-   "titulo": "Ibovespa perde os 165 mil pontos e fecha no vermelho com incertezas fiscais",
-   "url": "https://www.moneytimes.com.br/ibovespa-23-11-2026-davs/",
-   "data": "2026-11-23"
+   "titulo": "Tempo real: Ibovespa fecha no vermelho e dólar recua para os R$ 5,90; veja os destaques desta terça-feira (24)",
+   "url": "https://www.moneytimes.com.br/tempo-real-24-11-2026-davs/",
+   "data": "2026-11-24"
   },
   {
-   "nome": "The Washington Post (AP)",
-   "titulo": "How major US stock indexes fared Monday 11/23/2026",
-   "url": "https://www.washingtonpost.com/business/2026/11/23/wall-street-stocks-dow-nasdaq/5a7bcea0-e785-11f1-8db0-6f1e3c389e7c_story.html",
-   "data": "2026-11-23"
+   "nome": "InfoMoney",
+   "titulo": "Day Trade hoje (24): Ibovespa testa suporte e minidólar enfrenta barreira nos 6 mil",
+   "url": "https://www.infomoney.com.br/mercados/mercados-day-trade-hoje-analistas-24112026/",
+   "data": "2026-11-24"
   },
   {
-   "nome": "Fox Business",
-   "titulo": "US stocks rebound as battered AI and chip stocks rally after correction",
-   "url": "https://www.foxbusiness.com/markets/stocks-november-23-2026",
-   "data": "2026-11-23"
+   "nome": "Startup Fortune",
+   "titulo": "The Dow closes at 50,019 while Nasdaq drops 1.48% on an AI chip selloff",
+   "url": "https://startupfortune.com/the-dow-closes-at-50019-while-nasdaq-drops-148-on-an-ai-chip-selloff/",
+   "data": "2026-11-24"
   },
   {
-   "nome": "CNBC",
-   "titulo": "Nasdaq futures turn lower after Nvidia rally as Jensen Huang returns: Live updates",
-   "url": "https://www.cnbc.com/2026/11/23/stock-market-today-live-updates.html",
-   "data": "2026-11-23"
+   "nome": "FXStreet",
+   "titulo": "Nasdaq FUTs drop by 1% in Asia",
+   "url": "https://www.fxstreet.com/analysis/nasdaq-futs-drop-by-1-in-asia-202611250658",
+   "data": "2026-11-25"
   }
  ],
  "tecnica_data": "2026-11-24",
@@ -17419,14 +17419,7 @@
      }
     ]
    },
-   "mudancas": [
-    {
-     "tipo": "resultado",
-     "descricao": "Nvidia divulgou o 3T do ano fiscal 2027 com receita acima do esperado e projeção elevada; analistas revisaram alvos (Wedbush, JPMorgan e Melius elevaram; outras casas mantiveram), segundo resumos de mercado.",
-     "fonte": "Newsquawk",
-     "data": "2026-11-17"
-    }
-   ],
+   "mudancas": [],
    "fontes": [
     {
      "nome": "Nvidia",
