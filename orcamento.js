@@ -118,6 +118,11 @@ function render() {
     ${teste()}
     <div id="orcRes">${resultado()}</div>
     <p class="hint">É uma classificação estatística, feita para grupos grandes: num caso individual pode errar. As respostas ficam só neste navegador. Fonte: <a href="https://abep.org/wp-content/uploads/2026/03/CCEB_2026.pdf" target="_blank" rel="noopener">ABEP, Critério Brasil, válido desde 05/02/2026</a>; renda média pela PNAD Contínua 2025 do IBGE.</p>
+    <details class="orc-de"><summary><b>Qual a diferença entre classe D e classe E?</b></summary>
+      <p>Até 2014 o Critério Brasil separava as duas. A <b>D</b> eram as famílias que já tinham o básico: banheiro, geladeira, água encanada, e o chefe da família tinha estudado alguns anos. A <b>E</b> eram as que faltava parte desse básico: casa sem banheiro ou sem geladeira, e chefe da família sem estudo.</p>
+      <p>Desde o critério de 2015 a ABEP junta as duas numa só, a <b>DE</b> (0 a 34 pontos). O motivo: a classe E ficou pequena, porque quase todas as casas passaram a ter banheiro, geladeira e água, e os itens do teste já não separavam bem uma da outra. Na prática, quem está perto de 34 pontos lembra a antiga D, e quem está perto de 0 lembra a antiga E.</p>
+      <p>A renda média da DE (R$ 1.177,55, medida em 2025) fica abaixo do salário mínimo de 2026 (R$ 1.621) porque é a média do que as famílias recebem de fato, não um salário: muitas não têm ninguém de carteira assinada e vivem de bicos, do Bolsa Família ou estão sem trabalho.</p>
+    </details>
   </section>
   <section class="card orc-card">
     <h3>💰 Orçamento familiar para prosperar, por classe</h3>
@@ -160,6 +165,7 @@ function liga() {
 
 const css = document.createElement("style");
 css.textContent = `
+.orc-de{margin-top:10px;font-size:.92em}.orc-de summary{cursor:pointer}.orc-de p{margin:8px 0;line-height:1.5}
 .orc-card { padding: 16px 18px; margin-bottom: 14px; max-width: 900px; }
 .orc-card h3 { margin: 0 0 6px; font-size: 17px; }
 .orc-form { display: grid; gap: 8px; margin: 12px 0; }
