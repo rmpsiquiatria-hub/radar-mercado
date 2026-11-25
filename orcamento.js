@@ -33,20 +33,20 @@ const faixa = x => { const i = CLASSES.indexOf(x); return i === 0 ? `${x.min} a 
 
 // Reference budget, % of the family's monthly income, in the order A, B1, B2, C1, C2, DE.
 const ORC = [
-  ["Moradia", [20, 24, 26, 28, 30, 32], "Aluguel ou prestação do financiamento da casa, condomínio, luz, água, gás, internet e IPTU. O limite saudável é perto de 30% da renda."],
+  ["Moradia", [18, 21, 26, 28, 30, 32], "Aluguel ou prestação do financiamento da casa, condomínio, luz, água, gás, internet e IPTU. O limite saudável é perto de 30% da renda."],
   ["Alimentação", [7, 11, 15, 20, 26, 32], "Mercado, feira e açougue. Pesa mais quanto menor a renda."],
-  ["Restaurantes", [4, 4, 4, 3, 2, 1], "Comer fora, delivery e lanches."],
-  ["Transporte", [8, 10, 12, 12, 12, 11], "Ônibus, aplicativo, combustível, manutenção, IPVA e estacionamento. A prestação do carro financiado também entra aqui: se ela não couber junto com o resto, o carro está caro para a renda."],
+  ["Restaurantes", [3, 3, 4, 3, 2, 1], "Comer fora, delivery e lanches."],
+  ["Transporte", [8, 8, 12, 12, 12, 11], "Ônibus, aplicativo, combustível, manutenção, IPVA e estacionamento. A prestação do carro financiado também entra aqui: se ela não couber junto com o resto, o carro está caro para a renda."],
   ["Saúde", [6, 7, 7, 5, 3, 2], "Plano de saúde, consultas, exames e dentista. Nas classes C2 e DE o SUS cobre a maior parte."],
   ["Farmácia", [1, 1, 2, 2, 3, 4], "Remédios e itens de higiene."],
-  ["Educação", [8, 8, 7, 5, 4, 3], "Escola, faculdade, cursos, material e livros. É o gasto que mais ajuda a subir de classe."],
+  ["Educação", [19, 24, 7, 5, 4, 3], "Escola, faculdade, cursos, material e livros. É o gasto que mais ajuda a subir de classe. Nas classes A e B1 a conta já supõe <b>dois filhos em escola particular</b>. As mensalidades no Brasil vão de uns R$ 450 a R$ 2.000 na média e passam de R$ 3.000 nas escolas mais caras das capitais, e subiram cerca de 10% em 2026. Classe A: 2 × R$ 2.500 + uns R$ 500 de material, uniforme e atividades ≈ R$ 5.500 (19%). Classe B1: 2 × R$ 1.500 + uns R$ 300 ≈ R$ 3.300 (24%). Com isso a B1 poupa menos que a B2: escola é o maior peso de quem tem filhos. Sem filhos, ou com escola pública, a diferença vai para Previdência. Nas outras classes, a conta é de escola pública com cursos e material."],
   ["Seguros", [3, 3, 3, 2, 1, 0], "Seguro de vida, do carro e da casa. Cresce quando há patrimônio e dependentes para proteger."],
-  ["Previdência", [23, 19, 15, 10, 8, 5], "A parte da prosperidade: separe no dia do pagamento, antes de gastar. Primeiro uma reserva de emergência (6 meses de gastos), depois previdência e investimentos. Quem tem dívidas usa esta parte para quitá-las, começando pelos juros mais altos."],
-  ["Lazer", [6, 6, 5, 7, 6, 5], "Passeios, viagens, streaming, academia e hobbies. Ter lazer planejado ajuda a manter o orçamento."],
+  ["Previdência", [17, 12, 15, 10, 8, 5], "A parte da prosperidade: separe no dia do pagamento, antes de gastar. Primeiro uma reserva de emergência (6 meses de gastos), depois previdência e investimentos. Quem tem dívidas usa esta parte para quitá-las, começando pelos juros mais altos."],
+  ["Lazer", [4, 4, 5, 7, 6, 5], "Passeios, viagens, streaming, academia e hobbies. Ter lazer planejado ajuda a manter o orçamento."],
   ["Beleza", [2, 2, 2, 2, 2, 2], "Cabelo, estética e cosméticos. Como não há categoria de roupas, elas podem entrar aqui."],
   ["Presentes", [1, 1, 1, 2, 2, 2], "Aniversários, Natal e doações."],
   ["Pet", [1, 1, 1, 2, 1, 1], "Ração, veterinário e banho. Zero para quem não tem animal: a sobra vai para Previdência."],
-  ["Empregado doméstico", [9, 3, 0, 0, 0, 0], "Mensalista com carteira custa bem mais que o salário. Com o mínimo nacional de 2026 (R$ 1.621): + 20% de encargos todo mês (INSS 8%, FGTS 8%, multa do FGTS 3,2% e seguro 0,8%) + a reserva para 13º e férias com 1/3 = cerca de R$ 2.320 por mês, e uns R$ 2.450 com vale-transporte. No RS o piso regional (R$ 1.884,75) leva o custo para cerca de R$ 2.700 a R$ 2.850. Por isso só cabe com renda acima de uns R$ 25 mil, que é a classe A (9%). Na B1, uma diarista 2 vezes por mês (3%). Nas demais, o serviço é feito pela família."],
+  ["Empregado doméstico", [9, 2, 0, 0, 0, 0], "Mensalista com carteira custa bem mais que o salário. Com o mínimo nacional de 2026 (R$ 1.621): + 20% de encargos todo mês (INSS 8%, FGTS 8%, multa do FGTS 3,2% e seguro 0,8%) + a reserva para 13º e férias com 1/3 = cerca de R$ 2.320 por mês, e uns R$ 2.450 com vale-transporte. No RS o piso regional (R$ 1.884,75) leva o custo para cerca de R$ 2.700 a R$ 2.850. Por isso só cabe com renda acima de uns R$ 25 mil, que é a classe A (9%). Na B1, uma diarista de vez em quando (2%). Nas demais, o serviço é feito pela família."],
   ["Contador", [1, 0, 0, 0, 0, 0], "Faz sentido para quem é autônomo, tem empresa ou declaração de imposto de renda complexa."],
   ["Banco", [0, 0, 0, 0, 0, 0], "Ideal é zero: há contas digitais gratuitas. Pagar tarifa é dinheiro que não volta."],
   ["Empréstimos", [0, 0, 0, 0, 0, 0], "Dívida de consumo: crédito pessoal, cheque especial, parcelamento de fatura. O financiamento da casa entra em Moradia e o do carro em Transporte. O ideal aqui é zero. Se houver, a soma das parcelas não deve passar de 15% da renda, e o dinheiro sai da parte de Previdência até a dívida acabar."],
@@ -126,13 +126,13 @@ function render() {
   </section>
   <section class="card orc-card">
     <h3>💰 Orçamento familiar para prosperar, por classe</h3>
-    <p class="hint">Quanto de cada R$ 100 que a família ganha vai para cada categoria. As categorias são as mesmas do seu controle financeiro. A regra que mais pesa é a da <b>Previdência</b>: separar uma parte no dia do pagamento, antes de gastar. Quanto maior a renda, maior essa parte, porque o essencial (casa e comida) pesa menos.</p>
+    <p class="hint">Quanto de cada R$ 100 que a família ganha vai para cada categoria. As categorias são as mesmas do seu controle financeiro. A regra que mais pesa é a da <b>Previdência</b>: separar uma parte no dia do pagamento, antes de gastar. Quanto maior a renda, maior essa parte, porque o essencial (casa e comida) pesa menos. A exceção é a B1, onde a escola particular de dois filhos come parte da poupança.</p>
     <div id="orcTab">${tabela()}</div>
   </section>
   <section class="card orc-card">
     <h3>📊 As seis classes lado a lado</h3>
     ${comparativo()}
-    <p class="hint">Como foi montado: a proporção de casa, comida e transporte segue o que as famílias de cada faixa de renda gastam na Pesquisa de Orçamentos Familiares do IBGE, ajustada para caber uma poupança crescente (de 5% na classe DE a 25% na A), na linha da regra 50-30-20 (necessidades, desejos e poupança). É uma referência geral escrita por IA (Claude), não um plano feito para a sua família. Quem tem dívidas, filhos pequenos ou mora em cidade cara precisa ajustar.</p>
+    <p class="hint">Como foi montado: a proporção de casa, comida e transporte segue o que as famílias de cada faixa de renda gastam na Pesquisa de Orçamentos Familiares do IBGE, ajustada para caber uma poupança crescente (de 5% na classe DE a 17% na A), na linha da regra 50-30-20 (necessidades, desejos e poupança). É uma referência geral escrita por IA (Claude), não um plano feito para a sua família. Nas classes A e B1 a conta supõe dois filhos em escola particular; nas outras, escola pública. Quem tem dívidas, outro número de filhos ou mora em cidade cara precisa ajustar.</p>
   </section>`;
 }
 
