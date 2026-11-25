@@ -1,202 +1,405 @@
 {
- "data": "2026-11-23",
- "coletado_em": "2026-11-24T07:48:38.666Z",
- "gerado_em": "2026-11-24T08:20:00Z",
+ "data": "2026-11-24",
+ "gerado_em": "2026-11-25T08:15:00Z",
  "resumo": {
-  "federal": "A Aneel definiu como o Encargo Complementar de Recursos (ECR) vai aparecer e ser cobrado na conta de luz de quem recebe certos benefícios, como a geração própria de energia (placas solares). A Receita Federal abriu o Piloto da CBS, que deixa qualquer empresa testar o novo tributo sobre o consumo. O Banco Central mudou regras de operações com bancos. Também saíram leis que abrem créditos no orçamento, incluindo verbas para a Saúde.",
-  "estadual": "O Conselho Estadual de Trânsito (Cetran-RS) fixou diretrizes para bicicletas elétricas e patinetes elétricos: idade mínima de 16 anos e velocidades máximas. A Secretaria de Planejamento listou os serviços de tecnologia que o governo contrata de forma centralizada.",
-  "municipal": "Não foi possível ler o Diário Oficial de Lajeado neste dia: a fonte falhou (erro HTTP 403). Os atos de Lajeado não foram analisados."
+  "federal": "O destaque é a Lei Complementar 239, que dá ao governo federal novos instrumentos para cumprir a meta fiscal: contingenciamento de gastos, corte de benefícios tributários em 20% e limite à compensação de tributos. O Comitê Gestor do Simples Nacional mudou regras para as pequenas empresas (receita, caixa e IBS/CBS). O Ministério da Saúde incluiu o rituximabe e reajustou o pagamento de quimioterapias do SUS. O Conama criou o cadastro e o rastreamento de máquinas de mineração.",
+  "estadual": "No RS, o governo autorizou compras e contratações emergenciais em Tupanciretã (vendaval), a Secretaria da Saúde repassou R$ 15,9 milhões ao Hospital São Vicente de Paulo, de Osório, e ampliou o repasse do TEAcolhe (autismo) em Santiago.",
+  "municipal": "Lajeado publicou 5 leis (criação de vagas de técnico de enfermagem, contratação temporária de bibliotecário e duas denominações) e 2 decretos de crédito suplementar."
  },
  "destaques": [
   {
-   "id": "dou-745566480",
+   "id": "dou-745996277",
    "relevancia": "alta",
-   "area": "outros",
+   "area": "fazenda",
    "temas": [
-    "energia",
-    "conta de luz"
+    "finanças públicas",
+    "tributos"
    ],
-   "o_que_muda": "A Aneel definiu como o Encargo Complementar de Recursos (ECR) entra no faturamento. Ele reduz o benefício tarifário pago pela CDE a quem tem geração distribuída (como placas solares) e a outros beneficiários. De janeiro a junho de 2027 as distribuidoras podem só reduzir o percentual do benefício e avisar na fatura por mensagem. Depois disso a fatura deve mostrar separadamente o benefício bruto, o fator ECR e o valor do encargo.",
-   "quem_afeta": "Consumidores com geração própria de energia e outros beneficiários da CDE, distribuidoras de energia e o ONS.",
-   "vigencia": "Na publicação. O período transitório de faturamento vai de janeiro a junho de 2027.",
+   "o_que_muda": "Muda o arcabouço fiscal. O governo pode bloquear gastos para cumprir a meta e, a partir de 2027, o crescimento real da despesa fica limitado a 2% ao ano nesses casos. A lei também autoriza reduzir a compensação entre tributos federais, com percentuais a serem fixados por ato do Executivo. Para benefícios tributários federais, passa a valer o corte de 20% (alíquota zero ou reduzida mais próxima do padrão, crédito limitado a 80%). Vale para o benefício que depender dessa regra; veículos de pessoas com deficiência ou autismo ficam de fora. Limita ainda algumas despesas até 2030.",
+   "quem_afeta": "Empresas com benefícios fiscais ou que usam compensação de tributos, contabilistas, órgãos públicos federais e quem depende de verbas federais (ciência, educação).",
+   "vigencia": "Na publicação (24/11/2026); parte das regras vale a partir de 2027 e 2028.",
    "esfera": "federal",
-   "titulo": "RESOLUÇÃO NORMATIVA Nº 1.176, DE 17 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério de Minas e Energia / Diretoria Colegiada",
+   "titulo": "LEI COMPLEMENTAR Nº 239, DE 24 DE NOVEMBRO DE 2026",
+   "orgao": "Atos do Poder Legislativo",
+   "tipo": "Lei Complementar",
+   "url": "https://www.in.gov.br/web/dou/-/lei-complementar-n-239-de-24-de-novembro-de-2026-745996277",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-745832719",
+   "relevancia": "alta",
+   "area": "fazenda",
+   "temas": [
+    "tributos",
+    "Simples Nacional"
+   ],
+   "o_que_muda": "Muda regras do Simples Nacional: define o que conta como receita e faturamento (inclui patrocínio, juros e multas cobrados na operação), exige conta gov.br ouro ou prata, ajusta a repartição de IBS e CBS, e obriga quem usa o regime de caixa em 2026 a incluir em dezembro os valores ainda a receber. A Defis de 2026 deve ser entregue até 31/03/2027.",
+   "quem_afeta": "Microempresas e empresas de pequeno porte do Simples Nacional, MEI e contadores.",
+   "vigencia": "Em parte na publicação; regras de IBS/CBS e do regime de caixa passam a valer a partir de 2027.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO CGSN Nº 196, DE 16 de NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Comitê Gestor do Simples Nacional",
    "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-normativa-n-1.176-de-17-de-novembro-de-2026-745566480",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-cgsn-n-196-de-16-de-novembro-de-2026-745832719",
    "fonte": "DOU"
   },
   {
-   "id": "rs-1508244",
+   "id": "dou-745833610",
    "relevancia": "alta",
-   "area": "outros",
+   "area": "saude",
    "temas": [
-    "trânsito",
-    "mobilidade"
+    "saúde",
+    "oncologia",
+    "SUS"
    ],
-   "o_que_muda": "O Cetran-RS definiu diretrizes para os municípios regularem bicicletas elétricas e patinetes elétricos. Em ciclovias a velocidade máxima é de até 20 km/h. Em áreas de pedestres é de 6 km/h, e só onde o órgão de trânsito autorizar. Em vias de até 40 km/h a circulação é permitida. Fica proibido circular em vias rápidas, vias acima de 40 km/h, faixas exclusivas de ônibus, rodovias e calçadas, salvo autorização e sinalização. A idade mínima para conduzir é de 16 anos, e os pais respondem pelos danos causados por menores. O capacete é recomendado.",
-   "quem_afeta": "Usuários de bicicletas elétricas e patinetes elétricos, seus responsáveis e as prefeituras, inclusive a de Lajeado, que fiscalizam e regulamentam o trânsito local.",
-   "vigencia": "Na publicação (resolução de 19/11/2026).",
-   "esfera": "estadual",
-   "titulo": "RESOLUÇÃO N.165/2026",
-   "orgao": "Conselho Estadual de Trânsito",
-   "tipo": "Resoluções",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508244",
-   "fonte": "DOE-RS"
+   "o_que_muda": "Inclui o rituximabe (por miligrama) na tabela do SUS para linfoma folicular, linfoma difuso de grandes células B e leucemia linfocítica crônica, com compra e distribuição centralizadas pelo Ministério da Saúde. Reajusta o valor das quimioterapias desses tratamentos, por exemplo, linfoma folicular de 1ª linha de R$ 640,00 para R$ 746,67. Libera R$ 3,3 milhões por ano para estados e municípios.",
+   "quem_afeta": "Hematologistas e oncologistas, hospitais habilitados em oncologia (UNACON e CACON), gestores do SUS e pacientes.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "PORTARIA GM/MS Nº 12.306, DE 28 DE OUTUBRO DE 2026 (*)",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.306-de-28-de-outubro-de-2026-*-745833610",
+   "fonte": "DOU"
   },
   {
-   "id": "dou-745573207",
+   "id": "dou-745833689",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "oncologia",
+    "SUS"
+   ],
+   "o_que_muda": "Inclui e altera procedimentos de tratamento do câncer de mama HER-2 positivo na tabela do SUS e define os recursos para estados e municípios.",
+   "quem_afeta": "Oncologistas, hospitais habilitados em oncologia e pacientes do SUS.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "PORTARIA GM/MS Nº 12.310, DE 28 DE OUTUBRO DE 2026 (*)",
+   "orgao": "Ministério da Saúde / Gabinete do Ministro",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.310-de-28-de-outubro-de-2026-*-745833689",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745805912",
    "relevancia": "media",
    "area": "fazenda",
    "temas": [
     "tributos",
-    "reforma tributária"
+    "profissões"
    ],
-   "o_que_muda": "A Receita criou o Piloto RTC-CBS, um ambiente de testes da nova contribuição sobre bens e serviços (CBS). Qualquer empresa com CNPJ pode participar, sem convite. A Receita pode limitar, suspender ou bloquear o acesso em caso de uso indevido.",
-   "quem_afeta": "Empresas e contadores que querem se preparar para a CBS.",
-   "vigencia": "Na publicação. Até 31/12/2026 o piloto é conduzido pelo programa de implementação da reforma, e a partir de 1º/01/2027 pela Cotec.",
+   "o_que_muda": "As anuidades dos contadores e técnicos em contabilidade para 2027 aumentaram. A resolução traz também as taxas, os descontos e o valor por número de sócios das sociedades contábeis.",
+   "quem_afeta": "Contadores, técnicos em contabilidade e escritórios contábeis.",
+   "vigencia": "Anuidade de 2027, com vencimento em 31/03/2027; desconto de 5% pelo Domicílio Eletrônico se pedido até 04/12/2026.",
+   "imposto": {
+    "tributo": "Anuidade dos CRCs, contador",
+    "antes": "R$ 697,00 (2026)",
+    "depois": "R$ 749,00 (2027)",
+    "variacao_pct": 7.5,
+    "obs": "Valor anterior da Resolução CFC 1.774/2025, segundo notícias do CFC e de portais contábeis. Para técnicos em contabilidade a anuidade passa de R$ 616,00 para R$ 662,00 (+7,5%)."
+   },
    "esfera": "federal",
-   "titulo": "PORTARIA RFB Nº 763, DE 19 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Secretaria Especial da Receita Federal do Brasil",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-rfb-n-763-de-19-de-novembro-de-2026-745573207",
+   "titulo": "RESOLUÇÃO CFC Nº 1.807, DE 18 DE NOVEMBRO DE 2026",
+   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Contabilidade",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-cfc-n-1.807-de-18-de-novembro-de-2026-745805912",
    "fonte": "DOU"
   },
   {
-   "id": "dou-745574417",
+   "id": "dou-746071009",
    "relevancia": "media",
    "area": "fazenda",
    "temas": [
-    "sistema financeiro",
-    "política monetária"
+    "tributos",
+    "calamidade"
    ],
-   "o_que_muda": "O Banco Central ajustou regras do Selic e de operações compromissadas. Criou um procedimento de adesão facultativa para readequar valores dessas operações e regulou depósitos voluntários a prazo de instituições financeiras para fins de política monetária.",
-   "quem_afeta": "Bancos e demais instituições financeiras. Não afeta diretamente o cidadão.",
-   "vigencia": "",
+   "o_que_muda": "Por causa do vendaval em Tupanciretã (RS), a Procuradoria-Geral da Fazenda Nacional adia parcelas de negociações de dívidas (novembro e dezembro de 2026 passam para fevereiro e março de 2027) e suspende, por 90 dias, protestos de certidões de dívida ativa, inclusão no Cadin e prazos de recursos. O Simples Nacional não entra na prorrogação das parcelas.",
+   "quem_afeta": "Contribuintes de Tupanciretã (RS) com dívida ativa da União.",
+   "vigencia": "Na publicação; suspensões por 90 dias.",
    "esfera": "federal",
-   "titulo": "RESOLUÇÃO BCB Nº 606, DE 19 DE NOVEMBRO DE 2026",
-   "orgao": "Banco Central do Brasil / Diretoria Colegiada",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-bcb-n-606-de-19-de-novembro-de-2026-745574417",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-745550914",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "orçamento"
-   ],
-   "o_que_muda": "A Lei 15.546 abre crédito especial de R$ 3 milhões no orçamento da Seguridade Social em favor do Ministério da Saúde. Isso só libera a verba, sem criar regra nova.",
-   "quem_afeta": "Ministério da Saúde.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "LEI Nº 15.546, DE 19 DE NOVEMBRO DE 2026",
-   "orgao": "Atos do Poder Legislativo",
-   "tipo": "Lei",
-   "url": "https://www.in.gov.br/web/dou/-/lei-n-15.546-de-19-de-novembro-de-2026-745550914",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-745550835",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "educação",
-    "orçamento"
-   ],
-   "o_que_muda": "A Lei 15.549 abre crédito especial de R$ 115 milhões nos orçamentos fiscal e da Seguridade Social para os ministérios da Educação, da Justiça e Segurança Pública e da Saúde. Isso só libera a verba, sem criar regra nova.",
-   "quem_afeta": "Ministérios da Educação, da Justiça e da Saúde.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "LEI Nº 15.549, DE 19 DE NOVEMBRO DE 2026",
-   "orgao": "Atos do Poder Legislativo",
-   "tipo": "Lei",
-   "url": "https://www.in.gov.br/web/dou/-/lei-n-15.549-de-19-de-novembro-de-2026-745550835",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-745611207",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "energia",
-    "tarifas"
-   ],
-   "o_que_muda": "A Aneel aprovou nova versão (4.0) da metodologia que calcula a cobertura tarifária do fundo de descomissionamento de Angra 1 e Angra 2, a desativação futura das usinas. É regra técnica de cálculo, e o texto não diz o valor em reais.",
-   "quem_afeta": "Setor elétrico e, indiretamente, consumidores de energia.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO NORMATIVA DA ANEEL Nº 1.177, DE 17 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério de Minas e Energia / Diretoria Colegiada",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-normativa-da-aneel-n-1.177-de-17-de-novembro-de-2026-745611207",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-745563630",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "servidores",
-    "assédio"
-   ],
-   "o_que_muda": "A Procuradoria-Geral Federal criou um programa para ajudar autarquias e fundações federais a prevenir e enfrentar assédio sexual, assédio moral e discriminação. Ele funciona por meio de orientações e assessoria jurídica.",
-   "quem_afeta": "Servidores e dirigentes de autarquias e fundações públicas federais.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "PORTARIA NORMATIVA PGF/AGU Nº 102, DE 18 DE NOVEMBRO DE 2026",
-   "orgao": "Presidência da República / Procuradoria-Geral Federal",
+   "titulo": "Portaria PGFN/MF Nº 3.458, DE 23 DE novembro DE 2026",
+   "orgao": "Ministério da Fazenda / Procuradoria-Geral da Fazenda Nacional",
    "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-normativa-pgf/agu-n-102-de-18-de-novembro-de-2026-745563630",
-   "fonte": "DOU"
+   "url": "https://www.in.gov.br/web/dou/-/portaria-pgfn/mf-n-3.458-de-23-de-novembro-de-2026-746071009",
+   "fonte": "DOU (extra)"
   },
   {
-   "id": "rs-1507986",
+   "id": "dou-745996360",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "administração pública",
-    "tecnologia"
+    "meio ambiente",
+    "mineração"
    ],
-   "o_que_muda": "A Secretaria de Planejamento do RS listou os serviços de tecnologia da informação que o Estado contrata de forma centralizada. Entre eles estão PROA, SEI, internet, segurança cibernética, Microsoft 365 e desenvolvimento de sistemas. Também listou os órgãos e entidades atendidos.",
-   "quem_afeta": "Órgãos e entidades da administração estadual do RS.",
+   "o_que_muda": "Cria o cadastro nacional de escavadeiras, retroescavadeiras e balsas de dragagem usadas em mineração, com rastreamento. Fabricantes, importadores, vendedores e donos de máquinas deverão se registrar e informar vendas e furtos em até 30 dias. O Ibama regulamenta em 180 dias.",
+   "quem_afeta": "Fabricantes, importadores, revendedores e proprietários de máquinas de mineração.",
+   "vigencia": "Na publicação; registro até 90 dias depois da regulamentação.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO CONAMA Nº 519, DE 17 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério do Meio Ambiente e Mudança do Clima / Conselho Nacional do Meio Ambiente",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-conama-n-519-de-17-de-novembro-de-2026-745996360",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "dou-745823636",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "consumidor",
+    "alimentos"
+   ],
+   "o_que_muda": "Define o regulamento de identidade e qualidade do peixe congelado e do filé com aditivos: congelamento rápido, descongelamento e limite de 12% de glaciamento (camada de gelo) sobre o peso líquido.",
+   "quem_afeta": "Indústrias e vendedores de pescado e consumidores de peixe congelado.",
    "vigencia": "",
+   "esfera": "federal",
+   "titulo": "PORTARIA SDA/MAPA Nº 1.712, DE 23 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Agricultura e Pecuária / Secretaria de Defesa Agropecuária",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-sda/mapa-n-1.712-de-23-de-novembro-de-2026-745823636",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-745821378",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "propriedade intelectual"
+   ],
+   "o_que_muda": "Muda as condições para registrar marca de posição (sinal aplicado em lugar fixo de um objeto, como a posição de uma listra num tênis).",
+   "quem_afeta": "Empresas e titulares de marcas.",
+   "vigencia": "24/11/2026",
+   "esfera": "federal",
+   "titulo": "PORTARIA NORMATIVA INPI/PR Nº 101, DE 16 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços / Instituto Nacional da Propriedade Industrial",
+   "tipo": "Portaria",
+   "url": "https://www.in.gov.br/web/dou/-/portaria-normativa-inpi/pr-n-101-de-16-de-novembro-de-2026-745821378",
+   "fonte": "DOU"
+  },
+  {
+   "id": "dou-746071306",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "sistema financeiro"
+   ],
+   "o_que_muda": "O Conselho Monetário Nacional ajusta regras contábeis dos bancos para dívidas reestruturadas e prorroga até 31/12/2027 o uso da taxa de juros repactuada, com plano de adequação até 30/06/2027.",
+   "quem_afeta": "Bancos e instituições financeiras.",
+   "vigencia": "Na publicação.",
+   "esfera": "federal",
+   "titulo": "RESOLUÇÃO CMN Nº 5.346, DE 19 DE NOVEMBRO DE 2026",
+   "orgao": "Ministério da Fazenda / Conselho Monetário Nacional",
+   "tipo": "Resolução",
+   "url": "https://www.in.gov.br/web/dou/-/resolucao-cmn-n-5.346-de-19-de-novembro-de-2026-746071306",
+   "fonte": "DOU (extra)"
+  },
+  {
+   "id": "rs-1509473",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "calamidade",
+    "compras públicas"
+   ],
+   "o_que_muda": "Autoriza, por 180 dias, compras e contratações mais rápidas (Lei Federal 14.981/2024) pelo Estado e por Tupanciretã, para enfrentar os danos do vendaval.",
+   "quem_afeta": "Fornecedores e prestadores de serviço do poder público em Tupanciretã.",
+   "vigencia": "Na publicação (24/11/2026), por 180 dias.",
    "esfera": "estadual",
-   "titulo": "PORTARIA SPGG N° 300/2026",
-   "orgao": "Gabinete da Secretária",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1507986",
+   "titulo": "DECRETO Nº 59.095, DE 24 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509473",
    "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1508614",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "autismo"
+   ],
+   "o_que_muda": "Altera a habilitação de Santiago no programa TEAcolhe, para pessoas com autismo: repasse mensal de R$ 120.000,00 e meta mínima de 1.600 atendimentos por mês para pelo menos 200 usuários.",
+   "quem_afeta": "Gestores e serviços de saúde de Santiago e famílias de pessoas com autismo.",
+   "vigencia": "Na publicação; efeitos financeiros no mês seguinte.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 893/2026",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508614",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1508988",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "SUS"
+   ],
+   "o_que_muda": "Repassa R$ 15.851.109,78 do Tesouro do Estado ao Hospital São Vicente de Paulo, de Osório, que está sob intervenção estadual, para manter os serviços do SUS de outubro a dezembro de 2026.",
+   "quem_afeta": "Pacientes e profissionais do hospital, no Litoral Norte.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 854/2026.",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508988",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "laj-2694-10",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "homenagem"
+   ],
+   "o_que_muda": "Dá o nome de Paulo Roberto Schneider ao ginásio de esportes do bairro Moinhos D'Água.",
+   "quem_afeta": "Moradores do bairro.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "LEI Nº 12.269, DE 23 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "LEI",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2694"
+  },
+  {
+   "id": "laj-2694-11",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "servidores"
+   ],
+   "o_que_muda": "Cria 1 vaga de técnico de enfermagem e atualiza o plano de carreira dos servidores.",
+   "quem_afeta": "Servidores e serviços municipais de saúde.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "LEI Nº 12.270, DE 23 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "LEI",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2694"
+  },
+  {
+   "id": "laj-2694-13",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "servidores"
+   ],
+   "o_que_muda": "Cria 2 vagas de técnico de enfermagem e atualiza o plano de carreira dos servidores.",
+   "quem_afeta": "Servidores e serviços municipais de saúde.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "LEI Nº 12.272, DE 23 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "LEI",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2694"
+  },
+  {
+   "id": "laj-2694-12",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "servidores"
+   ],
+   "o_que_muda": "Autoriza a contratação temporária de 1 bibliotecário.",
+   "quem_afeta": "Biblioteca municipal e candidatos à vaga.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "LEI Nº 12.271, DE 23 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "LEI",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2694"
+  },
+  {
+   "id": "laj-2694-14",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "homenagem"
+   ],
+   "o_que_muda": "Dá o nome de Rua Dr. Aristóteles Bergesch à Rua D52 no loteamento Reserva da Colina, bairro Floresta.",
+   "quem_afeta": "Moradores do loteamento.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "LEI Nº 12.273, DE 23 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "LEI",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2694"
+  },
+  {
+   "id": "laj-2694-1",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "orçamento"
+   ],
+   "o_que_muda": "Abre crédito suplementar de R$ 800.000,00 para pagar aposentadorias no Fundo de Previdência do Município, com remanejamento de outras dotações do próprio fundo.",
+   "quem_afeta": "Aposentados do município.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "DECRETO Nº 14.470, DE 19 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "DECRETO",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2694"
+  },
+  {
+   "id": "laj-2694-2",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "orçamento"
+   ],
+   "o_que_muda": "Abre crédito suplementar no orçamento de 2026 do município.",
+   "quem_afeta": "Prefeitura.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "DECRETO Nº 14.471, DE 23 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "DECRETO",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2694"
   }
  ],
  "demais": {
-  "federal": "Sem destaque: seis outras leis de crédito orçamentário (15.547, 15.548, 15.550, 15.551, 15.552 e 15.553), dezenas de resoluções da Anvisa sobre empresas e produtos específicos (certificações, registros), portarias de habilitação de hospitais para hemodiálise no programa Agora Tem Especialistas, atos individuais da Anatel e da Aneel, circulares de defesa comercial (antidumping), anuidades de conselhos profissionais (CREF1 e CRBio-05), portarias de pessoal e pautas de julgamento.",
-  "estadual": "Sem destaque: portarias de pessoal e de designação de gestores e fiscais de contratos, editais de notificação do IPE Saúde, atos de aposentadoria, extratos de permissão de uso do DAER e a Resolução 164 do Cetran, que só prorroga as Câmaras Especiais de Julgamento.",
-  "municipal": "Fonte indisponível neste dia."
+  "federal": "Cerca de 110 despachos, 60 resoluções da Anvisa e de outros órgãos sobre casos individuais, decisões, pautas, portarias de repasse a municípios e de ensino superior, e atos de pessoal. Também saíram resoluções do CMN e do Banco Central sobre contabilidade bancária.",
+  "estadual": "Portarias e atos de pessoal, súmulas de contratos, aposentadorias, resoluções da CIB/RS e portarias de habitação.",
+  "municipal": "Editais de convocação e de homologação de concursos."
  },
  "fontes": {
   "federal": {
    "ok": true,
-   "atos": 467,
-   "lista": 2541
+   "atos": 425,
+   "lista": 2968
   },
   "estadual": {
    "ok": true,
-   "atos": 76,
-   "lista": 615,
-   "publicados": 720
+   "atos": 81,
+   "lista": 410,
+   "publicados": 522
   },
   "municipal": {
-   "ok": false,
-   "erro": "HTTP 403"
+   "ok": true,
+   "atos": 14,
+   "lista": 0,
+   "edicoes": [
+    "2694 (Normal)"
+   ]
   }
  },
+ "coletado_em": "2026-11-25T06:07:11.181Z",
  "totais": {
-  "federal": 3008,
-  "estadual": 691,
-  "municipal": 0
+  "federal": 3393,
+  "estadual": 491,
+  "municipal": 14
  }
 }
