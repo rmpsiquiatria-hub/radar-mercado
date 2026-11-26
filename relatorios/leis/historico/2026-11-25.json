@@ -1,0 +1,98 @@
+{
+ "data": "2026-11-25",
+ "gerado_em": "2026-11-26T05:20:00-03:00",
+ "resumo": {
+  "federal": "A coleta do Diário Oficial da União falhou neste dia (erro HTTP 502 na fonte), então não há análise federal. Os atos federais de 25/11 não foram avaliados.",
+  "estadual": "No RS, a Secretaria da Saúde criou o Comitê Estadual de Governança da Informação e Saúde Digital, que vai coordenar a política de dados e saúde digital do SUS no estado. O Fundo de Proteção e Bem-Estar de Animais Domésticos (FUNBEA-RS) autorizou R$ 300 mil para Tupanciretã atender animais atingidos pelo vendaval.",
+  "municipal": "Lajeado publicou a edição 2695 do Diário Oficial, com portarias de pessoal: fim e redução de adicional de insalubridade de dois servidores, uma relotação e uma designação por férias."
+ },
+ "destaques": [
+  {
+   "id": "rs-1509232",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "dados",
+    "SUS"
+   ],
+   "o_que_muda": "A Secretaria da Saúde do RS cria um comitê permanente para organizar a informação e a saúde digital no estado. Ele vai acompanhar a integração dos sistemas de saúde à Rede Nacional de Dados em Saúde, a proteção de dados dos pacientes e o uso do CPF como identificador no SUS. Em até 90 dias após a primeira reunião, deve propor um plano estadual de trabalho.",
+   "quem_afeta": "Gestores e profissionais da saúde pública, secretarias municipais de saúde e fornecedores de sistemas de saúde que se integram ao SUS no RS.",
+   "vigencia": "Na publicação; os membros do comitê são indicados em 15 dias.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 891/2026",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509232",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1509850",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "meio ambiente",
+    "animais",
+    "calamidade"
+   ],
+   "o_que_muda": "O FUNBEA-RS autoriza o repasse extraordinário de R$ 300 mil a Tupanciretã, em calamidade por vendaval, para resgate, abrigo e tratamento veterinário de animais domésticos. O dinheiro não pode pagar pessoal nem obras ou bens permanentes, deve ser usado em até 12 meses e ter as contas prestadas em até 60 dias depois.",
+   "quem_afeta": "Prefeitura e protetores de animais de Tupanciretã.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "RESOLUÇÃO FUNBEA-RS Nº 04 de 25 de novembro de 2026.",
+   "orgao": "Gabinete",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509850",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "laj-2695",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "servidores",
+    "pessoal"
+   ],
+   "o_que_muda": "A prefeitura cessou o adicional de insalubridade de um motorista de veículo pesado (laudo não prevê a função) e reduziu de 40% para 20% o de um marceneiro. Também relotou um servidor da Secretaria de Obras para o Canil Municipal e designou um substituto para o cargo de Diretor de Governo durante férias do titular, de 23/11 a 2/12.",
+   "quem_afeta": "Servidores municipais de Lajeado citados nas portarias; sem efeito geral para a população.",
+   "vigencia": "Na publicação, com efeitos a partir de 23 e 24/11/2026.",
+   "esfera": "municipal",
+   "titulo": "Edição 2695",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "Edição",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado"
+  }
+ ],
+ "demais": {
+  "federal": "Sem dados: a fonte federal estava fora do ar na coleta.",
+  "estadual": "Cerca de 130 outros atos: aposentadorias e revisões de proventos, portarias de pessoal e afastamentos (UERGS, Educação), notificações da AGERGS, repasses pontuais da Saúde e da Defesa Civil a hospitais e municípios, licenças ambientais, súmulas e extratos de contratos, pauta da sessão 41/2026 da AGERGS e decisões da agência sobre rodovias e saneamento em municípios específicos.",
+  "municipal": "Sem outros atos além da edição 2695."
+ },
+ "fontes": {
+  "federal": {
+   "ok": false,
+   "erro": "HTTP 502"
+  },
+  "estadual": {
+   "ok": true,
+   "atos": 135,
+   "lista": 338,
+   "publicados": 508
+  },
+  "municipal": {
+   "ok": true,
+   "atos": 1,
+   "lista": 0,
+   "edicoes": [
+    "2695 (Normal)"
+   ]
+  }
+ },
+ "coletado_em": "2026-11-26T05:59:16.535Z",
+ "totais": {
+  "federal": 0,
+  "estadual": 473,
+  "municipal": 1
+ }
+}

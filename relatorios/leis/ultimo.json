@@ -1,405 +1,98 @@
 {
- "data": "2026-11-24",
- "gerado_em": "2026-11-25T08:15:00Z",
+ "data": "2026-11-25",
+ "gerado_em": "2026-11-26T05:20:00-03:00",
  "resumo": {
-  "federal": "O destaque é a Lei Complementar 239, que dá ao governo federal novos instrumentos para cumprir a meta fiscal: contingenciamento de gastos, corte de benefícios tributários em 20% e limite à compensação de tributos. O Comitê Gestor do Simples Nacional mudou regras para as pequenas empresas (receita, caixa e IBS/CBS). O Ministério da Saúde incluiu o rituximabe e reajustou o pagamento de quimioterapias do SUS. O Conama criou o cadastro e o rastreamento de máquinas de mineração.",
-  "estadual": "No RS, o governo autorizou compras e contratações emergenciais em Tupanciretã (vendaval), a Secretaria da Saúde repassou R$ 15,9 milhões ao Hospital São Vicente de Paulo, de Osório, e ampliou o repasse do TEAcolhe (autismo) em Santiago.",
-  "municipal": "Lajeado publicou 5 leis (criação de vagas de técnico de enfermagem, contratação temporária de bibliotecário e duas denominações) e 2 decretos de crédito suplementar."
+  "federal": "A coleta do Diário Oficial da União falhou neste dia (erro HTTP 502 na fonte), então não há análise federal. Os atos federais de 25/11 não foram avaliados.",
+  "estadual": "No RS, a Secretaria da Saúde criou o Comitê Estadual de Governança da Informação e Saúde Digital, que vai coordenar a política de dados e saúde digital do SUS no estado. O Fundo de Proteção e Bem-Estar de Animais Domésticos (FUNBEA-RS) autorizou R$ 300 mil para Tupanciretã atender animais atingidos pelo vendaval.",
+  "municipal": "Lajeado publicou a edição 2695 do Diário Oficial, com portarias de pessoal: fim e redução de adicional de insalubridade de dois servidores, uma relotação e uma designação por férias."
  },
  "destaques": [
   {
-   "id": "dou-745996277",
-   "relevancia": "alta",
-   "area": "fazenda",
-   "temas": [
-    "finanças públicas",
-    "tributos"
-   ],
-   "o_que_muda": "Muda o arcabouço fiscal. O governo pode bloquear gastos para cumprir a meta e, a partir de 2027, o crescimento real da despesa fica limitado a 2% ao ano nesses casos. A lei também autoriza reduzir a compensação entre tributos federais, com percentuais a serem fixados por ato do Executivo. Para benefícios tributários federais, passa a valer o corte de 20% (alíquota zero ou reduzida mais próxima do padrão, crédito limitado a 80%). Vale para o benefício que depender dessa regra; veículos de pessoas com deficiência ou autismo ficam de fora. Limita ainda algumas despesas até 2030.",
-   "quem_afeta": "Empresas com benefícios fiscais ou que usam compensação de tributos, contabilistas, órgãos públicos federais e quem depende de verbas federais (ciência, educação).",
-   "vigencia": "Na publicação (24/11/2026); parte das regras vale a partir de 2027 e 2028.",
-   "esfera": "federal",
-   "titulo": "LEI COMPLEMENTAR Nº 239, DE 24 DE NOVEMBRO DE 2026",
-   "orgao": "Atos do Poder Legislativo",
-   "tipo": "Lei Complementar",
-   "url": "https://www.in.gov.br/web/dou/-/lei-complementar-n-239-de-24-de-novembro-de-2026-745996277",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-745832719",
-   "relevancia": "alta",
-   "area": "fazenda",
-   "temas": [
-    "tributos",
-    "Simples Nacional"
-   ],
-   "o_que_muda": "Muda regras do Simples Nacional: define o que conta como receita e faturamento (inclui patrocínio, juros e multas cobrados na operação), exige conta gov.br ouro ou prata, ajusta a repartição de IBS e CBS, e obriga quem usa o regime de caixa em 2026 a incluir em dezembro os valores ainda a receber. A Defis de 2026 deve ser entregue até 31/03/2027.",
-   "quem_afeta": "Microempresas e empresas de pequeno porte do Simples Nacional, MEI e contadores.",
-   "vigencia": "Em parte na publicação; regras de IBS/CBS e do regime de caixa passam a valer a partir de 2027.",
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO CGSN Nº 196, DE 16 de NOVEMBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Comitê Gestor do Simples Nacional",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-cgsn-n-196-de-16-de-novembro-de-2026-745832719",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-745833610",
-   "relevancia": "alta",
+   "id": "rs-1509232",
+   "relevancia": "media",
    "area": "saude",
    "temas": [
     "saúde",
-    "oncologia",
+    "dados",
     "SUS"
    ],
-   "o_que_muda": "Inclui o rituximabe (por miligrama) na tabela do SUS para linfoma folicular, linfoma difuso de grandes células B e leucemia linfocítica crônica, com compra e distribuição centralizadas pelo Ministério da Saúde. Reajusta o valor das quimioterapias desses tratamentos, por exemplo, linfoma folicular de 1ª linha de R$ 640,00 para R$ 746,67. Libera R$ 3,3 milhões por ano para estados e municípios.",
-   "quem_afeta": "Hematologistas e oncologistas, hospitais habilitados em oncologia (UNACON e CACON), gestores do SUS e pacientes.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "PORTARIA GM/MS Nº 12.306, DE 28 DE OUTUBRO DE 2026 (*)",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.306-de-28-de-outubro-de-2026-*-745833610",
-   "fonte": "DOU"
+   "o_que_muda": "A Secretaria da Saúde do RS cria um comitê permanente para organizar a informação e a saúde digital no estado. Ele vai acompanhar a integração dos sistemas de saúde à Rede Nacional de Dados em Saúde, a proteção de dados dos pacientes e o uso do CPF como identificador no SUS. Em até 90 dias após a primeira reunião, deve propor um plano estadual de trabalho.",
+   "quem_afeta": "Gestores e profissionais da saúde pública, secretarias municipais de saúde e fornecedores de sistemas de saúde que se integram ao SUS no RS.",
+   "vigencia": "Na publicação; os membros do comitê são indicados em 15 dias.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 891/2026",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509232",
+   "fonte": "DOE-RS"
   },
   {
-   "id": "dou-745833689",
-   "relevancia": "alta",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "oncologia",
-    "SUS"
-   ],
-   "o_que_muda": "Inclui e altera procedimentos de tratamento do câncer de mama HER-2 positivo na tabela do SUS e define os recursos para estados e municípios.",
-   "quem_afeta": "Oncologistas, hospitais habilitados em oncologia e pacientes do SUS.",
-   "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "PORTARIA GM/MS Nº 12.310, DE 28 DE OUTUBRO DE 2026 (*)",
-   "orgao": "Ministério da Saúde / Gabinete do Ministro",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-12.310-de-28-de-outubro-de-2026-*-745833689",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-745805912",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "tributos",
-    "profissões"
-   ],
-   "o_que_muda": "As anuidades dos contadores e técnicos em contabilidade para 2027 aumentaram. A resolução traz também as taxas, os descontos e o valor por número de sócios das sociedades contábeis.",
-   "quem_afeta": "Contadores, técnicos em contabilidade e escritórios contábeis.",
-   "vigencia": "Anuidade de 2027, com vencimento em 31/03/2027; desconto de 5% pelo Domicílio Eletrônico se pedido até 04/12/2026.",
-   "imposto": {
-    "tributo": "Anuidade dos CRCs, contador",
-    "antes": "R$ 697,00 (2026)",
-    "depois": "R$ 749,00 (2027)",
-    "variacao_pct": 7.5,
-    "obs": "Valor anterior da Resolução CFC 1.774/2025, segundo notícias do CFC e de portais contábeis. Para técnicos em contabilidade a anuidade passa de R$ 616,00 para R$ 662,00 (+7,5%)."
-   },
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO CFC Nº 1.807, DE 18 DE NOVEMBRO DE 2026",
-   "orgao": "Entidades de Fiscalização do Exercício das Profissões Liberais / Conselho Federal de Contabilidade",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-cfc-n-1.807-de-18-de-novembro-de-2026-745805912",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-746071009",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "tributos",
-    "calamidade"
-   ],
-   "o_que_muda": "Por causa do vendaval em Tupanciretã (RS), a Procuradoria-Geral da Fazenda Nacional adia parcelas de negociações de dívidas (novembro e dezembro de 2026 passam para fevereiro e março de 2027) e suspende, por 90 dias, protestos de certidões de dívida ativa, inclusão no Cadin e prazos de recursos. O Simples Nacional não entra na prorrogação das parcelas.",
-   "quem_afeta": "Contribuintes de Tupanciretã (RS) com dívida ativa da União.",
-   "vigencia": "Na publicação; suspensões por 90 dias.",
-   "esfera": "federal",
-   "titulo": "Portaria PGFN/MF Nº 3.458, DE 23 DE novembro DE 2026",
-   "orgao": "Ministério da Fazenda / Procuradoria-Geral da Fazenda Nacional",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-pgfn/mf-n-3.458-de-23-de-novembro-de-2026-746071009",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-745996360",
+   "id": "rs-1509850",
    "relevancia": "media",
    "area": "outros",
    "temas": [
     "meio ambiente",
-    "mineração"
+    "animais",
+    "calamidade"
    ],
-   "o_que_muda": "Cria o cadastro nacional de escavadeiras, retroescavadeiras e balsas de dragagem usadas em mineração, com rastreamento. Fabricantes, importadores, vendedores e donos de máquinas deverão se registrar e informar vendas e furtos em até 30 dias. O Ibama regulamenta em 180 dias.",
-   "quem_afeta": "Fabricantes, importadores, revendedores e proprietários de máquinas de mineração.",
-   "vigencia": "Na publicação; registro até 90 dias depois da regulamentação.",
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO CONAMA Nº 519, DE 17 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério do Meio Ambiente e Mudança do Clima / Conselho Nacional do Meio Ambiente",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-conama-n-519-de-17-de-novembro-de-2026-745996360",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "dou-745823636",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "consumidor",
-    "alimentos"
-   ],
-   "o_que_muda": "Define o regulamento de identidade e qualidade do peixe congelado e do filé com aditivos: congelamento rápido, descongelamento e limite de 12% de glaciamento (camada de gelo) sobre o peso líquido.",
-   "quem_afeta": "Indústrias e vendedores de pescado e consumidores de peixe congelado.",
-   "vigencia": "",
-   "esfera": "federal",
-   "titulo": "PORTARIA SDA/MAPA Nº 1.712, DE 23 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Agricultura e Pecuária / Secretaria de Defesa Agropecuária",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-sda/mapa-n-1.712-de-23-de-novembro-de-2026-745823636",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-745821378",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "propriedade intelectual"
-   ],
-   "o_que_muda": "Muda as condições para registrar marca de posição (sinal aplicado em lugar fixo de um objeto, como a posição de uma listra num tênis).",
-   "quem_afeta": "Empresas e titulares de marcas.",
-   "vigencia": "24/11/2026",
-   "esfera": "federal",
-   "titulo": "PORTARIA NORMATIVA INPI/PR Nº 101, DE 16 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços / Instituto Nacional da Propriedade Industrial",
-   "tipo": "Portaria",
-   "url": "https://www.in.gov.br/web/dou/-/portaria-normativa-inpi/pr-n-101-de-16-de-novembro-de-2026-745821378",
-   "fonte": "DOU"
-  },
-  {
-   "id": "dou-746071306",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "sistema financeiro"
-   ],
-   "o_que_muda": "O Conselho Monetário Nacional ajusta regras contábeis dos bancos para dívidas reestruturadas e prorroga até 31/12/2027 o uso da taxa de juros repactuada, com plano de adequação até 30/06/2027.",
-   "quem_afeta": "Bancos e instituições financeiras.",
+   "o_que_muda": "O FUNBEA-RS autoriza o repasse extraordinário de R$ 300 mil a Tupanciretã, em calamidade por vendaval, para resgate, abrigo e tratamento veterinário de animais domésticos. O dinheiro não pode pagar pessoal nem obras ou bens permanentes, deve ser usado em até 12 meses e ter as contas prestadas em até 60 dias depois.",
+   "quem_afeta": "Prefeitura e protetores de animais de Tupanciretã.",
    "vigencia": "Na publicação.",
-   "esfera": "federal",
-   "titulo": "RESOLUÇÃO CMN Nº 5.346, DE 19 DE NOVEMBRO DE 2026",
-   "orgao": "Ministério da Fazenda / Conselho Monetário Nacional",
-   "tipo": "Resolução",
-   "url": "https://www.in.gov.br/web/dou/-/resolucao-cmn-n-5.346-de-19-de-novembro-de-2026-746071306",
-   "fonte": "DOU (extra)"
-  },
-  {
-   "id": "rs-1509473",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "calamidade",
-    "compras públicas"
-   ],
-   "o_que_muda": "Autoriza, por 180 dias, compras e contratações mais rápidas (Lei Federal 14.981/2024) pelo Estado e por Tupanciretã, para enfrentar os danos do vendaval.",
-   "quem_afeta": "Fornecedores e prestadores de serviço do poder público em Tupanciretã.",
-   "vigencia": "Na publicação (24/11/2026), por 180 dias.",
    "esfera": "estadual",
-   "titulo": "DECRETO Nº 59.095, DE 24 DE NOVEMBRO DE 2026.",
-   "orgao": "Atos do Governador",
-   "tipo": "Decretos",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509473",
-   "fonte": "DOE-RS"
-  },
-  {
-   "id": "rs-1508614",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "autismo"
-   ],
-   "o_que_muda": "Altera a habilitação de Santiago no programa TEAcolhe, para pessoas com autismo: repasse mensal de R$ 120.000,00 e meta mínima de 1.600 atendimentos por mês para pelo menos 200 usuários.",
-   "quem_afeta": "Gestores e serviços de saúde de Santiago e famílias de pessoas com autismo.",
-   "vigencia": "Na publicação; efeitos financeiros no mês seguinte.",
-   "esfera": "estadual",
-   "titulo": "PORTARIA SES Nº 893/2026",
+   "titulo": "RESOLUÇÃO FUNBEA-RS Nº 04 de 25 de novembro de 2026.",
    "orgao": "Gabinete",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508614",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509850",
    "fonte": "DOE-RS"
   },
   {
-   "id": "rs-1508988",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "SUS"
-   ],
-   "o_que_muda": "Repassa R$ 15.851.109,78 do Tesouro do Estado ao Hospital São Vicente de Paulo, de Osório, que está sob intervenção estadual, para manter os serviços do SUS de outubro a dezembro de 2026.",
-   "quem_afeta": "Pacientes e profissionais do hospital, no Litoral Norte.",
-   "vigencia": "Na publicação.",
-   "esfera": "estadual",
-   "titulo": "PORTARIA SES Nº 854/2026.",
-   "orgao": "Gabinete",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1508988",
-   "fonte": "DOE-RS"
-  },
-  {
-   "id": "laj-2694-10",
+   "id": "laj-2695",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "homenagem"
+    "servidores",
+    "pessoal"
    ],
-   "o_que_muda": "Dá o nome de Paulo Roberto Schneider ao ginásio de esportes do bairro Moinhos D'Água.",
-   "quem_afeta": "Moradores do bairro.",
-   "vigencia": "Na publicação.",
+   "o_que_muda": "A prefeitura cessou o adicional de insalubridade de um motorista de veículo pesado (laudo não prevê a função) e reduziu de 40% para 20% o de um marceneiro. Também relotou um servidor da Secretaria de Obras para o Canil Municipal e designou um substituto para o cargo de Diretor de Governo durante férias do titular, de 23/11 a 2/12.",
+   "quem_afeta": "Servidores municipais de Lajeado citados nas portarias; sem efeito geral para a população.",
+   "vigencia": "Na publicação, com efeitos a partir de 23 e 24/11/2026.",
    "esfera": "municipal",
-   "titulo": "LEI Nº 12.269, DE 23 DE NOVEMBRO DE 2026.",
+   "titulo": "Edição 2695",
    "orgao": "Prefeitura de Lajeado",
-   "tipo": "LEI",
+   "tipo": "Edição",
    "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2694"
-  },
-  {
-   "id": "laj-2694-11",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "servidores"
-   ],
-   "o_que_muda": "Cria 1 vaga de técnico de enfermagem e atualiza o plano de carreira dos servidores.",
-   "quem_afeta": "Servidores e serviços municipais de saúde.",
-   "vigencia": "Na publicação.",
-   "esfera": "municipal",
-   "titulo": "LEI Nº 12.270, DE 23 DE NOVEMBRO DE 2026.",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "LEI",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2694"
-  },
-  {
-   "id": "laj-2694-13",
-   "relevancia": "media",
-   "area": "saude",
-   "temas": [
-    "saúde",
-    "servidores"
-   ],
-   "o_que_muda": "Cria 2 vagas de técnico de enfermagem e atualiza o plano de carreira dos servidores.",
-   "quem_afeta": "Servidores e serviços municipais de saúde.",
-   "vigencia": "Na publicação.",
-   "esfera": "municipal",
-   "titulo": "LEI Nº 12.272, DE 23 DE NOVEMBRO DE 2026.",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "LEI",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2694"
-  },
-  {
-   "id": "laj-2694-12",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "servidores"
-   ],
-   "o_que_muda": "Autoriza a contratação temporária de 1 bibliotecário.",
-   "quem_afeta": "Biblioteca municipal e candidatos à vaga.",
-   "vigencia": "Na publicação.",
-   "esfera": "municipal",
-   "titulo": "LEI Nº 12.271, DE 23 DE NOVEMBRO DE 2026.",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "LEI",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2694"
-  },
-  {
-   "id": "laj-2694-14",
-   "relevancia": "media",
-   "area": "outros",
-   "temas": [
-    "homenagem"
-   ],
-   "o_que_muda": "Dá o nome de Rua Dr. Aristóteles Bergesch à Rua D52 no loteamento Reserva da Colina, bairro Floresta.",
-   "quem_afeta": "Moradores do loteamento.",
-   "vigencia": "Na publicação.",
-   "esfera": "municipal",
-   "titulo": "LEI Nº 12.273, DE 23 DE NOVEMBRO DE 2026.",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "LEI",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2694"
-  },
-  {
-   "id": "laj-2694-1",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "orçamento"
-   ],
-   "o_que_muda": "Abre crédito suplementar de R$ 800.000,00 para pagar aposentadorias no Fundo de Previdência do Município, com remanejamento de outras dotações do próprio fundo.",
-   "quem_afeta": "Aposentados do município.",
-   "vigencia": "Na publicação.",
-   "esfera": "municipal",
-   "titulo": "DECRETO Nº 14.470, DE 19 DE NOVEMBRO DE 2026.",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "DECRETO",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2694"
-  },
-  {
-   "id": "laj-2694-2",
-   "relevancia": "media",
-   "area": "fazenda",
-   "temas": [
-    "orçamento"
-   ],
-   "o_que_muda": "Abre crédito suplementar no orçamento de 2026 do município.",
-   "quem_afeta": "Prefeitura.",
-   "vigencia": "Na publicação.",
-   "esfera": "municipal",
-   "titulo": "DECRETO Nº 14.471, DE 23 DE NOVEMBRO DE 2026.",
-   "orgao": "Prefeitura de Lajeado",
-   "tipo": "DECRETO",
-   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
-   "fonte": "DOM Lajeado ed. 2694"
+   "fonte": "DOM Lajeado"
   }
  ],
  "demais": {
-  "federal": "Cerca de 110 despachos, 60 resoluções da Anvisa e de outros órgãos sobre casos individuais, decisões, pautas, portarias de repasse a municípios e de ensino superior, e atos de pessoal. Também saíram resoluções do CMN e do Banco Central sobre contabilidade bancária.",
-  "estadual": "Portarias e atos de pessoal, súmulas de contratos, aposentadorias, resoluções da CIB/RS e portarias de habitação.",
-  "municipal": "Editais de convocação e de homologação de concursos."
+  "federal": "Sem dados: a fonte federal estava fora do ar na coleta.",
+  "estadual": "Cerca de 130 outros atos: aposentadorias e revisões de proventos, portarias de pessoal e afastamentos (UERGS, Educação), notificações da AGERGS, repasses pontuais da Saúde e da Defesa Civil a hospitais e municípios, licenças ambientais, súmulas e extratos de contratos, pauta da sessão 41/2026 da AGERGS e decisões da agência sobre rodovias e saneamento em municípios específicos.",
+  "municipal": "Sem outros atos além da edição 2695."
  },
  "fontes": {
   "federal": {
-   "ok": true,
-   "atos": 425,
-   "lista": 2968
+   "ok": false,
+   "erro": "HTTP 502"
   },
   "estadual": {
    "ok": true,
-   "atos": 81,
-   "lista": 410,
-   "publicados": 522
+   "atos": 135,
+   "lista": 338,
+   "publicados": 508
   },
   "municipal": {
    "ok": true,
-   "atos": 14,
+   "atos": 1,
    "lista": 0,
    "edicoes": [
-    "2694 (Normal)"
+    "2695 (Normal)"
    ]
   }
  },
- "coletado_em": "2026-11-25T06:07:11.181Z",
+ "coletado_em": "2026-11-26T05:59:16.535Z",
  "totais": {
-  "federal": 3393,
-  "estadual": 491,
-  "municipal": 14
+  "federal": 0,
+  "estadual": 473,
+  "municipal": 1
  }
 }
