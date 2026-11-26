@@ -1,35 +1,10 @@
 {
- "data": "2026-11-25",
- "gerado_em": "2026-11-25T18:44:08.369Z",
- "pesquisa_data": "2026-11-25",
+ "data": "2026-11-26",
+ "gerado_em": "2026-11-26T09:18:55.987Z",
+ "pesquisa_data": "2026-11-26",
  "indicadores_data": "2026-11-25",
- "resumo_mercado": "Na terça (24), o Ibovespa caiu 0,43%, a 164.089,81 pontos, após a presidente da Petrobras não garantir dividendos extraordinários, e o dólar recuou para perto de R$ 5,90, segundo Money Times. Segundo o InfoMoney, o índice chegou a subir cerca de 1,7% pela manhã e virou à tarde, com a Vale em queda de 5,51%. Em Nova York, o Dow subiu 0,85%, a 50.018,70, mas o S&P 500 recuou 0,50%, a 7.201,09, e o Nasdaq perdeu 1,48%, a 23.733,54, com a Nvidia em baixa de 5,9% após a alta da véspera, segundo a Startup Fortune. Para hoje (25), a FXStreet noticiava queda de cerca de 1% nos futuros do Nasdaq na Ásia. Sobre a China, não encontrei nas fontes consultadas notícia econômica relevante das últimas 24 horas.",
- "fontes_mercado": [
-  {
-   "nome": "Money Times",
-   "titulo": "Tempo real: Ibovespa fecha no vermelho e dólar recua para os R$ 5,90; veja os destaques desta terça-feira (24)",
-   "url": "https://www.moneytimes.com.br/tempo-real-24-11-2026-davs/",
-   "data": "2026-11-24"
-  },
-  {
-   "nome": "InfoMoney",
-   "titulo": "Day Trade hoje (24): Ibovespa testa suporte e minidólar enfrenta barreira nos 6 mil",
-   "url": "https://www.infomoney.com.br/mercados/mercados-day-trade-hoje-analistas-24112026/",
-   "data": "2026-11-24"
-  },
-  {
-   "nome": "Startup Fortune",
-   "titulo": "The Dow closes at 50,019 while Nasdaq drops 1.48% on an AI chip selloff",
-   "url": "https://startupfortune.com/the-dow-closes-at-50019-while-nasdaq-drops-148-on-an-ai-chip-selloff/",
-   "data": "2026-11-24"
-  },
-  {
-   "nome": "FXStreet",
-   "titulo": "Nasdaq FUTs drop by 1% in Asia",
-   "url": "https://www.fxstreet.com/analysis/nasdaq-futs-drop-by-1-in-asia-202611250658",
-   "data": "2026-11-25"
-  }
- ],
+ "resumo_mercado": "Não foi possível confirmar em fontes abertas o fechamento de 25/11 nas bolsas brasileira e americana nem a agenda de hoje, por falha de acesso às páginas das fontes; por isso este resumo não traz números de pregão. Veja os fechamentos nos sites de InfoMoney, Valor e Reuters. Também não foi localizada notícia econômica chinesa datada das últimas 24 horas em fonte confiável.",
+ "fontes_mercado": [],
  "tecnica_data": "2026-11-25",
  "empresas": [
   {
@@ -10598,13 +10573,13 @@
      ]
     }
    },
-   "resumo": "Segundo o Visno Invest, a Renner divulgou o 3T26 em 05/11 com lucro líquido de R$ 246,4 milhões (-11,8% a/a), queda de 49% no resultado de serviços financeiros da Realize e descontinuação das projeções de receita para 2026 e 2027-2030. O JPMorgan classificou o resultado como fraco, em linha, e manteve neutro. O Itaú BBA elevou em 01/06/2026 para compra com alvo de R$ 18; o UBS BB rebaixou para neutro com alvo de R$ 13,50 após o 2T26 (agosto), segundo o Seu Dinheiro. Datas e alvos de algumas casas não foram confirmados. Segundo o Suno e o Clube Acionista, Santander (R$ 19), BB Investimentos (R$ 21,20) e XP (R$ 22) aparecem com compra; o JPMorgan tem neutro com alvo de R$ 16 (setembro). Datas de várias notas não foram confirmadas.",
+   "resumo": "Segundo o Visno Invest, a Renner divulgou o 3T26 em 05/11 com lucro líquido de R$ 246,4 milhões (-11,8% a/a), queda de 49% no resultado de serviços financeiros da Realize e descontinuação das projeções de receita para 2026 e 2027-2030. O JPMorgan classificou o resultado como fraco, em linha, e manteve neutro. O Itaú BBA elevou em 01/06/2026 para compra com alvo de R$ 18; o UBS BB rebaixou para neutro com alvo de R$ 13,50 após o 2T26 (agosto), segundo o Seu Dinheiro. Datas e alvos de algumas casas não foram confirmados. Segundo o Suno e o Clube Acionista, Santander (R$ 19), BB Investimentos (R$ 21,20) e XP (R$ 22) aparecem com compra; o JPMorgan tem neutro com alvo de R$ 16 (setembro). Datas de várias notas não foram confirmadas. Segundo a Genial (05/11/2026), a casa manteve compra com alvo de R$ 14 em 12 meses, em revisão após o balanço.",
    "sentimento": "neutro",
    "consenso": {
-    "compra": 4,
+    "compra": 5,
     "neutro": 2,
     "venda": 0,
-    "preco_alvo_medio": 18.28,
+    "preco_alvo_medio": 17.67,
     "moeda": "BRL",
     "casas": [
      {
@@ -10642,6 +10617,12 @@
       "recomendacao": "neutro",
       "preco_alvo": 13.5,
       "data": null
+     },
+     {
+      "nome": "Genial",
+      "recomendacao": "compra",
+      "preco_alvo": 14,
+      "data": "2026-11-05"
      }
     ]
    },
@@ -10676,9 +10657,15 @@
      "titulo": "Lucro cai 11,8% no 3T26 e Lojas Renner (LREN3) abandona metas de crescimento",
      "url": "https://investidor10.com.br/noticias/btg-sinaliza-virada-de-chave-para-lojas-renner-lren3-e-acoes-disparam-107363/",
      "data": null
+    },
+    {
+     "nome": "Genial Investimentos",
+     "titulo": "Lojas Renner LREN3 Resultado do 3T26: Guidance Cai, Receita Decepciona e Lucro Comparável Também Fica Abaixo",
+     "url": "https://analisa.genialinvestimentos.com.br/acoes/LREN3/Lojas-Renner-LREN3--Resultado-do-3T26-Guidance-Cai-Receita-Decepciona-e-Lucro-Comparavel-Tambem-Fica-Abaixo/",
+     "data": "2026-11-05"
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-26"
   },
   {
    "ticker": "TAEE11",
