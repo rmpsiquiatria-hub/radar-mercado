@@ -1,23 +1,10 @@
 {
  "data": "2026-11-27",
- "gerado_em": "2026-11-27T10:15:05.886Z",
+ "gerado_em": "2026-11-27T15:17:24.380Z",
  "pesquisa_data": "2026-11-27",
  "indicadores_data": "2026-11-27",
- "resumo_mercado": "Não foi possível confirmar o fechamento do Ibovespa de 26/11 nem os destaques de hoje para a B3: as buscas não retornaram dados datados desse pregão. Nos EUA, o último fechamento confirmado é o de 18/11: Dow -1,1% (50.198,17), S&P 500 -0,2% (7.323,63) e Nasdaq +0,4% (24.429,88); não foram achados fechamentos de 19 a 27/11. Pelo calendário, 26/11 foi feriado de Ação de Graças nos EUA. Na China, segundo reportagem de 11/11 (Jamaica Gleaner), o superávit comercial passou de US$ 1 trilhão pelo segundo ano seguido e as exportações para os EUA subiram 32,9% em outubro; não foi achada notícia chinesa das últimas 24h.",
- "fontes_mercado": [
-  {
-   "nome": "La Nación (How major US stock indexes fared)",
-   "titulo": "How major US stock indexes fared Wednesday 11/18/2026",
-   "url": "https://www.lanacion.com.ar/usa/how-major-us-stock-indexes-fared-wednesday-11182026-nid18112026/",
-   "data": "2026-11-18"
-  },
-  {
-   "nome": "Jamaica Gleaner",
-   "titulo": "China's trade surplus surpasses US$1 trillion for second straight year",
-   "url": "https://jamaica-gleaner.com/article/business/20261111/chinas-trade-surplus-surpasses-us1-trillion-second-straight-year-exports",
-   "data": "2026-11-11"
-  }
- ],
+ "resumo_mercado": "O Ibovespa fechou em 26/11 com alta de 6,07%, a 176.800 pontos, e o dólar recuou 1,39%, a R$ 5,8219. Nos EUA, o último fechamento foi em 25/11, antes do feriado de Ação de Graças: S&P 500 a 7.182,78 pontos (-0,25%), Dow Jones a 50.182,95 (+0,33%) e Nasdaq a 23.585,80 (-0,62%). As fontes consultadas não trouxeram explicação para o movimento da bolsa brasileira nem agenda específica para hoje. Na China, não houve notícia econômica relevante identificada nas últimas 24 horas; Xangai fechou em alta de 3,73%, a 3.606,49 pontos, e o Hang Seng subiu 2,11%, a 22.694,77, em 27/11.",
+ "fontes_mercado": [],
  "tecnica_data": "2026-11-27",
  "empresas": [
   {
@@ -868,7 +855,7 @@
      ]
     }
    },
-   "resumo": "PETR3 é a ação ordinária da Petrobras e as fontes tratam as recomendações em conjunto com a PETR4. Segundo o Investidor10 e o Seu Dinheiro, a Petrobras divulgou o 3T26 em 10/11, com lucro líquido de cerca de R$ 39,7 bilhões, receita abaixo do consenso e dívida líquida de US$ 57,8 bilhões; os veículos divergem na base de comparação do lucro. O conselho aprovou R$ 15,3 bilhões em proventos (R$ 1,1873 por ação), abaixo do que Itaú BBA (US$ 4,2 bi), BTG e XP (US$ 3,6 bi) e Safra (US$ 3,1 bi) projetavam em parte; a Genial manteve recomendação de manter e viu o dividendo em linha com a política, porém ligeiramente abaixo da sua estimativa. Segundo a Genial e outras fontes, investimentos maiores e queda do Brent são pontos de atenção. Não há recomendações datadas dos últimos 6 meses específicas para PETR3, então o consenso segue zerado. Segundo o Money Times (09/11), o plano estratégico da estatal está previsto para 23/11 e é apontado como principal evento para as estimativas; o Citi, segundo a bpmoney, manteve neutro e cortou o alvo da PETR4 de R$ 56 para R$ 48 após o 3T, citando resultado abaixo do esperado e capex maior (data não confirmada). Segundo o Estadão, citado pela brapi, o plano 2027-2031 deve ter investimentos de US$ 115 bi a US$ 120 bi (contra US$ 109 bi no plano 2026-2030), ainda sem confirmação oficial; a presidente Magda Chambriard disse que o plano deve detalhar a busca por autossuficiência em diesel.",
+   "resumo": "PETR3 é a ação ordinária da Petrobras e as fontes tratam as recomendações em conjunto com a PETR4. Segundo O Tempo (Folhapress) e a Forbes Brasil, a Petrobras aprovou o plano 2027-2031 com US$ 122 bilhões em investimentos (cerca de 12% acima do plano anterior) e previsão de US$ 55 a 60 bilhões em dividendos ordinários no período; segundo o Investidor10, houve ainda R$ 15,6 bilhões em dividendos extraordinários a pagar em dezembro (ex-dividendos em 8/12). Segundo o Safra e o Investidor10, o mercado reagiu com cautela ao aumento do capex, e a presidente Magda Chambriard negou que o plano eleve a dívida. No 3T26, segundo Investidor10 e Seu Dinheiro, o lucro foi de cerca de R$ 39,7 bilhões, com receita abaixo do consenso; o Citi, segundo a bpmoney, manteve neutro e cortou o alvo da PETR4 de R$ 56 para R$ 48. Não há recomendações datadas dos últimos 6 meses específicas para PETR3, então o consenso segue zerado.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 0,
@@ -878,8 +865,33 @@
     "moeda": "BRL",
     "casas": []
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "fato_relevante",
+     "descricao": "Petrobras aprovou plano 2027-2031 com US$ 122 bi em investimentos e US$ 55 a 60 bi em dividendos ordinários previstos, segundo as fontes.",
+     "fonte": "O Tempo",
+     "data": "2026-11-25"
+    }
+   ],
    "fontes": [
+    {
+     "nome": "O Tempo",
+     "titulo": "Petrobras eleva investimento para US$ 122 bi no plano 2027–2031 e prevê até US$ 60 bi em dividendos",
+     "url": "https://www.otempo.com.br/economia/2026/11/25/petrobras-eleva-investimento-para-us-122-bi-no-plano-2027-2031-e-preve-ate-us-60-bi-em-dividendos",
+     "data": "2026-11-25"
+    },
+    {
+     "nome": "Investidor10",
+     "titulo": "Petrobras (PETR4) investirá de US$ 122 bilhões entre 2027 e 2031; saiba o saldo de dividendos",
+     "url": "https://investidor10.com.br/amp/noticias/petrobras-petr4-investira-de-us-122-bilhoes-entre-2027-e-2031-saiba-o-saldo-de-dividendos-124046/",
+     "data": "2026-11-25"
+    },
+    {
+     "nome": "Safra",
+     "titulo": "Petrobras eleva investimentos e reforça perspectiva de dividendos",
+     "url": "https://oespecialista.safra.com.br/petrobras-petr4-plano-investimentos-2027-2031-dividendos/",
+     "data": null
+    },
     {
      "nome": "InfoMoney",
      "titulo": "Petrobras: JPMorgan reforça compra e vê queda recente das ações como oportunidade",
@@ -929,7 +941,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-11-23"
+   "atualizado_em": "2026-11-27"
   },
   {
    "ticker": "AXIA3",
@@ -11245,13 +11257,13 @@
      ]
     }
    },
-   "resumo": "Segundo o Visno Invest e a BP Money, a Cosan teve lucro de cerca de R$ 190 milhões no 3T26, revertendo o prejuízo do mesmo período de 2025, com maior equivalência patrimonial das investidas e menor despesa financeira; a dívida líquida expandida foi de R$ 9,5 bilhões. Foi noticiada a saída do presidente Marcelo Martins em janeiro de 2027. O BofA tem compra com alvo de R$ 5,50, o Bradesco BBI compra com alvo de R$ 7 e o Goldman neutro; não há revisões datadas após o 3T26.",
+   "resumo": "Segundo o Visno Invest e a BP Money, a Cosan teve lucro de cerca de R$ 190 milhões no 3T26, revertendo o prejuízo do mesmo período de 2025, com maior equivalência patrimonial das investidas e menor despesa financeira; a dívida líquida expandida foi de R$ 9,5 bilhões. Foi noticiada a saída do presidente Marcelo Martins em janeiro de 2027. O BofA tem compra com alvo de R$ 5,50, o Bradesco BBI compra com alvo de R$ 7 e o Goldman neutro; não há revisões datadas após o 3T26. O BTG Pactual reiterou compra com preço-alvo de R$ 8,00 após o 3T26, segundo sua página de research.",
    "sentimento": "neutro",
    "consenso": {
-    "compra": 2,
+    "compra": 3,
     "neutro": 1,
     "venda": 0,
-    "preco_alvo_medio": 6.25,
+    "preco_alvo_medio": 6.83,
     "moeda": "BRL",
     "casas": [
      {
@@ -11270,6 +11282,12 @@
       "nome": "Bradesco BBI",
       "recomendacao": "compra",
       "preco_alvo": 7,
+      "data": null
+     },
+     {
+      "nome": "BTG Pactual",
+      "recomendacao": "compra",
+      "preco_alvo": 8,
       "data": null
      }
     ]
@@ -11299,9 +11317,15 @@
      "titulo": "CSAN3: Goldman mantém recomendação neutra para Cosan, mas vê melhora gradual",
      "url": "https://trademap.com.br/noticias/news-8261087",
      "data": null
+    },
+    {
+     "nome": "BTG Pactual",
+     "titulo": "CSAN3 - Cotação e análises (compra, alvo R$ 8,00)",
+     "url": "https://content.btgpactual.com/research/ativo/csan3",
+     "data": null
     }
    ],
-   "atualizado_em": "2026-11-17"
+   "atualizado_em": "2026-11-27"
   },
   {
    "ticker": "CPFE3",
@@ -13582,7 +13606,7 @@
       "nome": "Bank of America",
       "recomendacao": "compra",
       "preco_alvo": 11,
-      "data": null
+      "data": "2026-11-10"
      },
      {
       "nome": "Goldman Sachs",
@@ -17432,13 +17456,13 @@
      ]
     }
    },
-   "resumo": "Após o balanço do 3T do ano fiscal 2027 (divulgado em 17/11/2026, o primeiro após a renúncia de Jensen Huang como CEO em 12/11), resumos de mercado citam Barclays (overweight, US$ 210), Goldman Sachs (compra, US$ 220), Citi (compra, US$ 225), Cantor (US$ 250), Jefferies (compra, US$ 250), Wedbush (elevou de US$ 275 para US$ 293), JPMorgan (elevou de US$ 215 para US$ 230), BofA (compra, US$ 280), TD Cowen (compra, US$ 200) e Melius (elevou de US$ 300 para US$ 320). A Newsquawk descreve os alvos como em grande parte reduzidos apesar do resultado e da projeção fortes, e a Barclays diz que a sucessão na liderança segue indefinida. Os números divergem entre as fontes (por exemplo, Jefferies aparece com alta e com corte para US$ 250), e as datas exatas das revisões não foram confirmadas; a data usada (18/11) é aproximada. Segundo a Gotrade (citando a Reuters) e o Star-Advertiser, a ação caiu cerca de 2,9% em 18/11, para cerca de US$ 151, com investidores preocupados com a sucessão de Huang, e Colette Kress é citada como CEO interina.",
+   "resumo": "Após o balanço do 3T do ano fiscal 2027 (divulgado em 17/11/2026, o primeiro após a renúncia de Jensen Huang como CEO em 12/11), resumos de mercado citam Barclays (overweight, US$ 210), Goldman Sachs (compra, US$ 220), Citi (compra, US$ 225), Cantor (US$ 250), Jefferies (compra, US$ 250), Wedbush (elevou de US$ 275 para US$ 293), JPMorgan (elevou de US$ 215 para US$ 230), BofA (compra, US$ 280), TD Cowen (compra, US$ 200) e Melius (elevou de US$ 300 para US$ 320). A Newsquawk descreve os alvos como em grande parte reduzidos apesar do resultado e da projeção fortes, e a Barclays diz que a sucessão na liderança segue indefinida. Os números divergem entre as fontes (por exemplo, Jefferies aparece com alta e com corte para US$ 250), e as datas exatas das revisões não foram confirmadas; a data usada (18/11) é aproximada. Segundo a Gotrade (citando a Reuters) e o Star-Advertiser, a ação caiu cerca de 2,9% em 18/11, para cerca de US$ 151, com investidores preocupados com a sucessão de Huang, e Colette Kress é citada como CEO interina. Segundo a Stocktwits (18/11), a Wells Fargo reduziu o alvo de US$ 300 para US$ 250 mantendo overweight; Barclays (overweight, US$ 210) e Citi (compra, US$ 225) foram mantidos.",
    "sentimento": "positivo",
    "consenso": {
-    "compra": 10,
+    "compra": 11,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 247.8,
+    "preco_alvo_medio": 248,
     "moeda": "USD",
     "casas": [
      {
@@ -17499,6 +17523,12 @@
       "nome": "Melius Research",
       "recomendacao": "compra",
       "preco_alvo": 320,
+      "data": "2026-11-18"
+     },
+     {
+      "nome": "Wells Fargo",
+      "recomendacao": "compra",
+      "preco_alvo": 250,
       "data": "2026-11-18"
      }
     ]
@@ -17582,9 +17612,15 @@
      "titulo": "Nvidia retreats as strong outlook fails to dispel uncertainty",
      "url": "https://www.staradvertiser.com/2026/11/18/breaking-news/nvidia-retreats-as-strong-outlook-fails-to-dispel-uncertainty/",
      "data": "2026-11-18"
+    },
+    {
+     "nome": "Stocktwits",
+     "titulo": "NVDA Premarket: Nvidia Leadership Decision Remains ‘In Limbo,’ Says Barclays, But Earnings Draw Wall Street Praise",
+     "url": "https://stocktwits.com/news-articles/markets/equity/nvda-premarket-nvidia-leadership-decision-remains-in-limbo/cNbgbVYR9Lg",
+     "data": "2026-11-18"
     }
    ],
-   "atualizado_em": "2026-11-24"
+   "atualizado_em": "2026-11-27"
   },
   {
    "ticker": "MSFT",
@@ -17718,13 +17754,13 @@
      ]
     }
    },
-   "resumo": "A Microsoft reportou em 28/10/2026 o 1º trimestre fiscal de 2027: receita de US$ 92,3 bilhões (+19%), Microsoft Cloud de US$ 63,9 bilhões (+30%) e Azure com alta de cerca de 48%, acima dos 44% a 45% projetados, segundo veículos como SiliconANGLE e Stocktwits. A empresa projeta receita de US$ 96 bilhões a US$ 97,1 bilhões no 2º trimestre fiscal e crescimento do Azure de ao menos 49%. As ações subiram cerca de 4% a 5% no after-hours; o fluxo de caixa livre caiu para cerca de US$ 18,6 bilhões (de US$ 25,7 bilhões), por causa dos gastos com infraestrutura de IA. Antes do balanço, Bernstein (US$ 662, Outperform), UBS (US$ 675), BMO (US$ 600) e Guggenheim (US$ 586) tinham alvos acima de US$ 580, segundo textos de estilo Benzinga; o consenso atualizado pós-balanço não foi localizado. Agregadores citados pela Tickeron (08/11) mostram alvo médio perto de US$ 634 entre cerca de 58 analistas, em faixa de US$ 500 a US$ 750; a ação fechou a US$ 530,61 em 06/11. Segundo a 24/7 Wall St. (13/11), o consenso de analistas reunia 12 strong buy, 40 buy e 5 hold, sem recomendação de venda, com alvo médio de US$ 636,12. Segundo busca em veículos como o 24/7 Wall St., o Citi manteve compra com alvo de US$ 680 em 12/11/2026.",
+   "resumo": "A Microsoft reportou em 28/10/2026 o 1º trimestre fiscal de 2027: receita de US$ 92,3 bilhões (+19%), Microsoft Cloud de US$ 63,9 bilhões (+30%) e Azure com alta de cerca de 48%, acima dos 44% a 45% projetados, segundo veículos como SiliconANGLE e Stocktwits. A empresa projeta receita de US$ 96 bilhões a US$ 97,1 bilhões no 2º trimestre fiscal e crescimento do Azure de ao menos 49%. As ações subiram cerca de 4% a 5% no after-hours; o fluxo de caixa livre caiu para cerca de US$ 18,6 bilhões (de US$ 25,7 bilhões), por causa dos gastos com infraestrutura de IA. Antes do balanço, Bernstein (US$ 662, Outperform), UBS (US$ 675), BMO (US$ 600) e Guggenheim (US$ 586) tinham alvos acima de US$ 580, segundo textos de estilo Benzinga; o consenso atualizado pós-balanço não foi localizado. Agregadores citados pela Tickeron (08/11) mostram alvo médio perto de US$ 634 entre cerca de 58 analistas, em faixa de US$ 500 a US$ 750; a ação fechou a US$ 530,61 em 06/11. Segundo a 24/7 Wall St. (13/11), o consenso de analistas reunia 12 strong buy, 40 buy e 5 hold, sem recomendação de venda, com alvo médio de US$ 636,12. Citi manteve compra com alvo de US$ 680 em 12/11/2026. Em 20/11/2026, segundo resultados de busca, Mizuho (US$ 640) e UBS (US$ 650) reiteraram compra.",
    "sentimento": "positivo",
    "consenso": {
     "compra": 9,
     "neutro": 0,
     "venda": 0,
-    "preco_alvo_medio": 632.56,
+    "preco_alvo_medio": 629.78,
     "moeda": "USD",
     "casas": [
      {
@@ -17736,8 +17772,8 @@
      {
       "nome": "UBS",
       "recomendacao": "compra",
-      "preco_alvo": 675,
-      "data": "2026-10-15"
+      "preco_alvo": 650,
+      "data": "2026-11-20"
      },
      {
       "nome": "BMO Capital",
@@ -17779,11 +17815,18 @@
       "nome": "Mizuho",
       "recomendacao": "compra",
       "preco_alvo": 640,
-      "data": "2026-10-28"
+      "data": "2026-11-20"
      }
     ]
    },
-   "mudancas": [],
+   "mudancas": [
+    {
+     "tipo": "outro",
+     "descricao": "Mizuho (alvo US$ 640) e UBS (alvo US$ 650) reiteraram compra em 20/11, segundo resultado de busca.",
+     "fonte": "24/7 Wall St. / resultados de busca",
+     "data": "2026-11-20"
+    }
+   ],
    "fontes": [
     {
      "nome": "24/7 Wall St.",
@@ -17852,7 +17895,7 @@
      "data": null
     }
    ],
-   "atualizado_em": "2026-11-23"
+   "atualizado_em": "2026-11-27"
   }
  ]
 }
