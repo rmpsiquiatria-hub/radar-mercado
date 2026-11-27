@@ -67,6 +67,8 @@ jobs:
             node scripts/indicadores.mjs && node scripts/tecnica.mjs && node scripts/montar-relatorio.mjs - && node scripts/validar-relatorio.mjs \
               || { echo "Atualização falhou; envia com os dados existentes."; git checkout -- relatorios/; }
           fi
+          # index and dollar closes for the table under the market summary, always fresh at send time
+          node scripts/mercado.mjs || echo "Fechamentos indisponíveis; o e-mail sai sem a tabela."
           node scripts/email.mjs
           echo "$today" > relatorios/email-enviado.txt
           git config user.name "radar-mercado-bot"
