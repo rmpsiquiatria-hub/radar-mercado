@@ -17,6 +17,13 @@ Radar do Mercado (radar-mercado-xi.vercel.app). O site só lê arquivos JSON des
 
 1. Atualize os indicadores: `node scripts/indicadores.mjs`
    (gera `relatorios/indicadores.json` com Ibovespa do dia + `relatorios/acompanhar.json`).
+   Depois leia `relatorios/mercado.json`: o fechamento do último pregão do Ibovespa, do dólar, do S&P 500,
+   do Dow Jones, do Nasdaq e das bolsas de Xangai e Hong Kong (data, pontos e variação %), baixado às 05:30
+   pelo GitHub direto da fonte de cotações. **Os números do `resumo_mercado` saem deste arquivo**, nunca
+   de busca na internet. Se o arquivo não for de hoje, rode `node scripts/mercado.mjs` para atualizá-lo.
+   A busca serve só para explicar o **porquê** dos movimentos e para a notícia da China. Se a busca não
+   achar o motivo, escreva só os números (ex.: "o Ibovespa subiu 6,07% em 26/11, a 176.800 pontos") sem
+   inventar causa, e não escreva que não foi possível confirmar o fechamento.
 2. Leia `relatorios/ultimo.json` (relatório anterior, se existir). Para cada empresa, a pesquisa
    anterior é o ponto de partida: atualize só o que mudou e mantenha o resto, ajustando `atualizado_em`
    somente quando houver informação nova.
@@ -46,7 +53,7 @@ Radar do Mercado (radar-mercado-xi.vercel.app). O site só lê arquivos JSON des
 {
   "data": "2026-10-26",
   "gerado_em": "2026-10-26T07:12:00-03:00",
-  "resumo_mercado": "4 a 5 frases curtas (máximo 800 caracteres) sobre o que move a bolsa brasileira e a americana hoje e, na última frase, a principal notícia econômica da China (dados, banco central, governo, comércio), segundo as fontes.",
+  "resumo_mercado": "4 a 5 frases curtas (máximo 800 caracteres): o fechamento do Ibovespa, do dólar e das bolsas americanas com os números de mercado.json, o que moveu a bolsa brasileira e a americana e, na última frase, a principal notícia econômica da China (dados, banco central, governo, comércio), segundo as fontes.",
   "empresas": [
     {
       "ticker": "PETR4",

@@ -12,6 +12,8 @@ const rel = new URL("../relatorios/", import.meta.url);
 const rep = JSON.parse(await readFile(new URL("ultimo.json", rel), "utf8"));
 const cfg = JSON.parse(await readFile(new URL("config.json", rel), "utf8"));
 // One line on what each company does (relatorios/descricoes.json, kept by hand).
+// Last closes of the indices and the dollar (scripts/mercado.mjs, run by the 05:30 data job)
+const MERC = await readFile(new URL("mercado.json", rel), "utf8").then(JSON.parse).catch(() => null);
 const DESC = await readFile(new URL("descricoes.json", rel), "utf8").then(JSON.parse).catch(() => ({}));
 // The previous report (the latest file in historico/ dated before this one), to show only what changed.
 const prevRep = await (async () => {
@@ -234,6 +236,18 @@ function overviewTable() {
   </table></div>${hint(`★ sua lista · <b>Fundamentalista</b>: C·N·V = quantas casas recomendam compra, neutro e venda; Pot. = potencial até o preço-alvo médio; P/L e dividendos. <b>Técnica</b>: tendência no gráfico ${FRAME_LABEL[TF].toLowerCase()} (▲ alta, ▼ baixa, ■ neutro).`)}`;
 }
 
+function fechamentos() {
+  // only closes from the last 5 days, so a stale file never shows old numbers as today's
+  const l = (MERC?.itens || []).filter(i => (Date.now() - new Date(i.data + "T12:00:00Z")) / 864e5 < 5);
+  if (!l.length) return "";
+  const n = (x, d) => x.toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const td = (t, extra = "") => `<td style="padding:5px 6px;border-bottom:1px solid ${LINE};white-space:nowrap;${extra}">${t}</td>`;
+  return `<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:13px;width:100%;margin:0 0 6px">
+    <tr><th style="text-align:left;padding:5px 6px;font-size:11px;color:${MUTED};border-bottom:2px solid ${LINE}">Fechamento</th><th style="text-align:left;padding:5px 6px;font-size:11px;color:${MUTED};border-bottom:2px solid ${LINE}">Dia</th><th style="text-align:right;padding:5px 6px;font-size:11px;color:${MUTED};border-bottom:2px solid ${LINE}">Valor</th><th style="text-align:right;padding:5px 6px;font-size:11px;color:${MUTED};border-bottom:2px solid ${LINE}">Variação</th></tr>
+    ${l.map(i => `<tr>${td(`${i.nome} <span style="color:${MUTED}">· ${i.regiao}</span>`)}${td(i.data.slice(8, 10) + "/" + i.data.slice(5, 7))}${td(i.unidade === "R$" ? "R$ " + n(i.fechamento, 2) : n(i.fechamento, 0) + " pts", "text-align:right")}${td((i.variacao > 0 ? "▲ +" : i.variacao < 0 ? "▼ " : "") + n(i.variacao, 2) + "%", `text-align:right;color:${i.variacao > 0 ? GREEN : i.variacao < 0 ? RED : MUTED}`)}</tr>`).join("")}
+  </table>${hint("Números baixados direto da fonte de cotações (Yahoo Finance), sem IA. Cada mercado aparece com o dia do seu último pregão encerrado.")}`;
+}
+
 const dayLong = dateBR(rep.data, { weekday: "long", day: "2-digit", month: "long" });
 const nMud = buysNew.length + warnsNew.length + sairam.length;
 const subject = `📅 Análise DIÁRIA · ${dateBR(rep.data, { day: "2-digit", month: "2-digit" })} · ${prevRep ? `${nMud} ${nMud === 1 ? "mudança" : "mudanças"} nos sinais` : `${buys.length} sinais de compra, ${warns.length} de atenção`} · ${convBuy.length + convSell.length} onde as análises concordam`;
@@ -247,18 +261,16 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   ${staleResearch ? `<p style="background:#fff3dc;color:${AMBER};padding:10px 12px;border-radius:8px;font-size:14px"><b>Atenção:</b> a pesquisa de notícias de hoje não rodou; recomendações e notícias são de ${dateBR(rep.pesquisa_data)}. Preços, indicadores e análise técnica estão atualizados.</p>` : ""}
   ${h2("🌎 Resumo do mercado")}
   <p style="font-size:15px;margin:0 0 14px">${esc(rep.resumo_mercado)}</p>
+  ${fechamentos()}
 
   <div style="margin:26px 0 0;padding:10px 14px;border-radius:8px;background:#0f766e;color:#ffffff;font-weight:700;font-size:16px">📊 PARTE 1 · ANÁLISE FUNDAMENTALISTA</div>
-  ${hint("Baseada nas recomendações publicadas pelas casas de análise (resumidas por IA, com links no site) e nos indicadores das empresas (Fundamentus).")}
 
   ${prevRep ? `<p style="background:#e0f2ef;border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0 0">Aqui entram <b>só as mudanças</b> desde o relatório de ${prevDia}: empresas que ganharam um sinal ou trocaram de lado. Hoje há <b>${buys.length} sinais de compra</b> e <b>${warns.length} pontos de atenção</b> ao todo; ${buys.length + warns.length - buysNew.length - warnsNew.length} continuam iguais a ${prevDia} e estão no site.</p>${botao(siteSinais, `📋 Ver todas as recomendações (${buys.length + warns.length})`)}` : ""}
 
   ${h2(`🟢 ${prevRep ? "Novos sinais de compra" : "Sinais de compra"} (${buysNew.length})`)}
-  ${hint(`A maioria das casas consultadas (mínimo ${C.min_casas}) recomenda compra <b>e</b> o papel passa nos critérios: P/L ≤ ${C.pl_max}, dividendos ≥ ${C.dy_min}%, ROE ≥ ${C.roe_min}%, dívida líq./patrimônio ≤ ${C.div_max}.`)}
   ${signalRows(buysNew, "compra")}
 
   ${h2(`🟠 ${prevRep ? "Novos pontos de atenção" : "Pontos de atenção"} (${warnsNew.length})`)}
-  ${hint("Recomendações de venda, rebaixamentos recentes ou notícias negativas com indicadores fracos.")}
   ${signalRows(warnsNew, "atencao")}
 
   ${sairam.length ? `${h2(`⚪ Deixaram de ter sinal (${sairam.length})`)}${hint("Tinham sinal no relatório anterior e hoje não têm nenhum (mudou a recomendação de alguma casa, um indicador ou a notícia).")}<ul style="margin:0;padding-left:18px;font-size:14px">${sairam.map(p => `<li style="margin:4px 0">${link(p)} ${esc(p.nome)} — era ${KIND_TXT[prevKind.get(p.ticker)]}, agora sem sinal${sig.some(([e]) => e.ticker === p.ticker) ? "" : " (saiu do relatório)"}</li>`).join("")}</ul>` : ""}
@@ -267,11 +279,9 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
   ${changesSection()}
 
   <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#6d28d9;color:#ffffff;font-weight:700;font-size:16px">📈 PARTE 2 · ANÁLISE TÉCNICA · gráfico ${FRAME_LABEL[TF].toLowerCase()} · ${techPeriod}</div>
-  ${hint(`Calculada por programa a partir dos preços, sem IA. Sinais considerados: cruzamento das médias curtas (MME 9 × MMS 21), golden/death cross (MMS 50 × MMS 200) e candles de reversão. Cada candle deste gráfico representa um dia de negociação. Aos sábados chega outro e-mail, com a análise técnica da semana no gráfico semanal.`)}
   ${techSection(TF)}
 
   <div style="margin:30px 0 0;padding:10px 14px;border-radius:8px;background:#b45309;color:#ffffff;font-weight:700;font-size:16px">🎯 PARTE 3 · ONDE AS DUAS ANÁLISES CONCORDAM</div>
-  ${hint(`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>. Entram <b>todos</b> os sinais fundamentalistas em vigor (${buys.length} de compra, ${warns.length} de atenção), mesmo os que não mudaram desde ontem. Do lado técnico, vale um alerta recente de compra ou de venda; sem alerta, vale a tendência. Cruza a fundamentalista (pesquisa das 6h de <b>${researchDay}</b>${closeDay ? `, preços de ${closeDay}` : ""}) com o gráfico ${FRAME_LABEL[TF].toLowerCase()} <b>${techDa}</b>.`)}
   ${h2(`▲ Para o lado da compra (${convBuy.length})`)}
   ${convRows(convBuy)}
   ${h2(`▼ Para o lado da venda (${convSell.length})`)}
@@ -298,6 +308,15 @@ const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><met
     <tr><td>${datesBox}</td></tr>
     <tr><td style="font-size:13px;color:${MUTED};padding:0 4px">As duas se complementam: uma empresa pode ser boa (fundamentalista positiva) e o preço ainda estar caindo (técnica negativa), ou o contrário. A <b>Parte 3</b> mostra só os ativos em que as duas apontam para o mesmo lado.</td></tr>
   </table>
+
+  ${h2("📖 O que entra em cada parte")}
+  <div style="font-size:13px;color:#33414b">
+    <p style="margin:0 0 10px"><b>📊 Parte 1 · Análise fundamentalista</b><br>${"Baseada nas recomendações publicadas pelas casas de análise (resumidas por IA, com links no site) e nos indicadores das empresas (Fundamentus)."}</p>
+    <p style="margin:0 0 10px"><b>🟢 Sinais de compra</b><br>${`A maioria das casas consultadas (mínimo ${C.min_casas}) recomenda compra <b>e</b> o papel passa nos critérios: P/L ≤ ${C.pl_max}, dividendos ≥ ${C.dy_min}%, ROE ≥ ${C.roe_min}%, dívida líq./patrimônio ≤ ${C.div_max}.`}</p>
+    <p style="margin:0 0 10px"><b>🟠 Pontos de atenção</b><br>${"Recomendações de venda, rebaixamentos recentes ou notícias negativas com indicadores fracos."}</p>
+    <p style="margin:0 0 10px"><b>📈 Parte 2 · Análise técnica</b><br>${`Calculada por programa a partir dos preços, sem IA. Sinais considerados: cruzamento das médias curtas (MME 9 × MMS 21), golden/death cross (MMS 50 × MMS 200) e candles de reversão. Cada candle deste gráfico representa um dia de negociação. Aos sábados chega outro e-mail, com a análise técnica da semana no gráfico semanal.`}</p>
+    <p style="margin:0 0 10px"><b>🎯 Parte 3 · Onde as duas análises concordam</b><br>${`Só os ativos em que a análise fundamentalista e a técnica (gráfico ${FRAME_LABEL[TF].toLowerCase()}) apontam para o <b>mesmo lado</b>. Entram <b>todos</b> os sinais fundamentalistas em vigor (${buys.length} de compra, ${warns.length} de atenção), mesmo os que não mudaram desde ontem. Do lado técnico, vale um alerta recente de compra ou de venda; sem alerta, vale a tendência. Cruza a fundamentalista (pesquisa das 6h de <b>${researchDay}</b>${closeDay ? `, preços de ${closeDay}` : ""}) com o gráfico ${FRAME_LABEL[TF].toLowerCase()} <b>${techDa}</b>.`}</p>
+  </div>
 
   <p style="margin:28px 0 8px"><a href="${esc(cfg.site)}" style="display:inline-block;background:#0f766e;color:#ffffff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700">Abrir o painel completo</a></p>
   <p style="font-size:12px;color:#8c99a3;margin-top:24px">Resumo automático do que fontes publicadas dizem, feito por IA (pode conter erros — confira os links no site). Indicadores: Fundamentus. Cotações e candles: Yahoo Finance. Análise técnica calculada por programa, sem IA. Não é recomendação de investimento.</p>

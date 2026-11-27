@@ -28,6 +28,7 @@ jobs:
         run: |
           node scripts/indicadores.mjs
           node scripts/tecnica.mjs
+          node scripts/mercado.mjs || echo "fechamentos indisponíveis hoje"
           node scripts/montar-relatorio.mjs -
           node scripts/validar-relatorio.mjs
       - name: Publicar

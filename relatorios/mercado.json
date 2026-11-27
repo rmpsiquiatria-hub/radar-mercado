@@ -1,0 +1,69 @@
+{
+ "gerado_em": "2026-11-27T14:02:08.917Z",
+ "fonte": "Yahoo Finance (fechamento do último pregão)",
+ "itens": [
+  {
+   "simbolo": "^BVSP",
+   "nome": "Ibovespa",
+   "regiao": "Brasil",
+   "unidade": "pts",
+   "data": "2026-11-26",
+   "fechamento": 176800,
+   "variacao": 6.07
+  },
+  {
+   "simbolo": "BRL=X",
+   "nome": "Dólar (R$)",
+   "regiao": "Brasil",
+   "unidade": "R$",
+   "data": "2026-11-26",
+   "fechamento": 5.8219,
+   "variacao": -1.39
+  },
+  {
+   "simbolo": "^GSPC",
+   "nome": "S&P 500",
+   "regiao": "EUA",
+   "unidade": "pts",
+   "data": "2026-11-25",
+   "fechamento": 7182.78,
+   "variacao": -0.25
+  },
+  {
+   "simbolo": "^DJI",
+   "nome": "Dow Jones",
+   "regiao": "EUA",
+   "unidade": "pts",
+   "data": "2026-11-25",
+   "fechamento": 50182.95,
+   "variacao": 0.33
+  },
+  {
+   "simbolo": "^IXIC",
+   "nome": "Nasdaq",
+   "regiao": "EUA",
+   "unidade": "pts",
+   "data": "2026-11-25",
+   "fechamento": 23585.8,
+   "variacao": -0.62
+  },
+  {
+   "simbolo": "000001.SS",
+   "nome": "Xangai",
+   "regiao": "China",
+   "unidade": "pts",
+   "data": "2026-11-27",
+   "fechamento": 3606.49,
+   "variacao": 3.73
+  },
+  {
+   "simbolo": "^HSI",
+   "nome": "Hang Seng (Hong Kong)",
+   "regiao": "China",
+   "unidade": "pts",
+   "data": "2026-11-27",
+   "fechamento": 22694.77,
+   "variacao": 2.11
+  }
+ ]
+}
