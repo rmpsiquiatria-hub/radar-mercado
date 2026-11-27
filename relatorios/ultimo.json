@@ -1,10 +1,23 @@
 {
- "data": "2026-11-26",
- "gerado_em": "2026-11-26T18:32:09.881Z",
- "pesquisa_data": "2026-11-26",
+ "data": "2026-11-27",
+ "gerado_em": "2026-11-27T09:09:40.139Z",
+ "pesquisa_data": "2026-11-27",
  "indicadores_data": "2026-11-26",
- "resumo_mercado": "Não foi possível confirmar em fontes abertas o fechamento de 25/11 nas bolsas brasileira e americana nem a agenda de hoje, por falha de acesso às páginas das fontes; por isso este resumo não traz números de pregão. Veja os fechamentos nos sites de InfoMoney, Valor e Reuters. Também não foi localizada notícia econômica chinesa datada das últimas 24 horas em fonte confiável.",
- "fontes_mercado": [],
+ "resumo_mercado": "Não foi possível confirmar o fechamento do Ibovespa de 26/11 nem os destaques de hoje para a B3: as buscas não retornaram dados datados desse pregão. Nos EUA, o último fechamento confirmado é o de 18/11: Dow -1,1% (50.198,17), S&P 500 -0,2% (7.323,63) e Nasdaq +0,4% (24.429,88); não foram achados fechamentos de 19 a 27/11. Pelo calendário, 26/11 foi feriado de Ação de Graças nos EUA. Na China, segundo reportagem de 11/11 (Jamaica Gleaner), o superávit comercial passou de US$ 1 trilhão pelo segundo ano seguido e as exportações para os EUA subiram 32,9% em outubro; não foi achada notícia chinesa das últimas 24h.",
+ "fontes_mercado": [
+  {
+   "nome": "La Nación (How major US stock indexes fared)",
+   "titulo": "How major US stock indexes fared Wednesday 11/18/2026",
+   "url": "https://www.lanacion.com.ar/usa/how-major-us-stock-indexes-fared-wednesday-11182026-nid18112026/",
+   "data": "2026-11-18"
+  },
+  {
+   "nome": "Jamaica Gleaner",
+   "titulo": "China's trade surplus surpasses US$1 trillion for second straight year",
+   "url": "https://jamaica-gleaner.com/article/business/20261111/chinas-trade-surplus-surpasses-us1-trillion-second-straight-year-exports",
+   "data": "2026-11-11"
+  }
+ ],
  "tecnica_data": "2026-11-26",
  "empresas": [
   {
@@ -5551,13 +5564,13 @@
      ]
     }
    },
-   "resumo": "Segundo o Eu Quero Investir, a Localiza registrou lucro líquido de R$ 1,125 bilhão no 3T26 (+29,1% sobre a base ajustada de 2025), com Ebitda de R$ 4,029 bilhões (+13,7%) e receita líquida consolidada de R$ 12,28 bilhões; a depreciação dos veículos pesou no resultado. BTG (top pick) e Citi mantinham compra antes do balanço, e o JPMorgan rebaixou para neutra em 13/10 após a alta da ação; não foram encontradas revisões de casas posteriores ao resultado.",
+   "resumo": "Segundo o Eu Quero Investir, a Localiza registrou lucro líquido de R$ 1,125 bilhão no 3T26 (+29,1% sobre a base ajustada de 2025), com Ebitda de R$ 4,029 bilhões (+13,7%) e receita líquida consolidada de R$ 12,28 bilhões; a depreciação dos veículos pesou no resultado. BTG (top pick) e Citi mantinham compra antes do balanço, e o JPMorgan rebaixou para neutra em 13/10 após a alta da ação; não foram encontradas revisões de casas posteriores ao resultado. Segundo resultado de busca (página do Itaú BBA de 10/11), o banco revisou o preço-alvo para R$ 47 e a página indica recomendação de compra; o texto completo não pôde ser aberto.",
    "sentimento": "positivo",
    "consenso": {
-    "compra": 2,
+    "compra": 3,
     "neutro": 1,
     "venda": 0,
-    "preco_alvo_medio": 63,
+    "preco_alvo_medio": 59,
     "moeda": "BRL",
     "casas": [
      {
@@ -5577,6 +5590,12 @@
       "recomendacao": "neutro",
       "preco_alvo": 70,
       "data": "2026-10-13"
+     },
+     {
+      "nome": "Itaú BBA",
+      "recomendacao": "compra",
+      "preco_alvo": 47,
+      "data": "2026-11-10"
      }
     ]
    },
@@ -5605,9 +5624,15 @@
      "titulo": "JPMorgan eleva Rumo (RAIL3) e rebaixa Localiza (RENT3) para neutro",
      "url": "https://bpmoney.com.br/?p=426331",
      "data": "2026-10-13"
+    },
+    {
+     "nome": "Itaú BBA",
+     "titulo": "Localiza (RENT3) recomendação compra 10/11/26",
+     "url": "https://itau.com.br/investimentos/analises/localiza-rent3-recomendacao-compra-10-11-26",
+     "data": "2026-11-10"
     }
    ],
-   "atualizado_em": "2026-11-09"
+   "atualizado_em": "2026-11-27"
   },
   {
    "ticker": "VIVT3",
@@ -16016,7 +16041,7 @@
      ]
     }
    },
-   "resumo": "A MRV teve prejuízo líquido de R$ 626,3 milhões no 2T26, acima do esperado, segundo a Forbes; o Santander cortou o alvo de R$ 12,80 para R$ 10,70 (22/07/2026) mantendo compra por perdas esperadas na Resia (EUA). O BTG mantém compra com alvo de R$ 12 e o UBS BB rebaixou para neutro cortando o alvo de R$ 12 para R$ 7. Em 11/11 a MRV&CO divulgou o 3T26: segundo o Eu Quero Investir e o Visno Invest, voltou ao lucro (R$ 152,7 milhões atribuíveis à controladora), com lucro ajustado de R$ 315 milhões na MRV Incorporação, vendas líquidas de R$ 3,0 bilhões e geração de caixa de R$ 427 milhões; dívida líquida de R$ 5,5 bilhões, com a Resia ainda citada como ponto de atenção.",
+   "resumo": "A MRV teve prejuízo líquido de R$ 626,3 milhões no 2T26, acima do esperado, segundo a Forbes; o Santander cortou o alvo de R$ 12,80 para R$ 10,70 (22/07/2026) mantendo compra por perdas esperadas na Resia (EUA). O BTG mantém compra com alvo de R$ 12 e o UBS BB rebaixou para neutro cortando o alvo de R$ 12 para R$ 7. Em 11/11 a MRV&CO divulgou o 3T26: segundo o Eu Quero Investir e o Visno Invest, voltou ao lucro (R$ 152,7 milhões atribuíveis à controladora), com lucro ajustado de R$ 315 milhões na MRV Incorporação, vendas líquidas de R$ 3,0 bilhões e geração de caixa de R$ 427 milhões; dívida líquida de R$ 5,5 bilhões, com a Resia ainda citada como ponto de atenção. O Investing.com (15/11) mostra 13 analistas (5 compra, 8 manter, nenhum venda) com preço-alvo médio de R$ 7,96.",
    "sentimento": "negativo",
    "consenso": {
     "compra": 2,
@@ -16082,9 +16107,15 @@
      "titulo": "MRV (MRVE3) registra lucro líquido ajustado de R$ 315 mi no 3T26",
      "url": "https://visnoinvest.com.br/news/16428/mrv-mrve3-registra-lucro-liquido-ajustado-de-r-315-mi-no-3t26",
      "data": null
+    },
+    {
+     "nome": "Investing.com",
+     "titulo": "MRV Engenharia e Participações SA (MRVE3)",
+     "url": "https://pt.investing.com/equities/mrv-on-nm",
+     "data": "2026-11-15"
     }
    ],
-   "atualizado_em": "2026-11-16"
+   "atualizado_em": "2026-11-27"
   },
   {
    "ticker": "BEEF3",
