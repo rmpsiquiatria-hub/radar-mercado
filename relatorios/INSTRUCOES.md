@@ -36,6 +36,11 @@ Radar do Mercado (radar-mercado-xi.vercel.app). O site só lê arquivos JSON des
    divulgados por corretoras e bancos (XP, BTG Pactual, Itaú BBA, Safra, Genial, Ágora/Bradesco BBI,
    Santander, Goldman Sachs, JPMorgan, Morgan Stanley, UBS BB) quando noticiados.
    Para ações dos EUA: Reuters, CNBC, MarketWatch, Barron's, Yahoo Finance, Seeking Alpha (notícias).
+   **Profundidade obrigatória:** pesquise todas as empresas, uma por uma (copiar o relatório anterior sem
+   pesquisar não vale). Para cada empresa, faça pelo menos 2 buscas e **abra com WebFetch** pelo menos as 2
+   páginas mais recentes e relevantes, para ler a data de publicação e os números: o título do resultado de
+   busca não basta. Se uma página não abrir, tente outra fonte. Só mantenha o anterior depois de abrir as
+   páginas e confirmar que não há nada novo.
    Para cada empresa, procure: recomendação e preço-alvo de cada casa (com data), mudanças recentes
    (elevação, rebaixamento, início de cobertura), resultado trimestral mais recente e como foi recebido,
    dividendos anunciados, fatos relevantes, riscos citados.
