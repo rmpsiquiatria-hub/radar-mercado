@@ -4,11 +4,16 @@
 # e-mail goes out on its push (leis-email.yml).
 # The day collected is "now minus 9 hours" in Brasília, so a run GitHub delays past midnight still
 # picks the right day.
+# The federal gazette site (in.gov.br) sometimes goes down for hours (HTTP 502, "Request Rejected").
+# So the run is repeated at 01:00 and 04:00 (Brasília), before the 05:00 analysis; those retries do
+# nothing when the federal part already worked, and keep the earlier files if it fails again.
 name: Radar de leis - coleta
 
 on:
   schedule:
     - cron: "0 0 * * *"
+    - cron: "0 4 * * *"
+    - cron: "0 7 * * *"
   # also when the collector itself changes, to check it from GitHub's servers
   push:
     branches: [main]
@@ -41,7 +46,17 @@ jobs:
         run: |
           dia="${{ github.event.inputs.dia }}"
           [ -n "$dia" ] || dia=$(TZ=America/Sao_Paulo date -d "9 hours ago" +%F)
+          federal_ok() { node -p "const c=require('./relatorios/leis/coleta.json'); c.data==='$dia' && c.fontes.federal.ok===true" 2>/dev/null; }
+          retry=no
+          if [ "${{ github.event_name }}" = schedule ] && [ "${{ github.event.schedule }}" != "0 0 * * *" ]; then
+            retry=yes
+            [ "$(federal_ok)" = true ] && { echo "Federal já coletado para $dia; nada a refazer."; exit 0; }
+          fi
           node scripts/leis-coleta.mjs "$dia"
+          if [ $retry = yes ] && [ "$(federal_ok)" != true ]; then
+            echo "DOU ainda fora do ar; mantendo a coleta anterior."
+            git checkout -- relatorios/leis/ && git clean -fdq relatorios/leis/textos/
+          fi
       - name: Publicar
         run: |
           git config user.name "radar-mercado-bot"
