@@ -1,63 +1,148 @@
 {
- "data": "2026-11-25",
- "gerado_em": "2026-11-26T05:20:00-03:00",
+ "data": "2026-11-26",
+ "gerado_em": "2026-11-27T05:20:00-03:00",
  "resumo": {
-  "federal": "A coleta do Diário Oficial da União falhou neste dia (erro HTTP 502 na fonte), então não há análise federal. Os atos federais de 25/11 não foram avaliados.",
-  "estadual": "No RS, a Secretaria da Saúde criou o Comitê Estadual de Governança da Informação e Saúde Digital, que vai coordenar a política de dados e saúde digital do SUS no estado. O Fundo de Proteção e Bem-Estar de Animais Domésticos (FUNBEA-RS) autorizou R$ 300 mil para Tupanciretã atender animais atingidos pelo vendaval.",
-  "municipal": "Lajeado publicou a edição 2695 do Diário Oficial, com portarias de pessoal: fim e redução de adicional de insalubridade de dois servidores, uma relotação e uma designação por férias."
+  "federal": "A coleta do Diário Oficial da União falhou neste dia (índice do DOU sem dados), então não há análise federal. Os atos federais de 26/11 não foram avaliados.",
+  "estadual": "A AGERGS confirmou o reajuste de 4,63% nas tarifas de água e esgoto da Corsan a partir de 1º/01/2027 e aprovou revisão de 3,94% na BRK de Uruguaiana. Saiu também uma lei sobre a Reserva Barba Negra, decreto de emergência em três municípios e decretos de crédito orçamentário, com R$ 50 milhões a mais para medicamentos.",
+  "municipal": "Lajeado teve só uma edição, com convocação de aprovada em concurso, nomeações, adicional de insalubridade, licença-maternidade e designação de fiscais de contrato."
  },
  "destaques": [
   {
-   "id": "rs-1509232",
-   "relevancia": "media",
-   "area": "saude",
+   "id": "rs-1509746",
+   "relevancia": "alta",
+   "area": "fazenda",
    "temas": [
-    "saúde",
-    "dados",
-    "SUS"
+    "tarifas",
+    "saneamento",
+    "água"
    ],
-   "o_que_muda": "A Secretaria da Saúde do RS cria um comitê permanente para organizar a informação e a saúde digital no estado. Ele vai acompanhar a integração dos sistemas de saúde à Rede Nacional de Dados em Saúde, a proteção de dados dos pacientes e o uso do CPF como identificador no SUS. Em até 90 dias após a primeira reunião, deve propor um plano estadual de trabalho.",
-   "quem_afeta": "Gestores e profissionais da saúde pública, secretarias municipais de saúde e fornecedores de sistemas de saúde que se integram ao SUS no RS.",
-   "vigencia": "Na publicação; os membros do comitê são indicados em 15 dias.",
+   "o_que_muda": "A agência reguladora (AGERGS) homologou o reajuste de 4,63% nas tarifas de água e esgoto da Corsan, ou seja, a conta vai subir. A Corsan terá de apresentar a memória de cálculo, porque alguns valores das tabelas não bateram com os da agência.",
+   "quem_afeta": "Clientes da Corsan no RS, residenciais e empresas, incluindo municípios atendidos por ela.",
+   "vigencia": "1º/01/2027",
+   "imposto": {
+    "tributo": "Tarifa de água e esgoto da Corsan",
+    "antes": "tabela tarifária vigente desde julho de 2026",
+    "depois": "tabela atual reajustada pelo fator 1,0463",
+    "variacao_pct": 4.6,
+    "obs": "O valor anterior é a tabela de julho de 2026, conforme a própria decisão (reajuste pelo IPCA de nov/2025 a out/2026). Os valores finais das tabelas ainda dependem de conciliação com a AGERGS. Não houve consulta externa."
+   },
    "esfera": "estadual",
-   "titulo": "PORTARIA SES Nº 891/2026",
-   "orgao": "Gabinete",
-   "tipo": "Portarias",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509232",
+   "titulo": "DECISÃO MONOCRÁTICA Nº 5/2026",
+   "orgao": "Conselho-Superior",
+   "tipo": "Diversos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509746",
    "fonte": "DOE-RS"
   },
   {
-   "id": "rs-1509850",
+   "id": "rs-1509974",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "tarifas",
+    "saneamento",
+    "água"
+   ],
+   "o_que_muda": "A AGERGS aprovou a revisão tarifária da BRK Ambiental em Uruguaiana, com índice de 3,94%, o que aumenta as tarifas de água e esgoto. A Tarifa Social (desconto para famílias de baixa renda) passa a ser aplicada nas contas.",
+   "quem_afeta": "Clientes da BRK em Uruguaiana (RS); famílias elegíveis à Tarifa Social.",
+   "vigencia": "Tarifa Social nas faturas a partir de 11/12/2026; novas tarifas a partir de 1º/01/2027",
+   "imposto": {
+    "tributo": "Tarifa de água e esgoto da BRK Uruguaiana",
+    "antes": "tarifas vigentes até 31/12/2026",
+    "depois": "tarifas atuais com revisão de 3,94% (inclui impacto de 1,90% da Tarifa Social)",
+    "variacao_pct": 3.9,
+    "obs": "Índice de revisão fixado em 3,94% sobre as tarifas vigentes, conforme o texto; os valores em reais não constam do ato. Não houve consulta externa."
+   },
+   "esfera": "estadual",
+   "titulo": "RESOLUÇÃO DECISÓRIA",
+   "orgao": "Conselho-Superior",
+   "tipo": "Resoluções",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509974",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1509978",
    "relevancia": "media",
    "area": "outros",
    "temas": [
-    "meio ambiente",
-    "animais",
-    "calamidade"
+    "gás",
+    "regulação"
    ],
-   "o_que_muda": "O FUNBEA-RS autoriza o repasse extraordinário de R$ 300 mil a Tupanciretã, em calamidade por vendaval, para resgate, abrigo e tratamento veterinário de animais domésticos. O dinheiro não pode pagar pessoal nem obras ou bens permanentes, deve ser usado em até 12 meses e ter as contas prestadas em até 60 dias depois.",
-   "quem_afeta": "Prefeitura e protetores de animais de Tupanciretã.",
-   "vigencia": "Na publicação.",
+   "o_que_muda": "A AGERGS encerrou, sem decidir o mérito, o processo sobre um acordo entre o Estado e a Sulgás. Registrou que o acordo não muda a fórmula de cálculo da tarifa nem põe o 'Ativo Indenizável' na base de cálculo da tarifa do gás canalizado.",
+   "quem_afeta": "Consumidores e indústrias que usam gás canalizado da Sulgás.",
+   "vigencia": "Na publicação",
    "esfera": "estadual",
-   "titulo": "RESOLUÇÃO FUNBEA-RS Nº 04 de 25 de novembro de 2026.",
-   "orgao": "Gabinete",
-   "tipo": "Atos Administrativos",
-   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509850",
+   "titulo": "RESOLUÇÃO DECISÓRIA",
+   "orgao": "Conselho-Superior",
+   "tipo": "Resoluções",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509978",
    "fonte": "DOE-RS"
   },
   {
-   "id": "laj-2695",
+   "id": "rs-1509991",
+   "relevancia": "media",
+   "area": "saude",
+   "temas": [
+    "orçamento",
+    "saúde"
+   ],
+   "o_que_muda": "O Estado abriu crédito suplementar de R$ 64,1 milhões, com R$ 50 milhões para compra de medicamentos e R$ 5 milhões para a atenção primária à saúde nos municípios. O dinheiro sai de outras dotações da saúde e do turismo.",
+   "quem_afeta": "Pacientes do SUS no RS e prefeituras que recebem repasses da saúde.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.097, DE 24 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509991",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1509992",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "defesa civil",
+    "desastres"
+   ],
+   "o_que_muda": "O Governo do Estado reconheceu a situação de emergência em Cerro Grande e Getúlio Vargas (chuvas intensas) e em Campos Borges (granizo).",
+   "quem_afeta": "Moradores e prefeituras desses três municípios, que podem pedir ajuda estadual e federal.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.098, DE 25 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1509992",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510408",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "meio ambiente"
+   ],
+   "o_que_muda": "A Lei 16.569 ajusta os limites da Reserva Particular do Patrimônio Natural Estadual Barba Negra: retira uma área da reserva e inclui outra.",
+   "quem_afeta": "Proprietários da área e interessados na proteção ambiental da reserva.",
+   "vigencia": "Na publicação",
+   "esfera": "estadual",
+   "titulo": "LEI Nº 16.569, DE 26 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Leis",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510408",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "laj-2696",
    "relevancia": "media",
    "area": "outros",
    "temas": [
     "servidores",
-    "pessoal"
+    "concursos"
    ],
-   "o_que_muda": "A prefeitura cessou o adicional de insalubridade de um motorista de veículo pesado (laudo não prevê a função) e reduziu de 40% para 20% o de um marceneiro. Também relotou um servidor da Secretaria de Obras para o Canil Municipal e designou um substituto para o cargo de Diretor de Governo durante férias do titular, de 23/11 a 2/12.",
-   "quem_afeta": "Servidores municipais de Lajeado citados nas portarias; sem efeito geral para a população.",
-   "vigencia": "Na publicação, com efeitos a partir de 23 e 24/11/2026.",
+   "o_que_muda": "A edição trouxe atos de rotina de pessoal: convocação de candidata aprovada em concurso para inspeção médica em 30/11, duas nomeações, adicional de insalubridade de 20% a uma odontóloga da saúde, licença-maternidade e designação de fiscais de contrato. Nenhuma regra geral mudou.",
+   "quem_afeta": "Servidores e candidatos citados nos atos.",
+   "vigencia": "Na publicação",
    "esfera": "municipal",
-   "titulo": "Edição 2695",
+   "titulo": "Edição 2696",
    "orgao": "Prefeitura de Lajeado",
    "tipo": "Edição",
    "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
@@ -65,34 +150,34 @@
   }
  ],
  "demais": {
-  "federal": "Sem dados: a fonte federal estava fora do ar na coleta.",
-  "estadual": "Cerca de 130 outros atos: aposentadorias e revisões de proventos, portarias de pessoal e afastamentos (UERGS, Educação), notificações da AGERGS, repasses pontuais da Saúde e da Defesa Civil a hospitais e municípios, licenças ambientais, súmulas e extratos de contratos, pauta da sessão 41/2026 da AGERGS e decisões da agência sobre rodovias e saneamento em municípios específicos.",
-  "municipal": "Sem outros atos além da edição 2695."
+  "federal": "Sem dados: a coleta do DOU falhou.",
+  "estadual": "O restante foi 111 atos normativos, na maior parte portarias de pessoal e afastamentos da UERGS e da Secretaria de Habitação, aposentadorias, delegações de competência, resoluções da CIB/RS que aprovam recursos de saúde a municípios e deliberações do Conselho Estadual de Educação. Houve também 413 atos de lista (pessoal, contratos e licitações).",
+  "municipal": "Sem outros atos além dos citados."
  },
  "fontes": {
   "federal": {
    "ok": false,
-   "erro": "HTTP 502"
+   "erro": "índice do DOU sem dados (do1)"
   },
   "estadual": {
    "ok": true,
-   "atos": 135,
-   "lista": 338,
-   "publicados": 508
+   "atos": 111,
+   "lista": 413,
+   "publicados": 560
   },
   "municipal": {
    "ok": true,
    "atos": 1,
    "lista": 0,
    "edicoes": [
-    "2695 (Normal)"
+    "2696 (Normal)"
    ]
   }
  },
- "coletado_em": "2026-11-26T05:59:16.535Z",
+ "coletado_em": "2026-11-27T05:52:49.218Z",
  "totais": {
   "federal": 0,
-  "estadual": 473,
+  "estadual": 524,
   "municipal": 1
  }
 }
