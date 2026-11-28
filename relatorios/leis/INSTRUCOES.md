@@ -7,8 +7,10 @@ O leitor é uma pessoa leiga em Direito, que mora em Lajeado (RS). Ele quer sabe
 ## Passo 1: conferir se há trabalho a fazer
 
 1. Leia `relatorios/leis/coleta.json` só até o campo `itens` (use `node -p "const c=require('./relatorios/leis/coleta.json'); JSON.stringify({data:c.data, coletado_em:c.coletado_em, fontes:c.fontes})"`). O arquivo é grande: nunca o leia inteiro.
-2. Se `relatorios/leis/ultimo.json` já existir com o mesmo `data` **e** o mesmo `coletado_em`, **pare**: a análise dessa coleta já foi feita. (Mesmo `data` com `coletado_em` diferente = o dia foi coletado de novo, por exemplo porque Lajeado publicou mais tarde: faça a análise inteira de novo.)
-3. Se a data da coleta for mais antiga que ontem (horário de Brasília), pare também: a coleta não rodou.
+2. Se `relatorios/leis/ultimo.json` já existir com o mesmo `data` **e** o mesmo `coletado_em`, a análise dessa coleta já foi feita: **vá direto ao Passo 6**. (Mesmo `data` com `coletado_em` diferente = o dia foi coletado de novo, por exemplo porque Lajeado publicou mais tarde: faça a análise inteira de novo.)
+3. Se a data da coleta for mais antiga que ontem (horário de Brasília), a coleta não rodou: também **vá direto ao Passo 6**.
+
+Só pare sem fazer nada se o Passo 6 também não tiver trabalho.
 
 ## Passo 2: triagem
 
@@ -102,3 +104,27 @@ git pull --rebase && git push
 ```
 
 O push dispara o envio do e-mail.
+
+## Passo 6: dias recuperados
+
+Quando o Diário Oficial da União não pôde ser lido num dia, o programa tenta de novo nos dias seguintes e guarda a parte federal em `relatorios/leis/atrasados/<dia>/`. Faça este passo **depois** de publicar o dia atual (Passo 5), ou sozinho quando o Passo 1 mandar vir para cá.
+
+```
+ls relatorios/leis/atrasados/
+```
+
+Se a pasta não existir ou estiver vazia, não há nada a fazer. Para cada `<dia>` que tenha `coleta.json` e **ainda não tenha** `ultimo.json`, do mais antigo para o mais novo:
+
+1. Faça os Passos 2 a 4 com os arquivos desse dia: triagem em `relatorios/leis/atrasados/<dia>/textos/triagem.txt`, textos com `node scripts/leis-texto.mjs --dia <dia> <id> [<id> ...]` e análise em `relatorios/leis/atrasados/<dia>/ultimo.json`.
+2. Só há a esfera federal: em `resumo` e `demais`, escreva apenas `federal`. A `data` é o `<dia>`.
+3. Se `coleta.json` tiver `"parcial": true`, é só a edição extra, que faltava: resuma apenas o que veio nela.
+4. Valide e publique um dia de cada vez:
+
+```
+node scripts/leis-validar.mjs --dia <dia>
+git add relatorios/leis/atrasados/ relatorios/leis/historico/
+git commit -m "Radar de leis <dia> (recuperado)"
+git pull --rebase && git push
+```
+
+Não mude `relatorios/leis/ultimo.json` nem `coleta.json` neste passo: eles são do dia atual.

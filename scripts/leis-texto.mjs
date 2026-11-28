@@ -1,15 +1,22 @@
 // Prints the full text of acts from the last collection, by id (see relatorios/leis/textos/triagem.txt).
 //   node scripts/leis-texto.mjs dou-740643110 rs-1498861 laj-2677-2
+//   node scripts/leis-texto.mjs --dia AAAA-MM-DD dou-740643110    (a recovered day)
 import { readFile } from "node:fs/promises";
 
 const ids = process.argv.slice(2);
-if (!ids.length) { console.error("uso: node scripts/leis-texto.mjs <id> [<id> ...]"); process.exit(1); }
+let pasta = "../relatorios/leis/";
+if (ids[0] === "--dia") {
+  const dia = ids.splice(0, 2)[1];
+  if (!/^\d{4}-\d\d-\d\d$/.test(dia || "")) { console.error("--dia precisa de AAAA-MM-DD"); process.exit(1); }
+  pasta += `atrasados/${dia}/`;
+}
+if (!ids.length) { console.error("uso: node scripts/leis-texto.mjs [--dia AAAA-MM-DD] <id> [<id> ...]"); process.exit(1); }
 const esfera = id => id.startsWith("dou-") ? "federal" : id.startsWith("rs-") ? "estadual" : "municipal";
 const cache = {};
 for (const id of ids) {
   const e = esfera(id);
   // a Windows checkout turns the line ends into CRLF
-  cache[e] ??= (await readFile(new URL(`../relatorios/leis/textos/${e}.txt`, import.meta.url), "utf8")).replace(/\r\n/g, "\n");
+  cache[e] ??= (await readFile(new URL(`${pasta}textos/${e}.txt`, import.meta.url), "utf8")).replace(/\r\n/g, "\n");
   const i = cache[e].indexOf(`=== ${id} ===\n`);
   if (i < 0) { console.log(`=== ${id} === (não encontrado)\n`); continue; }
   const fim = cache[e].indexOf("\n=== ", i + 5);

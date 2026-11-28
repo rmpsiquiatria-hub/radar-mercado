@@ -4,13 +4,20 @@
 // which categories are also listed without analysis.
 //   node scripts/leis-email.mjs --preview saida.html   → only writes the HTML
 //   node scripts/leis-email.mjs                        → sends; needs GMAIL_USER, GMAIL_APP_PASSWORD, EMAIL_TO
+//   node scripts/leis-email.mjs --dia AAAA-MM-DD       → the federal part of a recovered day (atrasados/<dia>/)
 import { readFile, writeFile } from "node:fs/promises";
 import { sendGmail } from "./gmail.mjs";
 import { CATEGORIAS, AREAS } from "./leis-categorias.mjs";
 
 const dir = new URL("../relatorios/leis/", import.meta.url);
-const col = JSON.parse(await readFile(new URL("coleta.json", dir), "utf8"));
-const an = await readFile(new URL("ultimo.json", dir), "utf8").then(JSON.parse).catch(() => null);
+const args = process.argv.slice(2);
+const d0 = args.indexOf("--dia");
+const dia = d0 >= 0 ? args.splice(d0, 2)[1] : null;
+if (d0 >= 0 && !/^\d{4}-\d\d-\d\d$/.test(dia || "")) { console.error("--dia precisa de AAAA-MM-DD"); process.exit(1); }
+const pasta = dia ? new URL(`atrasados/${dia}/`, dir) : dir;
+const col = JSON.parse(await readFile(new URL("coleta.json", pasta), "utf8"));
+const an = await readFile(new URL("ultimo.json", pasta), "utf8").then(JSON.parse).catch(() => null);
+const ESFERAS = dia ? ["federal"] : ["federal", "estadual", "municipal"];
 const cfg = JSON.parse(await readFile(new URL("../config.json", dir), "utf8"));
 // Calls for public exams and selections, and convocations (of candidates, assemblies, companies) stay out
 // of the e-mail. A law or rule that changes how exams work is still a rule and stays in.
@@ -51,7 +58,11 @@ const filtroTxt = () => {
 };
 // A gazette that could not be read: a short note inside its own section (the technical error stays in the run log).
 const NOME = { federal: "o Diário Oficial da União", estadual: "o Diário Oficial do RS", municipal: "o Diário Oficial de Lajeado" };
-const aviso = e => col.fontes[e]?.ok === false ? `<div style="background:#fdecea;border-radius:8px;padding:8px 12px;font-size:13px;margin:6px 0">Não foi possível ler ${NOME[e]} hoje. Confira direto no site oficial.</div>` : "";
+const caixa = t => `<div style="background:#fdecea;border-radius:8px;padding:8px 12px;font-size:13px;margin:6px 0">${t}</div>`;
+const aviso = e => col.fontes[e]?.ok === false ? caixa(`Não foi possível ler ${NOME[e]} hoje. Confira direto no site oficial.${e === "federal" ? " O programa tenta de novo nos próximos dias." : ""}`) : "";
+// Parts of the federal gazette that were missing although the rest was read.
+const PARTES = { do1e: "a edição extra", do2: "a Seção 2 (pessoal)", do3: "a Seção 3 (contratos e empresas)" };
+const faltas = e => col.fontes[e]?.falhas?.length ? caixa(`Não foi possível ler ${col.fontes[e].falhas.map(f => PARTES[f.secao] || f.secao).join(", ")} do Diário Oficial da União.${col.fontes[e].falhas.some(f => f.secao === "do1e") ? " A edição extra será buscada de novo." : ""}`) : "";
 
 // Tax change: before → after and the change in %.
 function imposto(t) {
@@ -75,17 +86,21 @@ function card(d) {
 let corpo, subject;
 if (ok) {
   const alta = an.destaques.filter(d => d.relevancia === "alta"), media = an.destaques.filter(d => d.relevancia !== "alta");
-  subject = `Radar de leis · ${dataBR(col.data, { day: "2-digit", month: "2-digit" })} · ${an.destaques.length} destaques${alta.length ? ` (${alta.length} importantes)` : ""}`;
+  subject = `Radar de leis · ${dataBR(col.data, { day: "2-digit", month: "2-digit" })}${dia ? " (dia recuperado)" : ""} · ${an.destaques.length} destaques${alta.length ? ` (${alta.length} importantes)` : ""}`;
   // one section per sphere: summary, highlights (most important first), then the rest of the day
-  corpo = ["federal", "estadual", "municipal"].map(e => {
+  corpo = ESFERAS.map(e => {
     const de = an.destaques.filter(d => d.esfera === e);
     if (col.fontes[e]?.ok === false) return h2(ESF[e]) + aviso(e);
     return h2(`${ESF[e]} <span style="font-weight:400;color:${MUTED};font-size:13px">· ${cont(e)} publicações · ${de.length} destaques</span>`)
+      + faltas(e)
       + `<div style="background:#eef2ff;border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.5;margin:0 0 10px">${esc(an.resumo?.[e] || "")}</div>`
       + de.map(card).join("")
       + (an.demais?.[e] ? `<p style="font-size:13px;color:${MUTED};margin:4px 0 0"><b>O restante:</b> ${esc(an.demais[e])}</p>` : "")
       + listas(e);
   }).join("");
+} else if (dia) {
+  console.error(`A análise do dia recuperado ${dia} não está pronta; nada enviado.`);
+  process.exit(1);
 } else {
   // No analysis: the main acts by type, straight from the collection.
   const PRINC = /^(lei|medida provis|decreto|emenda|instru[çc][ãa]o normativa|resolu|portaria (interministerial|conjunta|normativa)|ato normativo)/i;
@@ -94,24 +109,24 @@ if (ok) {
   subject = `Radar de leis · ${dataBR(col.data, { day: "2-digit", month: "2-digit" })} · lista do dia (sem análise)`;
   corpo = `
   <div style="background:#fff7e6;border:1px solid #f0c36d;border-radius:8px;padding:10px 14px;font-size:14px">⚠️ A análise por IA deste dia não ficou pronta. Abaixo, a lista das leis, decretos, instruções normativas e resoluções publicados, sem comentários.</div>
-  ${["federal", "estadual", "municipal"].map(e => col.fontes[e]?.ok === false ? h2(ESF[e]) + aviso(e) : h2(`${ESF[e]} (${cont(e)} publicações)`) + `<ul style="padding-left:18px;margin:0">${lista(e)}</ul>` + listas(e)).join("")}`;
+  ${ESFERAS.map(e => col.fontes[e]?.ok === false ? h2(ESF[e]) + aviso(e) : h2(`${ESF[e]} (${cont(e)} publicações)`) + faltas(e) + `<ul style="padding-left:18px;margin:0">${lista(e)}</ul>` + listas(e)).join("")}`;
 }
 
 const html = `<!doctype html><html><body style="margin:0;background:#f4f6f8;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#17212b">
 <div style="max-width:680px;margin:0 auto;background:#fff;padding:20px 22px">
   <div style="font-size:12px;color:${MUTED};text-transform:uppercase;letter-spacing:.06em">Radar de leis</div>
   <h1 style="font-size:22px;margin:4px 0 2px">⚖️ Publicado em ${esc(dataBR(col.data, { weekday: "long", day: "numeric", month: "long" }))}</h1>
-  ${hint(`Diário Oficial da União: ${normas("federal")} atos normativos (Seção 1) e ${cont("federal") - normas("federal")} de pessoal, contratos e empresas (Seções 2 e 3) · Diário Oficial do RS: ${normas("estadual")} atos normativos e ${cont("estadual") - normas("estadual")} de pessoal, contratos e licitações · Diário Oficial de Lajeado: ${col.fontes.municipal?.ok === false ? "não lido hoje" : cont("municipal") + " atos"}`)}
+  ${dia ? hint("O Diário Oficial da União não pôde ser lido nesse dia. Esta é a parte federal, recuperada depois; a estadual e a de Lajeado já foram no e-mail do dia.") : ""}
+  ${hint(`Diário Oficial da União: ${normas("federal")} atos normativos (Seção 1) e ${cont("federal") - normas("federal")} de pessoal, contratos e empresas (Seções 2 e 3)${dia ? "" : ` · Diário Oficial do RS: ${normas("estadual")} atos normativos e ${cont("estadual") - normas("estadual")} de pessoal, contratos e licitações · Diário Oficial de Lajeado: ${col.fontes.municipal?.ok === false ? "não lido hoje" : cont("municipal") + " atos"}`}`)}
   ${hint(filtroTxt())}
 
   ${corpo}
   <p style="margin-top:22px;font-size:14px">Lista completa e explicação de cada fonte: <a href="${esc(cfg.site)}" style="color:${NAVY}">Radar do Mercado → Educação → Direito</a></p>
   <p style="font-size:12px;color:#8c99a3;margin-top:18px">Coleta automática dos diários oficiais, sem IA. Resumos feitos por IA a partir do texto publicado: podem conter erros, confira sempre o link oficial. Não é orientação jurídica.</p>
 </div></body></html>`;
-const text = [subject, "", ok ? ["federal", "estadual", "municipal"].map(e => `${ESF[e]}: ${an.resumo?.[e] || ""}`).join("\n") : "A análise deste dia não ficou pronta; veja a lista no site.", "",
+const text = [subject, "", ok ? ESFERAS.map(e => `${ESF[e]}: ${an.resumo?.[e] || ""}`).join("\n") : "A análise deste dia não ficou pronta; veja a lista no site.", "",
   ...(ok ? an.destaques.map(d => `• [${d.relevancia}] ${d.titulo} — ${d.o_que_muda} ${d.url}`) : []), "", `Site: ${cfg.site}`].join("\n");
 
-const args = process.argv.slice(2);
 if (args[0] === "--preview") {
   await writeFile(args[1] || "leis-preview.html", html);
   console.log(`Prévia gravada em ${args[1] || "leis-preview.html"} — assunto: ${subject}`);

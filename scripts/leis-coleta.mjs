@@ -1,5 +1,6 @@
 // Radar de leis, step 1: lists everything normative published on one day (no AI).
 //   node scripts/leis-coleta.mjs [AAAA-MM-DD]   (default: today in Brasília)
+//   node scripts/leis-coleta.mjs --recuperar     (reads again the federal gazette of recent days that failed)
 // Sources:
 //   federal   Diário Oficial da União, Seção 1 (+ extra edition), in.gov.br "leiturajornal" index
 //             and each act's page for the full text; Seções 2 (people) and 3 (contracts, tenders,
@@ -11,15 +12,22 @@
 // Writes relatorios/leis/coleta.json (index: title, summary, link, categories) and relatorios/leis/
 // textos/<esfera>.txt (full texts, "=== <id> ===" separated, capped per act) for the analysis routine.
 // List-only acts are left out of the texts and of the triage: they are never highlights.
-// A source that fails is recorded in coleta.json and the others still go out.
+// A source that fails is recorded in coleta.json and the others still go out. Of the federal sections only
+// Seção 1 is required; if another one fails the day still counts and the failure is noted.
+// Days whose federal part (or extra edition) failed wait in relatorios/leis/pendentes.json for up to a
+// week; --recuperar reads them again and writes each one apart, in relatorios/leis/atrasados/<dia>/,
+// for the routine to analyse and the e-mail to send, without touching the files of the current day.
 
 import { writeFile, mkdir, readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { categorias } from "./leis-categorias.mjs";
 
-const dia = process.argv[2] || new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
+const recuperando = process.argv[2] === "--recuperar";
+const dataBrasilia = quando => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(quando);
+const dia = (!recuperando && process.argv[2]) || dataBrasilia(new Date());
 const [Y, M, D] = dia.split("-");
 const UA = { "User-Agent": "Mozilla/5.0 (radar-mercado; coleta diaria de leis)" };
 const MAX_TEXTO = 15000;   // characters kept per act (long annexes are cut)
@@ -44,18 +52,30 @@ async function pool(list, n, fn) {
 
 /* ---------- federal: DOU ---------- */
 const SECOES_DOU = { do1: "DOU", do1e: "DOU (extra)", do2: "DOU Seção 2", do3: "DOU Seção 3" };
-async function dou() {
-  const itens = [];
-  for (const secao of Object.keys(SECOES_DOU)) {
-    const h = await (await get(`https://www.in.gov.br/leiturajornal?data=${D}-${M}-${Y}&secao=${secao}`)).text();
-    const m = h.match(/<script id="params" type="application\/json">([\s\S]*?)<\/script>/);
-    if (!m) throw new Error("índice do DOU sem dados (" + secao + ")");
-    for (const x of JSON.parse(m[1]).jsonArray || []) itens.push({
-      id: "dou-" + x.urlTitle.match(/(\d+)$/)?.[1], esfera: "federal", fonte: SECOES_DOU[secao], ...(/^do[23]/.test(secao) ? { lista: true } : {}),
-      tipo: x.artType, orgao: x.hierarchyList?.[0] || x.hierarchyStr,
-      unidade: x.hierarchyList?.length > 1 ? x.hierarchyList[0] + " / " + x.hierarchyList.at(-1) : x.hierarchyStr, titulo: x.title || x.titulo,
-      ementa: (x.content || "").replace(/\s+/g, " ").replace((x.title || "").replace(/\s+/g, " "), "").trim(), url: "https://www.in.gov.br/web/dou/-/" + x.urlTitle, pagina: x.numberPage,
-    });
+const TODAS_SECOES = Object.keys(SECOES_DOU);
+async function indiceDou(secao, quando) {
+  const [ano, mes, d] = quando.split("-");
+  const h = await (await get(`https://www.in.gov.br/leiturajornal?data=${d}-${mes}-${ano}&secao=${secao}`)).text();
+  const m = h.match(/<script id="params" type="application\/json">([\s\S]*?)<\/script>/);
+  if (!m) throw new Error("índice do DOU sem dados");
+  return (JSON.parse(m[1]).jsonArray || []).map(x => ({
+    id: "dou-" + x.urlTitle.match(/(\d+)$/)?.[1], esfera: "federal", fonte: SECOES_DOU[secao], ...(/^do[23]/.test(secao) ? { lista: true } : {}),
+    tipo: x.artType, orgao: x.hierarchyList?.[0] || x.hierarchyStr,
+    unidade: x.hierarchyList?.length > 1 ? x.hierarchyList[0] + " / " + x.hierarchyList.at(-1) : x.hierarchyStr, titulo: x.title || x.titulo,
+    ementa: (x.content || "").replace(/\s+/g, " ").replace((x.title || "").replace(/\s+/g, " "), "").trim(), url: "https://www.in.gov.br/web/dou/-/" + x.urlTitle, pagina: x.numberPage,
+  }));
+}
+async function dou(quando = dia, secoes = TODAS_SECOES) {
+  const itens = [], falhas = [];
+  for (const secao of secoes) {
+    try { itens.push(...await indiceDou(secao, quando)); }
+    catch (e) {
+      // Without Seção 1 (or, when only a missing part is asked for, without that part) there is no day.
+      const erro = String(e.message || e);
+      if (secao === "do1" || !secoes.includes("do1")) throw new Error(`${erro} (${secao})`);
+      console.error(`DOU ${quando} ${secao} falhou: ${erro}`);
+      falhas.push({ secao, erro });
+    }
   }
   const normas = itens.filter(it => !it.lista);
   const textos = await pool(normas, 4, async it => {
@@ -64,7 +84,7 @@ async function dou() {
     return limpa(h.slice(i, h.indexOf("</article>", i) > 0 ? h.indexOf("</article>", i) : i + 200000).replace(/^[^>]*>/, ""));
   });
   normas.forEach((it, k) => { it.texto = typeof textos[k] === "string" ? textos[k] : ""; });
-  return itens;
+  return { itens, ...(falhas.length ? { falhas } : {}) };
 }
 
 /* ---------- estadual: DOE-RS ---------- */
@@ -170,32 +190,90 @@ function atosLajeado(txt, ed) {
   });
 }
 
-/* ---------- run ---------- */
+/* ---------- files ---------- */
 const dir = new URL("../relatorios/leis/", import.meta.url);
-await mkdir(new URL("textos/", dir), { recursive: true });
+const lerJson = u => readFile(u, "utf8").then(JSON.parse).catch(() => null);
+const resumoFonte = (res, lst) => ({ ok: true, atos: lst.filter(i => !i.lista).length, lista: lst.filter(i => i.lista).length, ...(res.total != null ? { publicados: res.total } : {}), ...(res.edicoes ? { edicoes: res.edicoes } : {}), ...(res.falhas ? { falhas: res.falhas } : {}) });
+// coleta.json and textos/ of one day, in the folder given (the current day, or a recovered one).
+async function gravar(base, quando, fontes, itens, extra = {}) {
+  const esferas = ["federal", "estadual", "municipal"].filter(e => fontes[e]);
+  await mkdir(new URL("textos/", base), { recursive: true });
+  for (const esf of esferas) {
+    const t = itens.filter(i => i.esfera === esf && !i.lista).map(i => `=== ${i.id} ===\n${i.titulo}\n${(i.texto || i.ementa || "").slice(0, MAX_TEXTO)}${(i.texto || "").length > MAX_TEXTO ? "\n[… texto cortado; íntegra no link]" : ""}\n`).join("\n");
+    await writeFile(new URL(`textos/${esf}.txt`, base), t);
+  }
+  // One line per act, for the analysis to pick what deserves a full read (the full index is too big).
+  const linha = i => [i.id, i.tipo, i.unidade || i.orgao, i.titulo, (i.ementa || "").replace(/\s+/g, " ").slice(0, 250)].map(x => String(x || "").replace(/\s*\|\s*/g, " / ")).join(" | ");
+  await writeFile(new URL("textos/triagem.txt", base), [`Atos normativos publicados em ${quando} — id | tipo | órgão | título | começo do texto`,
+    ...esferas.flatMap(e => [``, `## ${e.toUpperCase()} (${itens.filter(i => i.esfera === e && !i.lista).length})${fontes[e]?.ok === false ? " — FONTE FALHOU: " + fontes[e].erro : ""}`, ...itens.filter(i => i.esfera === e && !i.lista).map(linha)])].join("\n") + "\n");
+  const index = { data: quando, coletado_em: new Date().toISOString(), ...extra, fontes,
+    itens: itens.map(({ texto, ...i }) => ({ ...i, unidade: i.unidade && i.unidade !== i.orgao ? i.unidade : undefined,
+      ementa: (i.ementa || "").replace(/\s+/g, " ").slice(0, i.lista ? 250 : 400), cats: categorias(i), ...(i.lista ? {} : { tamanho: (texto || "").length }) })) };
+  await writeFile(new URL("coleta.json", base), JSON.stringify(index, null, 1));
+}
+
+/* ---------- days that failed ---------- */
+const JANELA = 7;   // days a failed day is tried again
+const lerPendentes = async () => (await lerJson(new URL("pendentes.json", dir))) || {};
+const gravarPendentes = p => writeFile(new URL("pendentes.json", dir), JSON.stringify(Object.fromEntries(Object.entries(p).sort()), null, 1) + "\n");
+const faltaExtra = falhas => falhas?.find(f => f.secao === "do1e");
+
+async function recuperar() {
+  // The day of the normal collection ("now minus 9 hours", as in the workflow) and later ones are left to it.
+  const principal = dataBrasilia(new Date(Date.now() - 9 * 3600e3));
+  const limite = dataBrasilia(new Date(Date.now() - JANELA * 86400e3));
+  const pend = await lerPendentes(), inicio = Date.now();
+  for (const quando of Object.keys(pend).sort()) {
+    if (!/^\d{4}-\d\d-\d\d$/.test(quando) || quando < limite) { console.log(`${quando}: mais de ${JANELA} dias sem conseguir ler; desistindo`); delete pend[quando]; await gravarPendentes(pend); continue; }
+    if (quando >= principal) continue;
+    const pasta = new URL(`atrasados/${quando}/`, dir);
+    if (existsSync(new URL("coleta.json", pasta))) { console.log(`${quando}: recuperação anterior ainda não foi enviada; fica para depois`); continue; }
+    if (Date.now() - inicio > 12 * 60e3) { console.log("tempo esgotado; o restante fica para a próxima vez"); break; }
+    const secoes = pend[quando].secoes?.length ? pend[quando].secoes : TODAS_SECOES;
+    try {
+      const res = await dou(quando, secoes);
+      const normas = res.itens.filter(i => !i.lista);
+      // The index may come back before the acts' pages do: without the texts there is nothing to analyse.
+      if (normas.filter(i => !i.texto).length > normas.length / 2) throw new Error("textos dos atos indisponíveis");
+      if (normas.length) await gravar(pasta, quando, { federal: resumoFonte(res, res.itens) }, res.itens, { recuperado: true, ...(secoes.includes("do1") ? {} : { parcial: true }) });
+      const extra = faltaExtra(res.falhas);
+      if (extra) pend[quando] = { secoes: ["do1e"], erro: extra.erro }; else delete pend[quando];
+      console.log(`${quando}: recuperado, ${normas.length} atos normativos`);
+    } catch (e) {
+      pend[quando] = { secoes, erro: String(e.message || e) };
+      console.error(`${quando}: ainda sem leitura: ${e.message || e}`);
+    }
+    await gravarPendentes(pend);
+  }
+}
+
+/* ---------- run ---------- */
+if (recuperando) {
+  await recuperar();
+  process.exit(0);
+}
+await mkdir(dir, { recursive: true });
 const fontes = {}, itens = [];
-for (const [nome, fn] of [["federal", dou], ["estadual", doeRS], ["municipal", lajeado]]) {
+for (const [nome, fn] of [["federal", () => dou()], ["estadual", doeRS], ["municipal", lajeado]]) {
   try {
     const res = await fn(), lst = Array.isArray(res) ? res : res.itens;
     itens.push(...lst);
-    fontes[nome] = { ok: true, atos: lst.filter(i => !i.lista).length, lista: lst.filter(i => i.lista).length, ...(res.total != null ? { publicados: res.total } : {}), ...(res.edicoes ? { edicoes: res.edicoes } : {}) };
+    fontes[nome] = resumoFonte(res, lst);
     console.log(nome, lst.length);
   } catch (e) { fontes[nome] = { ok: false, erro: String(e.message || e) }; console.error(nome, "falhou:", e.message || e); }
 }
+// A federal gazette (or its extra edition) that could not be read waits to be tried again.
+const pend = await lerPendentes();
+const anterior = await lerJson(new URL("coleta.json", dir));
+const jaLido = (await lerJson(new URL(`historico/${dia}.json`, dir)))?.fontes?.federal?.ok === true
+  || (!itens.length && anterior?.data === dia && anterior.fontes?.federal?.ok === true);
+const extra = faltaExtra(fontes.federal.falhas);
+if (fontes.federal.ok && !extra) delete pend[dia];
+else if (!jaLido) pend[dia] = extra ? { secoes: ["do1e"], erro: extra.erro } : { secoes: TODAS_SECOES, erro: fontes.federal.erro };
+await gravarPendentes(pend);
 // Weekends and holidays usually have nothing: keep the previous day's files, so the routine and the
 // e-mail find a day already done and stop.
 if (!itens.length) { console.log(`coleta de ${dia}: nada publicado; arquivos anteriores mantidos`); process.exit(0); }
-for (const esf of ["federal", "estadual", "municipal"]) {
-  const t = itens.filter(i => i.esfera === esf && !i.lista).map(i => `=== ${i.id} ===\n${i.titulo}\n${(i.texto || i.ementa || "").slice(0, MAX_TEXTO)}${(i.texto || "").length > MAX_TEXTO ? "\n[… texto cortado; íntegra no link]" : ""}\n`).join("\n");
-  await writeFile(new URL(`textos/${esf}.txt`, dir), t);
-}
-// One line per act, for the analysis to pick what deserves a full read (the full index is too big).
-const linha = i => [i.id, i.tipo, i.unidade || i.orgao, i.titulo, (i.ementa || "").replace(/\s+/g, " ").slice(0, 250)].map(x => String(x || "").replace(/\s*\|\s*/g, " / ")).join(" | ");
-await writeFile(new URL("textos/triagem.txt", dir), [`Atos normativos publicados em ${dia} — id | tipo | órgão | título | começo do texto`,
-  ...["federal", "estadual", "municipal"].flatMap(e => [``, `## ${e.toUpperCase()} (${itens.filter(i => i.esfera === e && !i.lista).length})${fontes[e]?.ok === false ? " — FONTE FALHOU: " + fontes[e].erro : ""}`, ...itens.filter(i => i.esfera === e && !i.lista).map(linha)])].join("\n") + "\n");
-const index = { data: dia, coletado_em: new Date().toISOString(), fontes,
-  itens: itens.map(({ texto, ...i }) => ({ ...i, unidade: i.unidade && i.unidade !== i.orgao ? i.unidade : undefined,
-    ementa: (i.ementa || "").replace(/\s+/g, " ").slice(0, i.lista ? 250 : 400), cats: categorias(i), ...(i.lista ? {} : { tamanho: (texto || "").length }) })) };
-await writeFile(new URL("coleta.json", dir), JSON.stringify(index, null, 1));
+await gravar(dir, dia, fontes, itens);
 console.log(`coleta de ${dia}: ${itens.length} atos`);
 if (!Object.values(fontes).some(f => f.ok)) process.exit(1);

@@ -1,16 +1,23 @@
 // Checks relatorios/leis/ultimo.json (the routine's analysis) against the day's collection and fills
 // in title, agency, sphere and link from the ids, so links never come from the model.
 // Also writes relatorios/leis/historico/<data>.json. Exits 1 with the problems listed.
+//   node scripts/leis-validar.mjs --dia AAAA-MM-DD
+// checks the analysis of a recovered day (relatorios/leis/atrasados/<dia>/, federal only) and joins it
+// to that day's file in historico/, keeping the state and city parts analysed before.
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { AREAS, areaDestaque } from "./leis-categorias.mjs";
 
 const dir = new URL("../relatorios/leis/", import.meta.url);
-const col = JSON.parse(await readFile(new URL("coleta.json", dir), "utf8"));
-const an = JSON.parse(await readFile(new URL("ultimo.json", dir), "utf8"));
+const dia = process.argv[2] === "--dia" ? process.argv[3] : null;
+if (process.argv[2] === "--dia" && !/^\d{4}-\d\d-\d\d$/.test(dia || "")) { console.error("--dia precisa de AAAA-MM-DD"); process.exit(1); }
+const pasta = dia ? new URL(`atrasados/${dia}/`, dir) : dir;
+const col = JSON.parse(await readFile(new URL("coleta.json", pasta), "utf8"));
+const an = JSON.parse(await readFile(new URL("ultimo.json", pasta), "utf8"));
+const esferas = dia ? ["federal"] : ["federal", "estadual", "municipal"];
 const porId = new Map(col.itens.map(i => [i.id, i]));
 const erros = [];
 if (an.data !== col.data) erros.push(`data ${an.data} diferente da coleta (${col.data})`);
-for (const e of ["federal", "estadual", "municipal"]) if (typeof an.resumo?.[e] !== "string" || an.resumo[e].length < 10) erros.push(`resumo.${e} vazio ou curto demais`);
+for (const e of esferas) if (typeof an.resumo?.[e] !== "string" || an.resumo[e].length < 10) erros.push(`resumo.${e} vazio ou curto demais`);
 if (!Array.isArray(an.destaques)) erros.push("destaques precisa ser uma lista");
 const vistos = new Set();
 for (const [k, d] of (an.destaques || []).entries()) {
@@ -34,11 +41,29 @@ for (const [k, d] of (an.destaques || []).entries()) {
 }
 if (erros.length) { console.error("Problemas:\n- " + erros.join("\n- ")); process.exit(1); }
 const ordem = { alta: 0, media: 1 }, esf = { federal: 0, estadual: 1, municipal: 2 };
-an.destaques.sort((a, b) => ordem[a.relevancia] - ordem[b.relevancia] || esf[a.esfera] - esf[b.esfera]);
+const ordenar = l => l.sort((a, b) => ordem[a.relevancia] - ordem[b.relevancia] || esf[a.esfera] - esf[b.esfera]);
+ordenar(an.destaques);
 an.fontes = col.fontes;
 an.coletado_em = col.coletado_em;   // a later collection of the same day (an edition out late) is analysed again
-an.totais = Object.fromEntries(["federal", "estadual", "municipal"].map(e => [e, col.itens.filter(i => i.esfera === e).length]));
-await writeFile(new URL("ultimo.json", dir), JSON.stringify(an, null, 1));
+an.totais = Object.fromEntries(esferas.map(e => [e, col.itens.filter(i => i.esfera === e).length]));
+await writeFile(new URL("ultimo.json", pasta), JSON.stringify(an, null, 1));
 await mkdir(new URL("historico/", dir), { recursive: true });
-await writeFile(new URL(`historico/${an.data}.json`, dir), JSON.stringify(an, null, 1));
-console.log(`ok: ${an.destaques.length} destaques de ${col.itens.length} atos (${an.data})`);
+const arquivo = new URL(`historico/${an.data}.json`, dir);
+if (!dia) await writeFile(arquivo, JSON.stringify(an, null, 1));
+else {
+  const SEM = "Sem análise registrada neste dia.";
+  const antes = await readFile(arquivo, "utf8").then(JSON.parse).catch(() => ({ data: dia, resumo: { estadual: SEM, municipal: SEM }, destaques: [], demais: {}, fontes: {}, totais: {}, coletado_em: col.coletado_em }));
+  // Only the extra edition recovered: it adds to the federal part already there. Otherwise it replaces it.
+  const repetido = antes.federal_recuperado_em === col.coletado_em;
+  const junta = (a, b) => !col.parcial || !a ? b : repetido || !b ? a : `${a} ${b}`;
+  const novos = new Set(an.destaques.map(d => d.id));
+  const junto = { ...antes, gerado_em: an.gerado_em,
+    resumo: { ...antes.resumo, federal: junta(antes.resumo?.federal, an.resumo.federal) },
+    destaques: ordenar([...(antes.destaques || []).filter(d => !novos.has(d.id) && (col.parcial || d.esfera !== "federal")), ...an.destaques]),
+    demais: { ...antes.demais, federal: junta(antes.demais?.federal, an.demais?.federal) },
+    fontes: { ...antes.fontes, federal: col.fontes.federal },
+    totais: { ...antes.totais, federal: !col.parcial ? an.totais.federal : repetido ? antes.totais?.federal : (antes.totais?.federal || 0) + an.totais.federal },
+    federal_recuperado_em: col.coletado_em };
+  await writeFile(arquivo, JSON.stringify(junto, null, 1));
+}
+console.log(`ok: ${an.destaques.length} destaques de ${col.itens.length} atos (${an.data}${dia ? ", recuperado" : ""})`);

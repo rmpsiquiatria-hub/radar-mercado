@@ -7,6 +7,8 @@
 # The federal gazette site (in.gov.br) sometimes goes down for hours (HTTP 502, "Request Rejected").
 # So the run is repeated at 01:00 and 04:00 (Brasília), before the 05:00 analysis; those retries do
 # nothing when the federal part already worked, and keep the earlier files if it fails again.
+# Days of the last week whose federal part still failed (relatorios/leis/pendentes.json) are read
+# again by every run, into relatorios/leis/atrasados/<dia>/.
 name: Radar de leis - coleta
 
 on:
@@ -48,23 +50,34 @@ jobs:
           [ -n "$dia" ] || dia=$(TZ=America/Sao_Paulo date -d "9 hours ago" +%F)
           federal_ok() { node -p "const c=require('./relatorios/leis/coleta.json'); c.data==='$dia' && c.fontes.federal.ok===true" 2>/dev/null; }
           retry=no
+          coletar=yes
           if [ "${{ github.event_name }}" = schedule ] && [ "${{ github.event.schedule }}" != "0 0 * * *" ]; then
             retry=yes
             # GitHub often starts scheduled runs hours late; after 05:00 the analysis has already run
-            [ "$(TZ=America/Sao_Paulo date +%H)" -lt 5 ] || { echo "Já passou das 05:00; a análise do dia já rodou."; exit 0; }
-            [ "$(federal_ok)" = true ] && { echo "Federal já coletado para $dia; nada a refazer."; exit 0; }
+            if [ "$(TZ=America/Sao_Paulo date +%H)" -ge 5 ]; then echo "Já passou das 05:00; a análise do dia já rodou."; coletar=no
+            elif [ "$(federal_ok)" = true ]; then echo "Federal já coletado para $dia; nada a refazer."; coletar=no; fi
           fi
-          node scripts/leis-coleta.mjs "$dia"
-          if [ $retry = yes ] && [ "$(federal_ok)" != true ]; then
-            echo "DOU ainda fora do ar; mantendo a coleta anterior."
-            git checkout -- relatorios/leis/ && git clean -fdq relatorios/leis/textos/
+          if [ $coletar = yes ]; then
+            node scripts/leis-coleta.mjs "$dia"
+            if [ $retry = yes ] && [ "$(federal_ok)" != true ]; then
+              echo "DOU ainda fora do ar; mantendo a coleta anterior."
+              git checkout -- relatorios/leis/coleta.json relatorios/leis/textos/ && git clean -fdq relatorios/leis/textos/
+            fi
           fi
+      - name: Recuperar dias que falharam
+        continue-on-error: true
+        timeout-minutes: 18
+        run: node scripts/leis-coleta.mjs --recuperar
       - name: Publicar
         run: |
           git config user.name "radar-mercado-bot"
           git config user.email "radar-mercado-bot@users.noreply.github.com"
-          git add relatorios/leis/coleta.json relatorios/leis/textos/
+          git add -A relatorios/leis/
           git diff --cached --quiet && exit 0
-          git commit -m "Radar de leis: coleta de $(node -p "require('./relatorios/leis/coleta.json').data")"
+          if git diff --cached --quiet -- relatorios/leis/coleta.json; then
+            git commit -m "Radar de leis: dias pendentes e recuperados"
+          else
+            git commit -m "Radar de leis: coleta de $(node -p "require('./relatorios/leis/coleta.json').data")"
+          fi
           for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 10; done
           exit 1
