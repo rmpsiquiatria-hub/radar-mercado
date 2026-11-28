@@ -1,0 +1,310 @@
+{
+ "data": "2026-11-27",
+ "gerado_em": "2026-11-28T05:20:00-03:00",
+ "resumo": {
+  "federal": "A coleta do Diário Oficial da União falhou neste dia (erro HTTP 404), então não foi possível analisar as normas federais publicadas em 27/11/2026.",
+  "estadual": "O Diário Oficial do RS trouxe três portarias da FEPAM que mudam regras de licenciamento ambiental (regularização de empreendimentos sem licença, dispensa de licença para pequenas alterações e destino do lodo de estações de tratamento de água). A Secretaria da Saúde autorizou R$ 132,4 milhões extras para hospitais do SUS e habilitou novos hospitais no programa ASSISTIR. Também saíram regras de prestação de contas da assistência social e a homologação de situação de emergência em 14 municípios, incluindo Lajeado.",
+  "municipal": "Lajeado publicou decretos sobre parcerias com entidades da sociedade civil e sobre o encerramento do exercício financeiro de 2026, além de um crédito suplementar de R$ 1,96 milhão."
+ },
+ "destaques": [
+  {
+   "id": "rs-1510702",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "SUS",
+    "hospitais"
+   ],
+   "o_que_muda": "O Estado autoriza um repasse extra de R$ 132,4 milhões, em parcela única em dezembro de 2026, a hospitais públicos e filantrópicos que atendem pelo SUS. Cada hospital recebe o equivalente ao que ganha no programa ASSISTIR em outubro (mínimo de R$ 100 mil). Hospitais com UTI pediátrica habilitada podem receber até R$ 850 mil a mais.",
+   "quem_afeta": "Hospitais públicos e filantrópicos do SUS no RS e quem depende deles; gestores e médicos desses serviços.",
+   "vigencia": "Na publicação; pagamento em dezembro de 2026.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 916/2026",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510702",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510710",
+   "relevancia": "alta",
+   "area": "saude",
+   "temas": [
+    "saúde",
+    "SUS",
+    "hospitais"
+   ],
+   "o_que_muda": "Novos hospitais passam a receber incentivos do programa ASSISTIR para ambulatórios de especialidades (gastroenterologia, coloproctologia, cirurgia vascular, cirurgia geral e outras), só para novembro e dezembro de 2026.",
+   "quem_afeta": "Hospitais habilitados, médicos especialistas e pacientes em fila para consultas e cirurgias eletivas pelo SUS.",
+   "vigencia": "Competências de novembro e dezembro de 2026.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA SES Nº 922/2026.",
+   "orgao": "Gabinete",
+   "tipo": "Portarias",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510710",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510195",
+   "relevancia": "alta",
+   "area": "outros",
+   "temas": [
+    "meio ambiente",
+    "licenciamento"
+   ],
+   "o_que_muda": "A FEPAM define como regularizar empresas que funcionam sem licença ambiental ou que ampliaram a atividade sem licença. A empresa assina um Termo de Compromisso Ambiental (prazo máximo de 1 ano) e pode obter a Licença de Operação Corretiva. A regularização não afasta multas. A norma revoga a Portaria FEPAM 242/2022.",
+   "quem_afeta": "Empresas e empreendedores com licenciamento estadual no RS.",
+   "vigencia": "Na publicação; os artigos 4º e 5º (Termo de Compromisso) valem em até 90 dias.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA FEPAM N° 645/2026",
+   "orgao": "Diretoria da Presidência da FEPAM",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510195",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510030",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "meio ambiente",
+    "licenciamento"
+   ],
+   "o_que_muda": "Algumas alterações dentro da área de empreendimentos já licenciados na FEPAM deixam de precisar de licença prévia, como adequação de esgoto individual, troca de pavimento, obras de prevenção de incêndio e ampliação de áreas não produtivas (almoxarifado, portaria, refeitório).",
+   "quem_afeta": "Empresas e empreendedores com licença da FEPAM.",
+   "vigencia": "Texto lido só em parte; confira a vigência no ato.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA FEPAM N° 643/2026",
+   "orgao": "Diretoria da Presidência da FEPAM",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510030",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510184",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "meio ambiente",
+    "saneamento"
+   ],
+   "o_que_muda": "Estações de tratamento de água precisam dar destino adequado ao lodo e tratar os efluentes antes de lançá-los em rios. O lançamento de lodo em corpos d'água fica proibido ao fim de prazos que dependem do porte da estação.",
+   "quem_afeta": "Companhias e serviços de água e esgoto, inclusive municipais.",
+   "vigencia": "Na publicação; prazos de adequação por porte da estação.",
+   "esfera": "estadual",
+   "titulo": "PORTARIA FEPAM N° 644/2026",
+   "orgao": "Diretoria da Presidência da FEPAM",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510184",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510140",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "assistência social",
+    "prestação de contas"
+   ],
+   "o_que_muda": "Os municípios que receberam dinheiro estadual da assistência social em 2024 devem prestar contas pelo sistema SEGDAS, com aprovação do Conselho Municipal, em até 60 dias úteis. Contas irregulares podem exigir devolução de recursos.",
+   "quem_afeta": "Prefeituras, secretarias e conselhos municipais de assistência social.",
+   "vigencia": "Prazo de 60 dias úteis a partir da publicação.",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA SEDES Nº 09 DE NOVEMBRO DE 2026",
+   "orgao": "Assessoria Técnica",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510140",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510134",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "assistência social"
+   ],
+   "o_que_muda": "Regulamenta como os municípios usam o dinheiro do Piso Gaúcho (regular e especial) destinado a CREAS regionalizados, Centros-Dia e Residências Inclusivas.",
+   "quem_afeta": "Prefeituras e serviços de assistência social que recebem esses repasses.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "INSTRUÇÃO NORMATIVA Nº 08/2026",
+   "orgao": "Assessoria Técnica",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510134",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510542",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "trabalho infantil",
+    "criança e adolescente"
+   ],
+   "o_que_muda": "Conselhos estaduais recomendam que cada município do RS crie uma Comissão Municipal de Prevenção e Erradicação do Trabalho Infantil, coordenada pela assistência social, com plano municipal e campanhas. É uma recomendação, não obrigação.",
+   "quem_afeta": "Prefeituras, conselhos e entidades de proteção à infância, incluindo Lajeado.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "RECOMENDAÇÃO CONJUNTA CEPETI/CEDICA/CEAS Nº 01/2026",
+   "orgao": "Assessoria Técnica",
+   "tipo": "Atos Administrativos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510542",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510481",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "defesa civil",
+    "emergência"
+   ],
+   "o_que_muda": "O Governador homologa os decretos de situação de emergência (granizo e outros eventos) de 14 municípios, entre eles Lajeado. Isso facilita pedir ajuda estadual e federal.",
+   "quem_afeta": "Moradores e prefeituras dos municípios listados, incluindo Lajeado.",
+   "vigencia": "Na publicação.",
+   "esfera": "estadual",
+   "titulo": "DECRETO Nº 59.100, DE 26 DE NOVEMBRO DE 2026.",
+   "orgao": "Atos do Governador",
+   "tipo": "Decretos",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510481",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "rs-1510459",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "defesa civil",
+    "orçamento"
+   ],
+   "o_que_muda": "O Fundo Estadual de Defesa Civil destina R$ 5 milhões a prevenção, equipamentos, alertas e resposta a desastres.",
+   "quem_afeta": "Defesa Civil estadual e população de áreas de risco.",
+   "vigencia": "",
+   "esfera": "estadual",
+   "titulo": "RESOLUÇÃO N.º 17/FUNDEC, DE 26 DE NOVEMBRO DE 2026.",
+   "orgao": "Gabinete",
+   "tipo": "Resoluções",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510459",
+   "fonte": "DOE-RS"
+  },
+  {
+   "id": "laj-2697-1",
+   "relevancia": "media",
+   "area": "outros",
+   "temas": [
+    "parcerias",
+    "administração pública"
+   ],
+   "o_que_muda": "Lajeado regulamenta as parcerias com organizações da sociedade civil: processo todo eletrônico, termos de colaboração, fomento e acordos de cooperação. Dispensa chamamento público em acordos de cooperação e em parcerias com recursos de emendas parlamentares.",
+   "quem_afeta": "Entidades e ONGs que fazem parcerias com a Prefeitura de Lajeado.",
+   "vigencia": "",
+   "esfera": "municipal",
+   "titulo": "DECRETO N° 14.469, DE 19 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "DECRETO",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2697"
+  },
+  {
+   "id": "laj-2697-2",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "finanças públicas",
+    "orçamento"
+   ],
+   "o_que_muda": "Define os procedimentos e prazos que os órgãos da Prefeitura devem seguir para fechar as contas de 2026.",
+   "quem_afeta": "Secretarias e servidores da Prefeitura de Lajeado.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "DECRETO Nº 14.472, DE 23 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "DECRETO",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2697"
+  },
+  {
+   "id": "laj-2697-3",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "finanças públicas"
+   ],
+   "o_que_muda": "Parte do calendário do decreto de encerramento do exercício: o Conselho do Regime Próprio de Previdência e o Conselho do FUNDEB enviam seus pareceres à Contabilidade até 15/03/2027.",
+   "quem_afeta": "Conselhos e servidores municipais de Lajeado.",
+   "vigencia": "Prazo de 15/03/2027.",
+   "esfera": "municipal",
+   "titulo": "Resolução nº 1.134/2020).",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "Resolução nº 1.134/2020).",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2697"
+  },
+  {
+   "id": "laj-2697-4",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "finanças públicas"
+   ],
+   "o_que_muda": "Outra parte do calendário de encerramento do exercício: a Secretaria do Meio Ambiente envia dados do Plano Municipal à Contabilidade.",
+   "quem_afeta": "Secretarias da Prefeitura de Lajeado.",
+   "vigencia": "",
+   "esfera": "municipal",
+   "titulo": "Resolução nº 1.134/2020).",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "Resolução nº 1.134/2020).",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2697"
+  },
+  {
+   "id": "laj-2697-5",
+   "relevancia": "media",
+   "area": "fazenda",
+   "temas": [
+    "orçamento"
+   ],
+   "o_que_muda": "Abre crédito suplementar de R$ 1.963.547,02 no orçamento de 2026 de Lajeado, para despesas de planejamento, educação e outras secretarias.",
+   "quem_afeta": "Contas da Prefeitura de Lajeado.",
+   "vigencia": "Na publicação.",
+   "esfera": "municipal",
+   "titulo": "DECRETO Nº 14.473, DE 26 DE NOVEMBRO DE 2026.",
+   "orgao": "Prefeitura de Lajeado",
+   "tipo": "DECRETO",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "fonte": "DOM Lajeado ed. 2697"
+  }
+ ],
+ "demais": {
+  "federal": "Sem dados: a coleta do DOU falhou.",
+  "estadual": "Cerca de 90 atos normativos e 318 itens de lista, quase todos portarias de pessoal e fiscais de contrato, permissões de uso, notificações individuais, atos de aposentadoria e reserva, extratos de contratos, portarias da Polícia Penal, do IGP e do IRGA.",
+  "municipal": "Sete editais de concurso, homologação e convocação de candidatos, que não entram como destaque."
+ },
+ "fontes": {
+  "federal": {
+   "ok": false,
+   "erro": "HTTP 404"
+  },
+  "estadual": {
+   "ok": true,
+   "atos": 106,
+   "lista": 318,
+   "publicados": 452
+  },
+  "municipal": {
+   "ok": true,
+   "atos": 12,
+   "lista": 0,
+   "edicoes": [
+    "2697 (Normal)"
+   ]
+  }
+ },
+ "coletado_em": "2026-11-28T05:32:39.433Z",
+ "totais": {
+  "federal": 0,
+  "estadual": 424,
+  "municipal": 12
+ }
+}
