@@ -4,8 +4,9 @@ Você vai escrever a edição de **hoje** do jornal www.kotidi.com.br, para leit
 
 **Prazo:** o arquivo precisa estar publicado até as **6h (Brasília)**. Se o tempo apertar, publique o que estiver pronto e conferido (veja "Publicar em duas partes").
 
-## Passo 1: data e o que já saiu
+## Passo 1: pauta, data e o que já saiu
 
+0. Leia a **pauta do administrador**, em https://api.kotidi.com.br/journal/pauta (WebFetch ou `curl`). Ela diz o que o jornal publica e pode ter mudado: **vale a pauta**, e estas instruções dizem como fazer. As regras do Passo 2, o formato do Passo 4 e as regras de imagem continuam valendo em qualquer caso. Se o endereço não abrir, siga só estas instruções e avise na resposta final.
 1. `git pull`. A data da edição é a de hoje no fuso de São Paulo: `TZ=America/Sao_Paulo date +%F`.
 2. Se `relatorios/jornal/edicoes/<hoje>.json` já existir e estiver completo (todas as seções do Passo 3), pare e diga isso na resposta final.
 3. Leia os títulos das edições anteriores para **não repetir** filme, série, destino turístico, estudo ou notícia: `node scripts/jornal-anteriores.mjs`.
@@ -17,10 +18,13 @@ Você vai escrever a edição de **hoje** do jornal www.kotidi.com.br, para leit
 - Escreva com suas palavras. Não copie trechos das fontes (no máximo uma citação curta, com o nome de quem disse).
 - Sem opinião política própria, sem sensacionalismo. Não atribua a uma pessoa nomeada acusações ou xingamentos; processos e investigações só com o que a fonte oficial ou a imprensa confirmam, deixando claro que é investigação.
 - Saúde de pessoas ou animais: diga o tipo de estudo e seus limites, não indique remédio nem dose, e oriente a conversar com o médico ou o veterinário.
-- Não publique dados pessoais de pessoas comuns.
+- Não publique dados pessoais de pessoas comuns: quem não é figura pública não é citado pelo nome nem pela idade (ex.: participantes de um programa, pacientes).
+- Não publique o mesmo acontecimento em duas matérias ou seções.
 - Texto simples com parágrafos, `## subtítulo`, listas com `- ` e links `[nome](https://...)`. Nada de HTML, negrito, tabelas ou imagens no texto. Não escreva uma seção "Fontes": ela é montada a partir do campo `fontes`.
 
 ## Passo 3: as seções
+
+Em Esportes, Mundo e Governo, **procure uma foto real para cada matéria**; só deixe sem imagem quando não houver foto adequada.
 
 Faça os subagentes (ferramenta Agent) em paralelo, um por grupo abaixo, passando a cada um as regras do Passo 2, a data, a lista do que não repetir e o formato do Passo 4. Cada um grava um arquivo `/tmp/jornal/<grupo>.json` com a lista das suas matérias. Dê a eles até as 5h30.
 
@@ -36,7 +40,7 @@ Faça os subagentes (ferramenta Agent) em paralelo, um por grupo abaixo, passand
 | `moda` | **Duas** matérias sobre como se vestir hoje: uma para mulheres e outra para homens, levando em conta a estação no Brasil. | `ia`, uma por matéria |
 | `guerras` (Mundo) | Uma matéria **fixada** (`"fixada": true`) "Guerras em andamento no mundo", por região, com **todas** as guerras em curso e a **data de início** de cada uma (confira se alguma começou ou acabou). | `foto` ou nenhuma |
 | `guerras` (Mundo) | As novidades do dia: 2 a 4 matérias. | `foto` ou nenhuma |
-| `presidente` (Governo) | Uma matéria do dia sobre o presidente do Brasil em exercício (confirme quem é). Se o assunto for saúde, use a seção `longevidade`. | `foto` ou nenhuma |
+| `presidente` (Governo) | Uma matéria do dia sobre o presidente do Brasil em exercício (confirme quem é), em assunto **que não seja saúde**. **Tudo o que for de saúde vai para `longevidade`** (Saúde), mesmo envolvendo o presidente ou o governo. | `foto` ou nenhuma |
 
 **Leis e atos do Diário Oficial não entram aqui**: o sistema já os traz do Radar de leis. **Investimentos também não** (vem do relatório do mercado).
 
