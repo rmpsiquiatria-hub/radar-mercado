@@ -1,25 +1,42 @@
 {
  "data": "2026-11-27",
- "coletado_em": "2026-11-27T14:01:43.751Z",
+ "coletado_em": "2026-11-28T05:32:39.433Z",
  "fontes": {
   "federal": {
    "ok": false,
-   "erro": "The operation was aborted due to timeout"
+   "erro": "HTTP 404"
   },
   "estadual": {
    "ok": true,
-   "atos": 94,
-   "lista": 311,
-   "publicados": 432
+   "atos": 106,
+   "lista": 318,
+   "publicados": 452
   },
   "municipal": {
    "ok": true,
-   "atos": 0,
+   "atos": 12,
    "lista": 0,
-   "edicoes": []
+   "edicoes": [
+    "2697 (Normal)"
+   ]
   }
  },
  "itens": [
+  {
+   "id": "rs-1510542",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Atos Administrativos",
+   "orgao": "Secretaria de Desenvolvimento Social",
+   "unidade": "Assessoria Técnica",
+   "titulo": "RECOMENDAÇÃO CONJUNTA CEPETI/CEDICA/CEAS Nº 01/2026",
+   "ementa": "Dispõe sobre a recomendação para a criação de Comissões Municipais de Prevenção e Erradicação do Trabalho Infantil (COMPETI) no Estado do Rio Grande do Sul. A Comissão Estadual do Programa de Erradicação do Trabalho Infantil do Rio Grande do Sul, no cumprimento das suas competências estabelecidas no art. 7, inciso V do Regimento Interno, em reunião ordinária realizada no dia 13 de outubro de 2026,",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510542",
+   "cats": [
+    "comissoes"
+   ],
+   "tamanho": 9933
+  },
   {
    "id": "rs-1510289",
    "esfera": "estadual",
@@ -257,6 +274,21 @@
     "outros"
    ],
    "tamanho": 2007
+  },
+  {
+   "id": "rs-1510621",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Diversos",
+   "orgao": "Procuradoria-Geral do Estado",
+   "unidade": "Departamento de Administração ",
+   "titulo": "PORTARIA Nº 764, DE 26 DE NOVEMBRO DE 2026.",
+   "ementa": "BOLETIM Nº 185/2026 Foi registrado neste Departamento, para os devidos e correspondentes efeitos, o seguinte ato do Senhor Procurador-Geral do Estado: O PROCURADOR-GERAL DO ESTADO, no uso de suas atribuições, DESIGNA, nos termos dos artigos 11 e 17 da Instrução Normativa nº 41/2026-PGE, os Procuradores do Estado abaixo relacionados para exercer, pelo prazo inicial de 24 (vinte e quatro) meses, exc",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510621",
+   "cats": [
+    "nomeacoes"
+   ],
+   "tamanho": 1399
   },
   {
    "id": "rs-1510484",
@@ -581,6 +613,145 @@
     "contratos"
    ],
    "tamanho": 1111
+  },
+  {
+   "id": "rs-1510710",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Secretaria da Saúde",
+   "unidade": "Gabinete",
+   "titulo": "PORTARIA SES Nº 922/2026.",
+   "ementa": "Altera a Portaria SES nº 433/2026, que atualiza a habilitação dos prestadores de serviços hospitalares ao Programa ASSISTIR e os respectivos valores, para habilitar novos prestadores. SEI nº 26/2000-9012607-0. A SECRETÁRIA DE ESTADO DA SAÚDE DO RIO GRANDE DO SUL, no uso de suas atribuições e considerando: - o Decreto nº 56.015, de 02 de agosto de 2021, que institui o ASSISTIR - Programa de Incenti",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510710",
+   "cats": [
+    "saude",
+    "empresas"
+   ],
+   "tamanho": 18390
+  },
+  {
+   "id": "rs-1510702",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Secretaria da Saúde",
+   "unidade": "Gabinete",
+   "titulo": "PORTARIA SES Nº 916/2026",
+   "ementa": "Estabelece o repasse de recursos financeiros, em caráter extraordinário e complementar, aos hospitais públicos e filantrópicos situados no Estado do Rio Grande do Sul que prestam serviços ao Sistema Único de Saúde (SUS) e integram o Sistema Estadual de Saúde. (SEI 26/2000-9031722-4). A SECRETÁRIA DE ESTADO DA SAÚDE DO RIO GRANDE DO SUL , no uso das atribuições que lhe são conferidas pelos incisos ",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510702",
+   "cats": [
+    "saude"
+   ],
+   "tamanho": 23427
+  },
+  {
+   "id": "rs-1510649",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Departamento Estadual de Trânsito do RS",
+   "unidade": "Gabinete da Diretora-Geral",
+   "titulo": "PORTARIA DETRAN/RS N.º 544, DE 06 DE NOVEMBRO DE 2026.",
+   "ementa": "Dispõe sobre o credenciamento da empresa F&F Emplacamentos LTDA, inscrita no CNPJ n.º 58.092.431/0001-05. A DIRETORA-GERAL DO DEPARTAMENTO ESTADUAL DE TRÂNSITO DO ESTADO DO RIO GRANDE DO SUL - DETRAN/RS, no uso das atribuições conferidas pelo inciso VII do artigo 6.° da Lei Estadual n.º 10.847, de 20 de agosto de 1996, combinado com o artigo 5.° da Lei Estadual n.º 14.479, de 23 de janeiro de 2014",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510649",
+   "cats": [
+    "contratos",
+    "empresas"
+   ],
+   "tamanho": 1164
+  },
+  {
+   "id": "rs-1510636",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Secretaria do Esporte e Lazer",
+   "unidade": "Gabinete do Secretário",
+   "titulo": "PORTARIA SEL Nº 90/2026",
+   "ementa": "Gabinete do Secretário EMENDAS PARLAMENTARES - EPs Processo Administrativo/PROA n.º 26/2900-0000987-3",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510636",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 1121
+  },
+  {
+   "id": "rs-1510631",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Secretaria do Esporte e Lazer",
+   "unidade": "Gabinete do Secretário",
+   "titulo": "PORTARIA SEL Nº 89/2026",
+   "ementa": "Gabinete do Secretário EMENDAS PARLAMENTARES - EPs Processo Administrativo/PROA n.º 26/2900-0000987-3",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510631",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 2260
+  },
+  {
+   "id": "rs-1510618",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Secretaria do Esporte e Lazer",
+   "unidade": "Gabinete do Secretário",
+   "titulo": "PORTARIA SEL Nº 91/2026",
+   "ementa": "Gabinete do Secretário Processo Administrativo/PROA n.º 26/2900-0000950-4 O SECRETÁRIO DO ESPORTE E LAZER, no uso de suas competências elencadas na Lei Estadual n.º 15.934/2023, considerando o disposto nos artigos 117 e 184 da Lei Federal n.º 14.133/2021, na IN CAGE nº 05/2016, bem como nas informações constantes do processo administrativo abaixo listado, DESIGNA os servidores relacionados, neste ",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510618",
+   "cats": [
+    "nomeacoes"
+   ],
+   "tamanho": 864
+  },
+  {
+   "id": "rs-1510617",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Secretaria do Esporte e Lazer",
+   "unidade": "Gabinete do Secretário",
+   "titulo": "LEIA-SE: \"Suplente: Leonardo Azzi Dellamea - ID 5222346\"",
+   "ementa": "Gabinete do Secretário Assunto: Portaria - Retificação Processo: 26/2900-0000975-0",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510617",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 644
+  },
+  {
+   "id": "rs-1510583",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Secretaria de Turismo",
+   "unidade": "Divisão de Gestão de Contratos e Convênios ",
+   "titulo": "PORTARIA CONJUNTA SEDEC/SETUR Nº ___/2026",
+   "ementa": "SECRETARIA DE DESENVOLVIMENTO ECONÔMICO SECRETARIA DE TURISMO Dispõe sobre a designação dos membros dos colegiados responsáveis pela avaliação, análise de recursos e acompanhamento do Programa de Subsídio de Juros para Grandes Empreendimentos Voltados ao Turismo no Estado do Rio Grande do Sul - PROGRANTUR.",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510583",
+   "cats": [
+    "nomeacoes"
+   ],
+   "tamanho": 3757
+  },
+  {
+   "id": "rs-1510553",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Portarias",
+   "orgao": "Secretaria de Desenvolvimento Urbano e Metropolitano",
+   "unidade": "Gabinete do Secretário",
+   "titulo": "PORTARIA SEDUR Nº 34/2026",
+   "ementa": "Processo Administrativo nº 25/2600-0000 898-0 -4 O SECRETÁRIO DE ESTADO DE DESENVOLVIMENTO URBANO E METROPOLITANO - SEDUR, no uso das suas atribuições que lhe são conferidas pelo artigo 90 da Constituição Estadual, Resolve: Designar Fiscais Técnicos e Fiscais Administrativos titulares e suplentes do contrato FPE nº 2026/ 023490 , celebrado com MAK SERVIÇOS EPAVIMENTAÇÕES LTDA - CNPJ nº 65/000188 ,",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510553",
+   "cats": [
+    "nomeacoes",
+    "contratos",
+    "empresas"
+   ],
+   "tamanho": 1004
   },
   {
    "id": "rs-1510451",
@@ -1417,6 +1588,21 @@
     "servidores"
    ],
    "tamanho": 1087
+  },
+  {
+   "id": "rs-1510620",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "tipo": "Resoluções",
+   "orgao": "Procuradoria-Geral do Estado",
+   "unidade": "Departamento de Administração ",
+   "titulo": "RESOLUÇÃO Nº 322, DE 26 DE NOVEMBRO DE 2026.",
+   "ementa": "Revoga as Resoluções nº 122, de 30 de junho de 2017, e nº 159, de 29 de novembro de 2019. O PROCURADOR-GERAL DO ESTADO , no uso de suas atribuições legais, RESOLVE:",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510620",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 566
   },
   {
    "id": "rs-1510459",
@@ -2440,6 +2626,36 @@
    ]
   },
   {
+   "id": "rs-1510760",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Contratos",
+   "orgao": "",
+   "titulo": "Súmula",
+   "ementa": "CONTRATO DE PATROCÍNIO N. º 129/2026 Partes: Secretaria de Turismo – SETUR, inscrita no CNPJ sob nº 40.736.903/0001-50, e a Centro da Indústria, Comércio e Serviços de Bento Gonçalves, inscrito no CNPJ sob n.º 89.805.261/0001-92. Constitui objeto des",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510760",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "rs-1510623",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Contratos",
+   "orgao": "",
+   "titulo": "ATO DE DECLARAÇÃO DE INEXIGIBILIDADE DE LICITAÇÃO",
+   "ementa": "Declaro inexigível de licitação a efetivação do Contrato de Patrocínio concedido pela SECRETARIA DE TURISMO – SETUR/RS para a CENTRO DA INDÚSTRIA, COMÉRCIO E SERVIÇOS DE BENTO GONÇALVES - CIC, inscrita no CNPJ sob o nº 89.805.261/0001-92, no valor de",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510623",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
    "id": "rs-1510476",
    "esfera": "estadual",
    "fonte": "DOE-RS",
@@ -3408,6 +3624,63 @@
    ]
   },
   {
+   "id": "rs-1510806",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Contratos",
+   "orgao": "",
+   "titulo": "SÚMULA DE TERMO DE CONTRATO DE PRESTAÇÃO DE SERVIÇOS NÃO CONTINUADOS",
+   "ementa": "N° 027/2026 – FPE Nº 023577/2026 PARTES: O ESTADO DO RIO GRANDE DO SUL, por intermédio da SECRETARIA ESTADUAL DA AGRICULTURA, PECUÁRIA, PRODUÇÃO SUSTENTÁVEL E IRRIGAÇÃO, doravante denominada CONTRATANTE; e a empresa SEVEN ADMINISTRADORA DE SERVICOS L",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510806",
+   "cats": [
+    "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "rs-1510791",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Contratos",
+   "orgao": "",
+   "titulo": "SÚMULA DE INEXIGIBILIDADE DE LICITAÇÃO",
+   "ementa": "PROCESSO ADMINISTRATIVO Nº 26/3100-0003548-1 Tendo em vista o que consta no presente expediente, e principalmente o contido no parecer da Assessoria Jurídica, declaro inexigível o procedimento licitatório, com base no artigo 74, inciso I, da Lei Fede",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510791",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
+   "id": "rs-1510776",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Contratos",
+   "orgao": "",
+   "titulo": "SÚMULA DE INEXIGIBILIDADE DE LICITAÇÃO",
+   "ementa": "PROCESSO ADMINISTRATIVO Nº 26/3100-0003544-9 Tendo em vista o que consta no presente expediente, e principalmente o contido no parecer da Assessoria Jurídica, declaro inexigível o procedimento licitatório, com base no artigo 74, inciso I, da Lei Fede",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510776",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
+   "id": "rs-1510533",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Contratos",
+   "orgao": "",
+   "titulo": "SÚMULA DO SEGUNDO TERMO ADITIVO AO CONTRATO DE PRESTAÇÃO DE SERVIÇOS CONTÍNUOS SEM DEDICAÇÃO EXCLUSIVA DE MÃO DE OBRA N° 093/2025 – FPE Nº 022658/2025",
+   "ementa": "PARTES: O ESTADO DO RIO GRANDE DO SUL, por intermédio da SECRETARIA DE DESENVOLVIMENTO RURAL, doravante denominada CONTRATANTE; e ASSOCIAÇÃO RIOGRANDENSE DE EMPREENDIMENTOS DE ASSISTÊNCIA TÉCNICA E EXTENSÃO RURAL – EMATER/RS, doravante denominada CON",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510533",
+   "cats": [
+    "contratos"
+   ]
+  },
+  {
    "id": "rs-1510465",
    "esfera": "estadual",
    "fonte": "DOE-RS",
@@ -3908,6 +4181,20 @@
    "url": "https://www.diariooficial.rs.gov.br/materia?id=1510224",
    "cats": [
     "contratos",
+    "empresas"
+   ]
+  },
+  {
+   "id": "rs-1510718",
+   "esfera": "estadual",
+   "fonte": "DOE-RS",
+   "lista": true,
+   "tipo": "Editais",
+   "orgao": "",
+   "titulo": "Processo: PROA nº 26/1601-0000295-3",
+   "ementa": "COMISSÃO ESPECIAL DE SELEÇÃO PÚBLICA ANÁLISE FINAL E RESULTADO DEFINITIVO DA HABILITAÇÃO Referência: Edital nº 01/2026 e Termo de Referência nº 01/2026 Interessado: CONSÓRCIO ZPE RS AI CITY – SCALA A Comissão Especial de Seleção Pública, considerando",
+   "url": "https://www.diariooficial.rs.gov.br/materia?id=1510718",
+   "cats": [
     "empresas"
    ]
   },
@@ -5943,6 +6230,175 @@
     "nomeacoes",
     "servidores"
    ]
+  },
+  {
+   "id": "laj-2697-1",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "DECRETO",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "DECRETO N° 14.469, DE 19 DE NOVEMBRO DE 2026.",
+   "ementa": "Regulamenta as parcerias entre o Município de Lajeado e as Organizações da Sociedade Civil para a consecução de finalidades de interesse público e recíproco, mediante a execução de atividades ou projetos previamente estabelecidos em planos de trabalho, nos termos da Lei",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 93142
+  },
+  {
+   "id": "laj-2697-2",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "DECRETO",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "DECRETO Nº 14.472, DE 23 DE NOVEMBRO DE 2026.",
+   "ementa": "Dispõe sobre os procedimentos a serem observados pelos órgãos e entidades da Administração Pública Municipal com vistas ao encerramento do exercício financeiro de 2026.",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 26924
+  },
+  {
+   "id": "laj-2697-3",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "Resolução nº 1.134/2020).",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "Resolução nº 1.134/2020).",
+   "ementa": "Data limite para que o Conselho Gestor do Regime Próprio de Previdência encaminhe ao Setor da Contabilidade o relatório e parecer dos conselhos que legalmente devem se manifestar sobre os fundos criados em face da eventual instituição de regime próprio de previdência social, contendo a 16 análise de suas contas, bem como a consignação de conformidade (ou não) 15/03/2027 de suas aplicações fina",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 3701
+  },
+  {
+   "id": "laj-2697-4",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "Resolução nº 1.134/2020).",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "Resolução nº 1.134/2020).",
+   "ementa": "Data para a Secretaria Municipal do Meio Ambiente, Saneamento e Sustentabilidade encaminhar ao Setor da Contabilidade do Plano Municipal 24 de Gestão Integrada de Resíduos Sólidos, vigente no exercício anterior, 15/03/2027 conforme art. 18 da Lei Federal nº 12.305, de 2 de agosto de 2010 (art. 2º, IV, letra “q” da Resolução nº 1.134/2020). ______________________________________________________",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 2150
+  },
+  {
+   "id": "laj-2697-5",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "DECRETO",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "DECRETO Nº 14.473, DE 26 DE NOVEMBRO DE 2026.",
+   "ementa": "Abre Crédito Suplementar",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "fazenda"
+   ],
+   "tamanho": 10510
+  },
+  {
+   "id": "laj-2697-6",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "EDITAL",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "EDITAL N.º 447-02/2026, DE 27 DE NOVEMBRO DE 2026",
+   "ementa": "​ ​",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 2233
+  },
+  {
+   "id": "laj-2697-7",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "EDITAL",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "EDITAL N.º 448-02/2026, DE 27 DE NOVEMBRO DE 2026",
+   "ementa": "​ ​",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 455
+  },
+  {
+   "id": "laj-2697-8",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "Edital de Homologação nº 600-01/2025 para o cargo de Professor de Anos Finais – Educação Física, já",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "Edital de Homologação nº 600-01/2025 para o cargo de Professor de Anos Finais – Educação Física, já",
+   "ementa": "foram convocados para preenchimento de vaga temporária;​ ​ ​ ​ ​ CONSIDERANDO a ausência de manifestação de interesse da candidata Luiza Raquel Ferguitz Simon em assumir a vaga,​ ​ ​ ​ CONVOCA ​ ​ A candidata abaixo nominada que solicitou o reposicionamento para o final da lista de classificação para comparecer no Departamento de Recursos Humanos da",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "contratos",
+    "servidores"
+   ],
+   "tamanho": 1916
+  },
+  {
+   "id": "laj-2697-9",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "EDITAL",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "EDITAL N.º 449-02/2026, DE 27 DE NOVEMBRO DE 2026",
+   "ementa": "​ ​",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 1003
+  },
+  {
+   "id": "laj-2697-10",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "Edital de Homologação n.º 531-01/2025.",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "Edital de Homologação n.º 531-01/2025.",
+   "ementa": "​ ​ Agente Socioeducativo ​ ​ ​ ​ ​ MARISTELA DE LIMA SATIQ – Classificação 31º lugar​ ​ ​ ​ ​ O não comparecimento da candidata no prazo acima determinado, resulta na impossibilidade de contratação na função, perdendo sua vaga para as candidatas imediatamente classificadas, em absoluta obediência à ordem de classificação. ​ ​ A con",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "contratos"
+   ],
+   "tamanho": 1079
+  },
+  {
+   "id": "laj-2697-11",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "EDITAL",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "EDITAL N.º 450-02/2026, DE 27 DE NOVEMBRO DE 2026",
+   "ementa": "​ ​",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 2023
+  },
+  {
+   "id": "laj-2697-12",
+   "esfera": "municipal",
+   "fonte": "DOM Lajeado ed. 2697",
+   "tipo": "EDITAL",
+   "orgao": "Prefeitura de Lajeado",
+   "titulo": "EDITAL N.º 451-02/2026, DE 27 DE NOVEMBRO DE 2026",
+   "ementa": "​ ​",
+   "url": "https://www.lajeado.rs.gov.br/servico/704084/4975?titulo=Di%C3%A1rio+Oficial+Eletr%C3%B4nico",
+   "cats": [
+    "outros"
+   ],
+   "tamanho": 12780
   }
  ]
 }
