@@ -6,7 +6,7 @@
    "do2",
    "do3"
   ],
-  "erro": "HTTP 502"
+  "erro": "HTTP 404 (do1)"
  },
  "2026-11-26": {
   "secoes": [
@@ -15,7 +15,7 @@
    "do2",
    "do3"
   ],
-  "erro": "índice do DOU sem dados (do1)"
+  "erro": "HTTP 404 (do1)"
  },
  "2026-11-27": {
   "secoes": [
@@ -24,6 +24,15 @@
    "do2",
    "do3"
   ],
-  "erro": "HTTP 404"
+  "erro": "HTTP 404 (do1)"
+ },
+ "2026-11-28": {
+  "secoes": [
+   "do1",
+   "do1e",
+   "do2",
+   "do3"
+  ],
+  "erro": "HTTP 502 (do1)"
  }
 }
